@@ -7,8 +7,4 @@ import { Component } from '@angular/core';
     styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent {
-     game = {
-        name: "caca",
-        description:
-    }
 }
