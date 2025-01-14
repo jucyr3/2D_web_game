@@ -1,1 +1,6 @@
-<div (mouseover)="OnMouseOver()" (mousedown)="onMouseDown($event)" (mouseup)="onMouseUp($event)" [ngStyle]="{'background-color': tileColor}"></div>
+<div
+    class="tile"
+    (mouseover)="onMouseOver()" 
+    (click)="placeTile()"
+    [ngStyle]="{ 'background-color': tileColor }">
+</div>

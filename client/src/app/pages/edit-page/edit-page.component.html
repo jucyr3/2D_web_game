@@ -1,6 +1,2 @@
 
-<div style="width: 800px; height: 800px; border: 2px solid rgb(0, 0, 0); background-color: transparent; margin: 50px; display: grid;" [style.grid-template-columns]="'repeat(' + mapSize + ', 1fr)'" [style.grid-template-rows]="'repeat(' + mapSize + ', 1fr)'">
-
-    <app-tile [isMouseDownInput]="isMouseDown" (isMouseDownOutput)="onMouseDown($event)"  *ngFor="let tile of [].constructor(400); let i = index" [id]="i"></app-tile>
-    
-</div>
+<app-tile-grid></app-tile-grid>
