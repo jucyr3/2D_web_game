@@ -8,8 +8,9 @@ export class Map {
     gameMode: "CTF" | "Classic";
     tileMatrix: Tile[][];
     lastModified: Date;
+    previewImage: string;
 
-    constructor(name: string, size: number, isVisible: boolean, description: string, gameMode: "CTF" | "Classic", tileMatrix: Tile[][], lastModified: Date) {
+    constructor(name: string, size: number, isVisible: boolean, description: string, gameMode: "CTF" | "Classic", tileMatrix: Tile[][], lastModified: Date, previewImage: string) {
         this.name = name;
         this.size = size;
         this.isVisible = isVisible;
@@ -17,5 +18,6 @@ export class Map {
         this.gameMode = gameMode;
         this.tileMatrix = tileMatrix;
         this.lastModified = lastModified;
+        this.previewImage = previewImage;
     }
 }

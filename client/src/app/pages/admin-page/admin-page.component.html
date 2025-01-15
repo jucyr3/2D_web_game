@@ -1,0 +1,47 @@
+<div class="admin-container">
+    <header class="admin-header">
+        <h1>Administration des Jeux</h1>
+        <button [routerLink]="['/home']" class="new-game-btn">
+            <i class="fas fa-plus"></i> Créer un nouveau jeu
+        </button>
+    </header>
+
+    <div class="games-grid">
+        @for (game of games; track game.id) {
+            <div class="game-card">
+                <div class="preview-container"
+                     (mouseenter)="showDescription(game)"
+                     (mouseleave)="hideDescription()">
+                    <img [src]="game.map.previewImage" [alt]="game.gameName" class="preview-image">
+                    @if (selectedGame === game) {
+                        <div class="description-overlay">
+                            {{ game.map.description }}
+                        </div>
+                    }
+                </div>
+
+                <div class="game-info">
+                    <h2>{{ game.gameName }}</h2>
+                    <p>Taille: {{ game.map.size }} x {{ game.map.size }}</p>
+                    <p>Mode: {{ game.map.gameMode }}</p>
+                    <p>Dernière modification:</p>
+                </div>
+
+                <div class="game-actions">
+                    <button class="visibility-btn" (click)="toggleVisibility(game)">
+                        <i [class]="game.map.isVisible ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
+                        {{ game.map.isVisible ? 'Masquer' : 'Afficher' }}
+                    </button>
+                    
+                    <button [routerLink]="['/home']" class="edit-btn">
+                        <i class="fas fa-edit"></i> Éditer
+                    </button>
+
+                    <button class="delete-btn" (click)="deleteGame(game)">
+                        <i class="fas fa-trash"></i> Supprimer
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
