@@ -2,12 +2,14 @@
     class="tile-grid"
     [style.grid-template-columns]="'repeat(' + mapSize + ', 1fr)'"
     [style.grid-template-rows]="'repeat(' + mapSize + ', 1fr)'"
-    (mousedown)="onMouseDown()"
+    (mousedown)="onMouseDown($event)"
     (mouseup)="onMouseUp()"
     (mouseleave)="onMouseLeave()"
+    (mouseenter)="onMouseEnter($event)"
 >
     <app-tile
         [isMouseDown]="isMouseDown"
+        [isRightClick]="isRightClick"
         *ngFor="let tile of [].constructor(mapSize*mapSize); let i = index"
         [tileNumber]="i"
     ></app-tile>

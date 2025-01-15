@@ -1,6 +1,6 @@
 <div
     class="tile"
-    (mouseover)="onMouseOver()" 
-    (click)="placeTile()"
-    [ngStyle]="{ 'background-color': tileColor }">
+    (mousemove)="onMouseMove()" 
+    (mousedown)="onMouseDown($event)"
+    [ngStyle]="{ 'background-image': this.tileType}">
 </div>
