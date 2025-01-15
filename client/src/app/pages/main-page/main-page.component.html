@@ -1,22 +1,20 @@
 <div class="container justified">
-    <h1 class="header-item">Bienvenue au cours {{ title }}</h1>
+    <h1 class="header-item">{{ title }}</h1>
     <img src="https://bit.ly/3QofL1J" alt="Logo Projet" />
+
     <section id="server-message" class="justified">
-        <p>Petit message du serveur : {{ message.getValue() }}</p>
         <div class="justified">
-            <button class="button" (click)="getMessagesFromServer()">Récupérer un message du serveur</button>
-            <button class="button" (click)="sendTimeToServer()">Envoyer un message au serveur</button>
-            <button class="button" routerLink="/material">Voir la page démo Angular Material</button>
+            <button class="button" routerLink="/game">Join Game</button>
+            <button class="button">Create Game</button>
+            <button class="button" routerLink="/material">Manage Game</button>
         </div>
     </section>
 
-    <button class="button" routerLink="/game">Jouer!</button>
-
     <footer class="footer-item">
-        <h4 class="team-name">Équipe Poly</h4>
+        <h4 class="team-name">Made by team #103:</h4>
         <p>
-            <span>Coéquipier #1</span>, <span>Coéquipier #2</span>, <span>Coéquipier #3</span>, 
-            <span>Coéquipier #4</span>, <span>Coéquipier #5</span>, <span>Coéquipier #6</span>
+            <span>Alhassane Barry</span>, <span>Vincent Charbonneau</span>, <span>Julien Cyr</span>, <span>Danya Li</span>,
+            <span>Tristan Samson</span>, <span>Cedric Andy Vaval</span>
         </p>
     </footer>
 </div>

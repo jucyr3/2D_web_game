@@ -13,7 +13,7 @@ import { map } from 'rxjs/operators';
     imports: [RouterLink],
 })
 export class MainPageComponent {
-    readonly title: string = 'LOG2990';
+    readonly title: string = 'MYSHTIC QUEST-RPG';
     message: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
     constructor(private readonly communicationService: CommunicationService) {}
