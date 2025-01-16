@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
 })
 export class ProfilePictureComponent {
     // @Input() imgSrc: string;
-    //constructor() {}
+    // constructor() {}
 }
