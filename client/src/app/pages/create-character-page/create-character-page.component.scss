@@ -1,0 +1,17 @@
+h1,
+h5 {
+    font-family: sans-serif, Impact;
+    font-weight: 900;
+    margin: 1.25%;
+}
+h5 {
+    width: 40%;
+}
+
+div.options {
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
