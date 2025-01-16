@@ -3,4 +3,3 @@ export class Tile {
     isOccupied: boolean;
     isObstacle: boolean;
 }
-

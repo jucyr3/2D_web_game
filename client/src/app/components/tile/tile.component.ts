@@ -2,6 +2,7 @@ import { NgStyle } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { EDIT_TOOL_TYPES, TILE_TYPES } from '@app/services/editing-tool.constants';
 import { EditingToolService } from '../../services/editing-tool.service';
+import { MouseService } from '@app/services/mouse.service';
 
 @Component({
     selector: 'app-tile',
@@ -10,16 +11,14 @@ import { EditingToolService } from '../../services/editing-tool.service';
     styleUrl: './tile.component.scss',
 })
 export class TileComponent {
-    @Input() isMouseDown: boolean;
     @Input() tileNumber: number;
-    @Input() isRightClick: boolean;
 
     // TODO Add attribute for GameObject contained in tile
 
     tileTexture: string;
     tileType: TILE_TYPES;
 
-    constructor(private editingToolService: EditingToolService) {}
+    constructor(private editingToolService: EditingToolService, private mouseService: MouseService) {}
 
     ngOnInit() {
         this.tileTexture = this.editingToolService.getTileImage(TILE_TYPES.GRASS); // Initialize here
@@ -30,8 +29,8 @@ export class TileComponent {
     }
 
     onMouseMove(): void {
-        if (this.isMouseDown) {
-            this.handleTileBrush(this.isRightClick);
+        if (this.mouseService.isMouseDown) {
+            this.handleTileBrush(this.mouseService.isRightClick);
         }
     }
 
@@ -50,9 +49,9 @@ export class TileComponent {
         //this.tileService.saveTile(this.tileNumber, this.currentTileTypeOnBrush);
 
         // TODO add tile logic for saving in actual Tile Object
-        let column = this.tileNumber % 20; //? magic number, scale to map size
-        let row = Math.floor(this.tileNumber / 20); //? magic number, scale to map size
-        console.log(row, column);
+        // let column = this.tileNumber % 20; //? magic number, scale to map size
+        // let row = Math.floor(this.tileNumber / 20); //? magic number, scale to map size
+        // console.log(row, column);
     }
 
     eraseTile() {

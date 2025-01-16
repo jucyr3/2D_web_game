@@ -10,27 +10,28 @@ export class EditingToolService {
   
   // TODO set inital tile type cleaner
 
-  private activeToolSubject: EDIT_TOOL_TYPES = EDIT_TOOL_TYPES.HAND;
-  private currentTileTypeOnBrushSubject: TILE_TYPES = TILE_TYPES.GRASS;
+  private activeTool: EDIT_TOOL_TYPES = EDIT_TOOL_TYPES.HAND;
+  private currentTileTypeOnBrush: TILE_TYPES = TILE_TYPES.GRASS;
 
   setActiveTool(tool: EDIT_TOOL_TYPES) {
-    this.activeToolSubject = tool;
-  }
-
-  setTileTypeOnBrush(tileType: TILE_TYPES) {
-    this.currentTileTypeOnBrushSubject = tileType;
-  }
-
-  getCurrentTileTypeOnBrush(): TILE_TYPES {
-    return this.currentTileTypeOnBrushSubject;
+    this.activeTool = tool;
   }
 
   getActiveTool(): EDIT_TOOL_TYPES {
-    return this.activeToolSubject;
+    return this.activeTool;
+  }
+  
+  setTileTypeOnBrush(tileType: TILE_TYPES) {
+    this.currentTileTypeOnBrush = tileType;
+  }
+
+  getCurrentTileTypeOnBrush(): TILE_TYPES {
+    return this.currentTileTypeOnBrush;
   }
 
 
-  // TODO put this in another service (ex: map-display.service.ts)
+
+  // TODO put this in another service (ex: map-display.service.ts) (no created yet)
   getTileImage(tileType: TILE_TYPES): string {
     return `url(assets/${tileType}.png)`; // Use the tileType parameter
   }

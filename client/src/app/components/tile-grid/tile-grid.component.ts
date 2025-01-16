@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { TileComponent } from '../tile/tile.component';
 import { NgFor } from '@angular/common';
-
-
+import { MouseService } from '@app/services/mouse.service';
 
 @Component({
   selector: 'app-tile-grid',
@@ -12,8 +11,8 @@ import { NgFor } from '@angular/common';
 })
 export class TileGridComponent {
   mapSize = 20;  // TODO: put in constant file
-  isMouseDown = false;
-  isRightClick = false;
+
+  constructor(private mouseService: MouseService) { }
 
   ngOnInit() {
     document.addEventListener('contextmenu', this.disableContextMenu);
@@ -27,23 +26,14 @@ export class TileGridComponent {
     event.preventDefault();
   }
 
-  onMouseDown(event: MouseEvent) {
-    this.isMouseDown = true;
-    this.isRightClick = event.button === 2; // 1: left-click, 2: right-click (MDN Web Docs)
-  }
-
-  onMouseUp() {
-    this.isMouseDown = false;
-  }
-
   onMouseLeave() {
-    this.isMouseDown = false;
+    this.mouseService.isMouseDown = false;
   }
 
   onMouseEnter(event: MouseEvent) {
     if (event.buttons !== 0) {
-      this.isMouseDown = true;
-      this.isRightClick = event.buttons === 2;
+      this.mouseService.isMouseDown = true;
+      this.mouseService.isRightClick = event.buttons === 2;
     }
   }
 }
