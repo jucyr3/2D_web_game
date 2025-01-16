@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
 import { NgStyle } from '@angular/common';
-import { Input } from '@angular/core';
-import { EditingToolService, EditToolType, TileType } from '@app/services/editing-tool.service';
+import { Component, Input } from '@angular/core';
+import { EDIT_TOOL_TYPES, TILE_TYPES } from '@app/services/editing-tool.constants';
+import { EditingToolService } from '../../services/editing-tool.service';
 
 @Component({
     selector: 'app-tile',
@@ -15,34 +15,28 @@ export class TileComponent {
     @Input() isRightClick: boolean;
 
     // TODO Add attribute for GameObject contained in tile
-    
-    tileType: string = 'url(../assets/grass.png)'; // TODO put the base image in constant file
-    editingTool: EditToolType;
-    currentTileTypeOnBrush: TileType;
+
+    tileTexture: string;
+    tileType: TILE_TYPES;
 
     constructor(private editingToolService: EditingToolService) {}
 
     ngOnInit() {
-        this.editingToolService.activeTool$.subscribe((tool: EditToolType) => {
-            this.editingTool = tool;
-        })
-        this.editingToolService.currentTileTypeOnBrush$.subscribe((tileType: TileType) => {
-            this.currentTileTypeOnBrush = tileType;
-        })
+        this.tileTexture = this.editingToolService.getTileImage(TILE_TYPES.GRASS); // Initialize here
     }
 
     onMouseDown(event: MouseEvent): void {
         this.handleTileBrush(event.button === 2); // `true` if right-click, `false` otherwise
     }
-    
+
     onMouseMove(): void {
         if (this.isMouseDown) {
             this.handleTileBrush(this.isRightClick);
         }
     }
-    
+
     private handleTileBrush(isErase: boolean): void {
-        if (this.editingTool === 'tileBrush') {
+        if (this.editingToolService.getActiveTool() === EDIT_TOOL_TYPES.TILE_BRUSH) {
             if (isErase) {
                 this.eraseTile();
             } else {
@@ -52,7 +46,8 @@ export class TileComponent {
     }
 
     placeTile() {
-        this.tileType = this.currentTileTypeOnBrush;
+        this.tileTexture = this.editingToolService.getTileImage(this.editingToolService.getCurrentTileTypeOnBrush());
+        //this.tileService.saveTile(this.tileNumber, this.currentTileTypeOnBrush);
 
         // TODO add tile logic for saving in actual Tile Object
         let column = this.tileNumber % 20; //? magic number, scale to map size
@@ -62,6 +57,7 @@ export class TileComponent {
 
     eraseTile() {
         // TODO change this to the good tiles instead of the color
-        this.tileType = 'url(../assets/grass.png)';
+        this.tileType = TILE_TYPES.GRASS;
+        this.tileTexture = 'url(assets/grass.png)';
     }
 }

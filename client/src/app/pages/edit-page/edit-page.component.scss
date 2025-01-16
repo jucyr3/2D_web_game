@@ -1,0 +1,14 @@
+.app-layout {
+    display: flex;
+    flex-direction: row; /* Horizontal alignment */
+    height: 100vh; /* Full viewport height */
+}
+  
+.brush-grid {
+    width: 20%; /* Adjust as needed */
+}
+
+.tile-grid {
+    flex: 1; /* Take up the remaining space */
+    overflow: hidden;
+}
