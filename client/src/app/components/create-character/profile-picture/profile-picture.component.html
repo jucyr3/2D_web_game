@@ -1,1 +1,9 @@
-<img src="..." atl="img" />
+@if(isSelected){
+<div (click)="clickItem()" class=" container isClicked">
+    <img [src]="imagePath" atl="img" />
+</div>
+}@else{
+<div (click)="clickItem()" class="container">
+    <img [src]="imagePath" atl="img" />
+</div>
+}

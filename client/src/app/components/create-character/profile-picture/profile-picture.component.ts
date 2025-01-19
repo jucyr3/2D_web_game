@@ -7,6 +7,11 @@ import { Component } from '@angular/core';
     styleUrl: './profile-picture.component.scss',
 })
 export class ProfilePictureComponent {
+    imagePath = 'assets/images/1.jpg';
+    isSelected: boolean = false;
+    clickItem() {
+        this.isSelected = !this.isSelected;
+    }
     // @Input() imgSrc: string;
     // constructor() {}
 }

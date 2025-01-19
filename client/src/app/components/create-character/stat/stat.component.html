@@ -1,1 +1,30 @@
-<p>stat here</p>
+<div class="container">
+    <div (click)="clickItem(false)" class="options">
+        <div>
+            <p class="stat">vie</p>
+        </div>
+        @if(cahnge){
+        <div>
+            <h4 class="bonus" style="visibility:hidden">+2 BONUS</h4>
+        </div>
+        }@else{
+        <div>
+            <h4 class="bonus">+2 BONUS</h4>
+        </div>
+        }
+    </div>
+    <div (click)="clickItem(true)" class="options">
+        <div>
+            <p class="stat">rapidité</p>
+        </div>
+        @if(cahnge){
+        <div>
+            <h4 class="bonus">+2 BONUS</h4>
+        </div>
+        }@else{
+        <div>
+            <h4 class="bonus" style="visibility:hidden">+2 BONUS</h4>
+        </div>
+        }
+    </div>
+</div>

@@ -1,17 +1,41 @@
+body {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    margin: 0;
+    overflow: hidden;
+}
+
 h1,
 h5 {
     font-family: sans-serif, Impact;
     font-weight: 900;
-    margin: 1.25%;
-}
-h5 {
-    width: 40%;
+    margin: 1%;
+    text-align: left;
+    margin-left: 1%;
+    text-overflow: clip;
+    width: 100%;
 }
 
-div.options {
-    height: 100vh;
+.title {
+    display: flex;
+    resize: both;
+    overflow: hidden;
+    width: 100%;
+    height: 15vh;
+    flex-direction: column;
+}
+
+.options {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-    align-items: center;
+    height: 85vh;
+    overflow: hidden;
+}
+app-profile-selection,
+app-profile-showcase {
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
 }

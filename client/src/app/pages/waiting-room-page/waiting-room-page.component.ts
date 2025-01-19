@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-waiting-room-page',
-    imports: [RouterLink],
+    imports: [],
     templateUrl: './waiting-room-page.component.html',
     styleUrl: './waiting-room-page.component.scss',
 })

@@ -1,0 +1,26 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.options {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-evenly;
+
+    .bonus {
+        animation: pop 1s infinite;
+    }
+
+    @keyframes pop {
+        0%,
+        100% {
+            transform: scale(1) rotate(-10deg);
+        }
+        50% {
+            transform: scale(1.4) rotate(-10deg);
+        }
+    }
+}

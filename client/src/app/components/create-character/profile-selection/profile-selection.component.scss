@@ -1,0 +1,15 @@
+div {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-column-gap: 1%;
+    grid-row-gap: 1%;
+    height: 100%;
+}
+.grid-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin: 2%;
+}

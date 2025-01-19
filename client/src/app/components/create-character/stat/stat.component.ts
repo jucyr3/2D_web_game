@@ -6,4 +6,9 @@ import { Component } from '@angular/core';
     templateUrl: './stat.component.html',
     styleUrl: './stat.component.scss',
 })
-export class StatComponent {}
+export class StatComponent {
+    cahnge:boolean=false;
+    clickItem(value:boolean) {
+        this.cahnge = value;
+    }
+}

@@ -9,4 +9,6 @@ import { StatComponent } from '@app/components/create-character/stat/stat.compon
     templateUrl: './profile-showcase.component.html',
     styleUrl: './profile-showcase.component.scss',
 })
-export class ProfileShowcaseComponent {}
+export class ProfileShowcaseComponent {
+    imagePath = 'assets/images/1.jpg';
+}
