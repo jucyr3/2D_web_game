@@ -7,7 +7,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: center;
+    align-items:center;
 }
 
 .button {
@@ -34,19 +34,8 @@
     text-align: center;
 }
 
-.footer-item {
-    text-align: center;
-}
 
-.footer-item p :nth-child(even) {
-    color: orange;
-}
-.footer-item p :nth-child(odd) {
-    color: blue;
-}
 
-.server-message {
-    justify-content: center;
-    width: 20%;
-    min-width: min-content;
-}
+
+
+
