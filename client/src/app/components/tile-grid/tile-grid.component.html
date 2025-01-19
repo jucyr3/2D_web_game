@@ -1,12 +1,14 @@
 <div
     class="tile-grid"
-    [style.grid-template-columns]="'repeat(' + mapSize + ', 1fr)'"
-    [style.grid-template-rows]="'repeat(' + mapSize + ', 1fr)'"
+    [style.grid-template-columns]="'repeat(' + this.mapService.map.size + ', 1fr)'"
+    [style.grid-template-rows]="'repeat(' + this.mapService.map.size + ', 1fr)'"
     (mouseleave)="onMouseLeave()"
-    (mouseenter)="onMouseEnter($event)"
+    (mouseenter)="onMouseEnter($event)"   
 >
+
+    
     <app-tile
-        *ngFor="let tile of [].constructor(mapSize*mapSize); let i = index"
+        *ngFor="let tile of this.mapService.map.flattenedTileMatrix; let i = index"
         [tileNumber]="i"
     ></app-tile>
 </div>

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TileComponent } from '../tile/tile.component';
 import { NgFor } from '@angular/common';
 import { MouseService } from '@app/services/mouse.service';
+import { MapService } from '@app/services/map.service';
 
 @Component({
   selector: 'app-tile-grid',
@@ -10,9 +11,8 @@ import { MouseService } from '@app/services/mouse.service';
   styleUrl: './tile-grid.component.scss'
 })
 export class TileGridComponent {
-  mapSize = 20;  // TODO: put in constant file
 
-  constructor(private mouseService: MouseService) { }
+  constructor(private mouseService: MouseService, protected mapService: MapService) { }
 
   ngOnInit() {
     document.addEventListener('contextmenu', this.disableContextMenu);
