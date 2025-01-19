@@ -33,9 +33,45 @@ h5 {
     height: 85vh;
     overflow: hidden;
 }
-app-profile-selection,
-app-profile-showcase {
+.halfScreen {
     width: 50%;
     height: 100%;
+    overflow: hidden;
+}
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    height: 25%;
+    button {
+        width: 50%;
+        height: 50%;
+        margin: 7%;
+        color: black;
+        border: none;
+        border-radius: 10%;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    #back {
+        background-color: #f44336;
+        &:hover {
+            background-color: #d32f2f;
+        }
+    }
+    #continue {
+        background-color: #4caf50;
+        &:hover {
+            background-color: #388e3c;
+        }
+    }
+    #unlocked {
+        background-color: yellow;
+        &:hover {
+            background-color: #ffeb3b;
+        }
+    }
     overflow: hidden;
 }

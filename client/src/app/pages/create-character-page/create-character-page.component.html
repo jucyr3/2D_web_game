@@ -3,6 +3,18 @@
     <h5>Choisis ton peronnage, puis donne son bonus de +2 à sa rapidité ou sa vie et enfin choisis les dés pour son attaque et sa défense</h5>
 </div>
 <div class="options">
-    <app-profile-selection></app-profile-selection>
-    <app-profile-showcase></app-profile-showcase>
+    <div class="halfScreen">
+        <app-profile-selection></app-profile-selection>
+    </div>
+    <div class="halfScreen">
+        <app-profile-showcase></app-profile-showcase>
+        <div class="buttons">
+            @if(!choose){
+            <button id="back">retour</button>
+            <button id="continue" (click)="chosed(true)">choisir</button>
+            }@else{
+            <button id="unlocked" (click)="chosed(false)">changer</button>
+            }
+        </div>
+    </div>
 </div>

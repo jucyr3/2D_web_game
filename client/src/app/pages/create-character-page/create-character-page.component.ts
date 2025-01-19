@@ -4,8 +4,14 @@ import { ProfileShowcaseComponent } from '@app/components/create-character/profi
 
 @Component({
     selector: 'app-create-character-page',
-    imports: [ ProfileSelectionComponent, ProfileShowcaseComponent],
+    imports: [ProfileSelectionComponent, ProfileShowcaseComponent],
     templateUrl: './create-character-page.component.html',
     styleUrl: './create-character-page.component.scss',
 })
-export class CreateCharacterPageComponent {}
+export class CreateCharacterPageComponent {
+    choose: boolean = false;
+    chosed(value: boolean) {
+        this.choose = value;
+    }
+
+}

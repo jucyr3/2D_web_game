@@ -4,33 +4,33 @@
     margin-right: 4%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 20px;
+    text-align: center;
+    padding: 2.5%;
     background-color: #f9f9f9;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
 
     img {
-        width: 150px;
-        height: 150px;
+        width: 25%;
+        height: 25%;
         border-radius: 50%;
         object-fit: cover;
-        margin-bottom: 20px;
     }
 
     app-name {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 10px;
+        width: 25%;
+        width: 100%;
     }
 
     app-stat {
         display: flex;
+        height: 25%;
         width: 100%;
     }
 
     app-dice {
         display: flex;
+        height: 25%;
         width: 100%;
     }
 }

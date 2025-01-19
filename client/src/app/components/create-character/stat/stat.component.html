@@ -1,29 +1,29 @@
 <div class="container">
-    <div (click)="clickItem(false)" class="options">
+    <div (click)="clickItem(false, this)" class="options">
         <div>
             <p class="stat">vie</p>
         </div>
         @if(cahnge){
         <div>
-            <h4 class="bonus" style="visibility:hidden">+2 BONUS</h4>
+            <h5 class="bonus" style="display: none">+2 BONUS</h5>
         </div>
         }@else{
         <div>
-            <h4 class="bonus">+2 BONUS</h4>
+            <h5 class="bonus">+2 BONUS</h5>
         </div>
         }
     </div>
-    <div (click)="clickItem(true)" class="options">
+    <div (click)="clickItem(true, this)" class="options">
         <div>
             <p class="stat">rapidité</p>
         </div>
         @if(cahnge){
         <div>
-            <h4 class="bonus">+2 BONUS</h4>
+            <h5 class="bonus">+2 BONUS</h5>
         </div>
         }@else{
         <div>
-            <h4 class="bonus" style="visibility:hidden">+2 BONUS</h4>
+            <h5 class="bonus" style="display: none">+2 BONUS</h5>
         </div>
         }
     </div>

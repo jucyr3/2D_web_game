@@ -7,8 +7,8 @@ import { Component } from '@angular/core';
     styleUrl: './stat.component.scss',
 })
 export class StatComponent {
-    cahnge:boolean=false;
-    clickItem(value:boolean) {
+    cahnge: boolean = false;
+    clickItem(value: boolean, element: any) {
         this.cahnge = value;
     }
 }

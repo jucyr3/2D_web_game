@@ -8,19 +8,29 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    justify-content: space-evenly;
+    justify-content: center;
+    gap: 5%;
+    overflow: hidden;
 
     .bonus {
         animation: pop 1s infinite;
+        justify-content: left;
+        overflow: hidden;
     }
 
     @keyframes pop {
         0%,
         100% {
-            transform: scale(1) rotate(-10deg);
+            transform: scale(0.8) rotate(-10deg) translateY(-10px);
         }
         50% {
-            transform: scale(1.4) rotate(-10deg);
+            transform: scale(1.1) rotate(-10deg) translateY(-10px);
         }
     }
+    border-radius: 5%;
+    cursor: pointer;
+    &:hover {
+        background-color: #e4e4e4;
+    }
+    transition: all 0.2s ease-in-out;
 }
