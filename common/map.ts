@@ -15,7 +15,7 @@ export class Map {
         this.isVisible = isVisible;
         this.description = description;
         this.gameMode = gameMode;
-        this.tileMatrix = Array.from({ length: size }, () => Array.from({ length: size }, () => new Tile()));
+        this.tileMatrix = Array.from({ length: size }, () => Array.from({ length: size }, () => new Tile("grass", false, false)));
         this.lastModified = new Date();
     }
 

@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { EDIT_TOOL_TYPES, TILE_TYPES } from '@app/services/editing-tool.constants';
 import { EditingToolService } from '../../services/editing-tool.service';
 import { MouseService } from '@app/services/mouse.service';
+import { MapService } from '@app/services/map.service';
 
 @Component({
     selector: 'app-tile',
@@ -12,16 +13,22 @@ import { MouseService } from '@app/services/mouse.service';
 })
 export class TileComponent {
     @Input() tileNumber: number;
-
+    
     // TODO Add attribute for GameObject contained in tile
-
+    
     tileTexture: string;
     tileType: TILE_TYPES;
+    
+    row: number;
+    column: number;
 
-    constructor(private editingToolService: EditingToolService, private mouseService: MouseService) {}
+    constructor(private editingToolService: EditingToolService, private mouseService: MouseService, private mapService: MapService) {}
 
     ngOnInit() {
         this.tileTexture = this.editingToolService.getTileImage(TILE_TYPES.GRASS); // Initialize here
+        this.row = Math.floor(this.tileNumber / this.mapService.map.size); 
+        this.column = this.tileNumber % this.mapService.map.size;
+
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -44,19 +51,15 @@ export class TileComponent {
         }
     }
 
+    //? maybe logic to much coupled with view, possible refactor
     placeTile() {
         this.tileTexture = this.editingToolService.getTileImage(this.editingToolService.getCurrentTileTypeOnBrush());
-        //this.tileService.saveTile(this.tileNumber, this.currentTileTypeOnBrush);
-
-        // TODO add tile logic for saving in actual Tile Object
-        // let column = this.tileNumber % 20; //? magic number, scale to map size
-        // let row = Math.floor(this.tileNumber / 20); //? magic number, scale to map size
-        // console.log(row, column);
+        this.mapService.map.tileMatrix[this.row][this.column].type = this.editingToolService.getCurrentTileTypeOnBrush();
     }
 
     eraseTile() {
-        // TODO change this to the good tiles instead of the color
         this.tileType = TILE_TYPES.GRASS;
-        this.tileTexture = 'url(assets/grass.png)';
+        this.tileTexture = `url(assets/${TILE_TYPES.GRASS}.png)`;
+        this.mapService.map.tileMatrix[this.row][this.column].type = TILE_TYPES.GRASS;
     }
 }

@@ -1,5 +1,11 @@
 export class Tile {
-    type: "Grass" | "Water" | "Sand" | "Rock";
+    type: string;
     isOccupied: boolean;
     isObstacle: boolean;
+
+    constructor(type: string, isOccupied: boolean, isObstacle: boolean) {
+        this.type = type;
+        this.isOccupied = isOccupied;
+        this.isObstacle = isObstacle;
+    }
 }
