@@ -1,15 +1,21 @@
 import { Injectable } from '@angular/core';
-
+import { Map } from '@common/map';
+import { TileTypes } from '@common/tileType.constants';
 @Injectable({
     providedIn: 'root',
 })
 export class SaveService {
-    something: string;
     private games: { name: string; description: string }[] = [];
 
-    // TODO: verify unique name -> check thru game list
     isUniqueName(name: string): boolean {
         return this.games.some((game) => game.name === name);
+    }
+
+    // TODO: check that 50% is land
+    validateMap(map: Map): boolean {
+        const flatMap = map.flattenedTileMatrix;
+        const tilesCount = flatMap.filter((tile) => tile.type === (TileTypes.GROUND_0 || TileTypes.GROUND_1 || TileTypes.GROUND_2)).length;
+        return tilesCount > (map.size * map.size) / 2;
     }
 
     validateGame(name: string, description: string): string[] {

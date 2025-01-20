@@ -1,5 +1,5 @@
 import { Tile } from "./tile";
-import { TILE_TYPES } from "./tileType.constants";
+import { TileTypes } from "./tileType.constants";
 
 export class Map {
     name: string;
@@ -17,7 +17,7 @@ export class Map {
         this.isVisible = isVisible;
         this.description = description;
         this.gameMode = gameMode;
-        this.tileMatrix = Array.from({ length: size }, () => Array.from({ length: size }, () => new Tile(TILE_TYPES.GROUND_1, false, false)));
+        this.tileMatrix = Array.from({ length: size }, () => Array.from({ length: size }, () => new Tile(TileTypes.GROUND_1, false, false)));
         this.lastModified = new Date();
     }
 
