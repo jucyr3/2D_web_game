@@ -4,10 +4,10 @@
 </div>
 <div class="options">
     <div class="halfScreen">
-        <app-profile-selection></app-profile-selection>
+        <app-profile-selection (selected)="handleEvent($event)"></app-profile-selection>
     </div>
     <div class="halfScreen">
-        <app-profile-showcase></app-profile-showcase>
+        <app-profile-showcase [profileChosed]="profilePicture"></app-profile-showcase>
         <div class="buttons">
             @if(!choose){
             <button id="back">retour</button>

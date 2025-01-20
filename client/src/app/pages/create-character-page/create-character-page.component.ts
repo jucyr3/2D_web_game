@@ -9,9 +9,13 @@ import { ProfileShowcaseComponent } from '@app/components/create-character/profi
     styleUrl: './create-character-page.component.scss',
 })
 export class CreateCharacterPageComponent {
+    profilePicture: number = 1;
+
     choose: boolean = false;
     chosed(value: boolean) {
         this.choose = value;
     }
-
+    handleEvent(event: number) {
+        this.profilePicture = event;
+    }
 }

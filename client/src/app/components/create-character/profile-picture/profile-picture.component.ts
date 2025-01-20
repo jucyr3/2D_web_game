@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
     selector: 'app-profile-picture',
@@ -7,11 +7,12 @@ import { Component } from '@angular/core';
     styleUrl: './profile-picture.component.scss',
 })
 export class ProfilePictureComponent {
-    imagePath = 'assets/images/1.jpg';
-    isSelected: boolean = false;
+    @Input() imagePath: string;
+    @Input() isSelected = false;
+    @Input() itemNumber: number;
+    @Output() selected = new EventEmitter<number>();
+
     clickItem() {
-        this.isSelected = !this.isSelected;
+        this.selected.emit(this.itemNumber);
     }
-    // @Input() imgSrc: string;
-    // constructor() {}
 }
