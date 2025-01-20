@@ -8,10 +8,11 @@ describe('MainPageComponent', () => {
     let compiled: HTMLElement;
 
     const routes: Routes = [];
+    const EXPECTED_BUTTON_COUNT = 3;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [MainPageComponent], 
+            imports: [MainPageComponent],
             providers: [provideRouter(routes)],
         }).compileComponents();
     });
@@ -34,7 +35,7 @@ describe('MainPageComponent', () => {
 
     it('should render the buttons with correct text', () => {
         const buttons = compiled.querySelectorAll('.button');
-        expect(buttons.length).toBe(3);
+        expect(buttons.length).toBe(EXPECTED_BUTTON_COUNT);
         expect(buttons[0].textContent).toContain('Joindre une partie');
         expect(buttons[1].textContent).toContain('Créer une partie');
         expect(buttons[2].textContent).toContain('Administrer les jeux');
