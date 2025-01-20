@@ -1,5 +1,5 @@
 <div class="container">
-    @for (path of imagesPath; track path.id){ @if(path.id != itemSelected){
+    @for (path of imagesPath; track path.id){ @if(path.id !== itemSelected){
     <app-profile-picture
         [itemNumber]="path.id"
         imagePath="{{ path.imagePath }}"

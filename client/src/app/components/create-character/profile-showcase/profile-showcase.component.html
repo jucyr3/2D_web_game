@@ -1,8 +1,18 @@
 <div class="container">
-    <div>
+    <div class="overview">
+        <div class="info">
+            <span class="infoText">
+                <div>Vie : Points de vie du personnage</div>
+                <div>Rapidité : Ordre des tours et points de mouvement par tour</div>
+                <div>Attaque : Force avec laquelle une attaque est faite</div>
+                <div>Défense : Capacité à bloquer une attaque</div>
+            </span>
+            &#9432;
+        </div>
         <img [src]="imagePath" atl="img" />
+
     </div>
     <app-name></app-name>
-    <app-stat></app-stat>
-    <app-dice></app-dice>
+    <app-stat (selected)="clickBonus($event)"></app-stat>
+    <app-dice (selected)="clickDice($event)"></app-dice>
 </div>

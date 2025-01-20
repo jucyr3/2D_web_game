@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { ProfilePictureComponent } from '../profile-picture/profile-picture.component';
+import { ProfilePictureComponent } from '@app/components/create-character/profile-picture/profile-picture.component';
 
 @Component({
     selector: 'app-profile-selection',
@@ -8,6 +8,7 @@ import { ProfilePictureComponent } from '../profile-picture/profile-picture.comp
     styleUrl: './profile-selection.component.scss',
 })
 export class ProfileSelectionComponent {
+    @Output() selected = new EventEmitter<number>();
     imagesPath = [
         { id: 1, imagePath: 'assets/images/1.jpg' },
         { id: 2, imagePath: 'assets/images/2.jpg' },
@@ -23,7 +24,6 @@ export class ProfileSelectionComponent {
         { id: 12, imagePath: 'assets/images/12.jpg' },
     ];
     itemSelected: number = 1;
-    @Output() selected = new EventEmitter<number>();
     clickItem(event: number) {
         this.selected.emit(event);
         this.itemSelected = event;
