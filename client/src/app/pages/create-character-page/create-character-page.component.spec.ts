@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterLink,ActivatedRoute } from '@angular/router';
 import { CreateCharacterPageComponent } from './create-character-page.component';
 
 describe('CreateCharacterPageComponent', () => {
@@ -7,7 +8,8 @@ describe('CreateCharacterPageComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CreateCharacterPageComponent],
+            imports: [CreateCharacterPageComponent, RouterLink],
+            providers: [{ provide: ActivatedRoute, useValue: {} }],
         }).compileComponents();
         fixture = TestBed.createComponent(CreateCharacterPageComponent);
         component = fixture.componentInstance;
