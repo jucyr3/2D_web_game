@@ -9,12 +9,7 @@
     <div class="halfScreen">
         <app-profile-showcase [profileChosed]="profilePicture"></app-profile-showcase>
         <div class="buttons">
-            @if(!choose){
-            <button id="back">retour</button>
-            <button id="continue" (click)="chosed(true)">choisir</button>
-            }@else{
-            <button id="unlocked" (click)="chosed(false)">changer</button>
-            }
+            <button id="continue" routerLink="/waitingRoom">Valider</button>
         </div>
     </div>
 </div>

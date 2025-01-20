@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { WaitingRoomServiceService } from '@app/services/waiting-room-service.service';
 
 @Component({
     selector: 'app-waiting-room-page',
@@ -7,9 +8,6 @@ import { Component } from '@angular/core';
     styleUrl: './waiting-room-page.component.scss',
 })
 export class WaitingRoomPageComponent {
-    accessCode: number = this.getRandomFourDigitNumber();
-
-    getRandomFourDigitNumber(): number {
-        return Math.floor(1000 + Math.random() * 9000);
-    }
+    constructor(private waitingRoom: WaitingRoomServiceService) {}
+    accessCode: number = this.waitingRoom.getRandomFourDigitNumber();
 }
