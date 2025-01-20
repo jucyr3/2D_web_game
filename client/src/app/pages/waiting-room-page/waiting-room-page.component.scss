@@ -1,0 +1,196 @@
+.waiting-room {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+    }
+
+    &__title {
+        color: #b166ff;
+        font-size: 24px;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    &__code {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+
+        &-text {
+            color: white;
+            font-size: 25px;
+        }
+        span {
+            color: #b166ff;
+            background-color: rgba(177, 102, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 8px;
+        }
+    }
+
+    &__content {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        flex-grow: 1;
+    }
+
+    &__chat {
+        background-color: white;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        max-height: 500px;
+        margin-right: 20px;
+    }
+
+    &__player-header {
+        background-color: #808080;
+        color: white;
+        padding: 10px;
+        border-radius: 8px 8px 0 0;
+    }
+
+    &__messages {
+        flex-grow: 1;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        overflow-y: auto;
+    }
+
+    &__input {
+        padding: 8px;
+        background-color: #e0e0e0;
+        border-radius: 0 0 8px 8px;
+    }
+
+    &__players {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        overflow-y: auto;
+        // width: 50%;
+    }
+
+    &__add-bot {
+        background-color: #7094ff;
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 8px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: darken(#7094ff, 10%);
+        }
+    }
+
+    &__start-button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+
+        &:hover {
+            background-color: darken(#4caf50, 10%);
+        }
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    &__lock-button {
+        background-color: #777171;
+        &:hover {
+            background-color: darken(#879fe9, 10%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    }
+
+    &__start-button {
+        background-color: #4caf50;
+        &:hover {
+            background-color: darken(#4caf50, 5%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    }
+    .button {
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        width: auto;
+        transition:
+            transform 0.2s,
+            box-shadow 0.2s;
+        &:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    }
+}
+
+.player {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #808080;
+    padding: 15px; /* Augmenté de 10px à 15px */
+    border-radius: 8px;
+
+    &--admin {
+        background-color: #b166ff;
+    }
+
+    &__avatar {
+        width: 40px;
+        height: 40px;
+        background-color: #444;
+        border-radius: 4px;
+    }
+
+    &__name {
+        color: white;
+        font-weight: 500;
+    }
+}
+
+.message-input {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    background-color: transparent;
+    font-size: 14px;
+
+    &::placeholder {
+        color: #666;
+    }
+
+    &:focus {
+        outline: none;
+    }
+}

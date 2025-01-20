@@ -6,4 +6,10 @@ import { Component } from '@angular/core';
     templateUrl: './waiting-room-page.component.html',
     styleUrl: './waiting-room-page.component.scss',
 })
-export class WaitingRoomPageComponent {}
+export class WaitingRoomPageComponent {
+    accessCode: number = this.getRandomFourDigitNumber();
+
+    getRandomFourDigitNumber(): number {
+        return Math.floor(1000 + Math.random() * 9000);
+    }
+}
