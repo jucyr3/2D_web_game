@@ -33,4 +33,38 @@
         height: 25%;
         width: 100%;
     }
+    .overview {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        width: 100%;
+    }
+    .info {
+        right:10vh;
+        position: absolute;
+        display: inline-block;
+        transition: 0s;
+        .infoText {
+        position: absolute;
+
+            display: flex;
+            flex-direction: column;
+            visibility: hidden;
+            width: 25vh;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            padding: 0.5vh 0vh;
+            border-radius: 2vh;
+            position: absolute;
+            z-index: auto;
+            top:1.5vh;
+            right: 3vh;
+        }
+    
+    }
+    .info:hover .infoText {
+        visibility: visible;
+        transition-delay:0.5s;
+    }
 }
