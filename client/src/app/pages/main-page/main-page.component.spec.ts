@@ -1,34 +1,18 @@
-import { HttpResponse } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Routes, provideRouter } from '@angular/router';
-import { MainPageComponent } from '@app/pages/main-page/main-page.component';
-import { CommunicationService } from '@app/services/communication.service';
-import { of, throwError } from 'rxjs';
-import SpyObj = jasmine.SpyObj;
-
-const routes: Routes = [];
+import { MainPageComponent } from './main-page.component';
 
 describe('MainPageComponent', () => {
     let component: MainPageComponent;
     let fixture: ComponentFixture<MainPageComponent>;
-    let communicationServiceSpy: SpyObj<CommunicationService>;
+    let compiled: HTMLElement;
+
+    const routes: Routes = [];
 
     beforeEach(async () => {
-        communicationServiceSpy = jasmine.createSpyObj('ExampleService', ['basicGet', 'basicPost']);
-        communicationServiceSpy.basicGet.and.returnValue(of({ title: '', body: '' }));
-        communicationServiceSpy.basicPost.and.returnValue(of(new HttpResponse<string>({ status: 201, statusText: 'Created' })));
-
         await TestBed.configureTestingModule({
-            imports: [MainPageComponent],
-            providers: [
-                {
-                    provide: CommunicationService,
-                    useValue: communicationServiceSpy,
-                },
-                provideHttpClientTesting(),
-                provideRouter(routes),
-            ],
+            imports: [MainPageComponent], 
+            providers: [provideRouter(routes)],
         }).compileComponents();
     });
 
@@ -36,40 +20,40 @@ describe('MainPageComponent', () => {
         fixture = TestBed.createComponent(MainPageComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
+        compiled = fixture.nativeElement;
     });
 
-    it('should create', () => {
+    it('should create the component', () => {
         expect(component).toBeTruthy();
     });
 
-    it("should have as title 'LOG2990'", () => {
-        expect(component.title).toEqual('LOG2990');
+    it('should render the title correctly', () => {
+        const titleElement = compiled.querySelector('.home-page__title') as HTMLElement;
+        expect(titleElement.textContent).toContain(component.title);
     });
 
-    it('should call basicGet when calling getMessagesFromServer', () => {
-        component.getMessagesFromServer();
-        expect(communicationServiceSpy.basicGet).toHaveBeenCalled();
+    it('should render the buttons with correct text', () => {
+        const buttons = compiled.querySelectorAll('.button');
+        expect(buttons.length).toBe(3);
+        expect(buttons[0].textContent).toContain('Joindre une partie');
+        expect(buttons[1].textContent).toContain('Créer une partie');
+        expect(buttons[2].textContent).toContain('Administrer les jeux');
     });
 
-    it('should call basicPost when calling sendTimeToServer', () => {
-        component.sendTimeToServer();
-        expect(communicationServiceSpy.basicPost).toHaveBeenCalled();
+    it('should have correct router links in buttons', () => {
+        const buttons = compiled.querySelectorAll('.button');
+        expect(buttons[0].getAttribute('routerLink')).toBe('/game');
+        expect(buttons[1].getAttribute('routerLink')).toBe('/character');
+        expect(buttons[2].getAttribute('routerLink')).toBe('/admin');
     });
 
-    it('should handle basicPost that returns a valid HTTP response', () => {
-        component.sendTimeToServer();
-        component.message.subscribe((res) => {
-            expect(res).toContain('201 : Created');
-        });
-    });
-
-    it('should handle basicPost that returns an invalid HTTP response', () => {
-        communicationServiceSpy.basicPost.and.returnValue(throwError(() => new Error('test')));
-        component.sendTimeToServer();
-        component.message.subscribe({
-            next: (res) => {
-                expect(res).toContain('Le serveur ne répond pas');
-            },
-        });
+    it('should render the footer with team names', () => {
+        const footerText = compiled.querySelector('.home-page__footer p')?.textContent;
+        expect(footerText).toContain('Alhassane Barry');
+        expect(footerText).toContain('Vincent Charbonneau');
+        expect(footerText).toContain('Julien Cyr');
+        expect(footerText).toContain('Danya Li');
+        expect(footerText).toContain('Tristan Samson');
+        expect(footerText).toContain('Cedric Andy Vaval');
     });
 });
