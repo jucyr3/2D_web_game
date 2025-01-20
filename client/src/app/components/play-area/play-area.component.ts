@@ -1,4 +1,5 @@
 import { Component, HostListener, inject } from '@angular/core';
+import { SaveService } from '@app/services/save.service';
 import { TimeService } from '@app/services/time.service';
 
 // TODO : Avoir un fichier séparé pour les constantes!
@@ -23,18 +24,19 @@ export enum MouseButton {
 export class PlayAreaComponent {
     buttonPressed = '';
     private readonly timer = 5;
-
     // Injection de dépendance hors du constructeur
     // Équivalent à constructor(priate readonly timeService: TimeService)
     private readonly timeService: TimeService = inject(TimeService);
-
+    constructor(private saveButton: SaveService) {}
     get time(): number {
         return this.timeService.time;
     }
-
     @HostListener('keydown', ['$event'])
     buttonDetect(event: KeyboardEvent) {
         this.buttonPressed = event.key;
+    }
+    saveGame() {
+        this.saveButton.saveGame();
     }
 
     // TODO : déplacer ceci dans un service de gestion de la souris!

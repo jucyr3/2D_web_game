@@ -4,6 +4,7 @@
         <h2>Débutez une minuterie de 5 secondes</h2>
         <button (click)="mouseHitDetect($event)">Commencer</button>
         @if(time){ <p>Temps restant : {{ time }}</p> }
+        <button id='enregistrer-button' (click) = 'saveGame()'>Enregistrer</button>
     </section>
 
     <div id="position-display">
