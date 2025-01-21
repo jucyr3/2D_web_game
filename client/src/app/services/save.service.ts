@@ -11,11 +11,14 @@ export class SaveService {
         return this.games.some((game) => game.name === name);
     }
 
-    // TODO: check that 50% is land
-    validateMap(map: Map): boolean {
+    isMapHalfFloor(map: Map): boolean {
         const flatMap = map.flattenedTileMatrix;
         const tilesCount = flatMap.filter((tile) => tile.type === (TileTypes.GROUND_0 || TileTypes.GROUND_1 || TileTypes.GROUND_2)).length;
         return tilesCount > (map.size * map.size) / 2;
+    }
+
+    isMapAccessible(map: Map): boolean {
+        const flatMap = map.flattenedTileMatrix;
     }
 
     validateGame(name: string, description: string): string[] {
