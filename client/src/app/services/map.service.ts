@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Map } from "./../../../../common/map";
+import { TileTypes } from '@common/tileType.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -20,5 +21,17 @@ export class MapService {
             console.log(this.map.tileMatrix[i][j].type);
         }
       } 
+    }
+
+    changeTileType(row: number, column: number, newType: TileTypes): void {
+      this.map.tileMatrix[row][column].type = newType;
+    }
+
+    setDefaultTileType(row: number, column: number): void {
+      this.map.tileMatrix[row][column].type = TileTypes.GROUND_1;
+    }
+
+    getTileType(row: number, column: number): TileTypes {
+      return this.map.tileMatrix[row][column].type;
     }
 }

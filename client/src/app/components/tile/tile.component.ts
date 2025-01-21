@@ -1,9 +1,10 @@
 import { NgStyle } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { EDIT_TOOL_TYPES, TILE_TYPES } from '@app/services/editing-tool.constants';
-import { EditingToolService } from '../../services/editing-tool.service';
-import { MouseService } from '@app/services/mouse.service';
+import { EDIT_TOOL_TYPES } from '@app/services/editing-tool.constants';
 import { MapService } from '@app/services/map.service';
+import { MouseService } from '@app/services/mouse.service';
+import { EditingToolService } from '../../services/editing-tool.service';
+import { TileTypes } from '@app/../../../common/tileType.constants';
 
 @Component({
     selector: 'app-tile',
@@ -13,22 +14,25 @@ import { MapService } from '@app/services/map.service';
 })
 export class TileComponent {
     @Input() tileNumber: number;
-    
+
     // TODO Add attribute for GameObject contained in tile
-    
+
     tileTexture: string;
-    tileType: TILE_TYPES;
-    
+    tileType: TileTypes;
+
     row: number;
     column: number;
 
-    constructor(private editingToolService: EditingToolService, private mouseService: MouseService, private mapService: MapService) {}
+    constructor(
+        private readonly editingToolService: EditingToolService,
+        private readonly mouseService: MouseService,
+        private readonly mapService: MapService,
+    ) {}
 
     ngOnInit() {
-        this.tileTexture = this.editingToolService.getTileImage(TILE_TYPES.GRASS); // Initialize here
-        this.row = Math.floor(this.tileNumber / this.mapService.map.size); 
+        this.tileTexture = this.editingToolService.getTileImage(TileTypes.GROUND_1); // Initialize here
+        this.row = Math.floor(this.tileNumber / this.mapService.map.size);
         this.column = this.tileNumber % this.mapService.map.size;
-
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -54,12 +58,12 @@ export class TileComponent {
     //? maybe logic to much coupled with view, possible refactor
     placeTile() {
         this.tileTexture = this.editingToolService.getTileImage(this.editingToolService.getCurrentTileTypeOnBrush());
-        this.mapService.map.tileMatrix[this.row][this.column].type = this.editingToolService.getCurrentTileTypeOnBrush();
+        this.mapService.changeTileType(this.row, this.column, this.editingToolService.getCurrentTileTypeOnBrush());
     }
 
     eraseTile() {
-        this.tileType = TILE_TYPES.GRASS;
-        this.tileTexture = `url(assets/${TILE_TYPES.GRASS}.png)`;
-        this.mapService.map.tileMatrix[this.row][this.column].type = TILE_TYPES.GRASS;
+        this.tileType = TileTypes.GROUND_1;
+        this.tileTexture = `url(assets/${TileTypes.GROUND_1}.png)`;
+        this.mapService.setDefaultTileType(this.row, this.column);
     }
 }
