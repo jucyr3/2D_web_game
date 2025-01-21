@@ -13,3 +13,8 @@
     overflow: hidden;
 }
 
+.cursor-sword {
+    width: 32px; /* Adjust size as needed */
+    height: auto;
+    transform: translate(-50%, -50%); /* Centers the image on the cursor */
+  }
