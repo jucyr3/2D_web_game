@@ -1,12 +1,24 @@
+<!-- TODO put this in own component (logic also, see .ts) -->
+<input
+  class="titleInput"
+  type="text"
+  [value]="this.title"
+  (input)="onTitleInput($event)"
+  (blur)="onBlur()"
+  maxlength="30"
+/>
 
-<h1>{{ this.mapService.map.name }}</h1>
-<button (click)="openMapSettingsModal()">Edit Title</button>
 
-@if (showModal) {
-  <app-map-settings-modal 
-    (closeModal)="closeMapSettingsModal()">
-  </app-map-settings-modal>
-}
+<!-- TODO put this in own component (logic also, see .ts) -->
+<input
+  class="descriptionInput"
+  type="text"
+  [value]="this.description"
+  (input)="onTitleInput($event)"
+  (blur)="onBlur()"
+  maxlength="300"
+/>
+
 
 
 <!-- TODO remove this. for testing only-->
@@ -15,7 +27,7 @@
 <div class="app-layout" (mousedown)="onMouseDown($event)" (mouseup)="onMouseUp()">
     <app-brush-grid class="brush-grid"></app-brush-grid>
     <app-item-grid></app-item-grid>
-    <app-tile-grid class="tile-grid" ></app-tile-grid>
+    <app-tile-grid class="tile-grid"></app-tile-grid>
 </div>
 
-<p class="description"> {{this.mapService.map.description}} </p>
+<p class="description">{{ this.mapService.map.description }}</p>

@@ -18,3 +18,41 @@
     height: auto;
     transform: translate(-50%, -50%); /* Centers the image on the cursor */
   }
+
+
+.titleInput {
+    font-size: 1.5em;
+    font-weight: bold;
+    border: none;
+    outline: none;
+    background-color: rgba(249, 170, 170, 0.398);
+    color: black;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 40%;
+}
+
+
+.descriptionInput {
+    font-size: 1em;
+    font-weight: bold;
+    border: 1px solid black; /* Black border */
+    outline: none;
+    background-color: rgba(249, 170, 170, 0.398);
+    color: black;
+    text-align: center;
+    padding: 10px; /* Add padding */
+    margin: 10px; /* Add margin */
+    position: absolute; /* Change to absolute positioning */
+    bottom: 0; /* Position at the bottom */
+    left: 0; /* Position at the left */
+    width: auto; /* Adjust width */
+    max-width: 40%;
+    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+}

@@ -2,31 +2,23 @@ import { TileGridComponent } from '@app/components/tile-grid/tile-grid.component
 import { EditingToolService } from '@app/services/editing-tool.service';
 import { BrushGridComponent } from "../../components/brush-grid/brush-grid.component";
 import { MouseService } from '@app/services/mouse.service';
-import { MapSettingsModalComponent} from "../../components/map-settings-modal/map-settings-modal.component";
 import { MapService } from '@app/services/map.service';
 import { ItemGridComponent } from '@app/components/item-grid/item-grid.component';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-edit-page',
-  imports: [TileGridComponent, BrushGridComponent, MapSettingsModalComponent, ItemGridComponent],
+  imports: [TileGridComponent, BrushGridComponent, ItemGridComponent],
   templateUrl: './edit-page.component.html',
   styleUrl: './edit-page.component.scss',
   providers: [EditingToolService]
 })
 export class EditPageComponent {
-  showModal: boolean = false;
+  title = this.mapService.map.name;
+  description = this.mapService.map.description;
 
   constructor (private readonly mouseService: MouseService, protected mapService: MapService) { }
 
-
-  openMapSettingsModal() {
-    this.showModal = true;
-  }
-
-  closeMapSettingsModal() {
-    this.showModal = false;
-  }
 
 
   onMouseDown(event: MouseEvent) {
@@ -62,5 +54,28 @@ export class EditPageComponent {
     
     sword.classList.add('cursor-sword');
     document.body.appendChild(sword);
+  }
+
+
+  onTitleInput(event: Event) {
+    this.title = (event.target as HTMLInputElement).value;
+  }
+
+  onDescriptionInput(event: Event) {
+    this.description = (event.target as HTMLInputElement).value;
+  }
+
+  onBlur() {
+    this.updateValue();
+  }
+
+  updateValue() {
+    if (!this.title || this.title.trim() === '') {
+      this.title = 'Untitled'; // Reset to default if empty
+    }
+    this.mapService.map.name = this.title;
+    this.mapService.map.description = this.description;
+    console.log(this.mapService.map.description);
+    // Add any additional logic you need to handle the updated value
   }
 }
