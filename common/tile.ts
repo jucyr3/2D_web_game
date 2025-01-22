@@ -4,7 +4,7 @@ export class Tile {
     type: TileTypes;
     isOccupied: boolean;
     isObstacle: boolean;
-    gameObject: GameObject;
+    gameObject: GameObject | null;
 
     constructor(type: TileTypes, isOccupied: boolean, isObstacle: boolean) {
         this.type = type;

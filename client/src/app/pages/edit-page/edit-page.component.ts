@@ -52,7 +52,6 @@ export class EditPageComponent {
     }
     this.mapService.map.name = this.title;
     this.mapService.map.description = this.description;
-    console.log(this.mapService.map.description);
     // Add any additional logic you need to handle the updated value
   }
 }
