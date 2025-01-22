@@ -3,8 +3,11 @@ import { Component, Input } from '@angular/core';
 import { EDIT_TOOL_TYPES } from '@app/services/editing-tool.constants';
 import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
+import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditingToolService } from '../../services/editing-tool.service';
 import { TileTypes } from '@app/../../../common/tileType.constants';
+import { ItemObject } from '@app/../../../common/itemObject';
+import { GameObject } from '@app/../../../common/gameObject.interface';
 
 @Component({
     selector: 'app-tile',
@@ -16,6 +19,7 @@ export class TileComponent {
     @Input() tileNumber: number;
 
     // TODO Add attribute for GameObject contained in tile
+    gameObject: GameObject | null = null;
 
     tileTexture: string;
     tileType: TileTypes;
@@ -27,6 +31,7 @@ export class TileComponent {
         private readonly editingToolService: EditingToolService,
         private readonly mouseService: MouseService,
         private readonly mapService: MapService,
+        private readonly dragAndDropService: DragAndDropService
     ) {}
 
     ngOnInit() {
@@ -37,11 +42,42 @@ export class TileComponent {
 
     onMouseDown(event: MouseEvent): void {
         this.handleTileBrush(event.button === 2); // `true` if right-click, `false` otherwise
+        this.handleItemDragging(event);
     }
-
+    
     onMouseMove(): void {
         if (this.mouseService.isMouseDown) {
             this.handleTileBrush(this.mouseService.isRightClick);
+        }
+    }
+
+    onMouseUp(event: MouseEvent): void {
+        this.handleItemDragging(event);
+    }
+
+    onMouseEnter(): void {
+        
+        this.dragAndDropService.setCurrentHoveredTile(this.row, this.column);
+    }
+
+    private handleItemDragging(event: MouseEvent): void {
+
+        if (this.editingToolService.getActiveTool() !== EDIT_TOOL_TYPES.HAND) {
+            return;
+        }
+        if (this.gameObject) {
+            this.dragAndDropService.startDragging(this.gameObject.name, event);
+            this.gameObject = null;
+            this.mapService.removeGameObject(this.row, this.column);
+            // take the item in hand
+        }
+
+        //! temporary code, get out item creation elsewhere
+        else if (this.dragAndDropService.currentDraggedItemId && !this.gameObject) {
+            // TODO: should work for everyGameObject
+            let newGameObject = new ItemObject(this.dragAndDropService.currentDraggedItemId);
+            this.gameObject = newGameObject;
+            this.mapService.placeGameObject(this.row, this.column, newGameObject);
         }
     }
 

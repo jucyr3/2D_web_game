@@ -1,15 +1,15 @@
 <div class="item-container">
     <img
-        class="item"
-        [ngClass]="{ grayscale: isDragging }"
-        [src]="'../assets/' + itemType + '.png'"
-        [alt]="itemType"
-        draggable="false"
-        (mousedown)="onMouseDown($event)"
-        onmousedown="return false;"
-        onselectstart="return false;"
+      class="item"
+      [ngClass]="{ grayscale: draggingState.isDragging }"
+      [src]="'../assets/' + itemType + '.png'"
+      [alt]="itemType"
+      draggable="false"
+      (mousedown)="onMouseDown($event)"
+      onmousedown="return false;"
+      onselectstart="return false;"
     />
-</div>
-<div *ngIf="isDragging" class="drag-preview" [style.left.px]="dragX" [style.top.px]="dragY">
+  </div>
+  <div *ngIf="draggingState.isDragging" class="drag-preview" [style.left.px]="draggingState.dragX" [style.top.px]="draggingState.dragY">
     <img [src]="'../assets/' + itemType + '.png'" [alt]="itemType" />
-</div>
+  </div>

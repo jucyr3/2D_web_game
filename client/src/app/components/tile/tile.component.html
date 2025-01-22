@@ -2,5 +2,11 @@
     class="tile"
     (mousemove)="onMouseMove()" 
     (mousedown)="onMouseDown($event)"
+    (mouseenter)="onMouseEnter()"
+    (mouseup)="onMouseUp($event)"
     [ngStyle]="{ 'background-image': this.tileTexture}">
+
+    @if (this.gameObject) {
+        <img [src]="'../assets/' + this.gameObject.name + '.png'"  draggable="false" alt="{{this.gameObject.name}}"/>
+    }
 </div>

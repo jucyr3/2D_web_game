@@ -27,33 +27,10 @@ export class EditPageComponent {
   }
 
   onMouseUp() {
-    const existingSword = document.querySelector('.cursor-sword');
-      if (existingSword) {
-          existingSword.remove();
-      }
     this.mouseService.isMouseDown= false;
   }
 
   onMouseMove(event: MouseEvent) {
-    if (!this.mouseService.isMouseDown) {
-        return;
-    }
-    const sword = document.createElement('img');
-    sword.src = '../assets/sword.png';
-    sword.style.position = 'fixed';
-    sword.style.left = (event.clientX - 16) + 'px';  // Subtract half the width (32/2)
-    sword.style.top = (event.clientY - 16) + 'px';   // Subtract half the height (32/2)
-    sword.style.width = '32px';
-    sword.style.height = '32px';
-    sword.style.pointerEvents = 'none';
-    
-    const existingSword = document.querySelector('.cursor-sword');
-    if (existingSword) {
-        existingSword.remove();
-    }
-    
-    sword.classList.add('cursor-sword');
-    document.body.appendChild(sword);
   }
 
 
@@ -79,3 +56,12 @@ export class EditPageComponent {
     // Add any additional logic you need to handle the updated value
   }
 }
+
+
+// TODO: make the cursor a hand when dragging an item
+// TODO: make the hovered tile a different color when dragging an item over it
+// TODO: make click to delete item
+// TODO: when item is not in container, it needs to stay grayed out and not be draggable
+// TODO: replace the ItemId with the GameObject in Item component
+// TODO: add description to ItemObject
+// TODO: Remove the reference do "document" throughout the code

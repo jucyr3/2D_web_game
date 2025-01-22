@@ -1,69 +1,35 @@
-import { NgClass, NgIf } from '@angular/common';
 import { Component, Input, OnDestroy } from '@angular/core';
+import { DragAndDropService } from '../../services/drag-and-drop.service';
+import { EditingToolService } from '../../services/editing-tool.service';
+import { NgClass, NgIf } from '@angular/common';
+import { EDIT_TOOL_TYPES } from '@app/services/editing-tool.constants';
 
 @Component({
-    selector: 'app-item',
-    imports: [NgIf, NgClass],
-    templateUrl: './item.component.html',
-    styleUrls: ['./item.component.scss'],
+  selector: 'app-item',
+  imports: [NgIf, NgClass],
+  templateUrl: './item.component.html',
+  styleUrls: ['./item.component.scss'],
 })
 export class ItemComponent implements OnDestroy {
-    @Input() itemType: string;
+  @Input() itemType: string;
+  @Input() itemId: string; // Unique identifier for each item
 
-    isDragging = false;
-    dragX = 0;
-    dragY = 0;
-    private mouseMoveListener: ((event: MouseEvent) => void) | null = null;
-    private mouseUpListener: ((event: MouseEvent) => void) | null = null;
+  constructor(public dragAndDropService: DragAndDropService, public editingToolService: EditingToolService) {
+    //this.ItemObject = new ItemObject(this.ItemId);
+  }
 
-    onMouseDown(event: MouseEvent): void {
-        this.isDragging = true;
-        this.updateDragPosition(event);
+  onMouseDown(event: MouseEvent): void {
+    this.editingToolService.setActiveTool(EDIT_TOOL_TYPES.HAND)
+    this.dragAndDropService.startDragging(this.itemId, event);
+    console.log('Dragging:', this.itemType);
+  }
 
-        // Add global event listeners
-        this.mouseMoveListener = this.onMouseMove.bind(this);
-        this.mouseUpListener = this.onMouseUp.bind(this);
+  ngOnDestroy(): void {
+    // Clean up dragging state for this item
+    this.dragAndDropService.onMouseUp(this.itemId);
+  }
 
-        document.addEventListener('mousemove', this.mouseMoveListener);
-        document.addEventListener('mouseup', this.mouseUpListener);
-
-        // Prevent text selection
-        event.preventDefault();
-    }
-
-    onMouseMove(event: MouseEvent): void {
-        if (this.isDragging) {
-            this.updateDragPosition(event);
-        }
-    }
-
-    onMouseUp(): void {
-        this.isDragging = false;
-
-        // Remove global event listeners
-        if (this.mouseMoveListener) {
-            document.removeEventListener('mousemove', this.mouseMoveListener);
-            this.mouseMoveListener = null;
-        }
-        if (this.mouseUpListener) {
-            document.removeEventListener('mouseup', this.mouseUpListener);
-            this.mouseUpListener = null;
-        }
-    }
-
-    private updateDragPosition(event: MouseEvent): void {
-        this.dragX = event.clientX;
-        this.dragY = event.clientY;
-    }
-
-    ngOnDestroy(): void {
-        // Clean up by ensuring isDragging is false and removing any listeners
-        this.isDragging = false;
-        if (this.mouseMoveListener) {
-            document.removeEventListener('mousemove', this.mouseMoveListener);
-        }
-        if (this.mouseUpListener) {
-            document.removeEventListener('mouseup', this.mouseUpListener);
-        }
-    }
+  get draggingState() {
+    return this.dragAndDropService.getDraggingState(this.itemId);
+  }
 }
