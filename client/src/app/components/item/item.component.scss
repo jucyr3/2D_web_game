@@ -12,11 +12,14 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    cursor: grab;
     transition: filter 0.2s ease;
   }
-  
-  .item:active {
+
+  .item:hover {
+    cursor: grab;
+  }
+
+  .item.item:active {
     cursor: grabbing;
   }
 

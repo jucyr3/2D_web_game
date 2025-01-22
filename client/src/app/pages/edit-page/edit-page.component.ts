@@ -5,10 +5,12 @@ import { MouseService } from '@app/services/mouse.service';
 import { MapService } from '@app/services/map.service';
 import { ItemGridComponent } from '@app/components/item-grid/item-grid.component';
 import { Component } from '@angular/core';
+import { DragAndDropService } from '@app/services/drag-and-drop.service';
+import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-edit-page',
-  imports: [TileGridComponent, BrushGridComponent, ItemGridComponent],
+  imports: [TileGridComponent, BrushGridComponent, ItemGridComponent, NgStyle],
   templateUrl: './edit-page.component.html',
   styleUrl: './edit-page.component.scss',
   providers: [EditingToolService]
@@ -17,20 +19,26 @@ export class EditPageComponent {
   title = this.mapService.map.name;
   description = this.mapService.map.description;
 
-  constructor (private readonly mouseService: MouseService, protected mapService: MapService) { }
-
-
+  constructor (private readonly mouseService: MouseService, protected mapService: MapService, protected dragAndDropService: DragAndDropService) { }
 
   onMouseDown(event: MouseEvent) {
     this.mouseService.isMouseDown = true;
     this.mouseService.isRightClick = event.button === 2; // 1: left-click, 2: right-click (MDN Web Docs)
   }
 
-  onMouseUp() {
+  onMouseUp(event: MouseEvent) {
     this.mouseService.isMouseDown= false;
+    const itemId = this.dragAndDropService.currentDraggedItemId;
+    if (itemId) {
+      this.dragAndDropService.onMouseUp(itemId);
+    }
   }
 
-  onMouseMove(event: MouseEvent) {
+  onMouseMove(event: MouseEvent): void {
+    const itemId = this.dragAndDropService.currentDraggedItemId;
+    if (itemId) {
+      this.dragAndDropService.onMouseMove(itemId, event);
+    }
   }
 
 

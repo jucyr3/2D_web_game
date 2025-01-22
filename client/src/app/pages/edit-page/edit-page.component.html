@@ -1,33 +1,21 @@
-<!-- TODO put this in own component (logic also, see .ts) -->
-<input
-  class="titleInput"
-  type="text"
-  [value]="this.title"
-  (input)="onTitleInput($event)"
-  (blur)="onBlur()"
-  maxlength="30"
-/>
+<div
+    id="edit-page"
+    (mousemove)="onMouseMove($event)"
+    (mouseup)="onMouseUp($event)"
+    [ngStyle]="{ cursor: this.dragAndDropService.isDragging ? 'grabbing' : 'default' }"
+>
+    <!-- TODO put this in own component (logic also, see .ts) -->
+    <input class="titleInput" type="text" [value]="this.title" (input)="onTitleInput($event)" (blur)="onBlur()" maxlength="30" />
 
+    <!-- TODO put this in own component (logic also, see .ts) -->
+    <input class="descriptionInput" type="text" [value]="this.description" (input)="onDescriptionInput($event)" (blur)="onBlur()" maxlength="300" />
 
-<!-- TODO put this in own component (logic also, see .ts) -->
-<input
-  class="descriptionInput"
-  type="text"
-  [value]="this.description"
-  (input)="onDescriptionInput($event)"
-  (blur)="onBlur()"
-  maxlength="300"
-/>
+    <!-- TODO remove this. for testing only-->
+    <button (click)="this.mapService.printMap()">print for testing</button>
 
-
-
-<!-- TODO remove this. for testing only-->
-<button (click)="this.mapService.printMap()">print for testing</button>
-
-<div class="app-layout" (mousedown)="onMouseDown($event)" (mouseup)="onMouseUp()">
-    <app-brush-grid class="brush-grid"></app-brush-grid>
-    <app-item-grid></app-item-grid>
-    <app-tile-grid class="tile-grid"></app-tile-grid>
+    <div class="app-layout" (mousedown)="onMouseDown($event)" (mouseup)="onMouseUp($event)">
+        <app-brush-grid class="brush-grid"></app-brush-grid>
+        <app-item-grid></app-item-grid>
+        <app-tile-grid class="tile-grid"></app-tile-grid>
+    </div>
 </div>
-
-<p class="description">{{ this.mapService.map.description }}</p>

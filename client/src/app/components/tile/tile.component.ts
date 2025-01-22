@@ -1,4 +1,4 @@
-import { NgStyle } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { EDIT_TOOL_TYPES } from '@app/services/editing-tool.constants';
 import { MapService } from '@app/services/map.service';
@@ -6,12 +6,12 @@ import { MouseService } from '@app/services/mouse.service';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditingToolService } from '../../services/editing-tool.service';
 import { TileTypes } from '@app/../../../common/tileType.constants';
-import { ItemObject } from '@app/../../../common/itemObject';
+import { ItemObject } from '../../../../../common/ItemObject';
 import { GameObject } from '@app/../../../common/gameObject.interface';
 
 @Component({
     selector: 'app-tile',
-    imports: [NgStyle],
+    imports: [NgStyle, NgClass],
     templateUrl: './tile.component.html',
     styleUrl: './tile.component.scss',
 })
@@ -56,7 +56,6 @@ export class TileComponent {
     }
 
     onMouseEnter(): void {
-        
         this.dragAndDropService.setCurrentHoveredTile(this.row, this.column);
     }
 
@@ -101,5 +100,12 @@ export class TileComponent {
         this.tileType = TileTypes.GROUND_1;
         this.tileTexture = `url(assets/${TileTypes.GROUND_1}.png)`;
         this.mapService.setDefaultTileType(this.row, this.column);
+    }
+
+    shouldShowGrabCursor(): boolean {
+        return (
+            this.gameObject !== null && // Check if the tile has a gameObject
+            this.editingToolService.getActiveTool() === EDIT_TOOL_TYPES.HAND // Check if the active tool is HAND
+        );
     }
 }

@@ -4,9 +4,10 @@
     (mousedown)="onMouseDown($event)"
     (mouseenter)="onMouseEnter()"
     (mouseup)="onMouseUp($event)"
-    [ngStyle]="{ 'background-image': this.tileTexture}">
-
+    [ngStyle]="{ 'background-image': this.tileTexture }"
+    [ngClass]="{ 'grab-cursor': shouldShowGrabCursor() }"
+>
     @if (this.gameObject) {
-        <img [src]="'../assets/' + this.gameObject.name + '.png'"  draggable="false" alt="{{this.gameObject.name}}"/>
+        <img [src]="'../assets/' + this.gameObject.name + '.png'" draggable="false" alt="{{this.gameObject.name}}" />
     }
 </div>

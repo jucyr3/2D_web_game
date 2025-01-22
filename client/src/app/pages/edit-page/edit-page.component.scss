@@ -1,26 +1,36 @@
-.app-layout {
+/* Prevent scrolling on the entire page */
+#edit-page {
+    overflow: hidden;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Ensure no child elements allow scrolling */
+  .app-layout {
     display: flex;
     flex-direction: row; /* Horizontal alignment */
     height: 100vh; /* Full viewport height */
-}
+    overflow: hidden; /* Prevent scrolling */
+  }
   
-.brush-grid {
+  .brush-grid {
     width: 20%; /* Adjust as needed */
-}
-
-.tile-grid {
+    overflow: hidden; /* Prevent scrolling */
+  }
+  
+  .tile-grid {
     flex: 1; /* Take up the remaining space */
-    overflow: hidden;
-}
-
-.cursor-sword {
+    overflow: hidden; /* Prevent scrolling */
+  }
+  
+  .cursor-sword {
     width: 32px; /* Adjust size as needed */
     height: auto;
     transform: translate(-50%, -50%); /* Centers the image on the cursor */
   }
-
-
-.titleInput {
+  
+  .titleInput {
     font-size: 1.5em;
     font-weight: bold;
     border: none;
@@ -36,10 +46,9 @@
     transform: translateX(-50%);
     width: 100%;
     max-width: 40%;
-}
-
-
-.descriptionInput {
+  }
+  
+  .descriptionInput {
     font-size: 1em;
     font-weight: bold;
     border: 1px solid black; /* Black border */
@@ -55,4 +64,4 @@
     width: auto; /* Adjust width */
     max-width: 40%;
     box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
-}
+  }

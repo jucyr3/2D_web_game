@@ -8,10 +8,15 @@ export class DragAndDropService {
 
   // Track the currently dragged item's ID
   private _currentDraggedItemId: string = '';
+  private _isDragging: boolean = false;
 
   // Expose the currently dragged item's ID
   get currentDraggedItemId(): string {
     return this._currentDraggedItemId;
+  }
+
+  get isDragging(): boolean {
+    return this._isDragging;
   }
 
   // Track the current hovered tile
@@ -24,6 +29,7 @@ export class DragAndDropService {
   startDragging(itemId: string, event: MouseEvent): void {
     // Set the currently dragged item's ID
     this._currentDraggedItemId = itemId;
+    this._isDragging = true;
 
     // Initialize dragging state for this item
     this.draggingStates[itemId] = {
@@ -31,12 +37,6 @@ export class DragAndDropService {
       dragX: event.clientX,
       dragY: event.clientY,
     };
-
-    const onMouseMove = (e: MouseEvent) => this.onMouseMove(itemId, e);
-    const onMouseUp = () => this.onMouseUp(itemId);
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
 
     // Prevent text selection
     event.preventDefault();
@@ -50,16 +50,13 @@ export class DragAndDropService {
   }
 
   onMouseUp(itemId: string): void {
+    this._isDragging = false;
     if (this.draggingStates[itemId]) {
       this.draggingStates[itemId].isDragging = false;
     }
 
     // Reset the currently dragged item's ID
     this._currentDraggedItemId = '';
-
-    // Clean up event listeners
-    document.removeEventListener('mousemove', this.onMouseMove.bind(this, itemId));
-    document.removeEventListener('mouseup', this.onMouseUp.bind(this, itemId));
   }
 
   getDraggingState(itemId: string): { isDragging: boolean; dragX: number; dragY: number } {
