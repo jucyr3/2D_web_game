@@ -3,7 +3,7 @@ import { Component, Input, OnDestroy } from '@angular/core';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditToolTypes } from '@app/services/editing-tool.constants';
 import { EditingToolService } from '@app/services/editing-tool.service';
-import { ItemFactoryService } from '@app/services/item-factory.service';
+import { ItemService } from '@app/services/item.service';
 import { ItemObject } from '@common/ItemObject';
 
 @Component({
@@ -16,32 +16,32 @@ export class ItemComponent implements OnDestroy {
     @Input() itemId: string; // Unique identifier for each item
 
     itemObject: ItemObject;
-    itemAmount: number;
 
     constructor(
         private readonly dragAndDropService: DragAndDropService,
         private readonly editingToolService: EditingToolService,
-        private readonly itemFactoryService: ItemFactoryService
+        protected readonly itemService: ItemService,
     ) {}
 
     ngOnInit(): void {
-        const { itemObject, itemAmount } = this.itemFactoryService.createItem(this.itemId);
-        this.itemObject = itemObject;
-        this.itemAmount = itemAmount;
+        this.itemObject = this.itemService.createItem(this.itemId);
     }
 
     get draggingState() {
-        return this.dragAndDropService.getDraggingState(this.itemId);
+        return this.dragAndDropService.getDraggingState(this.itemObject.name);
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.itemAmount--;
+        if (this.itemService.itemAmounts[this.itemObject.name] === 0) {
+            return;
+        }
+        this.itemService.decreaseItemAmount(this.itemObject.name);
         this.editingToolService.setActiveTool(EditToolTypes.Hand);
         this.dragAndDropService.startDragging(this.itemObject, event);
     }
 
     ngOnDestroy(): void {
         // Clean up dragging state for this item
-        this.dragAndDropService.onMouseUp(this.itemId);
+        this.dragAndDropService.onMouseUp(this.itemObject.name);
     }
 }

@@ -3,7 +3,7 @@
     (mousemove)="onMouseMove()" 
     (mousedown)="onMouseDown($event)"
     (mouseenter)="onMouseEnter()"
-    (mouseup)="onMouseUp($event)"
+    (mouseup)="onMouseUp()"
     [ngStyle]="{ 'background-image': this.tileTexture }"
     [ngClass]="{ 'grab-cursor': shouldShowGrabCursor() }"
 >

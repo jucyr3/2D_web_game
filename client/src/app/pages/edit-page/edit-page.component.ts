@@ -7,6 +7,7 @@ import { ItemGridComponent } from '@app/components/item-grid/item-grid.component
 import { Component } from '@angular/core';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { NgStyle } from '@angular/common';
+import { ItemService } from '@app/services/item.service';
 
 @Component({
     selector: 'app-edit-page',
@@ -23,6 +24,7 @@ export class EditPageComponent {
         private readonly mouseService: MouseService,
         protected mapService: MapService,
         protected dragAndDropService: DragAndDropService,
+        protected itemService: ItemService
     ) {}
 
     onMouseDown(event: MouseEvent) {
@@ -34,6 +36,10 @@ export class EditPageComponent {
         this.mouseService.isMouseDown = false;
         const item = this.dragAndDropService.currentDraggedItem;
         if (item) {
+            if (this.dragAndDropService.currentHoveredTile.row === -1 && this.dragAndDropService.currentHoveredTile.column === -1) {
+                this.itemService.increaseItemAmount(item.name);
+            }
+
             this.dragAndDropService.onMouseUp(item.name);
         }
     }
@@ -72,4 +78,3 @@ export class EditPageComponent {
 // TODO: when item is not in container, it needs to stay grayed out and not be draggable
 // TODO: replace the ItemId with the GameObject in Item component
 // TODO: add description to ItemObject
-// TODO: Remove the reference do "document" throughout the code

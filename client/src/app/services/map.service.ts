@@ -11,7 +11,7 @@ export class MapService {
     map: Map;
 
     constructor() {
-        this.map = new Map('Untitled', 10, true, '', 'Classic');
+        this.map = new Map('Untitled', 20, true, '', 'Classic');
     }
 
     // for testing purposes
@@ -26,10 +26,10 @@ export class MapService {
                     .toLowerCase() || ''
             );
         };
-
+    
         const mapSize = this.map.size;
-
-        // 1. Calculer la largeur maximale nécessaire pour le contenu
+    
+        // 1. Calculate the maximum width needed for the content
         let maxCellWidth = 0;
         for (let i = 0; i < mapSize; i++) {
             for (let j = 0; j < mapSize; j++) {
@@ -38,42 +38,46 @@ export class MapService {
                 maxCellWidth = Math.max(maxCellWidth, content.length);
             }
         }
-
-        // 2. Définir la largeur des cellules (minimum 5 caractères)
+    
+        // 2. Define the cell width (minimum 5 characters)
         const CELL_WIDTH = Math.max(maxCellWidth + 2, 5);
-
-        // 3. Helper pour centrer le texte
+    
+        // 3. Helper to center text
         const centerText = (text: string, width: number) => {
             const pad = width - text.length;
             const padLeft = Math.floor(pad / 2);
             const padRight = pad - padLeft;
             return ' '.repeat(padLeft) + text + ' '.repeat(padRight);
         };
-
-        // 4. Générer l'en-tête centré
-        let header = '   ';
+    
+        // 4. Calculate the width needed for row indices
+        const rowIndexWidth = String(mapSize - 1).length; // Width of the largest row index
+    
+        // 5. Generate the centered header
+        let header = ' '.repeat(rowIndexWidth + 2); // Padding for row indices
         for (let j = 0; j < mapSize; j++) {
             header += centerText(j.toString(), CELL_WIDTH);
         }
-
-        // 5. Générer les lignes
+    
+        // 6. Generate the rows
         const grid = [header];
         for (let i = 0; i < mapSize; i++) {
-            let row = `${i} |`;
+            // Pad the row index to ensure consistent width
+            const rowIndex = String(i).padStart(rowIndexWidth, ' ');
+            let row = `${rowIndex} |`;
             for (let j = 0; j < mapSize; j++) {
                 const tile = this.map.tileMatrix[i][j];
                 const typeAbbrev = abbreviateType(tile.type);
                 const objAbbrev = tile.gameObject?.name.slice(0, 3) || '';
                 const cellContent = `${typeAbbrev}${objAbbrev ? ':' + objAbbrev : ''}`;
-
+    
                 row += centerText(cellContent, CELL_WIDTH);
             }
             grid.push(row);
         }
-
-        // eslint-disable-next-line no-console
+    
+        // 7. Print the grid
         console.log('\n' + grid.join('\n') + '\n');
-
     }
 
     changeTileType(row: number, column: number, newType: TileTypes): void {

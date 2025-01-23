@@ -1,10 +1,11 @@
 <div class="item-container">
     <img
       class="item"
-      [ngClass]="{ grayscale: this.itemAmount === 0 }"
+      [ngClass]="{ grayscale: this.itemService.itemAmounts[this.itemObject.name] === 0 }"
       [src]="'../assets/' + itemId + '.png'"
       [alt]="itemId"
       draggable="false"
+      
       (mousedown)="onMouseDown($event)"
       onmousedown="return false;"
       onselectstart="return false;"

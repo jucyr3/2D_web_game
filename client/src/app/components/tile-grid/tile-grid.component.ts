@@ -3,6 +3,7 @@ import { TileComponent } from '@app/components/tile/tile.component';
 import { NgFor } from '@angular/common';
 import { MouseService } from '@app/services/mouse.service';
 import { MapService } from '@app/services/map.service';
+import { DragAndDropService } from '@app/services/drag-and-drop.service';
 
 @Component({
     selector: 'app-tile-grid',
@@ -16,7 +17,8 @@ export class TileGridComponent implements OnInit, OnDestroy {
     constructor(
         private readonly mouseService: MouseService,
         protected mapService: MapService,
-        private readonly renderer: Renderer2, // Inject Renderer2
+        private readonly renderer: Renderer2,
+        private readonly dragAndDropService: DragAndDropService // Inject Renderer2
     ) {}
 
     ngOnInit() {
@@ -35,6 +37,7 @@ export class TileGridComponent implements OnInit, OnDestroy {
 
     onMouseLeave() {
         this.mouseService.isMouseDown = false;
+        this.dragAndDropService.setCurrentHoveredTile(-1, -1);
     }
 
     onMouseEnter(event: MouseEvent) {

@@ -11,6 +11,7 @@ import { MouseService } from '@app/services/mouse.service';
 
 import { EditToolTypes } from '@app/services/editing-tool.constants';
 import { TileTypes } from '@common/tileType.constants';
+import { ItemService } from '@app/services/item.service';
 
 @Component({
     selector: 'app-tile',
@@ -34,6 +35,7 @@ export class TileComponent implements OnInit {
         private readonly mouseService: MouseService,
         private readonly mapService: MapService,
         private readonly dragAndDropService: DragAndDropService,
+        private readonly itemService: ItemService
     ) {}
 
     ngOnInit() {
@@ -44,8 +46,17 @@ export class TileComponent implements OnInit {
     }
 
     onMouseDown(event: MouseEvent): void {
+        if (this.itemObject) {
+            this.editingToolService.setActiveTool(EditToolTypes.Hand);
+        }
+
         this.handleTileBrush(event.button === 2); // `true` if right-click, `false` otherwise
-        this.handleItemDragging(event);
+
+        if (this.itemObject && this.editingToolService.getActiveTool() === EditToolTypes.Hand) {
+            this.dragAndDropService.startDragging(this.itemObject, event);
+            this.itemObject = null;
+            this.mapService.removeGameObject(this.tilePosition.x, this.tilePosition.y);
+        }
     }
 
     onMouseMove(): void {
@@ -54,8 +65,22 @@ export class TileComponent implements OnInit {
         }
     }
 
-    onMouseUp(event: MouseEvent): void {
-        this.handleItemDragging(event);
+    onMouseUp(): void {
+        if (!this.dragAndDropService.currentDraggedItem) {
+            return;
+        }
+
+        else if (this.itemObject) {
+            this.itemService.increaseItemAmount(this.itemObject.name);
+            this.itemObject = this.dragAndDropService.currentDraggedItem;
+            this.mapService.placeGameObject(this.tilePosition.x, this.tilePosition.y, this.itemObject);
+        }
+        else {
+            this.itemObject = this.dragAndDropService.currentDraggedItem;
+            this.mapService.placeGameObject(this.tilePosition.x, this.tilePosition.y, this.itemObject);
+        }
+        
+        this.editingToolService.setActiveTool(EditToolTypes.TileBrush);
     }
 
     onMouseEnter(): void {
@@ -79,23 +104,6 @@ export class TileComponent implements OnInit {
             this.itemObject !== null && // Check if the tile has a gameObject
             this.editingToolService.getActiveTool() === EditToolTypes.Hand // Check if the active tool is HAND
         );
-    }
-
-    private handleItemDragging(event: MouseEvent): void {
-        if (this.editingToolService.getActiveTool() !== EditToolTypes.Hand) {
-            return;
-        }
-        if (this.itemObject) {
-            this.dragAndDropService.startDragging(this.itemObject, event);
-            this.itemObject = null;
-            this.mapService.removeGameObject(this.tilePosition.x, this.tilePosition.y);
-            // take the item in hand
-        }
-
-        else if (this.dragAndDropService.currentDraggedItem && !this.itemObject) {
-            this.itemObject = this.dragAndDropService.currentDraggedItem;
-            this.mapService.placeGameObject(this.tilePosition.x, this.tilePosition.y, this.itemObject);
-        }
     }
 
     private handleTileBrush(isErase: boolean): void {
