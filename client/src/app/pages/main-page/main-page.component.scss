@@ -1,44 +1,85 @@
-.container {
-    min-height: 100vh;
-    height: auto;
-}
+$primary-color: #a85cf9; // Couleur du titre
+$background-color: #333; // Couleur de fond de la page
+$button-color: #eee; // Couleur des boutons
+$button-hover-color: #ddd; // Couleur des boutons au survol
+$button-border-color: #aaa; // Couleur de la bordure des boutons
+$text-color: #fff; // Couleur principale du texte
+$footer-color: #aaa; // Couleur du texte dans le pied de page
 
-.justified {
+
+@mixin center-align {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
 }
 
-.button {
-    margin-top: 10px;
+.home-page {
+    background-color: $background-color;
     text-align: center;
-}
+    padding: 2rem;
+    min-height: 100vh;
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; 
+    box-sizing: border-box;
 
-.team-name {
-    margin-top: 0.25em;
-    margin-bottom: 0.25em;
-    color: green;
-}
+    &__title {
+        font-size: 3rem;
+        color: $primary-color;
+        margin-bottom: 2rem;
+    }
 
-.header-item {
-    justify-content: center;
-    text-align: center;
-}
+    &__logo {
+        width: 100px;
+        height: auto;
+        margin: 1rem auto;
+    }
 
-.footer-item {
-    text-align: center;
-}
+    &__button-section {
+        @include center-align;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 2rem;
 
-.footer-item p :nth-child(even) {
-    color: orange;
-}
-.footer-item p :nth-child(odd) {
-    color: blue;
-}
+        .button {
+            background-color: $button-color;
+            border: 2px solid $button-border-color;
+            border-radius: 5px;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
 
-.server-message {
-    justify-content: center;
-    width: 20%;
-    min-width: min-content;
+            &:hover {
+                background-color: $button-hover-color;
+            }
+        }
+    }
+
+    &__footer {
+        margin-top: 3rem;
+        justify-content: flex-end;
+        bottom: 0;
+
+        .team-name {
+            font-size: 1.2rem;
+            color: $footer-color;
+        }
+
+        p {
+            font-size: 1rem;
+
+            span {
+                color: $footer-color;
+
+                &:not(:last-child)::after {
+                    content: ', ';
+                }
+            }
+        }
+    }
+
+    
 }
