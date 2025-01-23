@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Map } from '@common/map';
 import { TileTypes } from '@common/tileType.constants';
+
+const TEMPNUMBER = 10;
 @Injectable({
     providedIn: 'root',
 })
@@ -72,7 +74,7 @@ export class SaveService {
 
     areStartingPointsValid(map: Map): boolean {
         // TODO: what to do
-        return 0;
+        return false;
     }
 
     areDoorsValid(map: Map): boolean {
@@ -103,32 +105,32 @@ export class SaveService {
         return true;
     }
 
-    validateGame(name: string, description: string, map: Map): string[] {
+    validateGame(map: Map): string[] {
         const error = [];
-        if (!name) {
+        if (!map.name) {
             error.push('Le nom du jeu ne peut pas etre vide.');
-        } else if (this.isUniqueName(name)) {
+        } else if (this.isUniqueName(map.name)) {
             error.push('Le nom du jeu doit etre unique.');
         }
 
-        if (!description) {
+        if (!map.description) {
             error.push('La description du jeu ne peut pas etre vide.');
         }
 
         if (!this.isMapHalfFloor(map)) {
-            error.push('La carte doit avoir plus de la moitié des tuiles comme terrain.');
+            error.push('Plus de 50% de la surface totale de la zone de jeu doit être occupée par des tuiles de terrain.');
         }
 
         if (!this.isMapAccessible(map)) {
-            error.push('La carte doit être accessible.');
+            error.push('Aucune tuile de terrain ne doit être inaccessible à cause d’un agencement de murs.');
         }
 
         if (!this.areStartingPointsValid(map)) {
-            error.push('Les points de départ ne sont pas valides.');
+            error.push('Tous les points de départ ont été placés.');
         }
 
         if (!this.areDoorsValid(map)) {
-            error.push('Les portes ne sont pas valides.');
+            error.push('Chaque tuile de porte doit se trouver entre deux tuiles de mur sur un même axe.');
         }
 
         return error;
@@ -138,8 +140,9 @@ export class SaveService {
         // a changer
         const name = 'TempName';
         const description = 'blablabla';
+        const tempMap = new Map('TempName', TEMPNUMBER, true, 'blablabla', 'Classic');
 
-        const errorList = this.validateGame(name, description);
+        const errorList = this.validateGame(tempMap);
         if (errorList.length > 0) {
             errorList.forEach((error) => alert(error));
         } else {
