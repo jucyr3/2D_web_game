@@ -37,7 +37,18 @@ export class ItemComponent implements OnDestroy {
         }
         this.itemService.decreaseItemAmount(this.itemObject.name);
         this.editingToolService.setActiveTool(EditToolTypes.Hand);
-        this.dragAndDropService.startDragging(this.itemObject, event);
+        this.dragAndDropService.startDragging(this.itemObject, event, 0, 0);
+    }
+
+    onMouseUp(event: MouseEvent): void {
+        if (this.draggingState.isDragging && this.dragAndDropService.currentDraggedItem) {
+            //if the dragged items name is the same as this ones
+            if (this.dragAndDropService.currentDraggedItem.name === this.itemObject.name) {
+                this.itemService.increaseItemAmount(this.itemObject.name);
+            }
+            
+            this.dragAndDropService.onMouseUp(this.itemObject.name);
+        }
     }
 
     ngOnDestroy(): void {

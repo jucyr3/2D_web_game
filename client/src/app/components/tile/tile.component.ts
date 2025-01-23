@@ -12,6 +12,7 @@ import { MouseService } from '@app/services/mouse.service';
 import { EditToolTypes } from '@app/services/editing-tool.constants';
 import { TileTypes } from '@common/tileType.constants';
 import { ItemService } from '@app/services/item.service';
+import { Tile } from '@common/tile';
 
 @Component({
     selector: 'app-tile',
@@ -21,6 +22,7 @@ import { ItemService } from '@app/services/item.service';
 })
 export class TileComponent implements OnInit {
     @Input() tileNumber: number;
+    @Input() tileObject: Tile;
 
     // TODO Add attribute for GameObject contained in tile
     itemObject: ItemObject | null = null;
@@ -39,7 +41,9 @@ export class TileComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.tileTexture = this.editingToolService.getTileImage(TileTypes.GROUND_1); // Initialize here
+        this.tileTexture = this.editingToolService.getTileImage(this.tileObject.type); // Initialize here
+        this.tileType = this.tileObject.type;
+
         const row = Math.floor(this.tileNumber / this.mapService.map.size);
         const column = this.tileNumber % this.mapService.map.size;
         this.tilePosition = { x: row, y: column };
@@ -53,7 +57,7 @@ export class TileComponent implements OnInit {
         this.handleTileBrush(event.button === 2); // `true` if right-click, `false` otherwise
 
         if (this.itemObject && this.editingToolService.getActiveTool() === EditToolTypes.Hand) {
-            this.dragAndDropService.startDragging(this.itemObject, event);
+            this.dragAndDropService.startDragging(this.itemObject, event, this.tilePosition.x, this.tilePosition.y);
             this.itemObject = null;
             this.mapService.removeGameObject(this.tilePosition.x, this.tilePosition.y);
         }
@@ -104,6 +108,10 @@ export class TileComponent implements OnInit {
             this.itemObject !== null && // Check if the tile has a gameObject
             this.editingToolService.getActiveTool() === EditToolTypes.Hand // Check if the active tool is HAND
         );
+    }
+
+    displayCoordinates(): void {
+        console.log(`(${this.tilePosition.x}, ${this.tilePosition.y})`);
     }
 
     private handleTileBrush(isErase: boolean): void {

@@ -12,6 +12,7 @@ export class DragAndDropService {
     // Track the currently dragged item's ID
     private _currentDraggedItem: ItemObject | null = null;
     private _isDragging: boolean = false;
+    startTile: { row: number; column: number } = { row: -1, column: -1 };
 
     // Expose the currently dragged item's ID
     get currentDraggedItem(): ItemObject | null {
@@ -28,10 +29,12 @@ export class DragAndDropService {
         this.currentHoveredTile = { row, column };
     }
 
-    startDragging(itemObject: ItemObject, event: MouseEvent): void {
+    startDragging(itemObject: ItemObject, event: MouseEvent, startRow: number, startColumn: number): void {
         // Set the currently dragged item's ID
         this._currentDraggedItem = itemObject;
         this._isDragging = true;
+
+        this.startTile = { row: startRow, column: startColumn };
 
         // Initialize dragging state for this item
         this.draggingStates[itemObject.name] = {

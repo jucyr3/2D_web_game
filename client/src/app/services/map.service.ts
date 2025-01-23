@@ -11,7 +11,7 @@ export class MapService {
     map: Map;
 
     constructor() {
-        this.map = new Map('Untitled', 20, true, '', 'Classic');
+        this.map = new Map('Untitled', 10, true, '', 'Classic');
     }
 
     // for testing purposes

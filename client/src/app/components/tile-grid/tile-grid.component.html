@@ -10,5 +10,7 @@
     <app-tile
         *ngFor="let tile of this.mapService.map.flattenedTileMatrix; let i = index"
         [tileNumber]="i"
+        [tileObject]="tile"
+        #tileRef
     ></app-tile>
 </div>

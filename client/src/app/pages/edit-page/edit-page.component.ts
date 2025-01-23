@@ -37,7 +37,7 @@ export class EditPageComponent {
         const item = this.dragAndDropService.currentDraggedItem;
         if (item) {
             if (this.dragAndDropService.currentHoveredTile.row === -1 && this.dragAndDropService.currentHoveredTile.column === -1) {
-                this.itemService.increaseItemAmount(item.name);
+                this.itemService.resetTileToStartPosition(this.dragAndDropService.startTile.row, this.dragAndDropService.startTile.column);
             }
 
             this.dragAndDropService.onMouseUp(item.name);

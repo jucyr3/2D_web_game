@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ItemObject } from '@common/ItemObject';
 import { MapService } from './map.service';
+import { Subject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -15,6 +16,15 @@ export class ItemService {
         15: 4,
         20: 6,
     };
+
+    private readonly resetTileToStartPositionSubject = new Subject<number>();
+
+    accessTile$ = this.resetTileToStartPositionSubject.asObservable();
+
+    resetTileToStartPosition(row: number, column: number): void {
+        const tileNumber = row * this.mapService.map.size + column;
+        this.resetTileToStartPositionSubject.next(tileNumber);
+    }
 
 
     createItem(itemName: string): ItemObject {
