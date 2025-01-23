@@ -1,0 +1,33 @@
+$primary-color: #a85cf9; // Couleur du titre
+$background-color: #333; // Couleur de fond de la page
+$button-color: #eee; // Couleur des boutons
+$button-hover-color: #ddd; // Couleur des boutons au survol
+$button-border-color: #aaa; // Couleur de la bordure des boutons
+$text-color: #fff; // Couleur principale du texte
+$footer-color: #aaa; // Couleur du texte dans le pied de page
+
+.titleInput {
+    grid-area: title;
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 12px 16px; /* Add padding for better spacing */
+    font-size: 24px; /* Larger font size for emphasis */
+    font-weight: bold; /* Bold text for a strong title */
+    color: #333; /* Dark text color */
+    background-color: #f9f9f9; /* Light background */
+    border: 2px solid #ddd; /* Subtle border */
+    border-radius: 8px; /* Rounded corners */
+    outline: none; /* Remove default outline */
+    transition: all 0.3s ease; /* Smooth transition for hover and focus effects */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  }
+  
+  .titleInput:focus {
+    border-color: $primary-color; /* Highlight border on focus */
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2); /* Stronger shadow on focus */
+    background-color: #fff; /* White background on focus */
+  }
+  
+  .titleInput:hover {
+    border-color: $primary-color; /* Highlight border on hover */
+  }

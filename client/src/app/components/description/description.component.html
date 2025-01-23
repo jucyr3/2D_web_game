@@ -1,0 +1,9 @@
+<h2>Description</h2>
+<textarea
+    class="descriptionInput"
+    type="text"
+    [value]="this.description"
+    (input)="onDescriptionInput($event)"
+    (blur)="onBlur()"
+    maxlength="200">
+</textarea>

@@ -8,10 +8,12 @@ import { Component } from '@angular/core';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { NgStyle } from '@angular/common';
 import { ItemService } from '@app/services/item.service';
+import { TitleComponent } from "../../components/title/title.component";
+import { DescriptionComponent } from "../../components/description/description.component";
 
 @Component({
     selector: 'app-edit-page',
-    imports: [TileGridComponent, BrushGridComponent, ItemGridComponent, NgStyle],
+    imports: [TileGridComponent, BrushGridComponent, ItemGridComponent, NgStyle, TitleComponent, DescriptionComponent],
     templateUrl: './edit-page.component.html',
     styleUrl: './edit-page.component.scss',
     providers: [EditingToolService],
@@ -49,10 +51,6 @@ export class EditPageComponent {
         if (item) {
             this.dragAndDropService.onMouseMove(item.name, event);
         }
-    }
-
-    onTitleInput(event: Event) {
-        this.title = (event.target as HTMLInputElement).value;
     }
 
     onDescriptionInput(event: Event) {

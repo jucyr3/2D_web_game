@@ -1,17 +1,16 @@
-.brush-button {
-    width: 100px;
-    height: 100px;
-    background-size: cover;
-}
-
 #brush-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 10px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    background-color: #f9f9f9;
-    justify-content: center;
-    align-items: center;
-}
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 0.5rem;
+    width: fit-content;
+  }
+  
+  .brush-button {
+    background-color: #ccc;
+    border-radius: 0.25rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    aspect-ratio: 1;
+    width: 80px;
+  }

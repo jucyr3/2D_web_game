@@ -1,67 +1,87 @@
-/* Prevent scrolling on the entire page */
+$primary-color: #a85cf9; // Couleur du titre
+$background-color: #333; // Couleur de fond de la page
+$button-color: #eee; // Couleur des boutons
+$button-hover-color: #ddd; // Couleur des boutons au survol
+$button-border-color: #aaa; // Couleur de la bordure des boutons
+$text-color: #fff; // Couleur principale du texte
+$footer-color: #aaa; // Couleur du texte dans le pied de page
+
+/* Disable scrolling on the entire page */
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Disable scrolling */
+    height: 100%; /* Ensure the body takes full height */
+}
+
 #edit-page {
-    overflow: hidden;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Ensure no child elements allow scrolling */
-  .app-layout {
     display: flex;
-    flex-direction: row; /* Horizontal alignment */
+    flex-direction: column;
     height: 100vh; /* Full viewport height */
-    overflow: hidden; /* Prevent scrolling */
-  }
-  
-  .brush-grid {
-    width: 20%; /* Adjust as needed */
-    overflow: hidden; /* Prevent scrolling */
-  }
-  
-  .tile-grid {
-    flex: 1; /* Take up the remaining space */
-    overflow: hidden; /* Prevent scrolling */
-  }
-  
-  .cursor-sword {
-    width: 32px; /* Adjust size as needed */
-    height: auto;
-    transform: translate(-50%, -50%); /* Centers the image on the cursor */
-  }
-  
-  .titleInput {
-    font-size: 1.5em;
-    font-weight: bold;
-    border: none;
-    outline: none;
-    background-color: rgba(249, 170, 170, 0.398);
-    color: black;
-    text-align: center;
-    padding: 0;
-    margin: 0;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    padding: 16px;
+    box-sizing: border-box;
+    overflow: hidden; /* Disable scrolling inside the container */
+    background-color: $background-color;
+}
+
+#edit-page ::ng-deep h2 {
+  color: $text-color; /* Use primary color for the title */
+  margin-bottom: 8px; /* Add some spacing below the title */
+}
+
+.titleInput {
+    grid-area: title;
     width: 100%;
-    max-width: 40%;
-  }
-  
-  .descriptionInput {
-    font-size: 1em;
-    font-weight: bold;
-    border: 1px solid black; /* Black border */
-    outline: none;
-    background-color: rgba(249, 170, 170, 0.398);
-    color: black;
-    text-align: center;
-    padding: 10px; /* Add padding */
-    margin: 10px; /* Add margin */
-    position: absolute; /* Change to absolute positioning */
-    bottom: 0; /* Position at the bottom */
-    left: 0; /* Position at the left */
-    width: auto; /* Adjust width */
-    max-width: 40%;
-    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
-  }
+    max-width: 300px;
+    margin-bottom: 8px;
+}
+
+.descriptionInput {
+    grid-area: description;
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 16px;
+}
+
+.app-layout {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.brush-grid {
+    grid-area: brush-grid;
+}
+
+.item-grid {
+    grid-area: item-grid;
+}
+
+.tile-grid {
+    grid-area: tile-grid;
+    margin-left: 16px; /* Add some spacing between the left and right sections */
+    overflow: hidden; /* Disable scrolling inside the tile-grid */
+}
+
+/* Style for the print button */
+button {
+    grid-area: print-button; /* Place the button in the bottom-left corner */
+    width: fit-content; /* Make the button small */
+    padding: 8px 16px; /* Adjust padding to make it compact */
+    font-size: 12px; /* Smaller font size */
+    background-color: #f0f0f0; /* Light background */
+    border: 1px solid #ccc; /* Subtle border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer;
+    margin-top: 16px; /* Add some spacing above the button */
+    background-color: $button-color;
+}
+
+button:hover {
+    background-color: #e0e0e0; /* Slightly darker on hover */
+}
+
+
