@@ -45,17 +45,30 @@ export class SaveService {
             }
         }
         visited[startX][startY] = true;
+        dfs(startX, startY);
 
-        // dfs
-        const stack = [[startX, startY]];
-        while (stack.length > 0) {
-            const [tempx, tempy] = stack.pop()!;
-            for (const [dirx, diry] of directions) {
-                const resx = tempx + dirx;
-                const resy = tempy + diry;
-                if (resx >= 0 && resx < rows && resy >= 0 && resy < cols && !visited[resx][resy] && tileMatrix[resx][resy].type !== TileTypes.WALL) {
-                    visited[resx][resy] = true;
-                    stack.push([resx, resy]);
+        function dfs(x: number, y: number) {
+            const stack = [[x, y]];
+            while (stack.length > 0) {
+                const popped = stack.pop();
+                if (popped === undefined) {
+                    return; // TODO: take care of error
+                }
+                const [tempx, tempy] = popped;
+                for (const [dirx, diry] of directions) {
+                    const resx = tempx + dirx;
+                    const resy = tempy + diry;
+                    if (
+                        resx >= 0 &&
+                        resx < rows &&
+                        resy >= 0 &&
+                        resy < cols &&
+                        !visited[resx][resy] &&
+                        tileMatrix[resx][resy].type !== TileTypes.WALL
+                    ) {
+                        visited[resx][resy] = true;
+                        stack.push([resx, resy]);
+                    }
                 }
             }
         }
@@ -73,8 +86,17 @@ export class SaveService {
     }
 
     areStartingPointsValid(map: Map): boolean {
-        // TODO: what to do
-        return false;
+        const flatMap = map.flattenedTileMatrix;
+        const startCount = flatMap.filter((tile) => tile.isOccupied === true).length;
+        if (map.size === 10) {
+            return startCount === 2;
+        } else if (map.size === 15) {
+            return startCount === 4;
+        } else if (map.size === 20) {
+            return startCount === 6;
+        } else {
+            return false;
+        }
     }
 
     areDoorsValid(map: Map): boolean {
@@ -122,11 +144,11 @@ export class SaveService {
         }
 
         if (!this.isMapAccessible(map)) {
-            error.push('Aucune tuile de terrain ne doit être inaccessible à cause d’un agencement de murs.');
+            error.push("Aucune tuile de terrain ne doit être inaccessible à cause d'un agencement de murs.");
         }
 
         if (!this.areStartingPointsValid(map)) {
-            error.push('Tous les points de départ ont été placés.');
+            error.push('Tous les points de départ doivent etre placés.');
         }
 
         if (!this.areDoorsValid(map)) {
