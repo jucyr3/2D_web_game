@@ -6,9 +6,12 @@ export class Tile {
     isObstacle: boolean;
     gameObject: GameObject | null;
 
-    constructor(type: TileTypes, isOccupied: boolean, isObstacle: boolean) {
+    constructor(type: TileTypes, isOccupied: boolean, isObstacle: boolean, gameObject?: GameObject) {
         this.type = type;
         this.isOccupied = isOccupied;
         this.isObstacle = isObstacle;
+        if (gameObject) {
+            this.gameObject = gameObject;
+        }
     }
 }

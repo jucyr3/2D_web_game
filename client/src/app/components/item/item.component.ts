@@ -1,35 +1,45 @@
-import { Component, Input, OnDestroy } from '@angular/core';
-import { DragAndDropService } from '../../services/drag-and-drop.service';
-import { EditingToolService } from '../../services/editing-tool.service';
 import { NgClass, NgIf } from '@angular/common';
-import { EDIT_TOOL_TYPES } from '@app/services/editing-tool.constants';
+import { Component, Input, OnDestroy } from '@angular/core';
+import { DragAndDropService } from '@app/services/drag-and-drop.service';
+import { EditToolTypes } from '@app/services/editing-tool.constants';
+import { EditingToolService } from '@app/services/editing-tool.service';
+import { ItemFactoryService } from '@app/services/item-factory.service';
+import { ItemObject } from '@common/ItemObject';
 
 @Component({
-  selector: 'app-item',
-  imports: [NgIf, NgClass],
-  templateUrl: './item.component.html',
-  styleUrls: ['./item.component.scss'],
+    selector: 'app-item',
+    imports: [NgIf, NgClass],
+    templateUrl: './item.component.html',
+    styleUrls: ['./item.component.scss'],
 })
 export class ItemComponent implements OnDestroy {
-  @Input() itemType: string;
-  @Input() itemId: string; // Unique identifier for each item
+    @Input() itemType: string;
+    @Input() itemId: string; // Unique identifier for each item
 
-  constructor(public dragAndDropService: DragAndDropService, public editingToolService: EditingToolService) {
-    //this.ItemObject = new ItemObject(this.ItemId);
-  }
+    itemObject: ItemObject;
+    itemAmount: number;
 
-  onMouseDown(event: MouseEvent): void {
-    this.editingToolService.setActiveTool(EDIT_TOOL_TYPES.HAND)
-    this.dragAndDropService.startDragging(this.itemId, event);
-    console.log('Dragging:', this.itemType);
-  }
+    constructor(
+        private readonly dragAndDropService: DragAndDropService,
+        private readonly editingToolService: EditingToolService,
+        private readonly itemFactoryService: ItemFactoryService
+    ) {
+        const { itemObject, itemAmount } = this.itemFactoryService.createItem(this.itemId);
+        this.itemObject = itemObject;
+        this.itemAmount = itemAmount;
+    }
 
-  ngOnDestroy(): void {
-    // Clean up dragging state for this item
-    this.dragAndDropService.onMouseUp(this.itemId);
-  }
+    get draggingState() {
+        return this.dragAndDropService.getDraggingState(this.itemId);
+    }
 
-  get draggingState() {
-    return this.dragAndDropService.getDraggingState(this.itemId);
-  }
+    onMouseDown(event: MouseEvent): void {
+        this.editingToolService.setActiveTool(EditToolTypes.Hand);
+        this.dragAndDropService.startDragging(this.itemId, event);
+    }
+
+    ngOnDestroy(): void {
+        // Clean up dragging state for this item
+        this.dragAndDropService.onMouseUp(this.itemId);
+    }
 }

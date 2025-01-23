@@ -1,13 +1,17 @@
 import { NgClass, NgStyle } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { EDIT_TOOL_TYPES } from '@app/services/editing-tool.constants';
+import { Component, Input, OnInit } from '@angular/core';
+
+import { Coordinate } from '@app/interfaces/coordinate';
+import { GameObject } from '@common/gameObject.interface';
+import { ItemObject } from '@common/ItemObject';
+
+import { DragAndDropService } from '@app/services/drag-and-drop.service';
+import { EditingToolService } from '@app/services/editing-tool.service';
 import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
-import { DragAndDropService } from '@app/services/drag-and-drop.service';
-import { EditingToolService } from '../../services/editing-tool.service';
-import { TileTypes } from '@app/../../../common/tileType.constants';
-import { ItemObject } from '../../../../../common/ItemObject';
-import { GameObject } from '@app/../../../common/gameObject.interface';
+
+import { EditToolTypes } from '@app/services/editing-tool.constants';
+import { TileTypes } from '@common/tileType.constants';
 
 @Component({
     selector: 'app-tile',
@@ -15,7 +19,7 @@ import { GameObject } from '@app/../../../common/gameObject.interface';
     templateUrl: './tile.component.html',
     styleUrl: './tile.component.scss',
 })
-export class TileComponent {
+export class TileComponent implements OnInit {
     @Input() tileNumber: number;
 
     // TODO Add attribute for GameObject contained in tile
@@ -24,27 +28,27 @@ export class TileComponent {
     tileTexture: string;
     tileType: TileTypes;
 
-    row: number;
-    column: number;
+    tilePosition: Coordinate;
 
     constructor(
         private readonly editingToolService: EditingToolService,
         private readonly mouseService: MouseService,
         private readonly mapService: MapService,
-        private readonly dragAndDropService: DragAndDropService
+        private readonly dragAndDropService: DragAndDropService,
     ) {}
 
     ngOnInit() {
         this.tileTexture = this.editingToolService.getTileImage(TileTypes.GROUND_1); // Initialize here
-        this.row = Math.floor(this.tileNumber / this.mapService.map.size);
-        this.column = this.tileNumber % this.mapService.map.size;
+        const row = Math.floor(this.tileNumber / this.mapService.map.size);
+        const column = this.tileNumber % this.mapService.map.size;
+        this.tilePosition = { x: row, y: column };
     }
 
     onMouseDown(event: MouseEvent): void {
         this.handleTileBrush(event.button === 2); // `true` if right-click, `false` otherwise
         this.handleItemDragging(event);
     }
-    
+
     onMouseMove(): void {
         if (this.mouseService.isMouseDown) {
             this.handleTileBrush(this.mouseService.isRightClick);
@@ -56,56 +60,55 @@ export class TileComponent {
     }
 
     onMouseEnter(): void {
-        this.dragAndDropService.setCurrentHoveredTile(this.row, this.column);
+        this.dragAndDropService.setCurrentHoveredTile(this.tilePosition.x, this.tilePosition.y);
+    }
+
+    // ? maybe logic to much coupled with view, possible refactor
+    placeTile() {
+        this.tileTexture = this.editingToolService.getTileImage(this.editingToolService.getCurrentTileTypeOnBrush());
+        this.mapService.changeTileType(this.tilePosition.x, this.tilePosition.y, this.editingToolService.getCurrentTileTypeOnBrush());
+    }
+
+    eraseTile() {
+        this.tileType = TileTypes.GROUND_1;
+        this.tileTexture = `url(assets/${TileTypes.GROUND_1}.png)`;
+        this.mapService.setDefaultTileType(this.tilePosition.x, this.tilePosition.y);
+    }
+
+    shouldShowGrabCursor(): boolean {
+        return (
+            this.gameObject !== null && // Check if the tile has a gameObject
+            this.editingToolService.getActiveTool() === EditToolTypes.Hand // Check if the active tool is HAND
+        );
     }
 
     private handleItemDragging(event: MouseEvent): void {
-
-        if (this.editingToolService.getActiveTool() !== EDIT_TOOL_TYPES.HAND) {
+        if (this.editingToolService.getActiveTool() !== EditToolTypes.Hand) {
             return;
         }
         if (this.gameObject) {
             this.dragAndDropService.startDragging(this.gameObject.name, event);
             this.gameObject = null;
-            this.mapService.removeGameObject(this.row, this.column);
+            this.mapService.removeGameObject(this.tilePosition.x, this.tilePosition.y);
             // take the item in hand
         }
 
-        //! temporary code, get out item creation elsewhere
+        // ! temporary code, get out item creation elsewhere
         else if (this.dragAndDropService.currentDraggedItemId && !this.gameObject) {
             // TODO: should work for everyGameObject
-            let newGameObject = new ItemObject(this.dragAndDropService.currentDraggedItemId);
+            const newGameObject = new ItemObject(this.dragAndDropService.currentDraggedItemId);
             this.gameObject = newGameObject;
-            this.mapService.placeGameObject(this.row, this.column, newGameObject);
+            this.mapService.placeGameObject(this.tilePosition.x, this.tilePosition.y, newGameObject);
         }
     }
 
     private handleTileBrush(isErase: boolean): void {
-        if (this.editingToolService.getActiveTool() === EDIT_TOOL_TYPES.TILE_BRUSH) {
+        if (this.editingToolService.getActiveTool() === EditToolTypes.TileBrush) {
             if (isErase) {
                 this.eraseTile();
             } else {
                 this.placeTile();
             }
         }
-    }
-
-    //? maybe logic to much coupled with view, possible refactor
-    placeTile() {
-        this.tileTexture = this.editingToolService.getTileImage(this.editingToolService.getCurrentTileTypeOnBrush());
-        this.mapService.changeTileType(this.row, this.column, this.editingToolService.getCurrentTileTypeOnBrush());
-    }
-
-    eraseTile() {
-        this.tileType = TileTypes.GROUND_1;
-        this.tileTexture = `url(assets/${TileTypes.GROUND_1}.png)`;
-        this.mapService.setDefaultTileType(this.row, this.column);
-    }
-
-    shouldShowGrabCursor(): boolean {
-        return (
-            this.gameObject !== null && // Check if the tile has a gameObject
-            this.editingToolService.getActiveTool() === EDIT_TOOL_TYPES.HAND // Check if the active tool is HAND
-        );
     }
 }

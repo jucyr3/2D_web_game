@@ -27,6 +27,6 @@ const modules = [
     imports: [...modules],
     exports: [...modules],
     providers: [],
-    bootstrap: []
+    bootstrap: [],
 })
 export class AppMaterialModule {}
