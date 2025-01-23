@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
     selector: 'app-name',
@@ -6,4 +6,10 @@ import { Component } from '@angular/core';
     templateUrl: './name.component.html',
     styleUrl: './name.component.scss',
 })
-export class NameComponent {}
+export class NameComponent {
+    name: string = '';
+    @ViewChild('nameInput') nameInput: ElementRef;
+    changeName() {
+        this.name = this.nameInput.nativeElement.value;
+    }
+}

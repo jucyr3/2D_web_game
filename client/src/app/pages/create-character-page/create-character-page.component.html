@@ -1,15 +1,16 @@
 <div class="title">
-    <h1>Choisis ton personnage</h1>
+    <h1>CRÉER VOTRE PERSONNAGE</h1>
     <h5>Choisis ton peronnage, puis donne son bonus de +2 à sa rapidité ou sa vie et enfin choisis les dés pour son attaque et sa défense</h5>
 </div>
 <div class="options">
-    <div class="halfScreen">
+    <div class="showSelection">
         <app-profile-selection (selected)="handleEvent($event)"></app-profile-selection>
     </div>
-    <div class="halfScreen">
+    <div class="showProfile">
         <app-profile-showcase [profileChosed]="profilePicture"></app-profile-showcase>
-        <div class="buttons">
-            <button id="continue" routerLink="/waitingRoom">Valider</button>
-        </div>
+        
     </div>
+</div>
+<div class="buttons">
+    <button id="continue" routerLink="/waitingRoom">VALIDER LA CRÉATION</button>
 </div>

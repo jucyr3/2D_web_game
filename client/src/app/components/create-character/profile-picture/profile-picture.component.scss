@@ -25,9 +25,9 @@ img:hover {
     transform: scale(1.3);
 }
 .container:hover {
-    border-color: gold;
+    border-color: white;
 }
 .isClicked.container:hover,
 .isClicked {
-    border-color: blue;
+    border-color: #b166ff;
 }
