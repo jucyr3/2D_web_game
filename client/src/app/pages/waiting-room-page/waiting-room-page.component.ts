@@ -25,10 +25,10 @@ export class WaitingRoomPageComponent {
 
     openQuitDialog(): void {
         const dialogRef = this.dialog.open(PopUpComponent, {
-            width: '50%',
+            width: '35%',
             data: {
                 title: 'Confirmer la sortie',
-                content: 'Quitter maintenant vous retirera de la liste.\n Êtes-vous sûr de vouloir quitter?',
+                content: 'Quitter maintenant vous retirera de la liste. Êtes-vous sûr de vouloir quitter?',
                 cancelButtonLabel: 'Non',
                 confirmButtonLabel: 'Oui',
             },

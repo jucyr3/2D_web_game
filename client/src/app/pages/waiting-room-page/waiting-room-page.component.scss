@@ -103,21 +103,6 @@
         }
     }
 
-    &__start-button {
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        padding: 15px 30px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 16px;
-        width: 100%;
-
-        &:hover {
-            background-color: darken(#4caf50, 10%);
-        }
-    }
-
     &__footer {
         display: flex;
         justify-content: flex-end;
@@ -142,13 +127,15 @@
     }
 
     &__quit-button {
-        background-color: #DC143C;
+        background-color: #c23652 !important;
+        color: white !important;
         &:hover {
-            background-color: darken(#a55226, 5%);
+            background-color: darken(#c23652, 10%) !important;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
     }
+
     .button {
         color: white;
         border: none;
@@ -207,3 +194,4 @@
         outline: none;
     }
 }
+
