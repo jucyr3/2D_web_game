@@ -13,11 +13,16 @@
         justify-content: space-between;
         align-items: center;
         padding: 10px 0;
+
+        .left-header{
+            display: flex;
+            gap: 20px;
+        }
     }
 
     &__title {
         color: #b166ff;
-        font-size: 24px;
+        font-size: 30px;
         font-weight: bold;
         margin: 0;
     }
@@ -83,7 +88,6 @@
         flex-direction: column;
         gap: 15px;
         overflow-y: auto;
-        // width: 50%;
     }
 
     &__add-bot {
@@ -132,6 +136,15 @@
         background-color: #4caf50;
         &:hover {
             background-color: darken(#4caf50, 5%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    }
+
+    &__quit-button {
+        background-color: #DC143C;
+        &:hover {
+            background-color: darken(#a55226, 5%);
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }

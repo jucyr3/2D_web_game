@@ -1,9 +1,15 @@
 <div class="waiting-room">
     <header class="waiting-room__header">
-        <h1 class="waiting-room__title">SALLE D'ATTENTE</h1>
-        <div class="waiting-room__code">
-            <button class="waiting-room__lock-button button"> Bloquer la partie</button>
-            <span class="waiting-room__code-text">CODE DU SERVEUR: {{ accessCode }}</span>
+        <div class="left-header">
+            <button  mat-raised-button (click)="openQuitDialog()" class="waiting-room__quit-button button" >Quitter</button>
+            
+            <h1 class="waiting-room__title">SALLE D'ATTENTE</h1>
+        </div>
+        <div>
+            <div class="waiting-room__code">
+                <button class="waiting-room__lock-button button">Bloquer la partie</button>
+                <span class="waiting-room__code-text">CODE DU SERVEUR: {{ accessCode }}</span>
+            </div>
         </div>
     </header>
 
