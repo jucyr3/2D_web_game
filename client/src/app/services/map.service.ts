@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { GameObject } from '@common/gameObject.interface';
+//import { GameObject } from '@common/gameObject.interface';
 import { TileTypes } from '@common/tileType.constants';
 import { Map } from '@common/map';
+import { ItemObject } from '@common/ItemObject';
 
 @Injectable({
     providedIn: 'root',
@@ -14,7 +15,7 @@ export class MapService {
     }
 
     // for testing purposes
-    
+    // totally not AI generated
     printMap() {
         const abbreviateType = (type: string) => {
             return (
@@ -87,7 +88,7 @@ export class MapService {
         return this.map.tileMatrix[row][column].type;
     }
 
-    placeGameObject(row: number, column: number, gameObject: GameObject): void {
+    placeGameObject(row: number, column: number, gameObject: ItemObject): void {
         this.map.tileMatrix[row][column].gameObject = gameObject;
     }
 

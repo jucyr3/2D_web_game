@@ -13,7 +13,6 @@ import { ItemObject } from '@common/ItemObject';
     styleUrls: ['./item.component.scss'],
 })
 export class ItemComponent implements OnDestroy {
-    @Input() itemType: string;
     @Input() itemId: string; // Unique identifier for each item
 
     itemObject: ItemObject;
@@ -23,7 +22,9 @@ export class ItemComponent implements OnDestroy {
         private readonly dragAndDropService: DragAndDropService,
         private readonly editingToolService: EditingToolService,
         private readonly itemFactoryService: ItemFactoryService
-    ) {
+    ) {}
+
+    ngOnInit(): void {
         const { itemObject, itemAmount } = this.itemFactoryService.createItem(this.itemId);
         this.itemObject = itemObject;
         this.itemAmount = itemAmount;
@@ -34,8 +35,9 @@ export class ItemComponent implements OnDestroy {
     }
 
     onMouseDown(event: MouseEvent): void {
+        this.itemAmount--;
         this.editingToolService.setActiveTool(EditToolTypes.Hand);
-        this.dragAndDropService.startDragging(this.itemId, event);
+        this.dragAndDropService.startDragging(this.itemObject, event);
     }
 
     ngOnDestroy(): void {

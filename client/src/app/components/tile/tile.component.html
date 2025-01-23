@@ -7,7 +7,7 @@
     [ngStyle]="{ 'background-image': this.tileTexture }"
     [ngClass]="{ 'grab-cursor': shouldShowGrabCursor() }"
 >
-    @if (this.gameObject) {
-        <img [src]="'../assets/' + this.gameObject.name + '.png'" draggable="false" alt="{{this.gameObject.name}}" />
+    @if (this.itemObject) {
+        <img [src]="'../assets/' + this.itemObject.name + '.png'" draggable="false" alt="{{this.itemObject.name}}" />
     }
 </div>

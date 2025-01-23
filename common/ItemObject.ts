@@ -1,6 +1,6 @@
-import { GameObject } from './gameObject.interface';
+//import { GameObject } from './gameObject.interface';
 
-export class ItemObject implements GameObject {
+export class ItemObject {
     name: string;
 
     constructor(name: string) {

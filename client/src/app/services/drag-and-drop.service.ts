@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ItemObject } from '@common/ItemObject';
 
 @Injectable({
     providedIn: 'root',
@@ -9,12 +10,12 @@ export class DragAndDropService {
     private draggingStates: { [itemId: string]: { isDragging: boolean; dragX: number; dragY: number } } = {};
 
     // Track the currently dragged item's ID
-    private _currentDraggedItemId: string = '';
+    private _currentDraggedItem: ItemObject | null = null;
     private _isDragging: boolean = false;
 
     // Expose the currently dragged item's ID
-    get currentDraggedItemId(): string {
-        return this._currentDraggedItemId;
+    get currentDraggedItem(): ItemObject | null {
+        return this._currentDraggedItem;
     }
 
     get isDragging(): boolean {
@@ -27,13 +28,13 @@ export class DragAndDropService {
         this.currentHoveredTile = { row, column };
     }
 
-    startDragging(itemId: string, event: MouseEvent): void {
+    startDragging(itemObject: ItemObject, event: MouseEvent): void {
         // Set the currently dragged item's ID
-        this._currentDraggedItemId = itemId;
+        this._currentDraggedItem = itemObject;
         this._isDragging = true;
 
         // Initialize dragging state for this item
-        this.draggingStates[itemId] = {
+        this.draggingStates[itemObject.name] = {
             isDragging: true,
             dragX: event.clientX,
             dragY: event.clientY,
@@ -57,7 +58,7 @@ export class DragAndDropService {
         }
 
         // Reset the currently dragged item's ID
-        this._currentDraggedItemId = '';
+        this._currentDraggedItem = null;
     }
 
     getDraggingState(itemId: string): { isDragging: boolean; dragX: number; dragY: number } {

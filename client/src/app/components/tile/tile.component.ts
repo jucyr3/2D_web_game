@@ -2,7 +2,6 @@ import { NgClass, NgStyle } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 
 import { Coordinate } from '@app/interfaces/coordinate';
-import { GameObject } from '@common/gameObject.interface';
 import { ItemObject } from '@common/ItemObject';
 
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
@@ -23,7 +22,7 @@ export class TileComponent implements OnInit {
     @Input() tileNumber: number;
 
     // TODO Add attribute for GameObject contained in tile
-    gameObject: GameObject | null = null;
+    itemObject: ItemObject | null = null;
 
     tileTexture: string;
     tileType: TileTypes;
@@ -77,7 +76,7 @@ export class TileComponent implements OnInit {
 
     shouldShowGrabCursor(): boolean {
         return (
-            this.gameObject !== null && // Check if the tile has a gameObject
+            this.itemObject !== null && // Check if the tile has a gameObject
             this.editingToolService.getActiveTool() === EditToolTypes.Hand // Check if the active tool is HAND
         );
     }
@@ -86,19 +85,16 @@ export class TileComponent implements OnInit {
         if (this.editingToolService.getActiveTool() !== EditToolTypes.Hand) {
             return;
         }
-        if (this.gameObject) {
-            this.dragAndDropService.startDragging(this.gameObject.name, event);
-            this.gameObject = null;
+        if (this.itemObject) {
+            this.dragAndDropService.startDragging(this.itemObject, event);
+            this.itemObject = null;
             this.mapService.removeGameObject(this.tilePosition.x, this.tilePosition.y);
             // take the item in hand
         }
 
-        // ! temporary code, get out item creation elsewhere
-        else if (this.dragAndDropService.currentDraggedItemId && !this.gameObject) {
-            // TODO: should work for everyGameObject
-            const newGameObject = new ItemObject(this.dragAndDropService.currentDraggedItemId);
-            this.gameObject = newGameObject;
-            this.mapService.placeGameObject(this.tilePosition.x, this.tilePosition.y, newGameObject);
+        else if (this.dragAndDropService.currentDraggedItem && !this.itemObject) {
+            this.itemObject = this.dragAndDropService.currentDraggedItem;
+            this.mapService.placeGameObject(this.tilePosition.x, this.tilePosition.y, this.itemObject);
         }
     }
 

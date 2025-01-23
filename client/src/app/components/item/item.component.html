@@ -1,9 +1,9 @@
 <div class="item-container">
     <img
       class="item"
-      [ngClass]="{ grayscale: draggingState.isDragging }"
-      [src]="'../assets/' + itemType + '.png'"
-      [alt]="itemType"
+      [ngClass]="{ grayscale: this.itemAmount === 0 }"
+      [src]="'../assets/' + itemId + '.png'"
+      [alt]="itemId"
       draggable="false"
       (mousedown)="onMouseDown($event)"
       onmousedown="return false;"
@@ -11,5 +11,5 @@
     />
   </div>
   <div *ngIf="draggingState.isDragging" class="drag-preview" [style.left.px]="draggingState.dragX" [style.top.px]="draggingState.dragY">
-    <img [src]="'../assets/' + itemType + '.png'" [alt]="itemType" />
-  </div>
+    <img [src]="'../assets/' + itemId + '.png'" [alt]="itemId" />
+</div>

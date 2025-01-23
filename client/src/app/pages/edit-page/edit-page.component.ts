@@ -32,16 +32,16 @@ export class EditPageComponent {
 
     onMouseUp() {
         this.mouseService.isMouseDown = false;
-        const itemId = this.dragAndDropService.currentDraggedItemId;
-        if (itemId) {
-            this.dragAndDropService.onMouseUp(itemId);
+        const item = this.dragAndDropService.currentDraggedItem;
+        if (item) {
+            this.dragAndDropService.onMouseUp(item.name);
         }
     }
 
     onMouseMove(event: MouseEvent): void {
-        const itemId = this.dragAndDropService.currentDraggedItemId;
-        if (itemId) {
-            this.dragAndDropService.onMouseMove(itemId, event);
+        const item = this.dragAndDropService.currentDraggedItem;
+        if (item) {
+            this.dragAndDropService.onMouseMove(item.name, event);
         }
     }
 
