@@ -1,10 +1,9 @@
 <div
     class="tile"
-    (mousemove)="onMouseMove()" 
     (mousedown)="onMouseDown($event)"
     (mouseenter)="onMouseEnter()"
     (mouseup)="onMouseUp()"
-    [ngStyle]="{ 'background-image': this.tileTexture }"
+    [ngStyle]="{ 'background-image': this.tileTexture}"
     [ngClass]="{ 'grab-cursor': shouldShowGrabCursor() }"
 >
     @if (this.itemObject) {

@@ -1,34 +1,36 @@
 import { Injectable } from '@angular/core';
 import { ItemObject } from '@common/ItemObject';
-import { MapService } from './map.service';
 import { Subject } from 'rxjs';
+import { MapService } from './map.service';
+
+export const ITEM_CONTAINER_COORDINATES = { row: -2, column: -2 };
 
 @Injectable({
     providedIn: 'root',
 })
 export class ItemService {
+    itemAmounts: { [itemName: string]: number } = {};
 
-    constructor(private readonly mapService: MapService) {}
-    itemAmounts: { [itemName: string]: number } = {}
-
-    itemMap: { [key: number]: number } = {
-        10: 2,
-        15: 4,
-        20: 6,
+    itemMap: { [key: string]: number } = {
+        size10: 2,
+        size15: 4,
+        size20: 6,
     };
 
     private readonly resetTileToStartPositionSubject = new Subject<number>();
 
-    accessTile$ = this.resetTileToStartPositionSubject.asObservable();
+    constructor(private readonly mapService: MapService) {}
+
+    get accessTile$() {
+        return this.resetTileToStartPositionSubject.asObservable();
+    }
 
     resetTileToStartPosition(row: number, column: number): void {
         const tileNumber = row * this.mapService.map.size + column;
         this.resetTileToStartPositionSubject.next(tileNumber);
     }
 
-
     createItem(itemName: string): ItemObject {
-        
         return this.getItemInfo(itemName);
     }
 
@@ -45,24 +47,35 @@ export class ItemService {
         switch (itemName) {
             case 'mushroom':
                 this.itemAmounts['mushroom'] = 1;
-                return new ItemObject('mushroom')
+                return new ItemObject('mushroom');
             case 'sword':
-                this.itemAmounts['sword'] = 2;
-                return new ItemObject('sword')
+                this.itemAmounts['sword'] = 1;
+                return new ItemObject('sword');
             case 'luma':
-                this.itemAmounts['luma'] = 3;
-                return new ItemObject('luma')
+                this.itemAmounts['luma'] = 1;
+                return new ItemObject('luma');
+            case 'bomb':
+                this.itemAmounts['bomb'] = 1;
+                return new ItemObject('bomb');
+            case 'potion':
+                this.itemAmounts['potion'] = 1;
+                return new ItemObject('potion');
+            case 'cloak':
+                this.itemAmounts['cloak'] = 1;
+                return new ItemObject('cloak');
             case 'spawnpoint':
-                this.itemAmounts['spawnpoint'] = this.itemMap[mapSize];
+                this.itemAmounts['spawnpoint'] = this.itemMap['size' + mapSize];
                 return new ItemObject('spawnpoint');
             case 'randomItem':
-                this.itemAmounts['randomItem'] = this.itemMap[mapSize];
+                this.itemAmounts['randomItem'] = this.itemMap['size' + mapSize];
                 return new ItemObject('randomItem');
+            case 'flag':
+                this.itemAmounts['flag'] = 1;
+                return new ItemObject('flag');
             default:
+                // tslint:disable-next-line: no-console
                 console.error(`Item ${itemName} not found`);
-                return new ItemObject('default')
+                return new ItemObject('default');
         }
     }
-
-    
 }

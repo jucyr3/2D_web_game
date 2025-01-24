@@ -4,4 +4,5 @@ export enum TileTypes {
     GROUND_2 = 'groundTile2',
     WALL = 'wallTile',
     DOOR = 'doorTile',
+    OPEN_DOOR = 'openDoorTile',
 }

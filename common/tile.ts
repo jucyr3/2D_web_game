@@ -1,4 +1,3 @@
-//import { GameObject } from './gameObject.interface';
 import { ItemObject } from './ItemObject';
 import { TileTypes } from './tileType.constants';
 export class Tile {
@@ -7,7 +6,7 @@ export class Tile {
     isObstacle: boolean;
     gameObject: ItemObject | null;
 
-    constructor(type: TileTypes, isOccupied: boolean, isObstacle: boolean, gameObject?: ItemObject) {
+    constructor(type: TileTypes, isOccupied: boolean, isObstacle: boolean, gameObject: ItemObject | null = null) {
         this.type = type;
         this.isOccupied = isOccupied;
         this.isObstacle = isObstacle;

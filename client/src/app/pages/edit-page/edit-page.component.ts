@@ -1,15 +1,15 @@
-import { TileGridComponent } from '@app/components/tile-grid/tile-grid.component';
-import { EditingToolService } from '@app/services/editing-tool.service';
-import { BrushGridComponent } from '@app/components/brush-grid/brush-grid.component';
-import { MouseService } from '@app/services/mouse.service';
-import { MapService } from '@app/services/map.service';
-import { ItemGridComponent } from '@app/components/item-grid/item-grid.component';
-import { Component } from '@angular/core';
-import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { NgStyle } from '@angular/common';
-import { ItemService } from '@app/services/item.service';
-import { TitleComponent } from "../../components/title/title.component";
-import { DescriptionComponent } from "../../components/description/description.component";
+import { Component } from '@angular/core';
+import { BrushGridComponent } from '@app/components/brush-grid/brush-grid.component';
+import { DescriptionComponent } from '@app/components/description/description.component';
+import { ItemGridComponent } from '@app/components/item-grid/item-grid.component';
+import { TileGridComponent } from '@app/components/tile-grid/tile-grid.component';
+import { TitleComponent } from '@app/components/title/title.component';
+import { DragAndDropService } from '@app/services/drag-and-drop.service';
+import { EditingToolService } from '@app/services/editing-tool.service';
+import { ITEM_CONTAINER_COORDINATES, ItemService } from '@app/services/item.service';
+import { MapService } from '@app/services/map.service';
+import { MouseService } from '@app/services/mouse.service';
 
 @Component({
     selector: 'app-edit-page',
@@ -26,7 +26,7 @@ export class EditPageComponent {
         private readonly mouseService: MouseService,
         protected mapService: MapService,
         protected dragAndDropService: DragAndDropService,
-        protected itemService: ItemService
+        protected itemService: ItemService,
     ) {}
 
     onMouseDown(event: MouseEvent) {
@@ -39,7 +39,14 @@ export class EditPageComponent {
         const item = this.dragAndDropService.currentDraggedItem;
         if (item) {
             if (this.dragAndDropService.currentHoveredTile.row === -1 && this.dragAndDropService.currentHoveredTile.column === -1) {
-                this.itemService.resetTileToStartPosition(this.dragAndDropService.startTile.row, this.dragAndDropService.startTile.column);
+                if (
+                    this.dragAndDropService.startTile.row === ITEM_CONTAINER_COORDINATES.row &&
+                    this.dragAndDropService.startTile.column === ITEM_CONTAINER_COORDINATES.column
+                ) {
+                    this.itemService.increaseItemAmount(item.name);
+                } else {
+                    this.itemService.resetTileToStartPosition(this.dragAndDropService.startTile.row, this.dragAndDropService.startTile.column);
+                }
             }
 
             this.dragAndDropService.onMouseUp(item.name);

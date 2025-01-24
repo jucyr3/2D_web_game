@@ -1,9 +1,9 @@
 import { NgClass, NgIf } from '@angular/common';
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditToolTypes } from '@app/services/editing-tool.constants';
 import { EditingToolService } from '@app/services/editing-tool.service';
-import { ItemService } from '@app/services/item.service';
+import { ITEM_CONTAINER_COORDINATES, ItemService } from '@app/services/item.service';
 import { ItemObject } from '@common/ItemObject';
 
 @Component({
@@ -12,7 +12,7 @@ import { ItemObject } from '@common/ItemObject';
     templateUrl: './item.component.html',
     styleUrls: ['./item.component.scss'],
 })
-export class ItemComponent implements OnDestroy {
+export class ItemComponent implements OnDestroy, OnInit {
     @Input() itemId: string; // Unique identifier for each item
 
     itemObject: ItemObject;
@@ -23,12 +23,12 @@ export class ItemComponent implements OnDestroy {
         protected readonly itemService: ItemService,
     ) {}
 
-    ngOnInit(): void {
-        this.itemObject = this.itemService.createItem(this.itemId);
-    }
-
     get draggingState() {
         return this.dragAndDropService.getDraggingState(this.itemObject.name);
+    }
+
+    ngOnInit(): void {
+        this.itemObject = this.itemService.createItem(this.itemId);
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -37,16 +37,16 @@ export class ItemComponent implements OnDestroy {
         }
         this.itemService.decreaseItemAmount(this.itemObject.name);
         this.editingToolService.setActiveTool(EditToolTypes.Hand);
-        this.dragAndDropService.startDragging(this.itemObject, event, 0, 0);
+        this.dragAndDropService.startDragging(this.itemObject, event, ITEM_CONTAINER_COORDINATES.row, ITEM_CONTAINER_COORDINATES.column);
     }
 
-    onMouseUp(event: MouseEvent): void {
+    onMouseUp(): void {
         if (this.draggingState.isDragging && this.dragAndDropService.currentDraggedItem) {
-            //if the dragged items name is the same as this ones
+            // if the dragged items name is the same as this ones
             if (this.dragAndDropService.currentDraggedItem.name === this.itemObject.name) {
                 this.itemService.increaseItemAmount(this.itemObject.name);
             }
-            
+
             this.dragAndDropService.onMouseUp(this.itemObject.name);
         }
     }

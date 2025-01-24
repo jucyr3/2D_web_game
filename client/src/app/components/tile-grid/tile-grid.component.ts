@@ -13,16 +13,16 @@ import { ItemService } from '@app/services/item.service';
     styleUrls: ['./tile-grid.component.scss'],
 })
 export class TileGridComponent implements OnInit, OnDestroy {
-    private disableContextMenuListener: () => void;
-
     @ViewChildren('tileRef') tileComponents!: QueryList<TileComponent>;
+
+    private disableContextMenuListener: () => void;
 
     constructor(
         private readonly mouseService: MouseService,
         protected mapService: MapService,
         private readonly renderer: Renderer2,
         private readonly dragAndDropService: DragAndDropService, // Inject Renderer2
-        private readonly itemService: ItemService
+        private readonly itemService: ItemService,
     ) {}
 
     ngOnInit() {
@@ -56,14 +56,12 @@ export class TileGridComponent implements OnInit, OnDestroy {
 
     resetTileToStartPosition(tileNumber: number): void {
         // Find the tile with the specified tileNumber
-        
-        const tileComponent = this.tileComponents.find(tile => tile.tileNumber === tileNumber);
+
+        const tileComponent = this.tileComponents.find((tile) => tile.tileNumber === tileNumber);
 
         if (tileComponent) {
             // Call a function on the tile component
             tileComponent.onMouseUp(); // Example: Call the placeTile function
-        } else {
-            console.error('Tile not found with tileNumber:', tileNumber);
         }
     }
 }

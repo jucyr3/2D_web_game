@@ -7,12 +7,13 @@ import { ItemObject } from '@common/ItemObject';
 export class DragAndDropService {
     currentHoveredTile: { row: number; column: number } = { row: -1, column: -1 };
 
+    startTile: { row: number; column: number } = { row: -1, column: -1 };
+
     private draggingStates: { [itemId: string]: { isDragging: boolean; dragX: number; dragY: number } } = {};
 
     // Track the currently dragged item's ID
     private _currentDraggedItem: ItemObject | null = null;
     private _isDragging: boolean = false;
-    startTile: { row: number; column: number } = { row: -1, column: -1 };
 
     // Expose the currently dragged item's ID
     get currentDraggedItem(): ItemObject | null {

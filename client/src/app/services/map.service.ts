@@ -1,8 +1,25 @@
 import { Injectable } from '@angular/core';
-//import { GameObject } from '@common/gameObject.interface';
-import { TileTypes } from '@common/tileType.constants';
-import { Map } from '@common/map';
 import { ItemObject } from '@common/ItemObject';
+import { Map } from '@common/map';
+import { Tile } from '@common/tile';
+import { TileTypes } from '@common/tileType.constants';
+
+interface MapJson {
+    name: string;
+    size: number;
+    isVisible: boolean;
+    description: string;
+    gameMode: 'CTF' | 'Classic';
+    tileMatrix: {
+        type: string;
+        isOccupied: boolean;
+        isObstacle: boolean;
+        gameObject?: {
+            name: string;
+        };
+    }[][];
+    lastModified: string;
+}
 
 @Injectable({
     providedIn: 'root',
@@ -11,7 +28,166 @@ export class MapService {
     map: Map;
 
     constructor() {
-        this.map = new Map('Untitled', 10, true, '', 'Classic');
+        const mapJson = null;
+        // const mapJson: MapJson = {
+        //     name: 'Test title',
+        //     size: 10,
+        //     isVisible: true,
+        //     description: 'Test description',
+        //     gameMode: 'Classic',
+        //     tileMatrix: [
+        //         [
+        //             { type: 'groundTile2', isOccupied: false, isObstacle: false, gameObject: { name: 'sword' } },
+        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
+        //             { type: 'wallTile', isOccupied: false, isObstacle: false, gameObject: { name: 'luma' } },
+        //             { type: 'wallTile', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //         ],
+        //         [
+        //             { type: 'groundTile2', isOccupied: false, isObstacle: false, gameObject: { name: 'sword' } },
+        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
+        //             { type: 'wallTile', isOccupied: false, isObstacle: false, gameObject: { name: 'luma' } },
+        //             { type: 'wallTile', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //         ],
+        //         [
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false, gameObject: { name: 'mushroom' } },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //         ],
+        //         [
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //         ],
+        //         [
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
+        //             { type: 'wallTile', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //         ],
+        //         [
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //         ],
+        //         [
+        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
+        //             { type: 'wallTile', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //         ],
+        //         [
+        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
+        //             { type: 'wallTile', isOccupied: false, isObstacle: false },
+        //             { type: 'wallTile', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //         ],
+        //         [
+        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
+        //             { type: 'wallTile', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //         ],
+        //         [
+        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
+        //             { type: 'wallTile', isOccupied: false, isObstacle: false },
+        //             { type: 'wallTile', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
+        //         ],
+        //     ],
+        //     lastModified: '2025-01-23T17:46:53.268Z',
+        // };
+        if (!mapJson) {
+            const mapSize = 10;
+            this.map = new Map('Untitled', mapSize, true, '', 'Classic');
+        } else {
+            this.map = this.createMapFromJSON(mapJson);
+        }
+    }
+
+    parseTileMatrix(json: MapJson): Tile[][] {
+        // eslint-disable-next-line
+        return json.tileMatrix.map((row: any[]) =>
+            row.map((tileData) => {
+                const type = tileData.type as TileTypes;
+                const isOccupied = tileData.isOccupied;
+                const isObstacle = tileData.isObstacle;
+                const gameObject = tileData.gameObject ? new ItemObject(tileData.gameObject.name) : null;
+
+                return new Tile(type, isOccupied, isObstacle, gameObject);
+            }),
+        );
+    }
+
+    createMapFromJSON(json: MapJson): Map {
+        const tileMatrix = this.parseTileMatrix(json);
+        return new Map(json.name, json.size, json.isVisible, json.description, json.gameMode, tileMatrix);
+    }
+
+    getMapJson(): string {
+        return JSON.stringify(this.map);
     }
 
     // for testing purposes
@@ -26,9 +202,9 @@ export class MapService {
                     .toLowerCase() || ''
             );
         };
-    
+
         const mapSize = this.map.size;
-    
+
         // 1. Calculate the maximum width needed for the content
         let maxCellWidth = 0;
         for (let i = 0; i < mapSize; i++) {
@@ -38,10 +214,10 @@ export class MapService {
                 maxCellWidth = Math.max(maxCellWidth, content.length);
             }
         }
-    
+
         // 2. Define the cell width (minimum 5 characters)
         const CELL_WIDTH = Math.max(maxCellWidth + 2, 5);
-    
+
         // 3. Helper to center text
         const centerText = (text: string, width: number) => {
             const pad = width - text.length;
@@ -49,16 +225,16 @@ export class MapService {
             const padRight = pad - padLeft;
             return ' '.repeat(padLeft) + text + ' '.repeat(padRight);
         };
-    
+
         // 4. Calculate the width needed for row indices
         const rowIndexWidth = String(mapSize - 1).length; // Width of the largest row index
-    
+
         // 5. Generate the centered header
         let header = ' '.repeat(rowIndexWidth + 2); // Padding for row indices
         for (let j = 0; j < mapSize; j++) {
             header += centerText(j.toString(), CELL_WIDTH);
         }
-    
+
         // 6. Generate the rows
         const grid = [header];
         for (let i = 0; i < mapSize; i++) {
@@ -70,12 +246,12 @@ export class MapService {
                 const typeAbbrev = abbreviateType(tile.type);
                 const objAbbrev = tile.gameObject?.name.slice(0, 3) || '';
                 const cellContent = `${typeAbbrev}${objAbbrev ? ':' + objAbbrev : ''}`;
-    
+
                 row += centerText(cellContent, CELL_WIDTH);
             }
             grid.push(row);
         }
-    
+
         // 7. Print the grid
         console.log('\n' + grid.join('\n') + '\n');
     }
