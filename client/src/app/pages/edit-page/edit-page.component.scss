@@ -39,7 +39,7 @@ body {
     justify-content: center;
 
     /* Animation to hide after 1 minute */
-    animation: hideAfter1Minute 1800s forwards;
+    animation: hideAfter1Minute 3600s forwards;
 }
 
 @keyframes hideAfter1Minute {

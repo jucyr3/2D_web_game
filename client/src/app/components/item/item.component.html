@@ -1,7 +1,7 @@
 <div class="item-container">
     <img
       class="item"
-      [ngClass]="{ grayscale: this.itemService.itemAmounts[this.itemObject.name] === 0 }"
+      [ngClass]="{ grayscale: this.itemService.itemAmounts[this.itemObject.name] <= 0 }"
       [src]="'../assets/' + itemId + '.png'"
       [alt]="itemId"
       draggable="false"
@@ -13,6 +13,7 @@
 
       [matTooltip]="!this.dragAndDropService.isDragging ? this.getFormattedTooltip() : null"
       [matTooltipPosition]="'right'"
+      [matTooltipShowDelay]="200"
       matTooltipClass="description-tooltip"
     />
   </div>

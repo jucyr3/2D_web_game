@@ -33,7 +33,7 @@ export class ItemComponent implements OnDestroy, OnInit {
     }
 
     onMouseDown(event: MouseEvent): void {
-        if (this.itemService.itemAmounts[this.itemObject.name] === 0) {
+        if (this.itemService.itemAmounts[this.itemObject.name] <= 0) {
             return;
         }
         this.itemService.decreaseItemAmount(this.itemObject.name);

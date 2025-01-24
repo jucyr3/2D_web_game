@@ -16,7 +16,8 @@ interface MapJson {
         isObstacle: boolean;
         gameObject?: {
             name: string;
-        };
+            description: string;
+        } | null;
     }[][];
     lastModified: string;
 }
@@ -29,136 +30,7 @@ export class MapService {
 
     constructor() {
         const mapJson = null;
-        // const mapJson: MapJson = {
-        //     name: 'Test title',
-        //     size: 10,
-        //     isVisible: true,
-        //     description: 'Test description',
-        //     gameMode: 'Classic',
-        //     tileMatrix: [
-        //         [
-        //             { type: 'groundTile2', isOccupied: false, isObstacle: false, gameObject: { name: 'sword' } },
-        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
-        //             { type: 'wallTile', isOccupied: false, isObstacle: false, gameObject: { name: 'luma' } },
-        //             { type: 'wallTile', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //         ],
-        //         [
-        //             { type: 'groundTile2', isOccupied: false, isObstacle: false, gameObject: { name: 'sword' } },
-        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
-        //             { type: 'wallTile', isOccupied: false, isObstacle: false, gameObject: { name: 'luma' } },
-        //             { type: 'wallTile', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //         ],
-        //         [
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false, gameObject: { name: 'mushroom' } },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //         ],
-        //         [
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //         ],
-        //         [
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
-        //             { type: 'wallTile', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //         ],
-        //         [
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //         ],
-        //         [
-        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
-        //             { type: 'wallTile', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //         ],
-        //         [
-        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
-        //             { type: 'wallTile', isOccupied: false, isObstacle: false },
-        //             { type: 'wallTile', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //         ],
-        //         [
-        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
-        //             { type: 'wallTile', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile0', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //         ],
-        //         [
-        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile2', isOccupied: false, isObstacle: false },
-        //             { type: 'wallTile', isOccupied: false, isObstacle: false },
-        //             { type: 'wallTile', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //             { type: 'groundTile1', isOccupied: false, isObstacle: false },
-        //         ],
-        //     ],
-        //     lastModified: '2025-01-23T17:46:53.268Z',
-        // };
+        //const mapJson: MapJson = {"name":"Untitled","size":10,"isVisible":true,"description":"","gameMode":"Classic","tileMatrix":[[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"spawnpoint","description":"A magical marker that sets the player's respawn location."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"mushroom","description":"A small, red mushroom with white spots. Consuming it grants the player extra health, making it a valuable resource for survival."}},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":null},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"potion","description":"A magical elixir in a shimmering vial. Drinking it restores the player's health, making it essential for long journeys and tough battles."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"sword","description":"A sharp, gleaming sword forged from rare metals. It is the perfect weapon for close combat, allowing the player to defeat enemies with ease."}},{"type":"groundTile1","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"luma","description":"A glowing, celestial orb that radiates energy. It is said to hold mysterious powers, though its true purpose remains unknown."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"cloak","description":"A mystical cloak that grants the wearer the ability to become invisible for a short time. Perfect for sneaking past enemies or escaping danger."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"bomb","description":"A volatile explosive device. Use it wisely to clear obstacles or defeat groups of enemies, but be careful not to get caught in the blast!"}},{"type":"groundTile1","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"randomItem","description":"Becomes a random item upon starting the game."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"spawnpoint","description":"A magical marker that sets the player's respawn location."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"randomItem","description":"Becomes a random item upon starting the game."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"flag","description":"A brightly colored flag."}},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false}]],"lastModified":"2025-01-24T15:33:15.507Z"}
         if (!mapJson) {
             const mapSize = 10;
             this.map = new Map('Untitled', mapSize, true, '', 'Classic');
@@ -169,12 +41,13 @@ export class MapService {
 
     parseTileMatrix(json: MapJson): Tile[][] {
         // eslint-disable-next-line
-        return json.tileMatrix.map((row: any[]) =>
+        return json.tileMatrix.map((row) =>
             row.map((tileData) => {
                 const type = tileData.type as TileTypes;
                 const isOccupied = tileData.isOccupied;
                 const isObstacle = tileData.isObstacle;
-                const gameObject = tileData.gameObject ? new ItemObject(tileData.gameObject.name) : null;
+                // TODO: Fix this
+                const gameObject = tileData.gameObject ? new ItemObject(tileData.gameObject.name, tileData.gameObject.description) : null;
 
                 return new Tile(type, isOccupied, isObstacle, gameObject);
             }),
@@ -254,6 +127,8 @@ export class MapService {
 
         // 7. Print the grid
         console.log('\n' + grid.join('\n') + '\n');
+
+        console.log(this.getMapJson());
     }
 
     changeTileType(row: number, column: number, newType: TileTypes): void {

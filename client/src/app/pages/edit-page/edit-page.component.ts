@@ -53,6 +53,10 @@ export class EditPageComponent {
         }
     }
 
+    onMouseLeave() {
+        this.onMouseUp();
+    }
+
     onMouseMove(event: MouseEvent): void {
         const item = this.dragAndDropService.currentDraggedItem;
         if (item) {

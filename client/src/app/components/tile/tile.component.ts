@@ -87,9 +87,11 @@ export class TileComponent implements OnInit {
 
         this.editingToolService.setActiveTool(EditToolTypes.TileBrush);
 
-        setTimeout(() => {
-            this.tooltip.show();
-        }, 1);
+        if (this.dragAndDropService.currentHoveredTile.row === this.tilePosition.row && this.dragAndDropService.currentHoveredTile.column === this.tilePosition.column) {
+            setTimeout(() => {
+                this.tooltip.show();
+            }, 1);
+        }
         
     }
 
