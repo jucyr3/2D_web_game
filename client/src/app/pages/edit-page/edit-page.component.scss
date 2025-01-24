@@ -37,19 +37,6 @@ body {
     flex-grow: 1;
     overflow: hidden;
     justify-content: center;
-
-    /* Animation to hide after 1 minute */
-    animation: hideAfter1Minute 3600s forwards;
-}
-
-@keyframes hideAfter1Minute {
-    0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-        display: none; /* Completely hide the element */
-    }
 }
 
 .brush-grid {
