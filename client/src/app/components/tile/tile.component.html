@@ -1,12 +1,17 @@
 <div
-    class="tile"
-    (mousedown)="onMouseDown($event)"
-    (mouseenter)="onMouseEnter()"
-    (mouseup)="onMouseUp()"
-    [ngStyle]="{ 'background-image': this.tileTexture}"
-    [ngClass]="{ 'grab-cursor': shouldShowGrabCursor() }"
+  class="tile mat-tooltip"
+  (mousedown)="onMouseDown($event)"
+  (mouseenter)="onMouseEnter()"
+  (mouseup)="onMouseUp()"
+  [ngStyle]="{ 'background-image': this.tileTexture }"
+  [ngClass]="{ 'grab-cursor': shouldShowGrabCursor() }"
+
+  #tooltip="matTooltip"
+  [matTooltip]="this.isTooltipEnabled() ? this.getFormattedTooltip() : null"
+  [matTooltipPosition]="'right'"
+  matTooltipClass="description-tooltip"
 >
-    @if (this.itemObject) {
-        <img [src]="'../assets/' + this.itemObject.name + '.png'" draggable="false" alt="{{this.itemObject.name}}" />
-    }
+  @if (this.itemObject) {
+    <img [src]="'../assets/' + this.itemObject.name + '.png'" draggable="false" alt="{{this.itemObject.name}}" />
+  }
 </div>

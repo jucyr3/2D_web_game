@@ -5,10 +5,11 @@ import { EditToolTypes } from '@app/services/editing-tool.constants';
 import { EditingToolService } from '@app/services/editing-tool.service';
 import { ITEM_CONTAINER_COORDINATES, ItemService } from '@app/services/item.service';
 import { ItemObject } from '@common/ItemObject';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
     selector: 'app-item',
-    imports: [NgIf, NgClass],
+    imports: [NgIf, NgClass, MatTooltipModule],
     templateUrl: './item.component.html',
     styleUrls: ['./item.component.scss'],
 })
@@ -18,7 +19,7 @@ export class ItemComponent implements OnDestroy, OnInit {
     itemObject: ItemObject;
 
     constructor(
-        private readonly dragAndDropService: DragAndDropService,
+        protected readonly dragAndDropService: DragAndDropService,
         private readonly editingToolService: EditingToolService,
         protected readonly itemService: ItemService,
     ) {}
@@ -54,5 +55,12 @@ export class ItemComponent implements OnDestroy, OnInit {
     ngOnDestroy(): void {
         // Clean up dragging state for this item
         this.dragAndDropService.onMouseUp(this.itemObject.name);
+    }
+
+    getFormattedTooltip(): string {
+        const name = this.itemObject ? this.itemObject.name : '';
+        const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
+        const description = this.itemObject ? this.itemObject.description : '';
+        return `${capitalizedName}: \n ${description}`;
     }
 }

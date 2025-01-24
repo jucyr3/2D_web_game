@@ -1,5 +1,5 @@
 import { NgClass, NgStyle } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Coordinate } from '@app/interfaces/coordinate';
 import { ItemObject } from '@common/ItemObject';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
@@ -10,10 +10,11 @@ import { EditToolTypes } from '@app/services/editing-tool.constants';
 import { TileTypes } from '@common/tileType.constants';
 import { ItemService } from '@app/services/item.service';
 import { Tile } from '@common/tile';
+import { MatTooltipModule, MatTooltip } from '@angular/material/tooltip';
 
 @Component({
     selector: 'app-tile',
-    imports: [NgStyle, NgClass],
+    imports: [NgStyle, NgClass, MatTooltipModule],
     templateUrl: './tile.component.html',
     styleUrl: './tile.component.scss',
 })
@@ -21,13 +22,14 @@ export class TileComponent implements OnInit {
     @Input() tileNumber: number;
     @Input() tileObject: Tile;
 
-    tilePosition: Coordinate;
+    @ViewChild('tooltip') tooltip!: MatTooltip;
 
+    tilePosition: Coordinate;
     itemObject: ItemObject | null = null;
 
     constructor(
         protected readonly editingToolService: EditingToolService,
-        private readonly mouseService: MouseService,
+        protected readonly mouseService: MouseService,
         protected readonly mapService: MapService,
         private readonly dragAndDropService: DragAndDropService,
         private readonly itemService: ItemService,
@@ -66,6 +68,9 @@ export class TileComponent implements OnInit {
             this.itemObject = null;
             this.mapService.removeGameObject(this.tilePosition.row, this.tilePosition.column);
         }
+
+        this.tooltip.hide();
+
     }
 
     onMouseUp(): void {
@@ -81,8 +86,19 @@ export class TileComponent implements OnInit {
         }
 
         this.editingToolService.setActiveTool(EditToolTypes.TileBrush);
+
+        setTimeout(() => {
+            this.tooltip.show();
+        }, 1);
+        
     }
 
+    @HostListener('mouseleave')
+    onMouseLeave(): void {
+        this.tooltip.hide();
+    }
+
+    
     onMouseEnter(): void {
         this.dragAndDropService.setCurrentHoveredTile(this.tilePosition.row, this.tilePosition.column);
         if (this.mouseService.isMouseDown) {
@@ -114,6 +130,17 @@ export class TileComponent implements OnInit {
             this.itemObject !== null && // Check if the tile has a gameObject
             this.editingToolService.getActiveTool() === EditToolTypes.Hand // Check if the active tool is HAND
         );
+    }
+
+    getFormattedTooltip(): string {
+        const name = this.itemObject ? this.itemObject.name : '';
+        const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
+        const description = this.itemObject ? this.itemObject.description : '';
+        return `${capitalizedName}: \n ${description}`;
+    }
+
+    isTooltipEnabled(): boolean {
+        return this.itemObject !== null && !this.mouseService.isMouseDown;
     }
 
     private toggleDoorTile() {

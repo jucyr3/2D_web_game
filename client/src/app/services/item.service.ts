@@ -46,36 +46,75 @@ export class ItemService {
         const mapSize = this.mapService.map.size;
         switch (itemName) {
             case 'mushroom':
-                this.itemAmounts['mushroom'] = 1;
-                return new ItemObject('mushroom');
+              this.itemAmounts['mushroom'] = 1;
+              return new ItemObject(
+                'mushroom',
+                "A small, red mushroom with white spots. Consuming it grants the player extra health, making it a valuable resource for survival."
+              );
+          
             case 'sword':
-                this.itemAmounts['sword'] = 1;
-                return new ItemObject('sword');
+              this.itemAmounts['sword'] = 1;
+              return new ItemObject(
+                'sword',
+                "A sharp, gleaming sword forged from rare metals. It is the perfect weapon for close combat, allowing the player to defeat enemies with ease."
+              );
+          
             case 'luma':
-                this.itemAmounts['luma'] = 1;
-                return new ItemObject('luma');
+              this.itemAmounts['luma'] = 1;
+              return new ItemObject(
+                'luma',
+                "A glowing, celestial orb that radiates energy. It is said to hold mysterious powers, though its true purpose remains unknown."
+              );
+          
             case 'bomb':
-                this.itemAmounts['bomb'] = 1;
-                return new ItemObject('bomb');
+              this.itemAmounts['bomb'] = 1;
+              return new ItemObject(
+                'bomb',
+                "A volatile explosive device. Use it wisely to clear obstacles or defeat groups of enemies, but be careful not to get caught in the blast!"
+              );
+          
             case 'potion':
-                this.itemAmounts['potion'] = 1;
-                return new ItemObject('potion');
+              this.itemAmounts['potion'] = 1;
+              return new ItemObject(
+                'potion',
+                "A magical elixir in a shimmering vial. Drinking it restores the player's health, making it essential for long journeys and tough battles."
+              );
+          
             case 'cloak':
-                this.itemAmounts['cloak'] = 1;
-                return new ItemObject('cloak');
+              this.itemAmounts['cloak'] = 1;
+              return new ItemObject(
+                'cloak',
+                "A mystical cloak that grants the wearer the ability to become invisible for a short time. Perfect for sneaking past enemies or escaping danger."
+              );
+          
             case 'spawnpoint':
-                this.itemAmounts['spawnpoint'] = this.itemMap['size' + mapSize];
-                return new ItemObject('spawnpoint');
+              this.itemAmounts['spawnpoint'] = this.itemMap['size' + mapSize];
+              return new ItemObject(
+                'spawnpoint',
+                "A magical marker that sets the player's respawn location."
+              );
+          
             case 'randomItem':
-                this.itemAmounts['randomItem'] = this.itemMap['size' + mapSize];
-                return new ItemObject('randomItem');
+              this.itemAmounts['randomItem'] = this.itemMap['size' + mapSize];
+              return new ItemObject(
+                'randomItem',
+                "Becomes a random item upon starting the game."
+              );
+          
             case 'flag':
-                this.itemAmounts['flag'] = 1;
-                return new ItemObject('flag');
+              this.itemAmounts['flag'] = 1;
+              return new ItemObject(
+                'flag',
+                "A brightly colored flag."
+              );
+          
             default:
-                // tslint:disable-next-line: no-console
-                console.error(`Item ${itemName} not found`);
-                return new ItemObject('default');
-        }
+              // tslint:disable-next-line: no-console
+              console.error(`Item ${itemName} not found`);
+              return new ItemObject(
+                'default',
+                "An unknown item. Its purpose and abilities are a mystery."
+              );
+          }
     }
 }

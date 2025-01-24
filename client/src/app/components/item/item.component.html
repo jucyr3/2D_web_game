@@ -10,6 +10,10 @@
       (mouseup)="onMouseUp()"
       onmousedown="return false;"
       onselectstart="return false;"
+
+      [matTooltip]="!this.dragAndDropService.isDragging ? this.getFormattedTooltip() : null"
+      [matTooltipPosition]="'right'"
+      matTooltipClass="description-tooltip"
     />
   </div>
   <div *ngIf="draggingState.isDragging" class="drag-preview" [style.left.px]="draggingState.dragX" [style.top.px]="draggingState.dragY">

@@ -72,7 +72,6 @@ button {
     width: fit-content; /* Make the button small */
     padding: 8px 16px; /* Adjust padding to make it compact */
     font-size: 12px; /* Smaller font size */
-    background-color: #f0f0f0; /* Light background */
     border: 1px solid #ccc; /* Subtle border */
     border-radius: 4px; /* Rounded corners */
     cursor: pointer;
@@ -84,4 +83,11 @@ button:hover {
     background-color: #e0e0e0; /* Slightly darker on hover */
 }
 
-
+::ng-deep .description-tooltip {
+    pointer-events: none; /* Prevent interaction with the tooltip */
+    position: fixed; /* Position relative to the viewport */
+    --mdc-plain-tooltip-container-color: rgba(0, 0, 0, 0.8);
+    font-family: 'Consolas', 'Courier New', monospace;
+    white-space: pre-line;
+    transition-duration: 0ms
+}
