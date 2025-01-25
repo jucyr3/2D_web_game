@@ -1,7 +1,8 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 import { DiceComponent } from '@app/components/create-character/dice/dice.component';
 import { NameComponent } from '@app/components/create-character/name/name.component';
 import { StatComponent } from '@app/components/create-character/stat/stat.component';
+import { ProfileService } from '@app/services/profile.service';
 
 @Component({
     selector: 'app-profile-showcase',
@@ -9,21 +10,16 @@ import { StatComponent } from '@app/components/create-character/stat/stat.compon
     templateUrl: './profile-showcase.component.html',
     styleUrl: './profile-showcase.component.scss',
 })
-export class ProfileShowcaseComponent implements OnChanges {
-    @Input() profileChosed: number;
-    imagePath: string;
+export class ProfileShowcaseComponent {
+
     bonus: boolean = false;
     dice: boolean = false;
 
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes['profileChosed']) {
-            this.imagePath = 'assets/images/' + this.profileChosed + '.jpg';
-        }
-    }
     clickBonus(event: boolean) {
         this.bonus = event;
     }
     clickDice(event: boolean) {
         this.dice = event;
     }
+    constructor(public profileService: ProfileService) {}
 }

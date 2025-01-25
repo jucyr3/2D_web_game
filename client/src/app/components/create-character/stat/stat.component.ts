@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
+import { ProfileService } from '@app/services/profile.service';
 
 @Component({
     selector: 'app-stat',
@@ -7,10 +8,10 @@ import { Component, EventEmitter, Output } from '@angular/core';
     styleUrl: './stat.component.scss',
 })
 export class StatComponent {
-    @Output() selected = new EventEmitter<boolean>();
     cahnge: boolean = false;
     clickItem(value: boolean) {
         this.cahnge = value;
-        this.selected.emit(this.cahnge);
+        this.profileService.setStatChoice(this.cahnge);
     }
+    constructor(private profileService: ProfileService) {}
 }

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { ProfileSelectionComponent } from '@app/components/create-character/profile-selection/profile-selection.component';
 import { ProfileShowcaseComponent } from '@app/components/create-character/profile-showcase/profile-showcase.component';
-import { RouterLink } from '@angular/router';
+import { ProfileService } from '@app/services/profile.service';
 
 @Component({
     selector: 'app-create-character-page',
@@ -10,13 +11,14 @@ import { RouterLink } from '@angular/router';
     templateUrl: './create-character-page.component.html',
 })
 export class CreateCharacterPageComponent {
-    profilePicture: number = 1;
+    verifyCreation() {
+        if (this.profileService.getName()) {
+            this.router.navigate(['/waitingRoom']);
+        }
+    }
 
-    choose: boolean = false;
-    chosed(value: boolean) {
-        this.choose = value;
-    }
-    handleEvent(event: number) {
-        this.profilePicture = event;
-    }
+    constructor(
+        private profileService: ProfileService,
+        private router: Router,
+    ) {}
 }

@@ -9,9 +9,9 @@
                 <p>Défense : Capacité à bloquer une attaque</p>
             </div>
         </div>
-        <img [src]="imagePath" atl="img" />
+        <img [src]="this.profileService.showImageSelected()" atl="img" />
     </div>
     <app-name></app-name>
-    <app-stat (selected)="clickBonus($event)"></app-stat>
-    <app-dice (selected)="clickDice($event)"></app-dice>
+    <app-stat></app-stat>
+    <app-dice></app-dice>
 </div>

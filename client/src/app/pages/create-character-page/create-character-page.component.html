@@ -4,13 +4,12 @@
 </div>
 <div class="options">
     <div class="showSelection">
-        <app-profile-selection (selected)="handleEvent($event)"></app-profile-selection>
+        <app-profile-selection></app-profile-selection>
     </div>
     <div class="showProfile">
-        <app-profile-showcase [profileChosed]="profilePicture"></app-profile-showcase>
-        
+        <app-profile-showcase></app-profile-showcase>
     </div>
 </div>
 <div class="buttons">
-    <button id="continue" routerLink="/waitingRoom">VALIDER LA CRÉATION</button>
+    <button id="continue" (click)="verifyCreation()">VALIDER LA CRÉATION</button>
 </div>
