@@ -1,7 +1,7 @@
 <h2>Tuiles</h2>
 <div id="brush-grid">
-    <button class="brush-button" (click)="changeBrushTile(tileTypes.DOOR)" style="background-image: url('../assets/doorTile.png')"></button>
-    <button class="brush-button" (click)="changeBrushTile(tileTypes.WALL)" style="background-image: url('../assets/wallTile.png')"></button>
-    <button class="brush-button" (click)="changeBrushTile(tileTypes.GROUND_0)" style="background-image: url('../assets/groundTile0.png')"></button>
-    <button class="brush-button" (click)="changeBrushTile(tileTypes.GROUND_2)" style="background-image: url('../assets/groundTile2.png')"></button>
+    <app-brush [tileType]="tileTypes.DOOR" [isActive]="this.editingToolService.getCurrentTileTypeOnBrush() === tileTypes.DOOR"></app-brush>
+    <app-brush [tileType]="tileTypes.WALL" [isActive]="this.editingToolService.getCurrentTileTypeOnBrush() === tileTypes.WALL"></app-brush>
+    <app-brush [tileType]="tileTypes.GROUND_0" [isActive]="this.editingToolService.getCurrentTileTypeOnBrush() === tileTypes.GROUND_0"></app-brush>
+    <app-brush [tileType]="tileTypes.GROUND_2" [isActive]="this.editingToolService.getCurrentTileTypeOnBrush() === tileTypes.GROUND_2"></app-brush>
 </div>

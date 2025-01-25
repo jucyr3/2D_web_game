@@ -1,0 +1,22 @@
+$primary-color: #a85cf9; // Couleur du titre
+$background-color: #333; // Couleur de fond de la page
+$button-color: #eee; // Couleur des boutons
+$button-hover-color: #ddd; // Couleur des boutons au survol
+$button-border-color: #aaa; // Couleur de la bordure des boutons
+$text-color: #fff; // Couleur principale du texte
+$footer-color: #aaa; // Couleur du texte dans le pied de page
+
+.brush-button {
+    background-color: #ccc;
+    border-radius: 0.25rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    aspect-ratio: 1;
+    width: 90px;
+
+    &.active {
+        border-color: $primary-color;
+        border-width: 3px;
+    }
+  }
