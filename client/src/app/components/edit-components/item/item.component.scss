@@ -17,6 +17,7 @@
   height: 90%;
   object-fit: contain;
   transition: filter 0.2s ease;
+  user-select: none;
 }
 
 .item:hover {
@@ -42,6 +43,7 @@
   padding: 2px 5px; /* Padding for better visibility */
   border-radius: 50%; /* Circular shape */
   line-height: 1; /* Ensure the text is centered vertically */
+  user-select: none;
 }
 
 .drag-preview {
