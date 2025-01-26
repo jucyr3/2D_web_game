@@ -1,5 +1,5 @@
 import { Tile } from "./tile";
-import { TILE_TYPES } from "./tileType.constants";
+import { TileTypes } from "./tileType.constants";
 
 export class Map {
     name: string;
@@ -12,14 +12,14 @@ export class Map {
     lastModified: Date;
     previewImage: string;
 
-    constructor(name: string, size: number, isVisible: boolean, description: string, gameMode: "CTF" | "Classic") {
+    constructor(name: string, size: number, isVisible: boolean, description: string, gameMode: "CTF" | "Classic", lastModified: Date) {
         this.name = name;
         this.size = size;
         this.isVisible = isVisible;
         this.description = description;
         this.gameMode = gameMode;
-        this.tileMatrix = Array.from({ length: size }, () => Array.from({ length: size }, () => new Tile(TILE_TYPES.GROUND_1, false, false)));
-        this.lastModified = new Date();
+        this.tileMatrix = Array.from({ length: size }, () => Array.from({ length: size }, () => new Tile(TileTypes.GROUND_1, false, false)));
+        this.lastModified = lastModified;
     }
 
     get flattenedTileMatrix(): Tile[] {
