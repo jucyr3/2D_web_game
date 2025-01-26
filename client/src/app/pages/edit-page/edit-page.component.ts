@@ -1,21 +1,30 @@
 import { NgStyle } from '@angular/common';
 import { Component } from '@angular/core';
-import { BrushGridComponent } from '@app/components/brush-grid/brush-grid.component';
-import { DescriptionComponent } from '@app/components/description/description.component';
-import { ItemGridComponent } from '@app/components/item-grid/item-grid.component';
-import { TileGridComponent } from '@app/components/tile-grid/tile-grid.component';
-import { TitleComponent } from '@app/components/title/title.component';
+import { BrushGridComponent } from '@app/components/edit-components/brush-grid/brush-grid.component';
+import { DescriptionComponent } from '@app/components/edit-components/description/description.component';
+import { TitleComponent } from '@app/components/edit-components/title/title.component';
+import { ItemGridComponent } from '@app/components/edit-components/item-grid/item-grid.component';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditingToolService } from '@app/services/editing-tool.service';
 import { ITEM_CONTAINER_COORDINATES, ItemService } from '@app/services/item.service';
 import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
-import { SaveButtonComponent } from "../../components/save-button/save-button.component";
-import { ResetButtonComponent } from "../../components/reset-button/reset-button.component";
+import { ResetButtonComponent } from '../../components/edit-components/reset-button/reset-button.component';
+import { SaveButtonComponent } from '../../components/edit-components/save-button/save-button.component';
+import { TileGridComponent } from '@app/components/edit-components/tile-grid/tile-grid.component';
 
 @Component({
     selector: 'app-edit-page',
-    imports: [TileGridComponent, BrushGridComponent, ItemGridComponent, NgStyle, TitleComponent, DescriptionComponent, SaveButtonComponent, ResetButtonComponent],
+    imports: [
+        TileGridComponent,
+        BrushGridComponent,
+        ItemGridComponent,
+        NgStyle,
+        TitleComponent,
+        DescriptionComponent,
+        SaveButtonComponent,
+        ResetButtonComponent,
+    ],
     templateUrl: './edit-page.component.html',
     styleUrl: './edit-page.component.scss',
     providers: [EditingToolService],

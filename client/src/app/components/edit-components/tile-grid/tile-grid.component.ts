@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewChildren, QueryList } from '@angular/core';
-import { TileComponent } from '@app/components/tile/tile.component';
 import { NgFor } from '@angular/common';
-import { MouseService } from '@app/services/mouse.service';
-import { MapService } from '@app/services/map.service';
+import { Component, OnDestroy, OnInit, QueryList, Renderer2, ViewChildren } from '@angular/core';
+import { TileComponent } from '@app/components/edit-components/tile/tile.component';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { ItemService } from '@app/services/item.service';
+import { MapService } from '@app/services/map.service';
+import { MouseService } from '@app/services/mouse.service';
 
 @Component({
     selector: 'app-tile-grid',

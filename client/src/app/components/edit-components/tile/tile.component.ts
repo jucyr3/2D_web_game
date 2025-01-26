@@ -95,7 +95,6 @@ export class TileComponent implements OnInit {
                     this.dragAndDropService.startTile.row === ITEM_CONTAINER_COORDINATES.row &&
                     this.dragAndDropService.startTile.column === ITEM_CONTAINER_COORDINATES.column
                 ) {
-                    this.itemService.increaseItemAmount(draggedItem.name);
                     this.removeItemObjectFromTile(draggedItem);
                 } else {
                     this.itemService.resetTileToStartPosition(this.dragAndDropService.startTile.row, this.dragAndDropService.startTile.column);
