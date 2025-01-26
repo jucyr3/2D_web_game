@@ -18,7 +18,11 @@
         <div class="infos">
             <app-title></app-title>
             <app-description></app-description>
-            <button (click)="this.mapService.printMap()">print for testing</button>
+            <div id="buttons">
+                <app-save-button></app-save-button>
+                <app-reset-button></app-reset-button>
+                <button (click)="this.mapService.printMap()">print for testing</button>
+            </div>
         </div>
     </div>
 </div>

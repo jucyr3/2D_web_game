@@ -78,3 +78,11 @@ button:hover {
     white-space: pre-line;
     transition-duration: 0ms
 }
+
+#buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 16px;
+}

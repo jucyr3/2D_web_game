@@ -10,10 +10,12 @@ import { EditingToolService } from '@app/services/editing-tool.service';
 import { ITEM_CONTAINER_COORDINATES, ItemService } from '@app/services/item.service';
 import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
+import { SaveButtonComponent } from "../../components/save-button/save-button.component";
+import { ResetButtonComponent } from "../../components/reset-button/reset-button.component";
 
 @Component({
     selector: 'app-edit-page',
-    imports: [TileGridComponent, BrushGridComponent, ItemGridComponent, NgStyle, TitleComponent, DescriptionComponent],
+    imports: [TileGridComponent, BrushGridComponent, ItemGridComponent, NgStyle, TitleComponent, DescriptionComponent, SaveButtonComponent, ResetButtonComponent],
     templateUrl: './edit-page.component.html',
     styleUrl: './edit-page.component.scss',
     providers: [EditingToolService],

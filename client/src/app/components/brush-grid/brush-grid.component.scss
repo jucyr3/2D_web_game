@@ -2,15 +2,4 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 0.5rem;
-    width: fit-content;
-  }
-  
-  .brush-button {
-    background-color: #ccc;
-    border-radius: 0.25rem;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    aspect-ratio: 1;
-    width: 80px;
   }
