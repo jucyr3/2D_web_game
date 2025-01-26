@@ -18,10 +18,8 @@ export class Map {
         this.description = description;
         this.gameMode = gameMode;
         if (tileMatrix) {
-            console.log('tileMatrix', tileMatrix);
             this.tileMatrix = tileMatrix;
         } else {
-            console.log("default creation");
             this.tileMatrix = Array.from({ length: size }, () => Array.from({ length: size }, () => new Tile(TileTypes.GROUND_1, false, false)));
         }
 

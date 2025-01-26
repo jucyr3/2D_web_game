@@ -9,7 +9,6 @@ import { Component } from '@angular/core';
 export class SaveButtonComponent {
 
   save() {
-    console.log('Save button clicked');
     // call mapService to save the map
   }
 

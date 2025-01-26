@@ -1,5 +1,5 @@
 import { NgClass, NgStyle } from '@angular/common';
-import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Coordinate } from '@app/interfaces/coordinate';
 import { ItemObject } from '@common/ItemObject';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
@@ -8,7 +8,7 @@ import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
 import { EditToolTypes } from '@app/services/editing-tool.constants';
 import { TileTypes } from '@common/tileType.constants';
-import { ItemService } from '@app/services/item.service';
+import { ITEM_CONTAINER_COORDINATES, ItemService } from '@app/services/item.service';
 import { Tile } from '@common/tile';
 import { MatTooltipModule, MatTooltip } from '@angular/material/tooltip';
 
@@ -57,32 +57,55 @@ export class TileComponent implements OnInit {
     }
 
     onMouseDown(event: MouseEvent): void {
-        if (this.itemObject) {
+        const isRightClick = event.button === 2;
+        
+        if (this.itemObject && !isRightClick) {
             this.editingToolService.setActiveTool(EditToolTypes.Hand);
-        }
-
-        this.handleTileBrush(event.button === 2);
-
-        if (this.itemObject && this.editingToolService.getActiveTool() === EditToolTypes.Hand) {
             this.dragAndDropService.startDragging(this.itemObject, event, this.tilePosition.row, this.tilePosition.column);
             this.itemObject = null;
             this.mapService.removeGameObject(this.tilePosition.row, this.tilePosition.column);
         }
+
+        this.handleTileBrush(event.button === 2);
 
         this.tooltip.hide();
 
     }
 
     onMouseUp(): void {
-        if (!this.dragAndDropService.currentDraggedItem) {
+        const draggedItem = this.dragAndDropService.currentDraggedItem; 
+        const currentTileType = this.mapService.getTileType(this.tilePosition.row, this.tilePosition.column);
+        if (!draggedItem) {
             return;
         } else if (this.itemObject) {
-            this.itemService.increaseItemAmount(this.itemObject.name);
-            this.itemObject = this.dragAndDropService.currentDraggedItem;
-            this.mapService.placeGameObject(this.tilePosition.row, this.tilePosition.column, this.itemObject);
+            //TODO: Refactor this logic (maybe bundle everything in resetTileToStartPosition())
+            if (
+                this.dragAndDropService.startTile.row === ITEM_CONTAINER_COORDINATES.row &&
+                this.dragAndDropService.startTile.column === ITEM_CONTAINER_COORDINATES.column
+            ) {
+                this.itemService.increaseItemAmount(draggedItem.name);
+            } else {
+                this.itemService.resetTileToStartPosition(this.dragAndDropService.startTile.row, this.dragAndDropService.startTile.column);
+            }
+
+            this.dragAndDropService.onMouseUp(draggedItem.name);
         } else {
-            this.itemObject = this.dragAndDropService.currentDraggedItem;
-            this.mapService.placeGameObject(this.tilePosition.row, this.tilePosition.column, this.itemObject);
+            if (currentTileType === TileTypes.DOOR || currentTileType === TileTypes.OPEN_DOOR || currentTileType === TileTypes.WALL) {
+                if (
+                    this.dragAndDropService.startTile.row === ITEM_CONTAINER_COORDINATES.row &&
+                    this.dragAndDropService.startTile.column === ITEM_CONTAINER_COORDINATES.column
+                ) {
+                    this.itemService.increaseItemAmount(draggedItem.name);
+                    this.removeItemObjectFromTile(draggedItem);
+                } else {
+                    this.itemService.resetTileToStartPosition(this.dragAndDropService.startTile.row, this.dragAndDropService.startTile.column);
+                }
+    
+                this.dragAndDropService.onMouseUp(draggedItem.name);
+            } else {
+                this.itemObject = draggedItem;
+                this.mapService.placeGameObject(this.tilePosition.row, this.tilePosition.column, draggedItem);
+            }
         }
 
         this.editingToolService.setActiveTool(EditToolTypes.TileBrush);
@@ -95,7 +118,6 @@ export class TileComponent implements OnInit {
         
     }
 
-    @HostListener('mouseleave')
     onMouseLeave(): void {
         this.tooltip.hide();
     }
@@ -108,12 +130,24 @@ export class TileComponent implements OnInit {
         }
     }
 
+    onRightClick(): void {
+        if (this.itemObject) {
+            this.removeItemObjectFromTile(this.itemObject);
+        }
+    }
+
     // ? maybe logic to much coupled with view, possible refactor
     placeTile() {
         const currentBrushTileType = this.editingToolService.getCurrentTileTypeOnBrush();
         const currentTileType = this.mapService.getTileType(this.tilePosition.row, this.tilePosition.column);
         const isDoorTile = currentTileType === TileTypes.DOOR || currentTileType === TileTypes.OPEN_DOOR;
         const isBrushDoor = currentBrushTileType === TileTypes.DOOR;
+        const isBrushWall = currentBrushTileType === TileTypes.WALL;
+
+        //If brush is wall of door, remove the object and increment the item amount
+        if (this.itemObject && (isBrushWall || isBrushDoor)) {
+            this.removeItemObjectFromTile(this.itemObject);
+        }
 
         if (isDoorTile && isBrushDoor) {
             this.toggleDoorTile();
@@ -145,6 +179,13 @@ export class TileComponent implements OnInit {
         return this.itemObject !== null && !this.mouseService.isMouseDown;
     }
 
+
+    private removeItemObjectFromTile(itemObject: ItemObject) {
+        this.itemService.increaseItemAmount(itemObject.name);
+        this.itemObject = null;
+        this.mapService.removeGameObject(this.tilePosition.row, this.tilePosition.column);
+    }
+
     private toggleDoorTile() {
         const currentTileType = this.mapService.getTileType(this.tilePosition.row, this.tilePosition.column);
         const newTileType = currentTileType === TileTypes.DOOR ? TileTypes.OPEN_DOOR : TileTypes.DOOR;
@@ -160,7 +201,8 @@ export class TileComponent implements OnInit {
     }
 
     private handleTileBrush(isErase: boolean): void {
-        if (this.editingToolService.getActiveTool() === EditToolTypes.TileBrush) {
+        const isTileBrush = this.editingToolService.getActiveTool() === EditToolTypes.TileBrush;
+        if (isTileBrush) {
             if (isErase) {
                 this.eraseTile();
             } else {

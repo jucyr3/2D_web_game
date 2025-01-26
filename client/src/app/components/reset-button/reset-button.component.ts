@@ -9,14 +9,11 @@ import { Component } from '@angular/core';
 export class ResetButtonComponent {
 
   reset() {
-    console.log('Reset button clicked');
-    if (confirm('Are you sure you want to reset?')) {  // could be a custom modal
-      // proceed with reset logic
-      // call mapService to reset the map
-      console.log('Resetting map');
+    if (confirm('Êtes-vous sûr de vouloir réinitialiser ?')) {  // pourrait être une fenêtre modale personnalisée
+      // procéder à la logique de réinitialisation
+      // appeler mapService pour réinitialiser la carte
     } 
     else {
-      console.log('Reset cancelled');
       return;
     }
 
