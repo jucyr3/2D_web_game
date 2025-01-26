@@ -1,0 +1,29 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.options {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: start;
+    align-items: center;
+    gap: 5%;
+    cursor: pointer;
+    border-radius: 5%;
+    &:hover {
+        background-color: #e4e4e4;
+    }
+    transition: all 0.2s ease-in-out;
+}
+.stat{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5%;
+    width: 100%;
+    overflow: hidden;
+}

@@ -1,0 +1,17 @@
+<div class="container">
+    <div class="overview">
+        <div class="info">
+            &#9432;
+            <div class="infoText">
+                <p>Vie : Points de vie du personnage</p>
+                <p>Rapidité : Ordre des tours et points de mouvement par tour</p>
+                <p>Attaque : Force avec laquelle une attaque est faite</p>
+                <p>Défense : Capacité à bloquer une attaque</p>
+            </div>
+        </div>
+        <img [src]="this.profileService.showImageSelected()" atl="img" />
+    </div>
+    <app-name></app-name>
+    <app-stat></app-stat>
+    <app-dice></app-dice>
+</div>

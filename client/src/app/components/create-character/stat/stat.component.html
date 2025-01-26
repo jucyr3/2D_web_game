@@ -1,0 +1,25 @@
+<div class="container">
+
+        @if(cahnge){
+            <div (click)="clickItem(false)" class="options">
+                    <p class="stat">Vie :</p>
+                    <p class="stat">4</p>
+    </div>
+    <div (click)="clickItem(true)" class="options">
+        <p class="stat">Rapidité :</p>
+        <p class="stat">6</p>
+
+    </div>
+        }@else{
+            <div (click)="clickItem(false)" class="options">
+
+                    <p class="stat">Vie :</p>
+                    <p class="stat">6</p>
+            </div>
+            <div (click)="clickItem(true)" class="options">
+
+                    <p class="stat">Rapidité :</p>
+                    <p class="stat">4</p>
+            </div>
+        }
+
