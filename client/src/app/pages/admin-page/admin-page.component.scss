@@ -48,6 +48,27 @@ html, body {
   font-weight: bold;
 }
 
+.game-card-other {
+  overflow: hidden;
+  background: rgb(137, 137, 137);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  font-weight: bold;
+
+  // other component
+  cursor: pointer;
+    transition: border-color 0.3s;
+    border: 2px solid transparent;
+
+    &:hover {
+        border-color: rgba(blue, 0.3);
+    }
+}
+
+//other component
+.game-info.selected {
+  border-color: blue;
+}
+
 .preview-container {
   position: relative;
   width: 100%;

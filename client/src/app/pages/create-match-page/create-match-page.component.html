@@ -1,1 +1,40 @@
-<p>create-match-page works!</p>
+<div class="admin-container">
+    <div class="content-wrapper">
+        <header class="admin-header">
+            <h1 style="color: rgb(233, 231, 231);">CRÉER UNE PARTIE</h1>
+            <button *ngIf="selectedGame" 
+                    class="button" 
+                    routerLink="/character">
+                Créer un Jeu
+            </button>
+        </header>
+
+        <div class="games-grid">
+            @for (game of games; track game.id) {
+                <div class="game-card-other" 
+                     (click)="selectGame(game)"
+                     (mouseenter)="showDescription(game)"
+                     (mouseleave)="hideDescription()">
+                    <div class="preview-container">
+                        <img [src]="game.map.previewImage" 
+                             [alt]="game.gameName" 
+                             class="preview-image">
+                        @if (hoveredGame === game) {
+                            <div class="description-overlay">
+                                {{ game.map.description }}
+                            </div>
+                        }
+                    </div>
+
+                    <div class="game-info" 
+                         [class.selected]="selectedGame === game">
+                        <h2>{{ game.gameName }}</h2>
+                        <p>Taille: {{ game.map.size }} x {{ game.map.size }}</p>
+                        <p>Mode: {{ game.map.gameMode }}</p>
+                        <p>Dernière modification: {{ game.map.lastModified }}</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

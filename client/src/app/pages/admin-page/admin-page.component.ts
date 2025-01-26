@@ -12,6 +12,7 @@ import { Game } from '@common/game';
     imports: [RouterLink, CommonModule, FormsModule],
     standalone: true
 })
+
 export class AdminPageComponent implements OnInit {
     games: Game[] = [];
     selectedGame: Game | null = null;
@@ -58,7 +59,6 @@ export class AdminPageComponent implements OnInit {
             },
             error: (error) => {
                 console.error('Error updating game visibility:', error);
-                // Revert the visibility change in UI
                 game.toggleVisibility();
                 this.error = 'Failed to update game visibility';
             }
@@ -79,7 +79,6 @@ export class AdminPageComponent implements OnInit {
         }
     }
 
-    // new methods
     showDescription(game: Game) {
         this.selectedGame = game;
     }
@@ -92,7 +91,6 @@ export class AdminPageComponent implements OnInit {
         this.error = null;
     }
 
-    // New methods for create game modal
     openCreateModal() {
         this.isCreateModalOpen = true;
     }

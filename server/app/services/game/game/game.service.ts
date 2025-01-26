@@ -7,15 +7,13 @@ import * as fs from 'fs/promises';
 export class GameService {
     private readonly logger = new Logger(GameService.name);
     private gamesFilePath = "assets/games.json";
-    private games: Game[] | null = null; // Cache for games
+    private games: Game[] | null = null; 
 
     async getAllGames(): Promise<Game[]> {
         try {
-            // Use cached games if available // html2canvas
             if (this.games) {
                 return this.games;
             }
-
             const data = await fs.readFile(this.gamesFilePath, 'utf8');
             const gamesData = JSON.parse(data).games;
             this.games = gamesData.map(game => this.convertToGameObject(game));
@@ -23,6 +21,18 @@ export class GameService {
         } catch (error) {
             this.logger.error(`Failed to read games: ${error.message}`, error.stack);
             throw new Error(`Failed to retrieve games: ${error.message}`);
+        }
+    }
+
+    async getAllGamesByVisibility(): Promise<Game[]> {
+        try {
+            const data = await fs.readFile(this.gamesFilePath, 'utf8');
+            const gamesData = JSON.parse(data).games;
+            this.games = gamesData.map(game => this.convertToGameObject(game));
+            return this.games.filter(game => game.map.isVisible === true);
+        } catch (error) {
+            this.logger.error(`Failed to get games by visibility: ${error.message}`, error.stack);
+            throw new Error(`Failed to retrieve games by visibility: ${error.message}`);
         }
     }
 

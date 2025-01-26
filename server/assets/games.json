@@ -6,7 +6,7 @@
       "map": {
         "name": "ssss",
         "size": "10",
-        "isVisible": false,
+        "isVisible": true,
         "description": "",
         "gameMode": "CLASSIQUE",
         "tileMatrix": [
@@ -540,7 +540,7 @@
       "map": {
         "name": "Test2",
         "size": "10",
-        "isVisible": false,
+        "isVisible": true,
         "description": "",
         "gameMode": "CLASSIQUE",
         "tileMatrix": [
@@ -1074,7 +1074,7 @@
       "map": {
         "name": "lelocuh",
         "size": "10",
-        "isVisible": false,
+        "isVisible": true,
         "description": "",
         "gameMode": "CLASSIQUE",
         "tileMatrix": [
@@ -1600,6 +1600,18 @@
           ]
         ],
         "lastModified": "25/01/2025 17:42"
+      }
+    },
+    {
+      "id": 4,
+      "gameName": "llll",
+      "map": {
+        "name": "llll",
+        "size": "10",
+        "isVisible": true,
+        "description": "",
+        "gameMode": "CLASSIQUE",
+        "lastModified": "26/01/2025 11:44"
       }
     }
   ]

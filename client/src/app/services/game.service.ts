@@ -22,6 +22,15 @@ export class GameService {
         );
     }
 
+    getAllGamesByVisibility(): Observable<Game[]> {
+        return this.http.get<Game[]>(`${this.apiUrl}/games/visibility/isVisible`).pipe(
+            map(response => {
+                const games = Array.isArray(response) ? response : [response];
+                return games.map(game => this.convertToGameObject(game));
+            })
+        );
+    }
+
     updateGameVisibility(gameId: number, isVisible: boolean): Observable<Game> {
         return this.http.patch<Game>(`${this.apiUrl}/games/${gameId}/isVisible`, { isVisible })
             .pipe(map(response => this.convertToGameObject(response)));
@@ -64,7 +73,6 @@ export class GameService {
             data.map.gameMode,
             data.map.lastModified
         );
-
         return new Game(data.id, data.gameName, map);
     }
 }

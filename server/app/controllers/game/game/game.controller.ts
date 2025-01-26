@@ -63,6 +63,23 @@ export class GameController {
         }
     }
 
+    @Get('/visibility/isVisible')
+    @ApiOperation({ summary: 'Get games by visibility status' })
+    @ApiResponse({ 
+        status: HttpStatus.OK, 
+        description: 'Returns games filtered by visibility',
+        type: Game,
+        isArray: true 
+    })
+    async getGamesByVisibility(): Promise<Game[]> {
+        try {
+            return await this.gameService.getAllGamesByVisibility();
+        } catch (error) {
+            this.logger.error(`Failed to get games by visibility : ${error.message}`);
+            throw error;
+        }
+    }
+
     @Post('/')
     @ApiOperation({ summary: 'Create a new game' })
     @ApiResponse({ 
