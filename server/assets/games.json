@@ -1,540 +1,6 @@
 {
   "games": [
     {
-      "id": 1,
-      "gameName": "ssss",
-      "map": {
-        "name": "ssss",
-        "size": "10",
-        "isVisible": true,
-        "description": "",
-        "gameMode": "CLASSIQUE",
-        "tileMatrix": [
-          [
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            }
-          ],
-          [
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            }
-          ],
-          [
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            }
-          ],
-          [
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            }
-          ],
-          [
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            }
-          ],
-          [
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            }
-          ],
-          [
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            }
-          ],
-          [
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            }
-          ],
-          [
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            }
-          ],
-          [
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            },
-            {
-              "type": "groundTile1",
-              "isOccupied": false,
-              "isObstacle": false
-            }
-          ]
-        ],
-        "lastModified": "23/01/2025 23:01"
-      }
-    },
-    {
       "id": 2,
       "gameName": "Test2",
       "map": {
@@ -1611,6 +1077,528 @@
         "isVisible": true,
         "description": "",
         "gameMode": "CLASSIQUE",
+        "tileMatrix": [
+          [
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            }
+          ],
+          [
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            }
+          ],
+          [
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            }
+          ],
+          [
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            }
+          ],
+          [
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            }
+          ],
+          [
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            }
+          ],
+          [
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            }
+          ],
+          [
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            }
+          ],
+          [
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            }
+          ],
+          [
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            },
+            {
+              "type": "groundTile1",
+              "isOccupied": false,
+              "isObstacle": false
+            }
+          ]
+        ],
         "lastModified": "26/01/2025 11:44"
       }
     }

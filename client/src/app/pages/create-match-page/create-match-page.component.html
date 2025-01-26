@@ -1,10 +1,12 @@
+<body>
 <div class="admin-container">
     <div class="content-wrapper">
         <header class="admin-header">
             <h1 style="color: rgb(233, 231, 231);">CRÉER UNE PARTIE</h1>
+            <p *ngIf="!selectedGame" style="color: rgb(233, 231, 231);">Sélectionner un jeu</p>
             <button *ngIf="selectedGame" 
                     class="button" 
-                    routerLink="/character">
+                    (click)="createGame()">
                 Créer un Jeu
             </button>
         </header>
@@ -38,3 +40,4 @@
         </div>
     </div>
 </div>
+</body>

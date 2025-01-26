@@ -10,7 +10,7 @@ export class Map {
     gameMode: "CTF" | "Classic";
     tileMatrix: Tile[][];
     lastModified: Date;
-    previewImage: string;
+    previewImage: string; // nice
 
     constructor(name: string, size: number, isVisible: boolean, description: string, gameMode: "CTF" | "Classic", lastModified: Date) {
         this.name = name;
@@ -24,5 +24,5 @@ export class Map {
 
     get flattenedTileMatrix(): Tile[] {
         return this.tileMatrix.reduce((acc, row) => [...acc, ...row], []);
-      }
+    }
 }

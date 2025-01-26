@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 @Injectable({
     providedIn: 'root'
 })
+
 export class GameService {
     private readonly apiUrl = environment.serverUrl;
 
@@ -56,7 +57,7 @@ export class GameService {
                     year: 'numeric',
                     hour: '2-digit',
                     minute: '2-digit'
-                 })
+                })
             }
         };
     
