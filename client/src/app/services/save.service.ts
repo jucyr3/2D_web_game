@@ -2,15 +2,26 @@ import { Injectable } from '@angular/core';
 import { Map } from '@common/map';
 import { TileTypes } from '@common/tileType.constants';
 
-const TEMPNUMBER = 10;
+const MAP_SIZE_SMALL = 10;
+const MAP_SIZE_MEDIUM = 15;
+const MAP_SIZE_LARGE = 20;
+const PLAYER_COUNT_SMALL = 2;
+const PLAYER_COUNT_MEDIUM = 4;
+const PLAYER_COUNT_LARGE = 6;
+
 @Injectable({
     providedIn: 'root',
 })
 export class SaveService {
-    private games: { name: string; description: string }[] = [];
+    // temporary storage for game names
+    private gameNames: { name: string }[] = [];
+
+    setGameNames(gameNames: { name: string }[]): void {
+        this.gameNames = gameNames;
+    }
 
     isUniqueName(name: string): boolean {
-        return this.games.some((game) => game.name === name);
+        return this.gameNames.some((game) => game.name === name);
     }
 
     isMapHalfFloor(map: Map): boolean {
@@ -19,7 +30,6 @@ export class SaveService {
         return tilesCount > (map.size * map.size) / 2;
     }
 
-    // TODO: fix complexity
     isMapAccessible(map: Map): boolean {
         const tileMatrix = map.tileMatrix;
         const rows = tileMatrix.length;
@@ -73,7 +83,7 @@ export class SaveService {
             }
         }
 
-        // check if all non-wall tiles are visiteds
+        // check if all non-wall tiles are visited
         for (let i = 0; i < rows; i++) {
             for (let j = 0; j < cols; j++) {
                 if (tileMatrix[i][j].type !== TileTypes.WALL && !visited[i][j]) {
@@ -88,12 +98,12 @@ export class SaveService {
     areStartingPointsValid(map: Map): boolean {
         const flatMap = map.flattenedTileMatrix;
         const startCount = flatMap.filter((tile) => tile.isOccupied === true).length;
-        if (map.size === 10) {
-            return startCount === 2;
-        } else if (map.size === 15) {
-            return startCount === 4;
-        } else if (map.size === 20) {
-            return startCount === 6;
+        if (map.size === MAP_SIZE_SMALL) {
+            return startCount === PLAYER_COUNT_SMALL;
+        } else if (map.size === MAP_SIZE_MEDIUM) {
+            return startCount === PLAYER_COUNT_MEDIUM;
+        } else if (map.size === MAP_SIZE_LARGE) {
+            return startCount === PLAYER_COUNT_LARGE;
         } else {
             return false;
         }
@@ -158,17 +168,13 @@ export class SaveService {
         return error;
     }
 
-    saveGame() {
-        // a changer
-        const name = 'TempName';
-        const description = 'blablabla';
-        const tempMap = new Map('TempName', TEMPNUMBER, true, 'blablabla', 'Classic');
-
-        const errorList = this.validateGame(tempMap);
+    //
+    saveGame(map: Map): void {
+        const errorList = this.validateGame(map);
         if (errorList.length > 0) {
             errorList.forEach((error) => alert(error));
         } else {
-            this.games.push({ name, description });
+            this.gameNames.push({ name: map.name });
             alert('Le jeu a ete enregistre!');
         }
     }
