@@ -10,9 +10,11 @@ export class Map {
     gameMode: 'CTF' | 'Classic';
     tileMatrix: Tile[][];
     lastModified: Date;
+    previewImage: string; 
 
-    constructor(name: string, size: number, isVisible: boolean, description: string, gameMode: 'CTF' | 'Classic', tileMatrix?: Tile[][]) {
+    constructor(name: string, id:number, size: number, isVisible: boolean, description: string, gameMode: 'CTF' | 'Classic', tileMatrix?: Tile[][]) {
         this.name = name;
+        this.id = id;
         this.size = size;
         this.isVisible = isVisible;
         this.description = description;
@@ -28,5 +30,9 @@ export class Map {
 
     get flattenedTileMatrix(): Tile[] {
         return this.tileMatrix.reduce((acc, row) => [...acc, ...row], []);
+    }
+
+    toggleVisibility() {
+        this.isVisible = !this.isVisible;
     }
 }

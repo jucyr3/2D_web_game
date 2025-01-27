@@ -40,12 +40,7 @@ export class TileComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.mapService.changeTileType(
-            Math.floor(this.tileNumber / this.mapService.map.size),
-            this.tileNumber % this.mapService.map.size,
-            this.tileObject.type,
-        );
-
+        
         if (this.tileObject.gameObject) {
             this.itemObject = this.tileObject.gameObject;
             this.itemService.decreaseItemAmount(this.itemObject.name);

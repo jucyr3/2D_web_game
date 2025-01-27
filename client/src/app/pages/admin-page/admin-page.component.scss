@@ -1,0 +1,258 @@
+// Existing styles
+
+html, body {
+  height: 100%;
+  background-color: #2c2d2c; /* Match the admin-container background */
+}
+
+.admin-container {
+  width: 100%;
+  background-color: #2c2d2c;
+  padding: 20px;
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.new-game-btn {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 35px;
+  margin-bottom: 100px;
+}
+
+.game-card {
+  overflow: hidden;
+  background: rgb(137, 137, 137);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  font-weight: bold;
+}
+
+.game-card-other {
+  overflow: hidden;
+  background: rgb(137, 137, 137);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  font-weight: bold;
+
+  // other component
+  cursor: pointer;
+    transition: border-color 0.3s;
+    border: 2px solid transparent;
+
+    &:hover {
+        border-color: rgba(blue, 0.3);
+    }
+}
+
+//other component
+.game-info.selected {
+  border-color: blue;
+}
+
+.preview-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background: rgb(160, 159, 159);
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.description-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.8);
+  color: white;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.game-info {
+  padding: 15px;
+
+  h2 {
+      margin: 0 0 10px 0;
+      font-size: 1.2em;
+      text-align: center;
+  }
+
+  p {
+      margin: 5px 0;
+      color: #e9e9e9;
+  }
+}
+
+.game-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background: rgb(137, 137, 137);
+
+  button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+  }
+}
+
+.visibility-btn {
+  background-color: #2196F3;
+  color: white;
+}
+
+.edit-btn {
+  background-color: #FFC107;
+  color: black;
+}
+
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+// New Modal Styles
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #2c2c2c;
+  border-radius: 8px;
+  width: 400px;
+  color: white;
+  position: relative;
+}
+
+.modal-header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #3d3d3d;
+
+  h2 {
+      margin: 0;
+      color: #b14bff;
+      font-size: 1.5em;
+  }
+
+  .close-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+  }
+}
+
+.modal-body {
+  padding: 20px;
+
+  .form-section {
+      margin-bottom: 20px;
+
+      h3 {
+          margin: 0 0 15px 0;
+          font-size: 1em;
+          font-weight: normal;
+      }
+
+      .radio-group {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+
+          label {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+              cursor: pointer;
+
+              input[type="radio"] {
+                  accent-color: #b14bff;
+                  width: 16px;
+                  height: 16px;
+              }
+          }
+      }
+
+      .game-name-input {
+        width: 85%;
+        padding: 8px 12px;
+        border: 1px solid #3d3d3d;
+        border-radius: 4px;
+        background-color: #1c1c1c;
+        color: white;
+        font-size: 14px;
+
+        &:focus {
+            outline: none;
+            border-color: #b14bff;
+        }
+
+        &::placeholder {
+            color: #666;
+        }
+    }
+  }
+
+  .create-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+
+      &:hover {
+          background-color: #45a049;
+      }
+  }
+}

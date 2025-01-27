@@ -9,6 +9,8 @@ import { DateService } from '@app/services/date/date.service';
 import { ChatGateway } from '@app/gateways/chat/chat.gateway';
 import { ExampleService } from '@app/services/example/example.service';
 import { ExampleController } from '@app/controllers/example/example.controller';
+import { GameService } from '@app/services/game/game/game.service';
+import { GameController } from '@app/controllers/game/game/game.controller';
 
 @Module({
     imports: [
@@ -22,7 +24,7 @@ import { ExampleController } from '@app/controllers/example/example.controller';
         }),
         MongooseModule.forFeature([{ name: Course.name, schema: courseSchema }]),
     ],
-    controllers: [CourseController, DateController, ExampleController],
-    providers: [ChatGateway, CourseService, DateService, ExampleService, Logger],
+    controllers: [CourseController, DateController, ExampleController, GameController],
+    providers: [ChatGateway, CourseService, DateService, ExampleService, Logger, GameService],
 })
 export class AppModule {}
