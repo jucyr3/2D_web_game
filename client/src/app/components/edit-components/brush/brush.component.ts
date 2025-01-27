@@ -4,26 +4,23 @@ import { EditingToolService } from '@app/services/editing-tool.service';
 import { TileTypes } from '@common/tileType.constants';
 
 @Component({
-  selector: 'app-brush',
-  imports: [],
-  templateUrl: './brush.component.html',
-  styleUrl: './brush.component.scss'
+    selector: 'app-brush',
+    imports: [],
+    templateUrl: './brush.component.html',
+    styleUrl: './brush.component.scss',
 })
 export class BrushComponent {
+    @Input() tileType: TileTypes;
+    @Input() isActive: boolean;
 
-  @Input() tileType: TileTypes;
-  @Input() isActive: boolean;
+    constructor(private readonly editingToolService: EditingToolService) {}
 
+    changeTool(tool: EditToolTypes) {
+        this.editingToolService.setActiveTool(tool);
+    }
 
-  constructor(private readonly editingToolService: EditingToolService) {}
-
-  changeTool(tool: EditToolTypes) {
-    this.editingToolService.setActiveTool(tool);
-  }
-
-  changeBrushTile(tileType: TileTypes) {
-    this.changeTool(EditToolTypes.TileBrush);
-    this.editingToolService.setTileTypeOnBrush(tileType);
-  }
-
+    changeBrushTile(tileType: TileTypes) {
+        this.changeTool(EditToolTypes.TileBrush);
+        this.editingToolService.setTileTypeOnBrush(tileType);
+    }
 }

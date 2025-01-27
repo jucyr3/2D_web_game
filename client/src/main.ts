@@ -16,12 +16,12 @@ if (environment.production) {
 
 
 const routes: Routes = [
-    { path: '', redirectTo: '/home', pathMatch: 'full' },
+    { path: '', redirectTo: '/edit', pathMatch: 'full' },
     { path: 'home', component: MainPageComponent },
     { path: 'game', component: GamePageComponent },
     { path: 'material', component: MaterialPageComponent },
     { path: 'edit', component: EditPageComponent},
-    { path: '**', redirectTo: '/home' },
+    { path: '**', redirectTo: '/edit' },
 ];
 
 bootstrapApplication(AppComponent, {

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { EditToolTypes } from '@app/services/editing-tool.constants';
 import { EditingToolService } from '@app/services/editing-tool.service';
 import { TileTypes } from '@common/tileType.constants';
-import { BrushComponent } from "../brush/brush.component";
+import { BrushComponent } from '@app/components/edit-components/brush/brush.component';
 
 @Component({
     selector: 'app-brush-grid',

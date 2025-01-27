@@ -9,9 +9,10 @@ import { EditingToolService } from '@app/services/editing-tool.service';
 import { ITEM_CONTAINER_COORDINATES, ItemService } from '@app/services/item.service';
 import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
-import { ResetButtonComponent } from '../../components/edit-components/reset-button/reset-button.component';
-import { SaveButtonComponent } from '../../components/edit-components/save-button/save-button.component';
+import { ResetButtonComponent } from '@app/components/edit-components/reset-button/reset-button.component';
+import { SaveButtonComponent } from '@app/components/edit-components/save-button/save-button.component';
 import { TileGridComponent } from '@app/components/edit-components/tile-grid/tile-grid.component';
+import { ItemObject } from '@common/ItemObject';
 
 @Component({
     selector: 'app-edit-page',
@@ -45,25 +46,22 @@ export class EditPageComponent {
         this.mouseService.isRightClick = event.button === 2; // 1: left-click, 2: right-click (MDN Web Docs)
     }
 
-    onMouseUp() {
+    onMouseUp(): void {
         this.mouseService.isMouseDown = false;
+    
         const item = this.dragAndDropService.currentDraggedItem;
-        if (item) {
-            if (this.dragAndDropService.currentHoveredTile.row === -1 && this.dragAndDropService.currentHoveredTile.column === -1) {
-                if (
-                    this.dragAndDropService.startTile.row === ITEM_CONTAINER_COORDINATES.row &&
-                    this.dragAndDropService.startTile.column === ITEM_CONTAINER_COORDINATES.column
-                ) {
-                    this.itemService.increaseItemAmount(item.name);
-                } else {
-                    this.itemService.resetTileToStartPosition(this.dragAndDropService.startTile.row, this.dragAndDropService.startTile.column);
-                }
-            }
-
-            this.dragAndDropService.onMouseUp(item.name);
+        if (!item) {
+            return;
         }
+    
+        if (this.isHoveredOutsideGrid()) {
+            this.handleItemOutsideGrid(item);
+        }
+    
+        this.dragAndDropService.onMouseUp(item.name);
     }
-
+    
+    
     onMouseLeave() {
         this.onMouseUp();
     }
@@ -82,7 +80,7 @@ export class EditPageComponent {
     onBlur() {
         this.updateValue();
     }
-
+    
     updateValue() {
         if (!this.title || this.title.trim() === '') {
             this.title = 'Untitled'; // Reset to default if empty
@@ -90,6 +88,28 @@ export class EditPageComponent {
         this.mapService.map.name = this.title;
         this.mapService.map.description = this.description;
         // Add any additional logic you need to handle the updated value
+    }
+    
+    private isHoveredOutsideGrid(): boolean {
+        const { row, column } = this.dragAndDropService.currentHoveredTile;
+        return row === -1 && column === -1;
+    }
+    
+    private handleItemOutsideGrid(item: ItemObject): void {
+        const { row, column } = this.dragAndDropService.startTile;
+    
+        if (this.isItemFromContainer(row, column)) {
+            this.itemService.increaseItemAmount(item.name);
+        } else {
+            this.itemService.resetTileToStartPosition(row, column);
+        }
+    }
+    
+    private isItemFromContainer(row: number, column: number): boolean {
+        return (
+            row === ITEM_CONTAINER_COORDINATES.row &&
+            column === ITEM_CONTAINER_COORDINATES.column
+        );
     }
 }
 
