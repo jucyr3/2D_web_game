@@ -1,7 +1,7 @@
 import { GameObject } from './gameObject.interface';
 
 export class ItemObject implements GameObject {
-    name: string;
+    name: string; // 'spawnpoint'
 
     constructor(name: string) {
         this.name = name;

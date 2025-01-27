@@ -1,6 +1,7 @@
 import { Component, HostListener, inject } from '@angular/core';
 import { SaveService } from '@app/services/save.service';
 import { TimeService } from '@app/services/time.service';
+import { Map } from '@common/map';
 
 // TODO : Avoir un fichier séparé pour les constantes!
 export const DEFAULT_WIDTH = 200;
@@ -36,7 +37,11 @@ export class PlayAreaComponent {
         this.buttonPressed = event.key;
     }
     saveGame() {
-        this.saveButton.saveGame();
+        // temporary
+
+        const tempMap = new Map('tempttitle', 10, true, ' ', 'Classic');
+
+        this.saveButton.saveGame(tempMap);
     }
 
     // TODO : déplacer ceci dans un service de gestion de la souris!

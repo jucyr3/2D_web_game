@@ -14,7 +14,7 @@ const PLAYER_COUNT_LARGE = 6;
 })
 export class SaveService {
     // temporary storage for game names
-    private gameNames: { name: string }[] = [];
+    private gameNames: { name: string }[] = [{ name: 'test' }];
 
     setGameNames(gameNames: { name: string }[]): void {
         this.gameNames = gameNames;
@@ -26,7 +26,9 @@ export class SaveService {
 
     isMapHalfFloor(map: Map): boolean {
         const flatMap = map.flattenedTileMatrix;
-        const tilesCount = flatMap.filter((tile) => tile.type === (TileTypes.GROUND_0 || TileTypes.GROUND_1 || TileTypes.GROUND_2)).length;
+        const tilesCount = flatMap.filter(
+            (tile) => tile.type === TileTypes.GROUND_0 || tile.type === TileTypes.GROUND_1 || tile.type === TileTypes.GROUND_2,
+        ).length;
         return tilesCount > (map.size * map.size) / 2;
     }
 
@@ -109,12 +111,15 @@ export class SaveService {
         }
     }
 
-    areDoorsValid(map: Map): boolean {
+    areDoorsNextToWalls(map: Map): boolean {
         const tileMatrix = map.tileMatrix;
         const rows = tileMatrix.length;
         const cols = tileMatrix[0].length;
 
         function isGround(i: number, j: number): boolean {
+            if (i < 0 || i >= rows || j < 0 || j >= cols) {
+                return false;
+            }
             return (
                 tileMatrix[i][j].type === TileTypes.GROUND_0 ||
                 tileMatrix[i][j].type === TileTypes.GROUND_1 ||
@@ -130,10 +135,32 @@ export class SaveService {
                     }
                     if (tileMatrix[i - 1][j].type === TileTypes.WALL && tileMatrix[i + 1][j].type === TileTypes.WALL) {
                         return isGround(i, j - 1) && isGround(i, j + 1);
+                    } else {
+                        return false;
                     }
                 }
             }
         }
+        return true;
+    }
+
+    areDoorsNotNextToBorder(map: Map): boolean {
+        const tileMatrix = map.tileMatrix;
+        const rows = tileMatrix.length;
+        const cols = tileMatrix[0].length;
+
+        for (let i = 0; i < rows; i++) {
+            if (tileMatrix[i][0].type === TileTypes.DOOR || tileMatrix[i][cols - 1].type === TileTypes.DOOR) {
+                return false;
+            }
+        }
+
+        for (let j = 0; j < cols; j++) {
+            if (tileMatrix[0][j].type === TileTypes.DOOR || tileMatrix[rows - 1][j].type === TileTypes.DOOR) {
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -161,8 +188,12 @@ export class SaveService {
             error.push('Tous les points de départ doivent etre placés.');
         }
 
-        if (!this.areDoorsValid(map)) {
+        if (!this.areDoorsNextToWalls(map)) {
             error.push('Chaque tuile de porte doit se trouver entre deux tuiles de mur sur un même axe.');
+        }
+
+        if (!this.areDoorsNotNextToBorder(map)) {
+            error.push('Une porte ne peut pas être placée sur les bords de la zone de jeu.');
         }
 
         return error;
