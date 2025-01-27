@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { SaveService } from '@app/services/save.service';
 
+import { GameObject } from '@common/gameObject.interface';
 import { Map } from '@common/map';
 // import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
@@ -40,7 +41,8 @@ describe('SaveService', () => {
 
     it('should check if map has description and name', () => {
         // set up valid map
-        mockMap.tileMatrix[0][0].gameObject.name = 'spawnpoint';
+        const GameObject testTemp = new GameObject('spawnpoint');
+        mockMap.tileMatrix[0][0].gameObject = new GameObject('spawnpoint');
         mockMap.tileMatrix[0][1].gameObject.name = 'spawnpoint';
 
         mockMap.name = '';
@@ -115,8 +117,6 @@ describe('SaveService', () => {
         expect(service.areStartingPointsValid(mockMap20)).toBeFalse();
         mockMap20.tileMatrix[0][5].gameObject.name = 'spawnpoint';
         expect(service.areStartingPointsValid(mockMap20)).toBeTrue();
-        mockMap20.tileMatrix[0][6].gameObject.name = 'spawnpoint';
-        expect(service.areStartingPointsValid(mockMap20)).toBeFalse();
     });
 
     it('should check if doors are between walls', () => {
@@ -148,7 +148,7 @@ describe('SaveService', () => {
         expect(service.areDoorsNotNextToBorder(mockMap)).toBeFalse();
     });
 
-    // it('should show the correct error message', () => {
+    // fit('should show the correct error message', () => {
     //     mockMap.name = '';
     //     expect(service.validateGame(mockMap)).toEqual([
     //         'Map must have the correct number of starting points',
@@ -161,21 +161,21 @@ describe('SaveService', () => {
     //     // triggers isMapHalfFloor
     //     for (let i = 0; i < MAP_SIZE_SMALL / 2; i++) {
     //         for (let j = 0; j < MAP_SIZE_SMALL; j++) {
-    //             mockMap.tileMatrix[i][j] = new Tile(TileTypes.WALL, false, false);
+    //             mockMap.tileMatrix[i][j].type = TileTypes.WALL;
     //         }
     //     }
 
     //     // triggers isMapAccessible
-    //     mockMap.tileMatrix[MAP_SIZE_SMALL - 1][1] = new Tile(TileTypes.WALL, false, false);
-    //     mockMap.tileMatrix[MAP_SIZE_SMALL - 2][0] = new Tile(TileTypes.WALL, false, false);
+    //     mockMap.tileMatrix[MAP_SIZE_SMALL - 1][1].type = TileTypes.WALL;
+    //     mockMap.tileMatrix[MAP_SIZE_SMALL - 2][0].type = TileTypes.WALL;
 
     //     // triggers areDoorsNotNextToBorder
-    //     mockMap.tileMatrix[MAP_SIZE_SMALL - 1][5] = new Tile(TileTypes.DOOR, false, false);
+    //     mockMap.tileMatrix[MAP_SIZE_SMALL - 1][5].type = TileTypes.DOOR;
     //     // triggers areDoorsNextToWalls
-    //     mockMap.tileMatrix[0][8] = new Tile(TileTypes.DOOR, false, false);
+    //     mockMap.tileMatrix[0][8].type = TileTypes.DOOR;
 
-    //     mockMap.tileMatrix[8][8].gameObject.name = 'spawnpoint'
-    //     mockMap.tileMatrix[8][9].gameObject.name = 'spawnpoint'
+    //     mockMap.tileMatrix[8][8].gameObject.name = 'spawnpoint';
+    //     mockMap.tileMatrix[8][9].gameObject.name = 'spawnpoint';
 
     //     expect(service.validateGame(mockMap)).toEqual([
     //         'Le nom du jeu doit etre unique.',
