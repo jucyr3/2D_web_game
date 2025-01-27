@@ -10,8 +10,9 @@
       onmousedown="return false;"
       onselectstart="return false;"
       [matTooltip]="!this.dragAndDropService.isDragging ? this.getFormattedTooltip() : null"
-      [matTooltipPosition]="'right'"
+      [matTooltipPosition]="'left'"
       [matTooltipShowDelay]="200"
+      [matTooltipHideDelay]="0"
       matTooltipClass="description-tooltip"
   />
   <!-- Add this div to display the item amount -->
