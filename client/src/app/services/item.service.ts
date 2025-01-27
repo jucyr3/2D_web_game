@@ -102,7 +102,7 @@ export class ItemService {
               );
           
             case 'flag':
-              this.itemAmounts['flag'] = 1;
+              this.itemAmounts['flag'] = this.mapService.map.gameMode === 'CTF' ? 1 : 0;
               return new ItemObject(
                 'flag',
                 "A brightly colored flag."
