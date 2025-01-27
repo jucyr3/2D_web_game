@@ -5,9 +5,9 @@ import { TileTypes } from '@common/tileType.constants';
 const MAP_SIZE_SMALL = 10;
 const MAP_SIZE_MEDIUM = 15;
 const MAP_SIZE_LARGE = 20;
-const PLAYER_COUNT_SMALL = 2;
-const PLAYER_COUNT_MEDIUM = 4;
-const PLAYER_COUNT_LARGE = 6;
+const SPAWN_COUNT_SMALL = 2;
+const SPAWN_COUNT_MEDIUM = 4;
+const SPAWN_COUNT_LARGE = 6;
 
 @Injectable({
     providedIn: 'root',
@@ -99,13 +99,13 @@ export class SaveService {
 
     areStartingPointsValid(map: Map): boolean {
         const flatMap = map.flattenedTileMatrix;
-        const startCount = flatMap.filter((tile) => tile.isOccupied === true).length;
+        const startCount = flatMap.filter((tile) => tile.gameObject.name === 'spawnpoint').length;
         if (map.size === MAP_SIZE_SMALL) {
-            return startCount === PLAYER_COUNT_SMALL;
+            return startCount === SPAWN_COUNT_SMALL;
         } else if (map.size === MAP_SIZE_MEDIUM) {
-            return startCount === PLAYER_COUNT_MEDIUM;
+            return startCount === SPAWN_COUNT_MEDIUM;
         } else if (map.size === MAP_SIZE_LARGE) {
-            return startCount === PLAYER_COUNT_LARGE;
+            return startCount === SPAWN_COUNT_LARGE;
         } else {
             return false;
         }

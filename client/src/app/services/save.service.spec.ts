@@ -40,8 +40,8 @@ describe('SaveService', () => {
 
     it('should check if map has description and name', () => {
         // set up valid map
-        mockMap.tileMatrix[0][0].isOccupied = true;
-        mockMap.tileMatrix[0][1].isOccupied = true;
+        mockMap.tileMatrix[0][0].gameObject.name = 'spawnpoint';
+        mockMap.tileMatrix[0][1].gameObject.name = 'spawnpoint';
 
         mockMap.name = '';
         expect(service.validateGame(mockMap)).toEqual(['Le nom du jeu ne peut pas etre vide.']);
@@ -89,34 +89,33 @@ describe('SaveService', () => {
     });
 
     it('should check if starting points are placed', () => {
-        // TODO: change the isOccupied to 'spawnpoint' from ItemObjects.ts
         // for 10x10 map
         expect(service.areStartingPointsValid(mockMap)).toBeFalse();
-        mockMap.tileMatrix[0][0].isOccupied = true;
-        mockMap.tileMatrix[0][1].isOccupied = true;
+        mockMap.tileMatrix[0][0].gameObject.name = 'spawnpoint';
+        mockMap.tileMatrix[0][1].gameObject.name = 'spawnpoint';
         expect(service.areStartingPointsValid(mockMap)).toBeTrue();
 
         // 15x15 map
         const mockMap15 = new Map('Map by 15', MAP_SIZE_MEDIUM, true, '', 'Classic');
         expect(service.areStartingPointsValid(mockMap15)).toBeFalse();
-        mockMap15.tileMatrix[0][0].isOccupied = true;
-        mockMap15.tileMatrix[0][1].isOccupied = true;
+        mockMap15.tileMatrix[0][0].gameObject.name = 'spawnpoint';
+        mockMap15.tileMatrix[0][1].gameObject.name = 'spawnpoint';
         expect(service.areStartingPointsValid(mockMap15)).toBeFalse();
-        mockMap15.tileMatrix[0][2].isOccupied = true;
-        mockMap15.tileMatrix[0][3].isOccupied = true;
+        mockMap15.tileMatrix[0][2].gameObject.name = 'spawnpoint';
+        mockMap15.tileMatrix[0][3].gameObject.name = 'spawnpoint';
         expect(service.areStartingPointsValid(mockMap15)).toBeTrue();
 
         // 20x20 map
         const mockMap20 = new Map('Map by 20', MAP_SIZE_LARGE, true, '', 'Classic');
-        mockMap20.tileMatrix[0][0].isOccupied = true;
-        mockMap20.tileMatrix[0][1].isOccupied = true;
-        mockMap20.tileMatrix[0][2].isOccupied = true;
-        mockMap20.tileMatrix[0][3].isOccupied = true;
-        mockMap20.tileMatrix[0][4].isOccupied = true;
+        mockMap20.tileMatrix[0][0].gameObject.name = 'spawnpoint';
+        mockMap20.tileMatrix[0][1].gameObject.name = 'spawnpoint';
+        mockMap20.tileMatrix[0][2].gameObject.name = 'spawnpoint';
+        mockMap20.tileMatrix[0][3].gameObject.name = 'spawnpoint';
+        mockMap20.tileMatrix[0][4].gameObject.name = 'spawnpoint';
         expect(service.areStartingPointsValid(mockMap20)).toBeFalse();
-        mockMap20.tileMatrix[0][5].isOccupied = true;
+        mockMap20.tileMatrix[0][5].gameObject.name = 'spawnpoint';
         expect(service.areStartingPointsValid(mockMap20)).toBeTrue();
-        mockMap20.tileMatrix[0][6].isOccupied = true;
+        mockMap20.tileMatrix[0][6].gameObject.name = 'spawnpoint';
         expect(service.areStartingPointsValid(mockMap20)).toBeFalse();
     });
 
@@ -175,8 +174,8 @@ describe('SaveService', () => {
     //     // triggers areDoorsNextToWalls
     //     mockMap.tileMatrix[0][8] = new Tile(TileTypes.DOOR, false, false);
 
-    //     mockMap.tileMatrix[8][8].isOccupied = true;
-    //     mockMap.tileMatrix[8][9].isOccupied = true;
+    //     mockMap.tileMatrix[8][8].gameObject.name = 'spawnpoint'
+    //     mockMap.tileMatrix[8][9].gameObject.name = 'spawnpoint'
 
     //     expect(service.validateGame(mockMap)).toEqual([
     //         'Le nom du jeu doit etre unique.',
