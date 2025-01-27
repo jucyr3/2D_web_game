@@ -19,6 +19,7 @@ import { Tile } from '@common/tile';
 import { EditToolTypes } from '@app/services/editing-tool.constants';
 import { TileTypes } from '@common/tileType.constants';
 
+
 @Component({
     selector: 'app-tile',
     imports: [NgStyle, NgClass, MatTooltipModule],
@@ -27,7 +28,7 @@ import { TileTypes } from '@common/tileType.constants';
 })
 export class TileComponent implements OnInit {
     @Input() tileNumber: number;
-    @Input() tileObject: Tile;
+    @Input() tileObject: Tile;      
 
     @ViewChild('tooltip') tooltip!: MatTooltip;
 
@@ -38,7 +39,7 @@ export class TileComponent implements OnInit {
         protected readonly mouseService: MouseService,
         protected readonly mapService: MapService,
         private readonly dragAndDropService: DragAndDropService,
-        private readonly itemService: ItemService,
+        private readonly itemService: ItemService
     ) {}
 
     get tileTexture(): string {
@@ -59,7 +60,6 @@ export class TileComponent implements OnInit {
         if (this.itemObject && !isRightClick) {
             this.startDraggingItem(event);
         }
-
         this.handleTileBrush(isRightClick);
         this.tooltip.hide();
     }
@@ -83,10 +83,10 @@ export class TileComponent implements OnInit {
     }
 
     onMouseEnter(): void {
-        this.dragAndDropService.setCurrentHoveredTile(this.tilePosition.row, this.tilePosition.column);
         if (this.mouseService.isMouseDown) {
             this.handleTileBrush(this.mouseService.isRightClick);
         }
+        this.dragAndDropService.setCurrentHoveredTile(this.tilePosition.row, this.tilePosition.column);
     }
 
     onRightClick(): void {
@@ -95,7 +95,7 @@ export class TileComponent implements OnInit {
         }
     }
 
-    placeTile(): void {
+    placeTile(): void { 
         const currentBrushTileType = this.editingToolService.getCurrentTileTypeOnBrush();
         const currentTileType = this.mapService.getTileType(this.tilePosition.row, this.tilePosition.column);
 
@@ -218,6 +218,9 @@ export class TileComponent implements OnInit {
 
     private handleTileBrush(isErase: boolean): void {
         if (this.editingToolService.getActiveTool() === EditToolTypes.TileBrush) {
+            this.mapService.startTile = this.mapService.endTile;
+            this.mapService.endTile = this.tilePosition;
+            this.mapService.paintInterpolatedPath();
             if (isErase) {
                 this.eraseTile();
             } else {
