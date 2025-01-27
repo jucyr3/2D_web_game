@@ -5,8 +5,6 @@ import { ItemObject } from '@common/ItemObject';
 import { Tile } from '@common/Tile';
 import { TileTypes } from '@common/tileType.constants';
 
-
-
 interface MapJson {
     name: string;
     id: number;
