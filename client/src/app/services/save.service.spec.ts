@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { SaveService } from '@app/services/save.service';
 
 import { Map } from '@common/map';
-import { Tile } from '@common/tile';
+// import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
 
 const MAP_SIZE_SMALL = 10;
@@ -21,6 +21,11 @@ describe('SaveService', () => {
         mockMap.isVisible = true;
         mockMap.description = 'blblabla';
         mockMap.gameMode = 'Classic';
+        for (let i = 0; i < MAP_SIZE_SMALL; i++) {
+            for (let j = 0; j < MAP_SIZE_SMALL; j++) {
+                mockMap.tileMatrix[i][j].type = TileTypes.GROUND_0;
+            }
+        }
     });
 
     it('should be created', () => {
@@ -50,35 +55,35 @@ describe('SaveService', () => {
         expect(service.isMapHalfFloor(mockMap)).toBeTrue();
         for (let i = 0; i < MAP_SIZE_SMALL / 2; i++) {
             for (let j = 0; j < MAP_SIZE_SMALL; j++) {
-                mockMap.tileMatrix[i][j] = new Tile(TileTypes.WALL, false, false);
+                mockMap.tileMatrix[i][j].type = TileTypes.WALL;
             }
         }
         expect(service.isMapHalfFloor(mockMap)).toBeFalse();
-        mockMap.tileMatrix[0][0] = new Tile(TileTypes.GROUND_0, false, false);
+        mockMap.tileMatrix[0][0].type = TileTypes.GROUND_0;
         expect(service.isMapHalfFloor(mockMap)).toBeTrue();
-        mockMap.tileMatrix[0][0] = new Tile(TileTypes.DOOR, false, false);
+        mockMap.tileMatrix[0][0].type = TileTypes.DOOR;
         expect(service.isMapHalfFloor(mockMap)).toBeFalse();
 
         for (let i = MAP_SIZE_SMALL / 2; i < MAP_SIZE_SMALL; i++) {
             for (let j = 0; j < MAP_SIZE_SMALL; j++) {
-                mockMap.tileMatrix[i][j] = new Tile(TileTypes.WALL, false, false);
+                mockMap.tileMatrix[i][j].type = TileTypes.WALL;
             }
         }
         expect(service.isMapHalfFloor(mockMap)).toBeFalse();
     });
 
     it('should check if map is accessible', () => {
-        mockMap.tileMatrix[0][1] = new Tile(TileTypes.WALL, false, false);
-        mockMap.tileMatrix[1][1] = new Tile(TileTypes.WALL, false, false);
-        mockMap.tileMatrix[1][0] = new Tile(TileTypes.WALL, false, false);
+        mockMap.tileMatrix[0][1].type = TileTypes.WALL;
+        mockMap.tileMatrix[1][1].type = TileTypes.WALL;
+        mockMap.tileMatrix[1][0].type = TileTypes.WALL;
         expect(service.isMapAccessible(mockMap)).toBeFalse();
-        mockMap.tileMatrix[1][1] = new Tile(TileTypes.GROUND_0, false, false);
+        mockMap.tileMatrix[1][1].type = TileTypes.GROUND_0;
         expect(service.isMapAccessible(mockMap)).toBeFalse();
-        mockMap.tileMatrix[0][0] = new Tile(TileTypes.WALL, false, false);
+        mockMap.tileMatrix[0][0].type = TileTypes.WALL;
         expect(service.isMapAccessible(mockMap)).toBeTrue();
 
         for (let i = 0; i < MAP_SIZE_SMALL; i++) {
-            mockMap.tileMatrix[i][4] = new Tile(TileTypes.WALL, false, false);
+            mockMap.tileMatrix[i][4].type = TileTypes.WALL;
         }
         expect(service.isMapAccessible(mockMap)).toBeFalse();
     });
@@ -129,7 +134,7 @@ describe('SaveService', () => {
         expect(service.areDoorsNextToWalls(mockMap)).toBeFalse();
     });
 
-    fit('should check if walls are not next to the border', () => {
+    it('should check if walls are not next to the border', () => {
         mockMap.tileMatrix[0][0].type = TileTypes.DOOR;
         expect(service.areDoorsNotNextToBorder(mockMap)).toBeFalse();
 
