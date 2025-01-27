@@ -11,9 +11,9 @@ import { ProfileService } from '@app/services/profile.service';
     styleUrl: './profile-showcase.component.scss',
 })
 export class ProfileShowcaseComponent {
-
     bonus: boolean = false;
     dice: boolean = false;
+    selectedImage:string = this.profileService.showImageSelected();
 
     clickBonus(event: boolean) {
         this.bonus = event;

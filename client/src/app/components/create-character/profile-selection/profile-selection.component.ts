@@ -12,8 +12,8 @@ export class ProfileSelectionComponent {
     get imagesPath() {
         return this.profileService.imagesPath;
     }
-    get itemSelected() {
-        return this.profileService.getSelectedItem();
+    public get itemSelected() {
+        return this.profileService.getSelectedItem()();
     }
     clickItem(event: number) {
         this.profileService.setSelectedItem(event);

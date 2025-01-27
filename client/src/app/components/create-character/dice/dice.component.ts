@@ -10,11 +10,11 @@ import { ProfileService } from '@app/services/profile.service';
 export class DiceComponent {
     dice1 = 'assets/images/dice1.png';
     dice2 = 'assets/images/dice2.png';
-    cahnge: boolean = false;
+    change: boolean = false;
     clickDice() {
-        this.cahnge = !this.cahnge;
+        this.change = !this.change;
         [this.dice1, this.dice2] = [this.dice2, this.dice1];
-        this.profileService.setDiceChoice(this.cahnge);
+        this.profileService.setDiceChoice(this.change);
     }
     constructor(private profileService: ProfileService) {}
 }

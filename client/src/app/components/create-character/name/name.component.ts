@@ -10,9 +10,11 @@ import { ProfileService } from '@app/services/profile.service';
 export class NameComponent {
     name: string = '';
     @ViewChild('nameInput') nameInput: ElementRef;
+    ngAfterViewInit: any;
     changeName() {
         this.name = this.nameInput.nativeElement.value;
         this.profileService.setName(this.name);
+        console.log(this.name);
     }
     constructor(private profileService: ProfileService) {}
 }
