@@ -41,6 +41,12 @@ export class EditPageComponent {
         protected itemService: ItemService,
     ) {}
 
+    ngOnInit() {
+        //preload image in cache
+        const img = new Image();
+        img.src = 'assets/openDoorTile.png';
+    }
+
     onMouseDown(event: MouseEvent) {
         this.mouseService.isMouseDown = true;
         this.mouseService.isRightClick = event.button === 2; // 1: left-click, 2: right-click (MDN Web Docs)
@@ -48,20 +54,23 @@ export class EditPageComponent {
 
     onMouseUp(): void {
         this.mouseService.isMouseDown = false;
-    
+
         const item = this.dragAndDropService.currentDraggedItem;
         if (!item) {
             return;
         }
-    
+
         if (this.isHoveredOutsideGrid()) {
             this.handleItemOutsideGrid(item);
         }
-    
+
         this.dragAndDropService.onMouseUp(item.name);
     }
-    
-    
+
+    onDragEnd() {
+        this.mouseService.isMouseDown = false;
+    }
+
     onMouseLeave() {
         this.onMouseUp();
     }
@@ -80,7 +89,7 @@ export class EditPageComponent {
     onBlur() {
         this.updateValue();
     }
-    
+
     updateValue() {
         if (!this.title || this.title.trim() === '') {
             this.title = 'Untitled'; // Reset to default if empty
@@ -89,27 +98,24 @@ export class EditPageComponent {
         this.mapService.map.description = this.description;
         // Add any additional logic you need to handle the updated value
     }
-    
+
     private isHoveredOutsideGrid(): boolean {
         const { row, column } = this.dragAndDropService.currentHoveredTile;
         return row === -1 && column === -1;
     }
-    
+
     private handleItemOutsideGrid(item: ItemObject): void {
         const { row, column } = this.dragAndDropService.startTile;
-    
+
         if (this.isItemFromContainer(row, column)) {
             this.itemService.increaseItemAmount(item.name);
         } else {
             this.itemService.resetTileToStartPosition(row, column);
         }
     }
-    
+
     private isItemFromContainer(row: number, column: number): boolean {
-        return (
-            row === ITEM_CONTAINER_COORDINATES.row &&
-            column === ITEM_CONTAINER_COORDINATES.column
-        );
+        return row === ITEM_CONTAINER_COORDINATES.row && column === ITEM_CONTAINER_COORDINATES.column;
     }
 }
 

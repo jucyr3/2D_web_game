@@ -1,11 +1,11 @@
 import { NgClass, NgIf } from '@angular/common';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditToolTypes } from '@app/services/editing-tool.constants';
 import { EditingToolService } from '@app/services/editing-tool.service';
 import { ITEM_CONTAINER_COORDINATES, ItemService } from '@app/services/item.service';
 import { ItemObject } from '@common/ItemObject';
-import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
     selector: 'app-item',
@@ -15,6 +15,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class ItemComponent implements OnDestroy, OnInit {
     @Input() itemId: string; // Unique identifier for each item
+
+    @ViewChild('tooltip') tooltip!: MatTooltip;
 
     itemObject: ItemObject;
 
@@ -39,6 +41,7 @@ export class ItemComponent implements OnDestroy, OnInit {
         this.itemService.decreaseItemAmount(this.itemObject.name);
         this.editingToolService.setActiveTool(EditToolTypes.Hand);
         this.dragAndDropService.startDragging(this.itemObject, event, ITEM_CONTAINER_COORDINATES.row, ITEM_CONTAINER_COORDINATES.column);
+        this.tooltip.hide();
     }
 
     onMouseUp(): void {
@@ -62,5 +65,10 @@ export class ItemComponent implements OnDestroy, OnInit {
         const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
         const description = this.itemObject ? this.itemObject.description : '';
         return `${capitalizedName}: \n ${description}`;
+        // Tooltip html
+        //    [matTooltip]="!this.dragAndDropService.isDragging ? this.getFormattedTooltip() : null"
+        //   [matTooltipPosition]="'right'"
+        //   [matTooltipShowDelay]="200"
+        //   matTooltipClass="description-tooltip"
     }
 }

@@ -14,16 +14,15 @@ if (environment.production) {
     enableProdMode();
 }
 
-
 const routes: Routes = [
     { path: '', redirectTo: '/edit', pathMatch: 'full' },
     { path: 'home', component: MainPageComponent },
     { path: 'game', component: GamePageComponent },
     { path: 'material', component: MaterialPageComponent },
-    { path: 'edit', component: EditPageComponent},
+    { path: 'edit', component: EditPageComponent },
     { path: '**', redirectTo: '/edit' },
 ];
 
 bootstrapApplication(AppComponent, {
     providers: [provideHttpClient(), provideRouter(routes, withHashLocation()), provideAnimations()],
-})
+});

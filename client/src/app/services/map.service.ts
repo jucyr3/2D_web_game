@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Coordinate } from '@app/interfaces/coordinate';
 import { ItemObject } from '@common/ItemObject';
 import { Map } from '@common/map';
 import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
-import { EditingToolService } from './editing-tool.service';
-
 
 interface MapJson {
     name: string;
@@ -31,13 +28,7 @@ interface MapJson {
 export class MapService {
     map: Map;
 
-    
-
-    startTile: Coordinate | null = null;
-    endTile: Coordinate | null = null;
-
-    
-    constructor(private editingToolService: EditingToolService) {
+    constructor() {
         const mapJson = null;
         // const mapJson: MapJson = {"name":"Untitled","size":10,"isVisible":true,"description":"","gameMode":"Classic","tileMatrix":[[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"spawnpoint","description":"A magical marker that sets the player's respawn location."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"mushroom","description":"A small, red mushroom with white spots. Consuming it grants the player extra health, making it a valuable resource for survival."}},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":null},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"potion","description":"A magical elixir in a shimmering vial. Drinking it restores the player's health, making it essential for long journeys and tough battles."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"sword","description":"A sharp, gleaming sword forged from rare metals. It is the perfect weapon for close combat, allowing the player to defeat enemies with ease."}},{"type":"groundTile1","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"luma","description":"A glowing, celestial orb that radiates energy. It is said to hold mysterious powers, though its true purpose remains unknown."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"cloak","description":"A mystical cloak that grants the wearer the ability to become invisible for a short time. Perfect for sneaking past enemies or escaping danger."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"bomb","description":"A volatile explosive device. Use it wisely to clear obstacles or defeat groups of enemies, but be careful not to get caught in the blast!"}},{"type":"groundTile1","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"randomItem","description":"Becomes a random item upon starting the game."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"spawnpoint","description":"A magical marker that sets the player's respawn location."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"randomItem","description":"Becomes a random item upon starting the game."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"flag","description":"A brightly colored flag."}},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false}]],"lastModified":"2025-01-24T15:33:15.507Z"}
         if (!mapJson) {
@@ -47,8 +38,6 @@ export class MapService {
             this.map = this.createMapFromJSON(mapJson);
         }
     }
-    
-    currentTileType = this.editingToolService.getCurrentTileTypeOnBrush();
 
     parseTileMatrix(json: MapJson): Tile[][] {
         // eslint-disable-next-line
@@ -172,85 +161,5 @@ export class MapService {
 
     removeGameObject(row: number, column: number): void {
         this.map.tileMatrix[row][column].gameObject = null;
-    }
-        
-
-
-    getPath(start: Coordinate, end: Coordinate): Coordinate[] {
-        // Check if start or end are null
-        if (!start || !end) {
-            return [];
-        }
-    
-        // Calculate the distance between start and end
-        const dx = Math.abs(end.column - start.column);
-        const dy = Math.abs(end.row - start.row);
-        const distance = Math.sqrt(dx * dx + dy * dy);
-    
-        // Return an empty array if the distance is less than 2
-        if (distance < 2) {
-            return [];
-        }
-    
-        // Immediately return if start and end are the same
-        if (start.column === end.column && start.row === end.row) {
-            return [];
-        }
-    
-        const points: Coordinate[] = [];
-        let x = start.column;
-        let y = start.row;
-    
-        const stepX = x < end.column ? 1 : -1;
-        const stepY = y < end.row ? 1 : -1;
-    
-        let error = dx - dy;
-        const maxIterations = dx + dy; // Maximum steps needed
-        let iterations = 0;
-    
-        while (iterations <= maxIterations) {
-            iterations++;
-    
-            // Add current point to path
-            points.push({ row: y, column: x });
-    
-            // Check if reached the end
-            if (x === end.column && y === end.row) {
-                break;
-            }
-    
-            const error2 = 2 * error;
-    
-            // Adjust error and move along x
-            if (error2 > -dy) {
-                error -= dy;
-                x += stepX;
-            }
-    
-            // Adjust error and move along y
-            if (error2 < dx) {
-                error += dx;
-                y += stepY;
-            }
-        }
-    
-        return points;
-    }
-    
-    
-    paintInterpolatedPath(): void {
-        if (this.startTile === null || this.endTile === null) {
-            return;
-        }
-    
-        const points = this.getPath(this.startTile, this.endTile);
-
-        if (points.length === 0) {
-            return;
-        }
-    
-        for (const point of points) {
-            this.changeTileType(point.row, point.column, TileTypes.WALL);
-        }
     }
 }

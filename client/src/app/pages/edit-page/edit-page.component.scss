@@ -23,11 +23,12 @@ body {
     box-sizing: border-box;
     overflow: hidden; /* Disable scrolling inside the container */
     background-color: $background-color;
+    user-select: none;
 }
 
 #edit-page ::ng-deep h2 {
-  color: $text-color; /* Use primary color for the title */
-  margin-bottom: 8px; /* Add some spacing below the title */
+    color: $text-color; /* Use primary color for the title */
+    margin-bottom: 8px; /* Add some spacing below the title */
 }
 
 .app-layout {
@@ -76,7 +77,7 @@ button:hover {
     --mdc-plain-tooltip-container-color: rgba(0, 0, 0, 0.8);
     font-family: 'Consolas', 'Courier New', monospace;
     white-space: pre-line;
-    transition-duration: 0ms
+    transition-duration: 0ms;
 }
 
 #buttons {

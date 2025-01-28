@@ -1,20 +1,19 @@
 <div
-  class="tile mat-tooltip"
-  (mousedown)="onMouseDown($event)"
-  (pointerenter)="onMouseEnter()"
-  (mouseup)="onMouseUp()"
-  (mouseleave)="onMouseLeave()"
-  (contextmenu)="onRightClick()"
-  [ngStyle]="{ 'background-image': this.tileTexture }"
-  [ngClass]="{ 'grab-cursor': shouldShowGrabCursor() }"
-
-  #tooltip="matTooltip"
-  [matTooltip]="this.isTooltipEnabled() ? this.getFormattedTooltip() : null"
-  [matTooltipShowDelay]="200"
-  [matTooltipPosition]="'right'"
-  matTooltipClass="description-tooltip"
+    class="tile mat-tooltip"
+    (mousedown)="onMouseDown($event)"
+    (pointerenter)="onMouseEnter()"
+    (mouseup)="onMouseUp()"
+    (mouseleave)="onMouseLeave()"
+    (contextmenu)="onRightClick()"
+    [ngStyle]="{ 'background-image': this.tileTexture }"
+    [ngClass]="{ 'grab-cursor': shouldShowGrabCursor() }"
+    #tooltip="matTooltip"
+    [matTooltip]="this.isTooltipEnabled() ? this.getFormattedTooltip() : null"
+    [matTooltipShowDelay]="200"
+    [matTooltipPosition]="'right'"
+    matTooltipClass="description-tooltip"
 >
-  @if (this.itemObject) {
-    <img [src]="'../assets/' + this.itemObject.name + '.png'" draggable="false" alt="{{this.itemObject.name}}" />
-  }
+    @if (this.itemObject) {
+    <img [src]="'../assets/' + this.itemObject.name + '.png'" draggable="false" alt="{{ this.itemObject.name }}" />
+    }
 </div>
