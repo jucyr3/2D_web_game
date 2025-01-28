@@ -153,7 +153,11 @@ export class EditingToolService {
     }
 
     eraseTile(row: number, column: number): void {
-        this.placeTile(row, column, TileTypes.GROUND_1);
+        const itemObjectOnTile = this.mapService.getItemObject(row, column);
+
+        if (!itemObjectOnTile || this.mouseService.isMouseDown) {
+            this.placeTile(row, column, TileTypes.GROUND_1);
+        }
     }
 
     placeTile(row: number, column: number, tileType: TileTypes): void {
