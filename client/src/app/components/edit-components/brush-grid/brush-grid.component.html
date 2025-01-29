@@ -1,0 +1,7 @@
+<h2>Tuiles</h2>
+<div id="brush-grid">
+    <app-brush [tileType]="tileTypes.DOOR" [isActive]="this.editingToolService.getCurrentTileTypeOnBrush() === tileTypes.DOOR"></app-brush>
+    <app-brush [tileType]="tileTypes.WALL" [isActive]="this.editingToolService.getCurrentTileTypeOnBrush() === tileTypes.WALL"></app-brush>
+    <app-brush [tileType]="tileTypes.GROUND_0" [isActive]="this.editingToolService.getCurrentTileTypeOnBrush() === tileTypes.GROUND_0"></app-brush>
+    <app-brush [tileType]="tileTypes.GROUND_2" [isActive]="this.editingToolService.getCurrentTileTypeOnBrush() === tileTypes.GROUND_2"></app-brush>
+</div>

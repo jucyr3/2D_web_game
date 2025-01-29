@@ -1,0 +1,26 @@
+<div
+    class="tile"
+    
+    class="tile"
+    [tp]="ItemTooltipComponent"
+    [tpIsEnabled]="isTooltipEnabled"
+    [tpDuration]="0"
+    tpPlacement="right"
+    tpMaxWidth="200px"
+
+    (mousedown)="onMouseDown($event)"
+    (pointerenter)="onMouseEnter()"
+    (mouseup)="onMouseUp()"
+    (mouseleave)="onMouseLeave()"
+    (contextmenu)="onRightClick()"
+    [ngStyle]="{ 'background-image': this.tileTexture }"
+    [ngClass]="{ 'grab-cursor': shouldShowGrabCursor() }"
+>
+    @if (this.itemObject) {
+    <img [src]="'../assets/' + this.itemObject.name + '.png'" draggable="false" alt="{{ this.itemObject.name }}" />
+    }
+</div>
+
+<ng-template #ItemTooltipComponent let-tooltip="tooltip">
+    <app-item-tooltip [itemObject]="itemObject"></app-item-tooltip>
+</ng-template>

@@ -1,0 +1,11 @@
+.tile-grid {
+    width: 90vmin;
+    height: 90vmin;
+    border: 2px solid rgb(0, 0, 0);
+    background-color: transparent;
+    display: grid;
+    user-select: none;
+    align-items: start;
+    justify-content: start;
+    box-sizing: border-box;
+}
