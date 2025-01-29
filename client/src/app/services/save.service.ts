@@ -99,7 +99,8 @@ export class SaveService {
 
     areStartingPointsValid(map: Map): boolean {
         const flatMap = map.flattenedTileMatrix;
-        const startCount = flatMap.filter((tile) => tile.gameObject.name === 'spawnpoint').length;
+        // if there is a gameObject...
+        const startCount = flatMap.filter((tile) => tile.gameObject && tile.gameObject.name === 'spawnpoint').length;
         if (map.size === MAP_SIZE_SMALL) {
             return startCount === SPAWN_COUNT_SMALL;
         } else if (map.size === MAP_SIZE_MEDIUM) {
