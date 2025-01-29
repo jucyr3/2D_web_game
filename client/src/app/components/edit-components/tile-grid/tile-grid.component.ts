@@ -45,7 +45,6 @@ export class TileGridComponent implements OnInit, OnDestroy {
     }
 
     onMouseLeave() {
-        this.mouseService.isMouseDown = false;
         this.dragAndDropService.setCurrentHoveredTile(-1, -1);
         this.editingToolService.resetInterpolationPoints();
     }

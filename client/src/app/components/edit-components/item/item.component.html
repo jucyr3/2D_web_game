@@ -1,4 +1,9 @@
-<div class="item-container">
+<div [tp]="ItemTooltipComponent" class="item-container"
+    [tpDuration]="0"
+    tpPlacement="right"
+    tpMaxWidth="200px"
+    [tpIsEnabled]="isTooltipEnabled"
+    >
     <img
         class="item"
         [ngClass]="{ grayscale: this.itemService.itemAmounts[this.itemObject.name] <= 0 }"
@@ -18,3 +23,8 @@
 <div *ngIf="draggingState.isDragging" class="drag-preview" [style.left.px]="draggingState.dragX" [style.top.px]="draggingState.dragY">
     <img [src]="'../assets/' + itemId + '.png'" [alt]="itemId" />
 </div>
+
+
+<ng-template #ItemTooltipComponent let-tooltip="tooltip">
+    <app-item-tooltip [itemObject]="itemObject"></app-item-tooltip>
+</ng-template>

@@ -1,7 +1,6 @@
 // Angular Core and Common Modules
 import { NgClass, NgStyle } from '@angular/common';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
+import { Component, Input, OnInit } from '@angular/core';
 
 // Services
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
@@ -9,6 +8,10 @@ import { EditingToolService } from '@app/services/editing-tool.service';
 import { ITEM_CONTAINER_COORDINATES, ItemService } from '@app/services/item.service';
 import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
+import { TippyDirective } from '@ngneat/helipopper';
+
+// Components
+import { ItemTooltipComponent } from '@app/components/edit-components/item-tooltip/item-tooltip.component';
 
 // Interfaces and Models
 import { Coordinate } from '@app/interfaces/coordinate';
@@ -21,7 +24,7 @@ import { TileTypes } from '@common/tileType.constants';
 
 @Component({
     selector: 'app-tile',
-    imports: [NgStyle, NgClass, MatTooltipModule],
+    imports: [NgStyle, NgClass, TippyDirective, ItemTooltipComponent],
     templateUrl: './tile.component.html',
     styleUrl: './tile.component.scss',
 })
@@ -29,10 +32,8 @@ export class TileComponent implements OnInit {
     @Input() tileNumber: number;
     @Input() tileObject: Tile;
 
-    @ViewChild('tooltip') tooltip!: MatTooltip;
-
     tilePosition: Coordinate;
-
+    
     constructor(
         protected readonly editingToolService: EditingToolService,
         protected readonly mouseService: MouseService,
@@ -40,13 +41,17 @@ export class TileComponent implements OnInit {
         private readonly dragAndDropService: DragAndDropService,
         private readonly itemService: ItemService,
     ) {}
-
+    
     get tileTexture(): string {
         return this.editingToolService.getTileImage(this.mapService.getTileType(this.tilePosition.row, this.tilePosition.column));
     }
-
+    
     get itemObject(): ItemObject | null {
         return this.mapService.getItemObject(this.tilePosition.row, this.tilePosition.column);
+    }
+    
+    get isTooltipEnabled(): boolean {
+        return this.itemObject != null && !this.mouseService.isMouseDown;
     }
 
     ngOnInit(): void {
@@ -60,7 +65,6 @@ export class TileComponent implements OnInit {
             this.startDraggingItem(event);
         }
         this.editingToolService.setInterpolationPoints(this.tilePosition);
-        this.tooltip.hide();
     }
 
     onMouseUp(): void {
@@ -72,13 +76,11 @@ export class TileComponent implements OnInit {
 
             this.editingToolService.setActiveTool(EditToolTypes.TileBrush);
             this.editingToolService.resetProcessedTiles();
-            this.showTooltipIfHovered();
             this.dragAndDropService.onMouseUp(draggedItem.name);
         }
     }
 
     onMouseLeave(): void {
-        this.tooltip.hide();
     }
 
     onMouseEnter(): void {
@@ -104,10 +106,6 @@ export class TileComponent implements OnInit {
         return `${capitalizedName}: \n ${this.itemObject.description}`;
     }
 
-    isTooltipEnabled(): boolean {
-        //return this.itemObject !== null && !this.mouseService.isMouseDown;
-        return false;
-    }
 
     private initializeTile(): void {
         const row = Math.floor(this.tileNumber / this.mapService.map.size);
@@ -151,14 +149,5 @@ export class TileComponent implements OnInit {
             this.dragAndDropService.startTile.row === ITEM_CONTAINER_COORDINATES.row &&
             this.dragAndDropService.startTile.column === ITEM_CONTAINER_COORDINATES.column
         );
-    }
-
-    private showTooltipIfHovered(): void {
-        if (
-            this.dragAndDropService.currentHoveredTile.row === this.tilePosition.row &&
-            this.dragAndDropService.currentHoveredTile.column === this.tilePosition.column
-        ) {
-            setTimeout(() => this.tooltip.show(), 1);
-        }
     }
 }

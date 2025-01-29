@@ -9,6 +9,7 @@ import { MainPageComponent } from '@app/pages/main-page/main-page.component';
 import { MaterialPageComponent } from '@app/pages/material-page/material-page.component';
 import { environment } from './environments/environment';
 import { EditPageComponent } from '@app/pages/edit-page/edit-page.component';
+import { provideTippyLoader, provideTippyConfig, tooltipVariation, popperVariation } from '@ngneat/helipopper/config';
 
 if (environment.production) {
     enableProdMode();
@@ -21,8 +22,16 @@ const routes: Routes = [
     { path: 'material', component: MaterialPageComponent },
     { path: 'edit', component: EditPageComponent },
     { path: '**', redirectTo: '/edit' },
-];
+  ];
 
 bootstrapApplication(AppComponent, {
-    providers: [provideHttpClient(), provideRouter(routes, withHashLocation()), provideAnimations()],
+    providers: [provideHttpClient(), provideRouter(routes, withHashLocation()), provideAnimations(), provideTippyLoader(() => import('tippy.js')),
+        provideTippyConfig({
+          defaultVariation: 'tooltip',
+          variations: {
+            tooltip: tooltipVariation,
+            popper: popperVariation,
+          },
+        }),],
 });
+

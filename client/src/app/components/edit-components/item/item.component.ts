@@ -1,22 +1,28 @@
 import { NgClass, NgIf } from '@angular/common';
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditToolTypes } from '@app/services/editing-tool.constants';
 import { EditingToolService } from '@app/services/editing-tool.service';
 import { ITEM_CONTAINER_COORDINATES, ItemService } from '@app/services/item.service';
 import { ItemObject } from '@common/ItemObject';
+import { TippyDirective } from '@ngneat/helipopper';
+import { ItemTooltipComponent } from '@app/components/edit-components/item-tooltip/item-tooltip.component';
+import { MouseService } from '@app/services/mouse.service';
 
 @Component({
     selector: 'app-item',
-    imports: [NgIf, NgClass, MatTooltipModule],
+    imports: [NgIf, NgClass, TippyDirective, ItemTooltipComponent],
     templateUrl: './item.component.html',
     styleUrls: ['./item.component.scss'],
 })
 export class ItemComponent implements OnDestroy, OnInit {
     @Input() itemId: string; // Unique identifier for each item
 
-    @ViewChild('tooltip') tooltip!: MatTooltip;
+    get isTooltipEnabled() {
+        return !this.mouseService.isMouseDown;
+    }
+
+    duration = 0;
 
     itemObject: ItemObject;
 
@@ -24,6 +30,7 @@ export class ItemComponent implements OnDestroy, OnInit {
         protected readonly dragAndDropService: DragAndDropService,
         private readonly editingToolService: EditingToolService,
         protected readonly itemService: ItemService,
+        protected readonly mouseService: MouseService
     ) {}
 
     get draggingState() {
@@ -41,7 +48,6 @@ export class ItemComponent implements OnDestroy, OnInit {
         this.itemService.decreaseItemAmount(this.itemObject.name);
         this.editingToolService.setActiveTool(EditToolTypes.Hand);
         this.dragAndDropService.startDragging(this.itemObject, event, ITEM_CONTAINER_COORDINATES.row, ITEM_CONTAINER_COORDINATES.column);
-        this.tooltip.hide();
     }
 
     onMouseUp(): void {
@@ -65,10 +71,5 @@ export class ItemComponent implements OnDestroy, OnInit {
         const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
         const description = this.itemObject ? this.itemObject.description : '';
         return `${capitalizedName}: \n ${description}`;
-        // Tooltip html
-        //    [matTooltip]="!this.dragAndDropService.isDragging ? this.getFormattedTooltip() : null"
-        //   [matTooltipPosition]="'right'"
-        //   [matTooltipShowDelay]="200"
-        //   matTooltipClass="description-tooltip"
     }
 }
