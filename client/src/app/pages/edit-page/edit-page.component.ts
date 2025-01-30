@@ -14,6 +14,15 @@ import { SaveButtonComponent } from '@app/components/edit-components/save-button
 import { TileGridComponent } from '@app/components/edit-components/tile-grid/tile-grid.component';
 import { ItemObject } from '@common/ItemObject';
 
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { PopUpComponent } from '@app/components/pop-up/pop-up.component';
+import { Router } from '@angular/router';
+
+
 @Component({
     selector: 'app-edit-page',
     imports: [
@@ -24,7 +33,7 @@ import { ItemObject } from '@common/ItemObject';
         TitleComponent,
         DescriptionComponent,
         SaveButtonComponent,
-        ResetButtonComponent,
+        ResetButtonComponent,MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule
     ],
     templateUrl: './edit-page.component.html',
     styleUrl: './edit-page.component.scss',
@@ -39,6 +48,8 @@ export class EditPageComponent {
         protected mapService: MapService,
         protected dragAndDropService: DragAndDropService,
         protected itemService: ItemService,
+        readonly dialog: MatDialog,
+        private router: Router
     ) {}
 
     ngOnInit() {
@@ -98,6 +109,25 @@ export class EditPageComponent {
         this.mapService.map.description = this.description;
         // Add any additional logic you need to handle the updated value
     }
+
+    openQuitDialog(): void {
+        const dialogRef = this.dialog.open(PopUpComponent, {
+            width: '35%',
+            data: {
+                title: 'Confirmer la sortie',
+                content: 'Quitter maintenant annulera vos modifications. Êtes-vous sûr de vouloir quitter?',
+                cancelButtonLabel: 'Non',
+                confirmButtonLabel: 'Oui',
+            },
+        });
+        dialogRef.componentInstance.confirmed.subscribe((result: boolean) => {
+            if (result) {
+                dialogRef.close();
+                this.router.navigate(['/home']);
+            }
+        });
+    }
+
 
     private isHoveredOutsideGrid(): boolean {
         const { row, column } = this.dragAndDropService.currentHoveredTile;

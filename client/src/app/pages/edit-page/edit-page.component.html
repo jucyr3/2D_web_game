@@ -6,7 +6,10 @@
     (dragend)="onDragEnd()"
     [ngStyle]="{ cursor: this.dragAndDropService.isDragging ? 'grabbing' : 'default' }"
 >
-    <div class="app-layout" (mousedown)="onMouseDown($event)" (mouseup)="onMouseUp()">
+<div class="app-layout" (mousedown)="onMouseDown($event)" (mouseup)="onMouseUp()">
+
+        <button  mat-raised-button (click)="openQuitDialog()" class=" quit-button " >Quitter</button>
+
         <div class="tools">
             <app-brush-grid class="brush-grid"></app-brush-grid>
             <app-item-grid></app-item-grid>

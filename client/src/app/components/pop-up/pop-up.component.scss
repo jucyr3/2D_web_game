@@ -1,0 +1,56 @@
+// Variables
+$primary-color: #a85cf9; // Couleur du titre
+$background-color: #333; // Couleur de fond de la page
+$button-color: #eee; // Couleur des boutons
+$button-hover-color: #ddd; // Couleur des boutons au survol
+$button-border-color: #aaa; // Couleur de la bordure des boutons
+$text-color: #fff; // Couleur principale du texte
+$footer-color: #aaa; // Couleur du texte dans le pied de page
+
+@mixin center-align {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.mat-mdc-dialog-content {
+    color: #fff; // Couleur du contenu
+}
+
+.dialog-title {
+    font-size: 1.5rem;
+    color: $primary-color;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.dialog-content {
+    color: $background-color;
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.dialog-actions {
+    @include center-align;
+    gap: 4rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    .dialog-button {
+        background-color: $button-color;
+        border: 2px solid $button-border-color;
+        border-radius: 5px;
+        padding: 0.5rem 1.5rem;
+        font-size: 1rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        color: $background-color;
+
+        &:hover {
+            background-color: $button-hover-color;
+        }
+    }
+}
