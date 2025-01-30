@@ -32,27 +32,22 @@ export class DragAndDropService {
         return this._isDragging;
     }
 
-    // Track the current hovered tile
-
     setCurrentHoveredTile(row: number, column: number): void {
         this.currentHoveredTile = { row, column };
     }
 
-    startDragging(itemObject: ItemObject, event: MouseEvent, startRow: number, startColumn: number): void {
-        // Set the currently dragged item's ID
+    startDragging(startRow: number, startColumn: number, itemObject: ItemObject, event: MouseEvent): void {
         this._currentDraggedItem = itemObject;
         this._isDragging = true;
 
         this.startTile = { row: startRow, column: startColumn };
 
-        // Initialize dragging state for this item
         this.draggingStates[itemObject.name] = {
             isDragging: true,
             dragX: event.clientX,
             dragY: event.clientY,
         };
 
-        // Prevent text selection
         event.preventDefault();
     }
 

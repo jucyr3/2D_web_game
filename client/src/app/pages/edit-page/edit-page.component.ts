@@ -69,12 +69,10 @@ export class EditPageComponent {
         this.mouseService.isMouseDown = false;
 
         const item = this.dragAndDropService.currentDraggedItem;
-        if (!item) {
-            return;
+        if (item) {
+            this.dragAndDropService.handleDraggedItemPlacement(-1, -1);
+            this.dragAndDropService.onMouseUp(item.name);
         }
-
-        this.dragAndDropService.handleDraggedItemPlacement(-1, -1);
-        this.dragAndDropService.onMouseUp(item.name);
     }
 
     onDragEnd() {
@@ -126,23 +124,4 @@ export class EditPageComponent {
             }
         });
     }
-
-    // private isHoveredOutsideGrid(): boolean {
-    //     const { row, column } = this.dragAndDropService.currentHoveredTile;
-    //     return row === -1 && column === -1;
-    // }
-
-    // private handleItemOutsideGrid(item: ItemObject): void {
-    //     const { row, column } = this.dragAndDropService.startTile;
-
-    //     if (this.isItemFromContainer(row, column)) {
-    //         this.itemService.increaseItemAmount(item.name);
-    //     } else {
-    //         this.itemService.resetTileToStartPosition(row, column);
-    //     }
-    // }
-
-    // private isItemFromContainer(row: number, column: number): boolean {
-    //     return row === ITEM_CONTAINER_COORDINATES.row && column === ITEM_CONTAINER_COORDINATES.column;
-    // }
 }

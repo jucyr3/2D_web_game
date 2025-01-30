@@ -42,7 +42,8 @@ export class TileComponent implements OnInit {
     ) {}
 
     get tileTexture(): string {
-        return this.editingToolService.getTileImage(this.mapService.getTileType(this.tilePosition.row, this.tilePosition.column));
+
+        return this.mapService.getTileTexture(this.tilePosition.row, this.tilePosition.column);
     }
 
     get itemObject(): ItemObject | null {
@@ -61,7 +62,9 @@ export class TileComponent implements OnInit {
         this.mouseService.isRightClick = event.button === 2;
 
         if (this.itemObject && !this.mouseService.isRightClick) {
-            this.startDraggingItem(event);
+            this.editingToolService.setActiveTool(EditToolTypes.Hand);
+            this.dragAndDropService.startDragging(this.tilePosition.row, this.tilePosition.column, this.itemObject, event);
+            this.mapService.removeGameObject(this.tilePosition.row, this.tilePosition.column);
         }
         this.editingToolService.setInterpolationPoints(this.tilePosition);
     }
@@ -78,14 +81,6 @@ export class TileComponent implements OnInit {
         }
     }
 
-    private startDraggingItem(event: MouseEvent): void {
-        if (this.itemObject) {
-            this.editingToolService.setActiveTool(EditToolTypes.Hand);
-            this.dragAndDropService.startDragging(this.itemObject, event, this.tilePosition.row, this.tilePosition.column);
-            this.mapService.removeGameObject(this.tilePosition.row, this.tilePosition.column);
-        }
-    }
-
     onMouseEnter(): void {
         if (this.mouseService.isMouseDown) {
             this.editingToolService.setInterpolationPoints(this.tilePosition);
@@ -97,12 +92,6 @@ export class TileComponent implements OnInit {
         if (this.itemObject) {
             this.editingToolService.removeItemObjectFromTile(this.tilePosition.row, this.tilePosition.column, this.itemObject);
         }
-    }
-
-    getFormattedTooltip(): string {
-        if (!this.itemObject) return '';
-        const capitalizedName = this.itemObject.name.charAt(0).toUpperCase() + this.itemObject.name.slice(1);
-        return `${capitalizedName}: \n ${this.itemObject.description}`;
     }
 
     private initializeTile(): void {

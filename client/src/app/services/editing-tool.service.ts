@@ -46,11 +46,6 @@ export class EditingToolService {
         return this.currentTileTypeOnBrush;
     }
 
-    // TODO put this in another service (ex: map-display.service.ts) (no created yet)
-    getTileImage(tileType: TileTypes): string {
-        return `url(assets/${tileType}.png)`; // Use the tileType parameter
-    }
-
     onMouseUp(): void {
         this.resetProcessedTiles();
         this.resetInterpolationPoints();

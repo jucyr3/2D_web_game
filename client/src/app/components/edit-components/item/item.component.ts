@@ -47,7 +47,7 @@ export class ItemComponent implements OnDestroy, OnInit {
         }
         this.itemService.decreaseItemAmount(this.itemObject.name);
         this.editingToolService.setActiveTool(EditToolTypes.Hand);
-        this.dragAndDropService.startDragging(this.itemObject, event, ITEM_CONTAINER_COORDINATES.row, ITEM_CONTAINER_COORDINATES.column);
+        this.dragAndDropService.startDragging(ITEM_CONTAINER_COORDINATES.row, ITEM_CONTAINER_COORDINATES.column, this.itemObject, event);
     }
 
     onMouseUp(): void {
@@ -58,18 +58,12 @@ export class ItemComponent implements OnDestroy, OnInit {
             }
 
             this.dragAndDropService.onMouseUp(this.itemObject.name);
+            this.editingToolService.setActiveTool(EditToolTypes.TileBrush);
         }
     }
 
     ngOnDestroy(): void {
         // Clean up dragging state for this item
         this.dragAndDropService.onMouseUp(this.itemObject.name);
-    }
-
-    getFormattedTooltip(): string {
-        const name = this.itemObject ? this.itemObject.name : '';
-        const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
-        const description = this.itemObject ? this.itemObject.description : '';
-        return `${capitalizedName}: \n ${description}`;
     }
 }

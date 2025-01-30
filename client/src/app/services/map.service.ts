@@ -63,6 +63,11 @@ export class MapService {
         return JSON.stringify(this.map);
     }
 
+    getTileTexture(row: number, column: number): string {
+        const tileType: TileTypes = this.getTileType(row, column)
+        return `url(assets/${tileType}.png)`; // Use the tileType parameter
+    }
+
     // for testing purposes
     // totally not AI generated
     printMap() {
