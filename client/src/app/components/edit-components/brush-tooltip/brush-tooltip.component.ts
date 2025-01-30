@@ -14,10 +14,18 @@ export class BrushTooltipComponent {
     tippy = injectTippyRef();
 
     get tileName(): string {
-        return tileDescription[this.tileType].name;
+        try {
+            return tileDescription[this.tileType].name;
+        } catch (e) {
+            return 'unknown tile';
+        }
     }
 
     get tileDescription(): string {
-        return tileDescription[this.tileType].description;
+        try {
+            return tileDescription[this.tileType].description;
+        } catch (e) {
+            return 'unknown tile so no description';
+        }
     }
 }

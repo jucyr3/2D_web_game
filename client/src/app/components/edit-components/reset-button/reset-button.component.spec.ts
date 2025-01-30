@@ -31,4 +31,28 @@ describe('ResetButtonComponent', () => {
 
     expect(component.reset).toHaveBeenCalled();
   });
+
+  it('should proceed with reset logic if user confirms', () => {
+    spyOn(window, 'confirm').and.returnValue(true);
+    spyOn(component, 'reset').and.callThrough();
+
+    const button = fixture.debugElement.query(By.css('button'));
+    button.triggerEventHandler('click', null);
+    fixture.detectChanges();
+
+    expect(window.confirm).toHaveBeenCalledWith('Êtes-vous sûr de vouloir réinitialiser ?');
+    expect(component.reset).toHaveBeenCalled();
+  });
+
+  it('should not proceed with reset logic if user cancels', () => {
+    spyOn(window, 'confirm').and.returnValue(false);
+    spyOn(component, 'reset').and.callThrough();
+
+    const button = fixture.debugElement.query(By.css('button'));
+    button.triggerEventHandler('click', null);
+    fixture.detectChanges();
+
+    expect(window.confirm).toHaveBeenCalledWith('Êtes-vous sûr de vouloir réinitialiser ?');
+    expect(component.reset).toHaveBeenCalled();
+  });
 });
