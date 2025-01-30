@@ -6,13 +6,12 @@ import { TitleComponent } from '@app/components/edit-components/title/title.comp
 import { ItemGridComponent } from '@app/components/edit-components/item-grid/item-grid.component';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditingToolService } from '@app/services/editing-tool.service';
-import { ITEM_CONTAINER_COORDINATES, ItemService } from '@app/services/item.service';
+import { ItemService } from '@app/services/item.service';
 import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
 import { ResetButtonComponent } from '@app/components/edit-components/reset-button/reset-button.component';
 import { SaveButtonComponent } from '@app/components/edit-components/save-button/save-button.component';
 import { TileGridComponent } from '@app/components/edit-components/tile-grid/tile-grid.component';
-import { ItemObject } from '@common/ItemObject';
 
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,7 +20,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { PopUpComponent } from '@app/components/pop-up/pop-up.component';
 import { Router } from '@angular/router';
-
 
 @Component({
     selector: 'app-edit-page',
@@ -34,10 +32,10 @@ import { Router } from '@angular/router';
         DescriptionComponent,
         SaveButtonComponent,
         ResetButtonComponent,
-        MatFormFieldModule, 
-        MatInputModule, 
-        FormsModule, 
-        MatButtonModule
+        MatFormFieldModule,
+        MatInputModule,
+        FormsModule,
+        MatButtonModule,
     ],
     templateUrl: './edit-page.component.html',
     styleUrl: './edit-page.component.scss',
@@ -53,7 +51,7 @@ export class EditPageComponent {
         protected dragAndDropService: DragAndDropService,
         protected itemService: ItemService,
         readonly dialog: MatDialog,
-        private readonly router: Router
+        private readonly router: Router,
     ) {}
 
     ngOnInit() {
@@ -75,10 +73,7 @@ export class EditPageComponent {
             return;
         }
 
-        if (this.isHoveredOutsideGrid()) {
-            this.handleItemOutsideGrid(item);
-        }
-
+        this.dragAndDropService.handleDraggedItemPlacement(-1, -1);
         this.dragAndDropService.onMouseUp(item.name);
     }
 
@@ -132,23 +127,22 @@ export class EditPageComponent {
         });
     }
 
+    // private isHoveredOutsideGrid(): boolean {
+    //     const { row, column } = this.dragAndDropService.currentHoveredTile;
+    //     return row === -1 && column === -1;
+    // }
 
-    private isHoveredOutsideGrid(): boolean {
-        const { row, column } = this.dragAndDropService.currentHoveredTile;
-        return row === -1 && column === -1;
-    }
+    // private handleItemOutsideGrid(item: ItemObject): void {
+    //     const { row, column } = this.dragAndDropService.startTile;
 
-    private handleItemOutsideGrid(item: ItemObject): void {
-        const { row, column } = this.dragAndDropService.startTile;
+    //     if (this.isItemFromContainer(row, column)) {
+    //         this.itemService.increaseItemAmount(item.name);
+    //     } else {
+    //         this.itemService.resetTileToStartPosition(row, column);
+    //     }
+    // }
 
-        if (this.isItemFromContainer(row, column)) {
-            this.itemService.increaseItemAmount(item.name);
-        } else {
-            this.itemService.resetTileToStartPosition(row, column);
-        }
-    }
-
-    private isItemFromContainer(row: number, column: number): boolean {
-        return row === ITEM_CONTAINER_COORDINATES.row && column === ITEM_CONTAINER_COORDINATES.column;
-    }
+    // private isItemFromContainer(row: number, column: number): boolean {
+    //     return row === ITEM_CONTAINER_COORDINATES.row && column === ITEM_CONTAINER_COORDINATES.column;
+    // }
 }

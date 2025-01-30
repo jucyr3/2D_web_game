@@ -30,7 +30,7 @@ export class ItemComponent implements OnDestroy, OnInit {
         protected readonly dragAndDropService: DragAndDropService,
         private readonly editingToolService: EditingToolService,
         protected readonly itemService: ItemService,
-        protected readonly mouseService: MouseService
+        protected readonly mouseService: MouseService,
     ) {}
 
     get draggingState() {

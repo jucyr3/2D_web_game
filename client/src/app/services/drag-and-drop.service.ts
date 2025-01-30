@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ItemObject } from '@common/ItemObject';
-import { MapService } from './map.service';
-import { ItemService, ITEM_CONTAINER_COORDINATES } from './item.service';
 import { TileTypes } from '@common/tileType.constants';
+import { ITEM_CONTAINER_COORDINATES, ItemService } from './item.service';
+import { MapService } from './map.service';
 
 @Injectable({
     providedIn: 'root',
@@ -18,7 +18,10 @@ export class DragAndDropService {
     private _currentDraggedItem: ItemObject | null = null;
     private _isDragging: boolean = false;
 
-    constructor(private readonly mapService: MapService, private readonly itemService: ItemService) {}
+    constructor(
+        private readonly mapService: MapService,
+        private readonly itemService: ItemService,
+    ) {}
 
     // Expose the currently dragged item's ID
     get currentDraggedItem(): ItemObject | null {
@@ -78,11 +81,13 @@ export class DragAndDropService {
         if (!this.currentDraggedItem) {
             return;
         }
-        const currentTileType = this.mapService.getTileType(row, column);
+        let currentTileType: TileTypes = TileTypes.GROUND_1;
+        if (row !== -1 && column !== -1) {
+            currentTileType = this.mapService.getTileType(row, column);
+        }
         const isDoorOrWall = [TileTypes.DOOR, TileTypes.OPEN_DOOR, TileTypes.WALL].includes(currentTileType);
-        
 
-        if (isDoorOrWall || this.mapService.getItemObject(row, column)) {
+        if (isDoorOrWall || this.mapService.getItemObject(row, column) || this.isHoveredOutsideGrid()) {
             this.handleInvalidItemPlacement(this.currentDraggedItem);
         } else {
             this.mapService.placeGameObject(row, column, this.currentDraggedItem);
@@ -93,14 +98,16 @@ export class DragAndDropService {
         if (this.isItemFromContainer()) {
             this.itemService.increaseItemAmount(draggedItem.name);
         } else {
-            this.itemService.resetTileToStartPosition(this.startTile.row, this.startTile.column);
+            this.mapService.resetItemToStartPosition(this.startTile.row, this.startTile.column, draggedItem);
         }
     }
 
     private isItemFromContainer(): boolean {
-        return (
-            this.startTile.row === ITEM_CONTAINER_COORDINATES.row &&
-            this.startTile.column === ITEM_CONTAINER_COORDINATES.column
-        );
+        return this.startTile.row === ITEM_CONTAINER_COORDINATES.row && this.startTile.column === ITEM_CONTAINER_COORDINATES.column;
+    }
+
+    private isHoveredOutsideGrid(): boolean {
+        const { row, column } = this.currentHoveredTile;
+        return row === -1 && column === -1;
     }
 }

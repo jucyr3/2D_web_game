@@ -32,7 +32,7 @@ export class TileComponent implements OnInit {
     @Input() tileObject: Tile;
 
     tilePosition: Coordinate;
-    
+
     constructor(
         protected readonly editingToolService: EditingToolService,
         protected readonly mouseService: MouseService,
@@ -40,15 +40,15 @@ export class TileComponent implements OnInit {
         private readonly dragAndDropService: DragAndDropService,
         private readonly itemService: ItemService,
     ) {}
-    
+
     get tileTexture(): string {
         return this.editingToolService.getTileImage(this.mapService.getTileType(this.tilePosition.row, this.tilePosition.column));
     }
-    
+
     get itemObject(): ItemObject | null {
         return this.mapService.getItemObject(this.tilePosition.row, this.tilePosition.column);
     }
-    
+
     get isTooltipEnabled(): boolean {
         return this.itemObject != null && !this.mouseService.isMouseDown;
     }
@@ -71,8 +71,8 @@ export class TileComponent implements OnInit {
 
         const draggedItem = this.dragAndDropService.currentDraggedItem;
         if (draggedItem) {
-            this.editingToolService.onMouseUp()
-            
+            this.editingToolService.onMouseUp();
+
             this.dragAndDropService.handleDraggedItemPlacement(this.tilePosition.row, this.tilePosition.column);
             this.dragAndDropService.onMouseUp(draggedItem.name);
         }
@@ -86,14 +86,12 @@ export class TileComponent implements OnInit {
         }
     }
 
-    //?WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
     onMouseEnter(): void {
         if (this.mouseService.isMouseDown) {
             this.editingToolService.setInterpolationPoints(this.tilePosition);
         }
         this.dragAndDropService.setCurrentHoveredTile(this.tilePosition.row, this.tilePosition.column);
     }
-
 
     onRightClick(): void {
         if (this.itemObject) {
@@ -107,7 +105,6 @@ export class TileComponent implements OnInit {
         return `${capitalizedName}: \n ${this.itemObject.description}`;
     }
 
-
     private initializeTile(): void {
         const row = Math.floor(this.tileNumber / this.mapService.map.size);
         const column = this.tileNumber % this.mapService.map.size;
@@ -117,5 +114,4 @@ export class TileComponent implements OnInit {
             this.itemService.decreaseItemAmount(this.itemObject.name);
         }
     }
-
 }

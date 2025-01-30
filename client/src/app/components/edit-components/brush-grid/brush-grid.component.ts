@@ -13,5 +13,4 @@ export class BrushGridComponent {
     tileTypes = TileTypes; // ? dw about it, its needed
 
     constructor(protected readonly editingToolService: EditingToolService) {}
-
 }

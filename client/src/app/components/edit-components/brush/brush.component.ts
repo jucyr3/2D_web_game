@@ -6,7 +6,6 @@ import { TippyDirective } from '@ngneat/helipopper';
 import { BrushTooltipComponent } from '@app/components/edit-components/brush-tooltip/brush-tooltip.component';
 import { MouseService } from '@app/services/mouse.service';
 
-
 @Component({
     selector: 'app-brush',
     imports: [BrushTooltipComponent, TippyDirective],
@@ -17,7 +16,10 @@ export class BrushComponent {
     @Input() tileType: TileTypes;
     @Input() isActive: boolean;
 
-    constructor(private readonly editingToolService: EditingToolService, private readonly mouseService: MouseService) {}
+    constructor(
+        private readonly editingToolService: EditingToolService,
+        private readonly mouseService: MouseService,
+    ) {}
 
     get isTooltipEnabled() {
         return !this.mouseService.isMouseDown;

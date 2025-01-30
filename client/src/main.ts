@@ -22,16 +22,20 @@ const routes: Routes = [
     { path: 'material', component: MaterialPageComponent },
     { path: 'edit', component: EditPageComponent },
     { path: '**', redirectTo: '/edit' },
-  ];
+];
 
 bootstrapApplication(AppComponent, {
-    providers: [provideHttpClient(), provideRouter(routes, withHashLocation()), provideAnimations(), provideTippyLoader(() => import('tippy.js')),
+    providers: [
+        provideHttpClient(),
+        provideRouter(routes, withHashLocation()),
+        provideAnimations(),
+        provideTippyLoader(() => import('tippy.js')),
         provideTippyConfig({
-          defaultVariation: 'tooltip',
-          variations: {
-            tooltip: tooltipVariation,
-            popper: popperVariation,
-          },
-        }),],
+            defaultVariation: 'tooltip',
+            variations: {
+                tooltip: tooltipVariation,
+                popper: popperVariation,
+            },
+        }),
+    ],
 });
-

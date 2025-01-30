@@ -5,6 +5,7 @@ $button-hover-color: #ddd; // Couleur des boutons au survol
 $button-border-color: #aaa; // Couleur de la bordure des boutons
 $text-color: #fff; // Couleur principale du texte
 $footer-color: #aaa; // Couleur du texte dans le pied de page
+@use 'sass:color';
 
 /* Disable scrolling on the entire page */
 html,
@@ -90,23 +91,24 @@ button:hover {
 }
 
 .quit-button {
-    color: white;
     border: none;
     padding: 12px 24px;
     border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
     background-color: #c23652 !important;
     color: white !important;
-    
+
     &:active {
         transform: translateY(0);
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    
+
     &:hover {
-        background-color: adjust-color(#c23652, $lightness: -10%);
+        background-color: color.adjust(#c23652, $lightness: -10%);
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }

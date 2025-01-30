@@ -156,10 +156,18 @@ export class MapService {
     }
 
     getItemObject(row: number, column: number): ItemObject | null {
-        return this.map.tileMatrix[row][column].gameObject;
+        try {
+            return this.map.tileMatrix[row][column].gameObject;
+        } catch (error) {
+            return null;
+        }
     }
 
     removeGameObject(row: number, column: number): void {
         this.map.tileMatrix[row][column].gameObject = null;
+    }
+
+    resetItemToStartPosition(row: number, column: number, draggedItem: ItemObject): void {
+        this.map.tileMatrix[row][column].gameObject = draggedItem;
     }
 }

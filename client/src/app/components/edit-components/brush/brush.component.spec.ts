@@ -7,78 +7,74 @@ import { MapService } from '@app/services/map.service';
 import { TileComponent } from '@app/components/edit-components/tile/tile.component';
 
 describe('BrushComponent', () => {
-  let component: BrushComponent;
-  let fixture: ComponentFixture<BrushComponent>;
+    let component: BrushComponent;
+    let fixture: ComponentFixture<BrushComponent>;
 
-  // Mock services
-  const editingToolServiceMock = {
-    setActiveTool: jasmine.createSpy('setActiveTool'),
-    setTileTypeOnBrush: jasmine.createSpy('setTileTypeOnBrush'),
-  };
+    // Mock services
+    const editingToolServiceMock = {
+        setActiveTool: jasmine.createSpy('setActiveTool'),
+        setTileTypeOnBrush: jasmine.createSpy('setTileTypeOnBrush'),
+    };
 
-  const mapServiceMock = {
-    getItemObject: jasmine.createSpy('getItemObject').and.returnValue({
-      // Add whatever properties your itemObject should have
-      id: 1,
-      type: TileTypes.GROUND_0,
-      // ... other required properties
-    })
-  };
+    const mapServiceMock = {
+        getItemObject: jasmine.createSpy('getItemObject').and.returnValue({
+            // Add whatever properties your itemObject should have
+            id: 1,
+            type: TileTypes.GROUND_0,
+            // ... other required properties
+        }),
+    };
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [BrushComponent, TileComponent], // Import both components
-      providers: [
-        { provide: EditingToolService, useValue: editingToolServiceMock },
-        { provide: MapService, useValue: mapServiceMock }, // Provide the MapService mock
-      ],
-    }).compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [BrushComponent, TileComponent], // Import both components
+            providers: [
+                { provide: EditingToolService, useValue: editingToolServiceMock },
+                { provide: MapService, useValue: mapServiceMock }, // Provide the MapService mock
+            ],
+        }).compileComponents();
 
-    fixture = TestBed.createComponent(BrushComponent);
-    component = fixture.componentInstance;
-    
-    // Reset spies before each test
-    editingToolServiceMock.setActiveTool.calls.reset();
-    editingToolServiceMock.setTileTypeOnBrush.calls.reset();
-    mapServiceMock.getItemObject.calls.reset();
-  });
+        fixture = TestBed.createComponent(BrushComponent);
+        component = fixture.componentInstance;
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+        // Reset spies before each test
+        editingToolServiceMock.setActiveTool.calls.reset();
+        editingToolServiceMock.setTileTypeOnBrush.calls.reset();
+        mapServiceMock.getItemObject.calls.reset();
+    });
 
-  it('should call setActiveTool with TileBrush and setTileTypeOnBrush with the provided tileType when changeBrushTile is called', () => {
-    const tileType = TileTypes.GROUND_0;
-    component.changeBrushTile(tileType);
-    
-    expect(editingToolServiceMock.setActiveTool).toHaveBeenCalledWith(
-      EditToolTypes.TileBrush
-    );
-    expect(editingToolServiceMock.setTileTypeOnBrush).toHaveBeenCalledWith(
-      tileType
-    );
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 
-  it('should call setActiveTool with the provided tool when changeTool is called', () => {
-    const tool = EditToolTypes.Hand;
-    component.changeTool(tool);
-    
-    expect(editingToolServiceMock.setActiveTool).toHaveBeenCalledWith(tool);
-  });
+    it('should call setActiveTool with TileBrush and setTileTypeOnBrush with the provided tileType when changeBrushTile is called', () => {
+        const tileType = TileTypes.GROUND_0;
+        component.changeBrushTile(tileType);
 
-  it('should correctly bind the tileType input', () => {
-    const tileType = TileTypes.GROUND_2;
-    component.tileType = tileType;
-    fixture.detectChanges();
-    
-    expect(component.tileType).toEqual(tileType);
-  });
+        expect(editingToolServiceMock.setActiveTool).toHaveBeenCalledWith(EditToolTypes.TileBrush);
+        expect(editingToolServiceMock.setTileTypeOnBrush).toHaveBeenCalledWith(tileType);
+    });
 
-  it('should correctly bind the isActive input', () => {
-    const isActive = true;
-    component.isActive = isActive;
-    fixture.detectChanges();
-    
-    expect(component.isActive).toEqual(isActive);
-  });
+    it('should call setActiveTool with the provided tool when changeTool is called', () => {
+        const tool = EditToolTypes.Hand;
+        component.changeTool(tool);
+
+        expect(editingToolServiceMock.setActiveTool).toHaveBeenCalledWith(tool);
+    });
+
+    it('should correctly bind the tileType input', () => {
+        const tileType = TileTypes.GROUND_2;
+        component.tileType = tileType;
+        fixture.detectChanges();
+
+        expect(component.tileType).toEqual(tileType);
+    });
+
+    it('should correctly bind the isActive input', () => {
+        const isActive = true;
+        component.isActive = isActive;
+        fixture.detectChanges();
+
+        expect(component.isActive).toEqual(isActive);
+    });
 });

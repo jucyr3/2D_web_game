@@ -55,25 +55,25 @@ describe('PopUpComponent', () => {
         expect(component.confirmed.emit).toHaveBeenCalledWith(true);
     });
     it('should initialize with provided dialog data', () => {
-      expect(component.title).toBe(dialogData.title);
-      expect(component.content).toBe(dialogData.content);
-      expect(component.cancelButtonLabel).toBe(dialogData.cancelButtonLabel);
-      expect(component.confirmButtonLabel).toBe(dialogData.confirmButtonLabel);
+        expect(component.title).toBe(dialogData.title);
+        expect(component.content).toBe(dialogData.content);
+        expect(component.cancelButtonLabel).toBe(dialogData.cancelButtonLabel);
+        expect(component.confirmButtonLabel).toBe(dialogData.confirmButtonLabel);
     });
 
     it('should initialize with default values if no data is provided', () => {
-      const dialogData: DialogData = {
-        title: '',
-        content: '',
-        cancelButtonLabel: '',
-        confirmButtonLabel: '',
-    };
-    let newComponent = new PopUpComponent(dialogData);
-      fixture.detectChanges();
+        const dialogData: DialogData = {
+            title: '',
+            content: '',
+            cancelButtonLabel: '',
+            confirmButtonLabel: '',
+        };
+        let newComponent = new PopUpComponent(dialogData);
+        fixture.detectChanges();
 
-      expect(newComponent.title).toBe('Confirmer la sortie');
-      expect(newComponent.content).toBe("Quitter maintenant vous retirera de la liste d'attente");
-      expect(newComponent.cancelButtonLabel).toBe('Annuler');
-      expect(newComponent.confirmButtonLabel).toBe('Quitter');
+        expect(newComponent.title).toBe('Confirmer la sortie');
+        expect(newComponent.content).toBe("Quitter maintenant vous retirera de la liste d'attente");
+        expect(newComponent.cancelButtonLabel).toBe('Annuler');
+        expect(newComponent.confirmButtonLabel).toBe('Quitter');
     });
 });
