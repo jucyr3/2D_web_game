@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SaveButtonComponent } from './save-button.component';
 import { By } from '@angular/platform-browser';
 
-fdescribe('ResetButtonComponent', () => {
+describe('ResetButtonComponent', () => {
   let component: SaveButtonComponent;
   let fixture: ComponentFixture<SaveButtonComponent>;
 
