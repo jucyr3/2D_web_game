@@ -3,7 +3,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditToolTypes } from '@app/services/editing-tool.constants';
 import { EditingToolService } from '@app/services/editing-tool.service';
-import { ITEM_CONTAINER_COORDINATES, ItemService } from '@app/services/item.service';
+import { ITEM_CONTAINER_COORDINATES, ITEM_TEXTURE_PATH, ItemService } from '@app/services/item.service';
 import { ItemObject } from '@common/ItemObject';
 import { TippyDirective } from '@ngneat/helipopper';
 import { ItemTooltipComponent } from '@app/components/edit-components/item-tooltip/item-tooltip.component';
@@ -17,6 +17,8 @@ import { MouseService } from '@app/services/mouse.service';
 })
 export class ItemComponent implements OnDestroy, OnInit {
     @Input() itemId: string; // Unique identifier for each item
+
+    ITEM_TEXTURE_PATH = ITEM_TEXTURE_PATH;
 
     get isTooltipEnabled() {
         return !this.mouseService.isMouseDown;

@@ -5,7 +5,7 @@ import { Component, Input, OnInit } from '@angular/core';
 // Services
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditingToolService } from '@app/services/editing-tool.service';
-import { ItemService } from '@app/services/item.service';
+import { ItemService, ITEM_TEXTURE_PATH } from '@app/services/item.service';
 import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
 import { TippyDirective } from '@ngneat/helipopper';
@@ -30,6 +30,8 @@ import { EditToolTypes } from '@app/services/editing-tool.constants';
 export class TileComponent implements OnInit {
     @Input() tileNumber: number;
     @Input() tileObject: Tile;
+
+    ITEM_TEXTURE_PATH = ITEM_TEXTURE_PATH;
 
     tilePosition: Coordinate;
 

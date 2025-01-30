@@ -77,4 +77,6 @@ describe('BrushComponent', () => {
 
         expect(component.isActive).toEqual(isActive);
     });
+
+    
 });

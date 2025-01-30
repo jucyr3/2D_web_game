@@ -7,6 +7,8 @@ import { ItemService } from './item.service';
 import { MapService } from './map.service';
 import { MouseService } from './mouse.service';
 
+export const TILE_TEXTURE_PATH = 'assets/tiles/';
+
 @Injectable({
     providedIn: 'root',
 })

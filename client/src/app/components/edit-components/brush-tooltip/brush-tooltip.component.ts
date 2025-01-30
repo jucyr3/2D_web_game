@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { injectTippyRef } from '@ngneat/helipopper';
-import { tileDescription } from '@app/../assets/tile-description';
+import { tileDescription } from 'src/assets/tiles/tile-description';
 
 @Component({
     selector: 'app-brush-tooltip',

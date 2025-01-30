@@ -2,7 +2,7 @@
     <img
         class="item"
         [ngClass]="{ grayscale: this.itemService.itemAmounts[this.itemObject.name] <= 0 }"
-        [src]="'../assets/' + itemId + '.png'"
+        [src]="ITEM_TEXTURE_PATH + itemId + '.png'"
         [alt]="itemId"
         draggable="false"
         (mousedown)="onMouseDown($event)"
@@ -16,7 +16,7 @@
     </div>
 </div>
 <div *ngIf="draggingState.isDragging" class="drag-preview" [style.left.px]="draggingState.dragX" [style.top.px]="draggingState.dragY">
-    <img [src]="'../assets/' + itemId + '.png'" [alt]="itemId" />
+    <img [src]="ITEM_TEXTURE_PATH + itemId + '.png'" [alt]="itemId" />
 </div>
 
 <ng-template #ItemTooltipComponent let-tooltip="tooltip">

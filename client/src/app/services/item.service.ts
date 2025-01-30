@@ -3,6 +3,7 @@ import { ItemObject } from '@common/ItemObject';
 import { MapService } from './map.service';
 
 export const ITEM_CONTAINER_COORDINATES = { row: -2, column: -2 };
+export const ITEM_TEXTURE_PATH = 'assets/items/';
 
 @Injectable({
     providedIn: 'root',
