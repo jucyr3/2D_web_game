@@ -106,7 +106,7 @@ button:hover {
     }
     
     &:hover {
-        background-color: darken(#c23652, 10%) !important;
+        background-color: adjust-color(#c23652, $lightness: -10%);
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }

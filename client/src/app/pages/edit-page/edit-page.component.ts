@@ -33,7 +33,11 @@ import { Router } from '@angular/router';
         TitleComponent,
         DescriptionComponent,
         SaveButtonComponent,
-        ResetButtonComponent,MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule
+        ResetButtonComponent,
+        MatFormFieldModule, 
+        MatInputModule, 
+        FormsModule, 
+        MatButtonModule
     ],
     templateUrl: './edit-page.component.html',
     styleUrl: './edit-page.component.scss',
@@ -49,7 +53,7 @@ export class EditPageComponent {
         protected dragAndDropService: DragAndDropService,
         protected itemService: ItemService,
         readonly dialog: MatDialog,
-        private router: Router
+        private readonly router: Router
     ) {}
 
     ngOnInit() {
@@ -148,9 +152,3 @@ export class EditPageComponent {
         return row === ITEM_CONTAINER_COORDINATES.row && column === ITEM_CONTAINER_COORDINATES.column;
     }
 }
-
-// TODO: make the hovered tile a different color when dragging an item over it
-// TODO: make click to delete item
-// TODO: when item is not in container, it needs to stay grayed out and not be draggable
-// TODO: replace the ItemId with the GameObject in Item component
-// TODO: add description to ItemObject

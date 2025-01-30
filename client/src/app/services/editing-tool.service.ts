@@ -51,6 +51,12 @@ export class EditingToolService {
         return `url(assets/${tileType}.png)`; // Use the tileType parameter
     }
 
+    onMouseUp(): void {
+        this.resetProcessedTiles();
+        this.resetInterpolationPoints();
+        this.setActiveTool(EditToolTypes.TileBrush);
+    }
+
     getPath(start: Coordinate, end: Coordinate): Coordinate[] {
         // Check if start or end are null
         if (!start || !end) {

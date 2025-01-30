@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ItemObject } from '@common/ItemObject';
+import { MapService } from './map.service';
+import { ItemService, ITEM_CONTAINER_COORDINATES } from './item.service';
+import { TileTypes } from '@common/tileType.constants';
 
 @Injectable({
     providedIn: 'root',
@@ -14,6 +17,8 @@ export class DragAndDropService {
     // Track the currently dragged item's ID
     private _currentDraggedItem: ItemObject | null = null;
     private _isDragging: boolean = false;
+
+    constructor(private readonly mapService: MapService, private readonly itemService: ItemService) {}
 
     // Expose the currently dragged item's ID
     get currentDraggedItem(): ItemObject | null {
@@ -67,5 +72,35 @@ export class DragAndDropService {
 
     getDraggingState(itemId: string): { isDragging: boolean; dragX: number; dragY: number } {
         return this.draggingStates[itemId] || { isDragging: false, dragX: 0, dragY: 0 };
+    }
+
+    handleDraggedItemPlacement(row: number, column: number): void {
+        if (!this.currentDraggedItem) {
+            return;
+        }
+        const currentTileType = this.mapService.getTileType(row, column);
+        const isDoorOrWall = [TileTypes.DOOR, TileTypes.OPEN_DOOR, TileTypes.WALL].includes(currentTileType);
+        
+
+        if (isDoorOrWall || this.mapService.getItemObject(row, column)) {
+            this.handleInvalidItemPlacement(this.currentDraggedItem);
+        } else {
+            this.mapService.placeGameObject(row, column, this.currentDraggedItem);
+        }
+    }
+
+    private handleInvalidItemPlacement(draggedItem: ItemObject): void {
+        if (this.isItemFromContainer()) {
+            this.itemService.increaseItemAmount(draggedItem.name);
+        } else {
+            this.itemService.resetTileToStartPosition(this.startTile.row, this.startTile.column);
+        }
+    }
+
+    private isItemFromContainer(): boolean {
+        return (
+            this.startTile.row === ITEM_CONTAINER_COORDINATES.row &&
+            this.startTile.column === ITEM_CONTAINER_COORDINATES.column
+        );
     }
 }

@@ -11,10 +11,8 @@
     (mousedown)="onMouseDown($event)"
     (pointerenter)="onMouseEnter()"
     (mouseup)="onMouseUp()"
-    (mouseleave)="onMouseLeave()"
     (contextmenu)="onRightClick()"
     [ngStyle]="{ 'background-image': this.tileTexture }"
-    [ngClass]="{ 'grab-cursor': shouldShowGrabCursor() }"
 >
     @if (this.itemObject) {
     <img [src]="'../assets/' + this.itemObject.name + '.png'" draggable="false" alt="{{ this.itemObject.name }}" />

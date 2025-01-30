@@ -1,11 +1,11 @@
 // Angular Core and Common Modules
-import { NgClass, NgStyle } from '@angular/common';
+import { NgStyle } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 
 // Services
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditingToolService } from '@app/services/editing-tool.service';
-import { ITEM_CONTAINER_COORDINATES, ItemService } from '@app/services/item.service';
+import { ItemService } from '@app/services/item.service';
 import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
 import { TippyDirective } from '@ngneat/helipopper';
@@ -20,11 +20,10 @@ import { Tile } from '@common/tile';
 
 // Constants
 import { EditToolTypes } from '@app/services/editing-tool.constants';
-import { TileTypes } from '@common/tileType.constants';
 
 @Component({
     selector: 'app-tile',
-    imports: [NgStyle, NgClass, TippyDirective, ItemTooltipComponent],
+    imports: [NgStyle, TippyDirective, ItemTooltipComponent],
     templateUrl: './tile.component.html',
     styleUrl: './tile.component.scss',
 })
@@ -72,17 +71,22 @@ export class TileComponent implements OnInit {
 
         const draggedItem = this.dragAndDropService.currentDraggedItem;
         if (draggedItem) {
-            this.handleDraggedItemPlacement(draggedItem);
-
-            this.editingToolService.setActiveTool(EditToolTypes.TileBrush);
-            this.editingToolService.resetProcessedTiles();
+            this.editingToolService.onMouseUp()
+            
+            this.dragAndDropService.handleDraggedItemPlacement(this.tilePosition.row, this.tilePosition.column);
             this.dragAndDropService.onMouseUp(draggedItem.name);
         }
     }
 
-    onMouseLeave(): void {
+    private startDraggingItem(event: MouseEvent): void {
+        if (this.itemObject) {
+            this.editingToolService.setActiveTool(EditToolTypes.Hand);
+            this.dragAndDropService.startDragging(this.itemObject, event, this.tilePosition.row, this.tilePosition.column);
+            this.mapService.removeGameObject(this.tilePosition.row, this.tilePosition.column);
+        }
     }
 
+    //?WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
     onMouseEnter(): void {
         if (this.mouseService.isMouseDown) {
             this.editingToolService.setInterpolationPoints(this.tilePosition);
@@ -90,14 +94,11 @@ export class TileComponent implements OnInit {
         this.dragAndDropService.setCurrentHoveredTile(this.tilePosition.row, this.tilePosition.column);
     }
 
+
     onRightClick(): void {
         if (this.itemObject) {
             this.editingToolService.removeItemObjectFromTile(this.tilePosition.row, this.tilePosition.column, this.itemObject);
         }
-    }
-
-    shouldShowGrabCursor(): boolean {
-        return this.itemObject !== null && this.editingToolService.getActiveTool() === EditToolTypes.Hand;
     }
 
     getFormattedTooltip(): string {
@@ -117,37 +118,4 @@ export class TileComponent implements OnInit {
         }
     }
 
-    private startDraggingItem(event: MouseEvent): void {
-        if (this.itemObject) {
-            this.editingToolService.setActiveTool(EditToolTypes.Hand);
-            this.dragAndDropService.startDragging(this.itemObject, event, this.tilePosition.row, this.tilePosition.column);
-            this.mapService.removeGameObject(this.tilePosition.row, this.tilePosition.column);
-        }
-    }
-
-    private handleInvalidItemPlacement(draggedItem: ItemObject): void {
-        if (this.isItemFromContainer()) {
-            this.itemService.increaseItemAmount(draggedItem.name);
-        } else {
-            this.itemService.resetTileToStartPosition(this.dragAndDropService.startTile.row, this.dragAndDropService.startTile.column);
-        }
-    }
-
-    private handleDraggedItemPlacement(draggedItem: ItemObject): void {
-        const currentTileType = this.mapService.getTileType(this.tilePosition.row, this.tilePosition.column);
-        const isDoorOrWall = [TileTypes.DOOR, TileTypes.OPEN_DOOR, TileTypes.WALL].includes(currentTileType);
-
-        if (isDoorOrWall || this.itemObject) {
-            this.handleInvalidItemPlacement(draggedItem);
-        } else {
-            this.mapService.placeGameObject(this.tilePosition.row, this.tilePosition.column, draggedItem);
-        }
-    }
-
-    private isItemFromContainer(): boolean {
-        return (
-            this.dragAndDropService.startTile.row === ITEM_CONTAINER_COORDINATES.row &&
-            this.dragAndDropService.startTile.column === ITEM_CONTAINER_COORDINATES.column
-        );
-    }
 }
