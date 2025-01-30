@@ -5,6 +5,8 @@ import { TileTypes } from '@common/tileType.constants';
 import { EditingToolService } from '@app/services/editing-tool.service';
 import { MapService } from '@app/services/map.service';
 import { TileComponent } from '@app/components/edit-components/tile/tile.component';
+import { provideTippyLoader, provideTippyConfig, tooltipVariation, popperVariation } from '@ngneat/helipopper/config';
+import { TippyDirective } from '@ngneat/helipopper';
 
 describe('BrushComponent', () => {
     let component: BrushComponent;
@@ -27,10 +29,18 @@ describe('BrushComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [BrushComponent, TileComponent], // Import both components
+            imports: [BrushComponent, TileComponent, TippyDirective], // Import both components
             providers: [
                 { provide: EditingToolService, useValue: editingToolServiceMock },
                 { provide: MapService, useValue: mapServiceMock }, // Provide the MapService mock
+                provideTippyConfig({
+                                    defaultVariation: 'tooltip',
+                                    variations: {
+                                        tooltip: tooltipVariation,
+                                        popper: popperVariation,
+                                    },
+                                }),
+                provideTippyLoader(() => import('tippy.js')),
             ],
         }).compileComponents();
 

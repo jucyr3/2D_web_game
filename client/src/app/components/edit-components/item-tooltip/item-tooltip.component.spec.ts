@@ -4,7 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ItemObject } from '@common/ItemObject';
 import { TIPPY_REF } from '@ngneat/helipopper';
 
-    describe('ItemTooltipComponent', () => {
+describe('ItemTooltipComponent', () => {
   let component: ItemTooltipComponent;
   let fixture: ComponentFixture<ItemTooltipComponent>;
   let sanitizerSpy: jasmine.SpyObj<DomSanitizer>;
