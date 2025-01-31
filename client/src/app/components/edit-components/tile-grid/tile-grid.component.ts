@@ -44,13 +44,6 @@ export class TileGridComponent implements OnInit, OnDestroy {
         this.editingToolService.resetInterpolationPoints();
     }
 
-    onMouseEnter(event: MouseEvent) {
-        if (event.buttons !== 0) {
-            this.mouseService.isMouseDown = true;
-            this.mouseService.isRightClick = event.buttons === 2;
-        }
-    }
-
     onMouseUp() {
         this.editingToolService.resetInterpolationPoints();
         this.editingToolService.resetProcessedTiles();

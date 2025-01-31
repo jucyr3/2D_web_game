@@ -3,7 +3,6 @@
     [style.grid-template-columns]="'repeat(' + this.mapService.map.size + ', 1fr)'"
     [style.grid-template-rows]="'repeat(' + this.mapService.map.size + ', 1fr)'"
     (mouseleave)="onMouseLeave()"
-    (mouseenter)="onMouseEnter($event)"
     (mouseup)="onMouseUp()"
     (mousedown)="onMouseDown($event)"
 >
