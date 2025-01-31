@@ -55,10 +55,6 @@ export class EditingToolService {
     }
 
     getPath(start: Coordinate, end: Coordinate): Coordinate[] {
-        // Check if start or end are null
-        if (!start || !end) {
-            return [];
-        }
 
         // Calculate the distance between start and end
         const dx = Math.abs(end.column - start.column);
