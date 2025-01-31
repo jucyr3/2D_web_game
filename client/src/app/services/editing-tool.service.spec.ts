@@ -25,7 +25,7 @@ class MockMouseService {
     isRightClick = false;
 }
 
-fdescribe('EditingToolService', () => {
+describe('EditingToolService', () => {
     let service: EditingToolService;
     let itemService: MockItemService;
     let mapService: MockMapService;
