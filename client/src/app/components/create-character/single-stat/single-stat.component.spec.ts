@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProfileShowcaseComponent } from './profile-showcase.component';
+import { SingleStatComponent } from './single-stat.component';
 
-describe('ProfileShowcaseComponent', () => {
-    let component: ProfileShowcaseComponent;
-    let fixture: ComponentFixture<ProfileShowcaseComponent>;
+describe('SingleStatComponent', () => {
+    let component: SingleStatComponent;
+    let fixture: ComponentFixture<SingleStatComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ProfileShowcaseComponent],
+            imports: [SingleStatComponent],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(ProfileShowcaseComponent);
+        fixture = TestBed.createComponent(SingleStatComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
@@ -19,4 +19,4 @@ describe('ProfileShowcaseComponent', () => {
     it('should create', () => {
         expect(component).toBeTruthy();
     });
-
+});

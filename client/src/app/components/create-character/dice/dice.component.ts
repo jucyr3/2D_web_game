@@ -11,10 +11,10 @@ export class DiceComponent {
     dice1 = 'assets/images/dice1.png';
     dice2 = 'assets/images/dice2.png';
     cahnge: boolean = false;
+    constructor(private profileService: ProfileService) {}
     clickDice() {
         this.cahnge = !this.cahnge;
         [this.dice1, this.dice2] = [this.dice2, this.dice1];
         this.profileService.setDiceChoice(this.cahnge);
     }
-    constructor(private profileService: ProfileService) {}
 }

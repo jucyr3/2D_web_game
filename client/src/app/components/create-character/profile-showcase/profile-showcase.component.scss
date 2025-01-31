@@ -5,40 +5,11 @@
     flex-direction: column;
     text-align: center;
     background-color: #808080;
-    
+    box-sizing: border-box;
+    padding: 3vh;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgb(255, 255, 255,0.25);
+    box-shadow: 0 4px 8px rgb(255, 255, 255, 0.25);
 
-    img {
-        padding: 3% 0%;
-        width: 25vh;
-        height: 25vh;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    app-name {
-        height: 15vh;
-        width: 100%;
-    }
-
-    app-stat {
-        display: flex;
-        height: 10vh;
-        width: 100%;
-    }
-
-    app-dice {
-        display: flex;
-        height: 11vh;
-        width: 100%;
-    }
-    .overview {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-evenly;
-        width: 100%;
-    }
     .info {
         right: 7vh;
         top: 17vh;
@@ -59,11 +30,106 @@
             top: 0vh;
             right: 3vh;
             text-align: left;
-
         }
     }
     .info:hover .infoText {
         visibility: visible;
         transition-delay: 0.5s;
+    }
+
+    img {
+        width: 13vh;
+        height: 13vh;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    app-name {
+        height: auto;
+        width: 100%;
+    }
+
+    .character-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        gap: 1vh;
+        margin-bottom: 4vh;
+    }
+
+    .attributes-display {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-bottom: 50px;
+    }
+
+    .choices-section {
+        display: flex;
+        flex-direction: column;
+
+        button {
+            background-color: #4cc9f0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #4361ee;
+        }
+
+        button.selected {
+            background-color: #3a0ca3;
+            font-weight: bold;
+            color: white;
+        }
+    }
+
+    .bonus-choice,
+    .dice-choice {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+    .subtitle {
+        display: flex;
+        font-weight: bold;
+        margin-bottom: 10px;
+        justify-content: center;
+    }
+
+    .bonus-section {
+        margin-bottom: 30px;
+    }
+    .toggle-btn {
+        padding: 8px 16px;
+        border: 2px solid #ccc;
+        background-color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 0 4px;
+    }
+
+    .toggle-btn.active {
+        background-color: #4a90e2;
+        color: white;
+        border-color: #4a90e2;
+    }
+
+    .toggle-btn:hover:not(.active) {
+        background-color: #f0f0f0;
+    }
+
+    .dice-choice {
+        display: flex;
+        gap: 10px;
+        margin-top: 8px;
     }
 }

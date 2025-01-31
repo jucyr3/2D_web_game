@@ -1,0 +1,21 @@
+.main-div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 60px 0px 60px;
+    box-sizing: border-box;
+    height: 35px;
+    background-color: azure;
+    border-radius: 5px;
+    
+    *{
+        font-weight:bold;
+    }
+
+    img{
+        object-fit: cover;
+        height: 100%;
+    }
+    
+}
