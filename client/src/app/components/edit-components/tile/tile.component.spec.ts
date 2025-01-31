@@ -71,6 +71,18 @@ describe('TileComponent', () => {
         expect(component.tilePosition).toEqual({ row: 0, column: 0 });
     });
 
+    it('shoudl decrease amont of item if item already on tile', () => {
+        const mockItem = { name: 'TestItem' } as ItemObject;
+        mockMapService.getItemObject.and.returnValue(mockItem);
+        expect(component.itemObject).toBe(mockItem);
+
+        component['initializeTile']();
+
+        expect(mockItemService.decreaseItemAmount).toHaveBeenCalled();
+
+
+    });
+
     it('should get tile texture', () => {
         mockMapService.getTileTexture.and.returnValue('texture.png');
         expect(component.tileTexture).toBe('texture.png');
