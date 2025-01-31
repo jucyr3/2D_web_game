@@ -7,7 +7,7 @@ import { MouseService } from '@app/services/mouse.service';
 import { Renderer2 } from '@angular/core';
 import { NgFor } from '@angular/common';
 
-fdescribe('TileGridComponent', () => {
+describe('TileGridComponent', () => {
     let component: TileGridComponent;
     let fixture: ComponentFixture<TileGridComponent>;
     let mockDragAndDropService: jasmine.SpyObj<DragAndDropService>;
