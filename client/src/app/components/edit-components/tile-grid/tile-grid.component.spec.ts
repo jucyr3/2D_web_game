@@ -65,4 +65,14 @@ describe('TileGridComponent', () => {
     
     expect(mouseService.isRightClick).toBe(true);
   });
+
+  it('should prevent default action on context menu', () => {
+    const mockEvent = new MouseEvent('contextmenu');
+    spyOn(mockEvent, 'preventDefault');
+    
+    component.onContextMenu(mockEvent);
+    
+    expect(mockEvent.preventDefault).toHaveBeenCalled();
+  });
+  
 });
