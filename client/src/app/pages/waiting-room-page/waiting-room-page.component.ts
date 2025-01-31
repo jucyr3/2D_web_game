@@ -15,13 +15,17 @@ import { WaitingRoomServiceService } from '@app/services/waiting-room-service.se
     styleUrl: './waiting-room-page.component.scss',
 })
 export class WaitingRoomPageComponent {
-    accessCode: number = this.waitingRoom.getRandomFourDigitNumber();
+    accessCode: number = 0;
     quitted: boolean = false;
     constructor(
         private waitingRoom: WaitingRoomServiceService,
         readonly dialog: MatDialog,
         private router: Router,
     ) {}
+
+    ngOnInit(): void {
+        this.accessCode = this.waitingRoom.getRandomFourDigitNumber();
+    }
 
     openQuitDialog(): void {
         const dialogRef = this.dialog.open(PopUpComponent, {
