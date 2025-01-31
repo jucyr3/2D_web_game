@@ -13,8 +13,8 @@ export class DiceComponent {
     cahnge: boolean = false;
     constructor(private profileService: ProfileService) {}
     clickDice() {
-        this.cahnge = !this.cahnge;
+        this.change = !this.change;
         [this.dice1, this.dice2] = [this.dice2, this.dice1];
-        this.profileService.setDiceChoice(this.cahnge);
+        this.profileService.setDiceChoice(this.change);
     }
 }
