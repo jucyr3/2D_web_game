@@ -33,7 +33,7 @@ describe('TitleComponent', () => {
     });
 
     it('should update title on input', () => {
-        const event = { target: { value: 'New Title' } } as any;
+        const event = { target: { value: 'New Title' } } as unknown;
         component.onTitleInput(event);
         expect(component.title).toBe('New Title');
     });

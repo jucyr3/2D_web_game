@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'; // Import DomSanitizer
 import { ItemObject } from '@common/ItemObject';
 import { injectTippyRef } from '@ngneat/helipopper';
+import { itemDescriptions } from 'src/assets/items/item-descriptions';
 
 @Component({
     selector: 'app-item-tooltip',
@@ -14,7 +15,7 @@ export class ItemTooltipComponent {
     tippy = injectTippyRef();
 
     // Inject DomSanitizer
-    constructor(private sanitizer: DomSanitizer) {}
+    constructor(private readonly sanitizer: DomSanitizer) {}
 
     // Map of words to their corresponding colors
     private readonly highlightedWords: { [key: string]: string } = {
@@ -26,17 +27,15 @@ export class ItemTooltipComponent {
     };
 
     get itemDescription(): SafeHtml {
-        //💀 trust me bro
-        const description = this.itemObject?.description || '';
+        // 💀 trust me bro
+        if (!this.itemObject) return '';
+        const description = itemDescriptions[this.itemObject.name].description;
         return this.sanitizer.bypassSecurityTrustHtml(this.highlightWords(description));
     }
 
     get itemName(): string {
-        return this.itemObject?.name ? this.capitalizeFirstLetter(this.itemObject.name) : '';
-    }
-
-    capitalizeFirstLetter(str: string): string {
-        return str.charAt(0).toUpperCase() + str.slice(1);
+        if (!this.itemObject) return '';
+        return itemDescriptions[this.itemObject.name].name;
     }
 
     // Highlight specific words with colors

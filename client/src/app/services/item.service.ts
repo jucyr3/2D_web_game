@@ -19,7 +19,6 @@ export class ItemService {
 
     constructor(private readonly mapService: MapService) {}
 
-
     createItem(itemName: string): ItemObject {
         return this.getItemInfo(itemName);
     }
@@ -35,64 +34,46 @@ export class ItemService {
     private getItemInfo(itemName: string): ItemObject {
         const mapSize = this.mapService.map.size;
         switch (itemName) {
-            case 'mushroom':
-                this.itemAmounts['mushroom'] = 1;
-                return new ItemObject(
-                    'mushroom',
-                    'A small, red mushroom with white spots. Consuming it grants the player extra health, making it a valuable resource for survival.',
-                );
+            case 'attributeItem1':
+                this.itemAmounts['attributeItem1'] = 1;
+                return new ItemObject('attributeItem1');
 
-            case 'sword':
-                this.itemAmounts['sword'] = 1;
-                return new ItemObject(
-                    'sword',
-                    'A sharp, gleaming sword forged from rare metals. It is the perfect weapon for close combat, allowing the player to defeat enemies with ease.',
-                );
+            case 'conditionItem1':
+                this.itemAmounts['conditionItem1'] = 1;
+                return new ItemObject('conditionItem1');
 
-            case 'luma':
-                this.itemAmounts['luma'] = 1;
-                return new ItemObject(
-                    'luma',
-                    'A glowing, celestial orb that radiates energy. It is said to hold mysterious powers, though its true purpose remains unknown.',
-                );
+            case 'gameplayItem1':5
+                this.itemAmounts['gameplayItem1'] = 1;
+                return new ItemObject('gameplayItem1');
 
-            case 'bomb':
-                this.itemAmounts['bomb'] = 1;
-                return new ItemObject(
-                    'bomb',
-                    'A volatile explosive device. Use it wisely to clear obstacles or defeat groups of enemies, but be careful not to get caught in the blast!',
-                );
+            case 'attributeItem2':
+                this.itemAmounts['attributeItem2'] = 1;
+                return new ItemObject('attributeItem2');
 
-            case 'potion':
-                this.itemAmounts['potion'] = 1;
-                return new ItemObject(
-                    'potion',
-                    "A magical elixir in a shimmering vial. Drinking it restores the player's health, making it essential for long journeys and tough battles.",
-                );
+            case 'conditionItem2':
+                this.itemAmounts['conditionItem2'] = 1;
+                return new ItemObject('conditionItem2');
 
-            case 'cloak':
-                this.itemAmounts['cloak'] = 1;
-                return new ItemObject(
-                    'cloak',
-                    'A mystical cloak that grants the wearer the ability to become invisible for a short time. Perfect for sneaking past enemies or escaping danger.',
-                );
+            case 'gameplayItem2':
+                this.itemAmounts['gameplayItem2'] = 1;
+                return new ItemObject('gameplayItem2');
 
             case 'spawnpoint':
                 this.itemAmounts['spawnpoint'] = this.itemMap['size' + mapSize];
-                return new ItemObject('spawnpoint', "A magical marker that sets the player's respawn location.");
+                return new ItemObject('spawnpoint');
 
             case 'randomItem':
                 this.itemAmounts['randomItem'] = this.itemMap['size' + mapSize];
-                return new ItemObject('randomItem', 'Becomes a random item upon starting the game.');
+                return new ItemObject('randomItem');
 
             case 'flag':
                 this.itemAmounts['flag'] = 1;
-                return new ItemObject('flag', 'A brightly colored flag.');
+                return new ItemObject('flag');
 
             default:
                 // tslint:disable-next-line: no-console
                 console.error(`Item ${itemName} not found`);
-                return new ItemObject('default', 'An unknown item. Its purpose and abilities are a mystery.');
+                return new ItemObject('default');
         }
     }
 }

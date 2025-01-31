@@ -41,13 +41,7 @@ describe('ItemComponent', () => {
         } as ItemObject;
 
         await TestBed.configureTestingModule({
-            imports: [
-                NgIf,
-                NgClass,
-                TippyDirective,
-                ItemTooltipComponent,
-                ItemComponent
-            ],
+            imports: [NgIf, NgClass, TippyDirective, ItemTooltipComponent, ItemComponent],
             providers: [
                 { provide: DragAndDropService, useValue: mockDragAndDropService },
                 { provide: EditingToolService, useValue: mockEditingToolService },
@@ -60,27 +54,27 @@ describe('ItemComponent', () => {
                         popper: popperVariation,
                     },
                 }),
-                provideTippyLoader(() => import('tippy.js')),
+                provideTippyLoader(async () => import('tippy.js')),
             ],
         }).compileComponents();
 
         fixture = TestBed.createComponent(ItemComponent);
         component = fixture.componentInstance;
-        
+
         // Setup default mock return values
         mockItemService.createItem.and.returnValue(mockItemObject);
         mockItemService.itemAmounts = { 'test-item': 1 };
-        
+
         // Setup drag and drop state mock
         mockDragAndDropService.getDraggingState.and.returnValue({
             isDragging: true,
             dragX: 100,
-            dragY: 200
+            dragY: 200,
         });
 
         // Define the currentDraggedItem getter
         Object.defineProperty(mockDragAndDropService, 'currentDraggedItem', {
-            get: () => mockItemObject
+            get: () => mockItemObject,
         });
     });
 
@@ -91,7 +85,7 @@ describe('ItemComponent', () => {
 
     it('should initialize itemObject on ngOnInit', () => {
         setupComponent('test-item-id', mockItemObject);
-        
+
         expect(mockItemService.createItem).toHaveBeenCalledWith('test-item-id');
         expect(component.itemObject).toEqual(mockItemObject);
     });
@@ -108,7 +102,7 @@ describe('ItemComponent', () => {
             ITEM_CONTAINER_COORDINATES.row,
             ITEM_CONTAINER_COORDINATES.column,
             mockItemObject,
-            mockEvent
+            mockEvent,
         );
     });
 
@@ -126,7 +120,7 @@ describe('ItemComponent', () => {
 
     it('should call increaseItemAmount and onMouseUp when mouse up and dragging', () => {
         setupComponent('test-item-id', mockItemObject);
-        
+
         component.onMouseUp();
 
         expect(mockItemService.increaseItemAmount).toHaveBeenCalledWith('test-item');
@@ -139,7 +133,7 @@ describe('ItemComponent', () => {
         mockDragAndDropService.getDraggingState.and.returnValue({
             isDragging: false,
             dragX: 0,
-            dragY: 0
+            dragY: 0,
         });
 
         component.onMouseUp();
@@ -150,7 +144,7 @@ describe('ItemComponent', () => {
 
     it('should clean up dragging state on destroy', () => {
         setupComponent('test-item-id', mockItemObject);
-        
+
         component.ngOnDestroy();
 
         expect(mockDragAndDropService.onMouseUp).toHaveBeenCalledWith('test-item');

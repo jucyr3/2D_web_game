@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrushTooltipComponent } from './brush-tooltip.component';
 import { TIPPY_REF } from '@ngneat/helipopper';
-import { tileDescription } from '@app/../assets/tile-description';
+import { tileDescription } from '@app/../assets/tiles/tile-description';
 import { TileTypes } from '@common/tileType.constants';
 
 describe('BrushTooltipComponent', () => {
@@ -50,8 +50,8 @@ describe('BrushTooltipComponent', () => {
         fixture.detectChanges();
 
         // Verify that the computed properties handle the unknown case
-        expect(component.tileName).toBe("unknown tile");
-        expect(component.tileDescription).toBe("unknown tile so no description");
+        expect(component.tileName).toBe('unknown tile');
+        expect(component.tileDescription).toBe('unknown tile so no description');
     });
 
     it('should have tippy reference defined', () => {

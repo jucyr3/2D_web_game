@@ -68,7 +68,7 @@ describe('PopUpComponent', () => {
             cancelButtonLabel: '',
             confirmButtonLabel: '',
         };
-        let newComponent = new PopUpComponent(dialogData);
+        const newComponent = new PopUpComponent(dialogData);
         fixture.detectChanges();
 
         expect(newComponent.title).toBe('Confirmer la sortie');

@@ -1,5 +1,5 @@
 import { NgStyle } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BrushGridComponent } from '@app/components/edit-components/brush-grid/brush-grid.component';
 import { DescriptionComponent } from '@app/components/edit-components/description/description.component';
 import { TitleComponent } from '@app/components/edit-components/title/title.component';
@@ -41,7 +41,7 @@ import { Router } from '@angular/router';
     styleUrl: './edit-page.component.scss',
     providers: [EditingToolService],
 })
-export class EditPageComponent {
+export class EditPageComponent implements OnInit {
     title = this.mapService.map.name;
     description = this.mapService.map.description;
 
@@ -55,9 +55,9 @@ export class EditPageComponent {
     ) {}
 
     ngOnInit() {
-        //preload image in cache
+        // preload image in cache
         const img = new Image();
-        img.src = 'assets/openDoorTile.png';
+        img.src = 'assets/tiles/openDoorTile.png';
     }
 
     onMouseDown(event: MouseEvent) {

@@ -34,13 +34,13 @@ describe('BrushComponent', () => {
                 { provide: EditingToolService, useValue: editingToolServiceMock },
                 { provide: MapService, useValue: mapServiceMock }, // Provide the MapService mock
                 provideTippyConfig({
-                                    defaultVariation: 'tooltip',
-                                    variations: {
-                                        tooltip: tooltipVariation,
-                                        popper: popperVariation,
-                                    },
-                                }),
-                provideTippyLoader(() => import('tippy.js')),
+                    defaultVariation: 'tooltip',
+                    variations: {
+                        tooltip: tooltipVariation,
+                        popper: popperVariation,
+                    },
+                }),
+                provideTippyLoader(async () => import('tippy.js')),
             ],
         }).compileComponents();
 
@@ -87,6 +87,4 @@ describe('BrushComponent', () => {
 
         expect(component.isActive).toEqual(isActive);
     });
-
-    
 });

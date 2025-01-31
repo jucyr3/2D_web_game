@@ -44,7 +44,6 @@ export class TileComponent implements OnInit {
     ) {}
 
     get tileTexture(): string {
-
         return this.mapService.getTileTexture(this.tilePosition.row, this.tilePosition.column);
     }
 

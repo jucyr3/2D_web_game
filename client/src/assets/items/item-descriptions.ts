@@ -1,51 +1,51 @@
 // constants.ts
-interface Item {
+interface ItemDescription {
     name: string;
     description: string;
-  }
-  
-export const ITEMS: { [key: string]: Item } = {
-    // Items that alter attributes
-    ATTRIBUTE_ITEM_1: {
-        name: 'Attribute Item 1',
-        description: 'Alters player or opponent attributes (e.g., increases strength or decreases speed).',
+}
+
+export const itemDescriptions: { [key: string]: ItemDescription } = {
+    // Objets qui modifient les attributs
+    attributeItem1: {
+        name: 'Objet d\'Attribut 1',
+        description: 'Modifie les attributs du joueur ou de l\'adversaire (ex.: augmente ou réduit un attribut).',
     },
-    ATTRIBUTE_ITEM_2: {
-        name: 'Attribute Item 2',
-        description: 'Alters player or opponent attributes (e.g., boosts defense or reduces attack power).',
+    attributeItem2: {
+        name: 'Objet d\'Attribut 2',
+        description: 'Modifie les attributs du joueur ou de l\'adversaire (ex.: augmente ou réduit un attribut).',
     },
 
-    // Items that use a condition
-    CONDITION_ITEM_1: {
-        name: 'Condition Item 1',
-        description: 'Activates an effect only when a specific condition is met (e.g., low health or proximity to an opponent).',
+    // Objets utilisant une condition
+    conditionItem1: {
+        name: 'Objet de Condition 1',
+        description: 'Active un effet uniquement lorsqu\'une condition spécifique est remplie (ex.: faible santé ou proximité avec un adversaire).',
     },
-    CONDITION_ITEM_2: {
-        name: 'Condition Item 2',
-        description: 'Triggers an effect based on a specific condition (e.g., after a certain number of turns or actions).',
-    },
-
-    // Items that modify the game's functionality
-    GAMEPLAY_ITEM_1: {
-        name: 'Gameplay Item 1',
-        description: 'Modifies the game\'s functionality (e.g., slows down the game speed or changes movement rules).',
-    },
-    GAMEPLAY_ITEM_2: {
-        name: 'Gameplay Item 2',
-        description: 'Modifies the game\'s functionality (e.g., reverses controls or alters win conditions).',
+    conditionItem2: {
+        name: 'Objet de Condition 2',
+        description: 'Active un effet uniquement lorsqu\'une condition spécifique est remplie (ex.: faible santé ou proximité avec un adversaire).',
     },
 
-    // Special items (kept intact)
+    // Objets qui modifient le fonctionnement du jeu
+    gameplayItem1: {
+        name: 'Objet de Gameplay 1',
+        description: 'Modifie le fonctionnement du jeu (ex.: ralentit la vitesse du jeu ou change les règles de déplacement).',
+    },
+    gameplayItem2: {
+        name: 'Objet de Gameplay 2',
+        description: 'Modifie le fonctionnement du jeu (ex.: ralentit la vitesse du jeu ou change les règles de déplacement).',
+    },
+
+    // Objets spéciaux (conservés tels quels)
     spawnpoint: {
-        name: 'Spawnpoint',
-        description: 'This is the spawnpoint item.',
+        name: 'Point d\'Apparition',
+        description: 'Ceci est l\'objet point d\'apparition.',
     },
     flag: {
-        name: 'Flag',
-        description: 'This is the flag item.',
+        name: 'Drapeau',
+        description: 'Ceci est l\'objet drapeau.',
     },
     randomItem: {
-        name: 'Random Item',
-        description: 'This is the randomItem.',
+        name: 'Objet Aléatoire',
+        description: 'Se transforme en un objet aléatoire au lancement du jeu.',
     },
 };
