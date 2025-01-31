@@ -33,7 +33,7 @@ describe('DescriptionComponent', () => {
     });
 
     it('should update description on input', () => {
-        const event = { target: { value: 'New description' } } as unknown;
+        const event = { target: { value: 'New description' } } as unknown as Event;
         component.onDescriptionInput(event);
         expect(component.description).toBe('New description');
     });
