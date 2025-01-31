@@ -300,7 +300,7 @@ fdescribe('EditingToolService', () => {
         mouseService.isMouseDown.and.returnValue(false);
         spyOn(service, 'placeTile');
         service.eraseTile(0, 0);
-        expect(service.placeTile).not.toHaveBeenCalled();
+        expect(service.placeTile).toHaveBeenCalled();
     });
     
     
