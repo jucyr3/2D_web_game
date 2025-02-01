@@ -11,8 +11,9 @@ export class Map {
     tileMatrix: Tile[][];
     lastModified: Date;
 
-    constructor(name: string, size: number, isVisible: boolean, description: string, gameMode: 'CTF' | 'Classic', tileMatrix?: Tile[][]) {
+    constructor(name: string, id:number, size: number, isVisible: boolean, description: string, gameMode: 'CTF' | 'Classic', tileMatrix?: Tile[][]) {
         this.name = name;
+        this.id = id;
         this.size = size;
         this.isVisible = isVisible;
         this.description = description;

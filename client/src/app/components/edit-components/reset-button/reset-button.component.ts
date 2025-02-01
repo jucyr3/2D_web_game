@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MapService } from '@app/services/map.service';
 
 @Component({
     selector: 'app-reset-button',
@@ -7,13 +8,12 @@ import { Component } from '@angular/core';
     styleUrl: './reset-button.component.scss',
 })
 export class ResetButtonComponent {
+    constructor(private mapService: MapService) { }
+
     reset() {
         if (confirm('Êtes-vous sûr de vouloir réinitialiser ?')) {
-            // pourrait être une fenêtre modale personnalisée
-            // procéder à la logique de réinitialisation
-            // appeler mapService pour réinitialiser la carte
-        } else {
-            return;
-        }
+            this.mapService.resetMap();
+
+        } 
     }
 }

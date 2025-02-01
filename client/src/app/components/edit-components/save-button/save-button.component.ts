@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MapService } from '@app/services/map.service';
 
 @Component({
     selector: 'app-save-button',
@@ -7,7 +8,11 @@ import { Component } from '@angular/core';
     styleUrl: './save-button.component.scss',
 })
 export class SaveButtonComponent {
+
+    constructor(private mapService: MapService) { } 
+
     save() {
-        // call mapService to save the map
+        this.mapService.saveMap();
+            
     }
 }

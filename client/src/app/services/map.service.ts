@@ -6,6 +6,7 @@ import { TileTypes } from '@common/tileType.constants';
 
 interface MapJson {
     name: string;
+    id: number;
     size: number;
     isVisible: boolean;
     description: string;
@@ -29,13 +30,22 @@ export class MapService {
     map: Map;
 
     constructor() {
-        const mapJson = null;
-        if (!mapJson) {
-            const mapSize = 15;
-            this.map = new Map('Untitled', mapSize, true, '', 'Classic');
-        } else {
-            this.map = this.createMapFromJSON(mapJson);
+        console.log("trying to load map from session storage");
+        if (!this.loadMapFromSessionStorage()) {
+            console.log("failed to load map from session storage");
+            console.log("trying to load map from server");
+            if (!this.loadMapFromServer()) {
+                console.log("failed to load map from server");
+                console.log("setting default map");
+                this.setDefaultMap();
+            }
         }
+    }
+
+    setDefaultMap(): void {
+        const mapSize = 15;
+        const defaultId = 0;
+        this.map = new Map('Untitled', defaultId, mapSize, true, '', 'Classic');
     }
 
     parseTileMatrix(json: MapJson): Tile[][] {
@@ -55,7 +65,42 @@ export class MapService {
 
     createMapFromJSON(json: MapJson): Map {
         const tileMatrix = this.parseTileMatrix(json);
-        return new Map(json.name, json.size, json.isVisible, json.description, json.gameMode, tileMatrix);
+        return new Map(json.name, json.id, json.size, json.isVisible, json.description, json.gameMode, tileMatrix);
+    }
+
+
+    // returns true if map is loaded from server
+    loadMapFromServer(): boolean {
+        // TODO: for the server implementation
+        return false;
+    }
+
+    saveMapToServer(): void {
+        // TODO: for the server implementation
+    }
+
+    saveMap(): void {
+        this.saveMapToSessionStorage();
+        this.saveMapToServer();
+    }
+
+    resetMap(): void {
+        window.location.reload();
+    }
+
+
+    saveMapToSessionStorage(): void {
+        sessionStorage.setItem('map', this.getMapJson());
+    }
+
+    loadMapFromSessionStorage(): boolean { 
+        const mapJson = sessionStorage.getItem('map');
+        if (!mapJson) {
+            return false;
+        }
+
+        this.map = this.createMapFromJSON(JSON.parse(mapJson));
+        return true;
     }
 
     getMapJson(): string {
