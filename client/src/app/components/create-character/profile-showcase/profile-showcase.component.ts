@@ -19,7 +19,7 @@ export class ProfileShowcaseComponent {
     ) {
         this.combinedStats = this.statsService.getCombinedStats();
     }
-
+    
     assignBonus(stat: 'life' | 'speed') {
         this.statsService.assignBonus(stat);
     }

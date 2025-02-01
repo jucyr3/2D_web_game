@@ -8,7 +8,7 @@ export class StatsService {
         life: {
             stat: 4,
             label: 'Vie',
-            selected: true,
+            selected: false,
         },
         speed: {
             stat: 4,
@@ -19,11 +19,13 @@ export class StatsService {
             stat: 4,
             label: 'Attaque',
             selected: true,
+            isDiceSix: true,
         },
         defense: {
             stat: 4,
             label: 'Défense',
             selected: false,
+            isDiceSix: false,
         },
     };
 
