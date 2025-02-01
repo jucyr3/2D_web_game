@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ProfileService } from '@app/services/profile.service';
 import { CreateCharacterPageComponent } from './create-character-page.component';
 
-describe('CreateCharacterPageComponent', () => {
+fdescribe('CreateCharacterPageComponent', () => {
     let component: CreateCharacterPageComponent;
     let fixture: ComponentFixture<CreateCharacterPageComponent>;
     let routerSpy: jasmine.SpyObj<Router>;

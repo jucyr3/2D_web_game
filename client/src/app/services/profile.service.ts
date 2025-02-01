@@ -23,6 +23,13 @@ export class ProfileService {
     private _statChoice: boolean = false;
     private _name: string = '';
 
+    setSelectedItem(value: number) {
+        this._itemSelected.set(value);
+    }
+    getSelectedItem() {
+        return this._itemSelected;
+    }
+    
     getdiceChoice() {
         return this._diceChoicee;
     }
@@ -30,12 +37,6 @@ export class ProfileService {
         return this._statChoice;
     }
 
-    setSelectedItem(value: number) {
-        this._itemSelected.set(value);
-    }
-    getSelectedItem() {
-        return this._itemSelected;
-    }
     showImageSelected() {
         return this.imagesPath[this._itemSelected() - 1].imagePath;
     }

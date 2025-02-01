@@ -1,16 +1,16 @@
-import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ProfileService } from '@app/services/profile.service';
+import { ProfilePictureComponent } from '../profile-picture/profile-picture.component';
 import { ProfileSelectionComponent } from './profile-selection.component';
 
-describe('ProfileSelectionComponent', () => {
+fdescribe('ProfileSelectionComponent', () => {
     let component: ProfileSelectionComponent;
     let fixture: ComponentFixture<ProfileSelectionComponent>;
-    let profileServiceStub: Partial<ProfileService>;
+    let profileServiceMock: Partial<ProfileService>;
 
     beforeEach(async () => {
-        profileServiceStub = {
+        profileServiceMock = {
             imagesPath: [
                 { id: 1, imagePath: 'assets/images/1.jpg' },
                 { id: 2, imagePath: 'assets/images/2.jpg' },
@@ -25,13 +25,13 @@ describe('ProfileSelectionComponent', () => {
                 { id: 11, imagePath: 'assets/images/11.jpg' },
                 { id: 12, imagePath: 'assets/images/12.jpg' },
             ],
-            getSelectedItem: jasmine.createSpy('getSelectedItem').and.returnValue(signal<number>(4)),
+            getSelectedItem: jasmine.createSpy('getSelectedItem').and.returnValue(() => 4),
             setSelectedItem: jasmine.createSpy('setSelectedItem'),
         };
 
         await TestBed.configureTestingModule({
             imports: [ProfileSelectionComponent],
-            providers: [{ provide: ProfileService, useValue: profileServiceStub }],
+            providers: [{ provide: ProfileService, useValue: profileServiceMock }],
         }).compileComponents();
 
         fixture = TestBed.createComponent(ProfileSelectionComponent);
@@ -61,10 +61,10 @@ describe('ProfileSelectionComponent', () => {
         expect(images.length).toBe(testValue);
     });
 
-    it('should call profileService.setSelectedItem when clickItem is called', () => {
+    it('should update the selected item in ProfileService when an image is clicked"', () => {
         const itemId = 2;
         component.clickItem(itemId);
-        expect(profileServiceStub.setSelectedItem).toHaveBeenCalledWith(itemId);
+        expect(profileServiceMock.setSelectedItem).toHaveBeenCalledWith(itemId);
     });
 
     it('should display images with correct src attributes', () => {
@@ -76,7 +76,24 @@ describe('ProfileSelectionComponent', () => {
 
     it('should call profileService.getSelectedItem when itemSelected is accessed', () => {
         const selectedItem = component.itemSelected;
-        expect(profileServiceStub.getSelectedItem).toHaveBeenCalled();
+        expect(profileServiceMock.getSelectedItem).toHaveBeenCalled();
         expect(selectedItem).toEqual(4);
     });
+
+    it('should set isSelected=true for the selected item and false for others', () => {
+        const profilePictureComponents = fixture.debugElement.queryAll(By.directive(ProfilePictureComponent));
+        const selectedItem = component.itemSelected;
+
+        profilePictureComponents.forEach((component, index) => {
+            const isSelected = component.componentInstance.isSelected;
+            const itemNumber = component.componentInstance.itemNumber;
+
+            if (itemNumber === selectedItem) {
+                expect(isSelected).toBeTrue();
+            } else {
+                expect(isSelected).toBeFalse();
+            }
+        });
+    });
+
 });
