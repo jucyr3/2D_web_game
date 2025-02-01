@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { ProfileService } from '@app/services/profile.service';
 import { NameComponent } from './name.component';
 
-describe('NameComponent', () => {
+fdescribe('NameComponent', () => {
     let component: NameComponent;
     let fixture: ComponentFixture<NameComponent>;
     let profileServiceSpy: jasmine.SpyObj<ProfileService>;

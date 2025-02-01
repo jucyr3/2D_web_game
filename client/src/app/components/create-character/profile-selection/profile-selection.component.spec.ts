@@ -4,7 +4,7 @@ import { ProfileService } from '@app/services/profile.service';
 import { ProfilePictureComponent } from '../profile-picture/profile-picture.component';
 import { ProfileSelectionComponent } from './profile-selection.component';
 
-fdescribe('ProfileSelectionComponent', () => {
+describe('ProfileSelectionComponent', () => {
     let component: ProfileSelectionComponent;
     let fixture: ComponentFixture<ProfileSelectionComponent>;
     let profileServiceMock: Partial<ProfileService>;
