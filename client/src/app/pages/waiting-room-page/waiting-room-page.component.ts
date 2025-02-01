@@ -41,6 +41,8 @@ export class WaitingRoomPageComponent {
             if (result) {
                 dialogRef.close();
                 this.router.navigate(['/home']);
+            }else{
+                dialogRef.close();
             }
         });
     }

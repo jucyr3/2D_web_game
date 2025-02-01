@@ -33,4 +33,7 @@ export class PopUpComponent {
     onConfirm(): void {
         this.confirmed.emit(true);
     }
+    onCancel(): void {
+        this.confirmed.emit(false);
+    }
 }

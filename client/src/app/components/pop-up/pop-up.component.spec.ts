@@ -39,18 +39,18 @@ describe('PopUpComponent', () => {
     });
 
     it('should display the correct cancel button label', () => {
-        const cancelButtonElement = fixture.debugElement.query(By.css('.button1')).nativeElement;
+        const cancelButtonElement = fixture.debugElement.query(By.css('.cancel-button')).nativeElement;
         expect(cancelButtonElement.textContent).toContain(dialogData.cancelButtonLabel);
     });
 
     it('should display the correct confirm button label', () => {
-        const confirmButtonElement = fixture.debugElement.query(By.css('.button2')).nativeElement;
+        const confirmButtonElement = fixture.debugElement.query(By.css('.confirm-button')).nativeElement;
         expect(confirmButtonElement.textContent).toContain(dialogData.confirmButtonLabel);
     });
 
     it('should emit confirmed event when confirm button is clicked', () => {
         spyOn(component.confirmed, 'emit');
-        const confirmButtonElement = fixture.debugElement.query(By.css('.button2')).nativeElement;
+        const confirmButtonElement = fixture.debugElement.query(By.css('.confirm-button')).nativeElement;
         confirmButtonElement.click();
         expect(component.confirmed.emit).toHaveBeenCalledWith(true);
     });
@@ -76,4 +76,12 @@ describe('PopUpComponent', () => {
       expect(newComponent.cancelButtonLabel).toBe('Annuler');
       expect(newComponent.confirmButtonLabel).toBe('Quitter');
     });
+
+    it('should emit false when cancel button is clicked', () => {
+        spyOn(component.confirmed, 'emit');
+        const cancelButtonElement = fixture.debugElement.query(By.css('.cancel-button')).nativeElement;
+        cancelButtonElement.click();
+        expect(component.confirmed.emit).toHaveBeenCalledWith(false);
+      });
+      
 });

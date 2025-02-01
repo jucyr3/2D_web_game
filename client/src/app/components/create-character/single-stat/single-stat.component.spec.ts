@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SingleStatComponent } from './single-stat.component';
 import { By } from '@angular/platform-browser';
 
-fdescribe('SingleStatComponent', () => {
+describe('SingleStatComponent', () => {
   let component: SingleStatComponent;
   let fixture: ComponentFixture<SingleStatComponent>;
 
