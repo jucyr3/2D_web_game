@@ -1,0 +1,27 @@
+.preview-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    background: rgb(160, 159, 159);
+}
+  
+.preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This will maintain aspect ratio */
+}
+  
+.description-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}

@@ -2,8 +2,9 @@ import { NgStyle } from '@angular/common';
 import { Component } from '@angular/core';
 import { BrushGridComponent } from '@app/components/edit-components/brush-grid/brush-grid.component';
 import { DescriptionComponent } from '@app/components/edit-components/description/description.component';
-import { TitleComponent } from '@app/components/edit-components/title/title.component';
 import { ItemGridComponent } from '@app/components/edit-components/item-grid/item-grid.component';
+import { TileGridComponent } from '@app/components/edit-components/tile-grid/tile-grid.component';
+import { TitleComponent } from '@app/components/edit-components/title/title.component';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditingToolService } from '@app/services/editing-tool.service';
 import { ITEM_CONTAINER_COORDINATES, ItemService } from '@app/services/item.service';
@@ -11,7 +12,6 @@ import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
 import { ResetButtonComponent } from '../../components/edit-components/reset-button/reset-button.component';
 import { SaveButtonComponent } from '../../components/edit-components/save-button/save-button.component';
-import { TileGridComponent } from '@app/components/edit-components/tile-grid/tile-grid.component';
 
 @Component({
     selector: 'app-edit-page',
@@ -90,6 +90,19 @@ export class EditPageComponent {
         this.mapService.map.name = this.title;
         this.mapService.map.description = this.description;
         // Add any additional logic you need to handle the updated value
+    }
+
+    async saveMap(): Promise<void> {
+        try {
+            const blob = await this.mapService.exportMapAsImage();
+            if (blob) {
+                console.log('Map image exported and saved successfully');
+            } else {
+                console.error('Failed to export map image');
+            }
+        } catch (error) {
+            console.error('Error saving map:', error);
+        }
     }
 }
 

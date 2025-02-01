@@ -3,6 +3,8 @@ import { ItemObject } from '@common/ItemObject';
 import { Map } from '@common/map';
 import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
+import * as htmlToImage from 'html-to-image';
+import { ClientHttpRequestsService } from './client-http-requests.service';
 
 interface MapJson {
     name: string;
@@ -29,7 +31,7 @@ interface MapJson {
 export class MapService {
     map: Map;
 
-    constructor() {
+    constructor(protected clientHttpRequest : ClientHttpRequestsService) {
         const mapJson = null;
         //const mapJson: MapJson = {"name":"Untitled","size":10,"isVisible":true,"description":"","gameMode":"Classic","tileMatrix":[[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"groundTile2","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"spawnpoint","description":"A magical marker that sets the player's respawn location."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"mushroom","description":"A small, red mushroom with white spots. Consuming it grants the player extra health, making it a valuable resource for survival."}},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":null},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"potion","description":"A magical elixir in a shimmering vial. Drinking it restores the player's health, making it essential for long journeys and tough battles."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"sword","description":"A sharp, gleaming sword forged from rare metals. It is the perfect weapon for close combat, allowing the player to defeat enemies with ease."}},{"type":"groundTile1","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"luma","description":"A glowing, celestial orb that radiates energy. It is said to hold mysterious powers, though its true purpose remains unknown."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"cloak","description":"A mystical cloak that grants the wearer the ability to become invisible for a short time. Perfect for sneaking past enemies or escaping danger."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"bomb","description":"A volatile explosive device. Use it wisely to clear obstacles or defeat groups of enemies, but be careful not to get caught in the blast!"}},{"type":"groundTile1","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"randomItem","description":"Becomes a random item upon starting the game."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"spawnpoint","description":"A magical marker that sets the player's respawn location."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false}],[{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"randomItem","description":"Becomes a random item upon starting the game."}},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false},{"type":"wallTile","isOccupied":false,"isObstacle":false,"gameObject":{"name":"flag","description":"A brightly colored flag."}},{"type":"groundTile1","isOccupied":false,"isObstacle":false},{"type":"groundTile1","isOccupied":false,"isObstacle":false}]],"lastModified":"2025-01-24T15:33:15.507Z"}
         if (!mapJson) {
@@ -164,5 +166,84 @@ export class MapService {
 
     removeGameObject(row: number, column: number): void {
         this.map.tileMatrix[row][column].gameObject = null;
+    }
+
+    async exportMapAsImage(): Promise<Blob | null> {
+        const mapElement = document.querySelector('.map') as HTMLElement;
+        
+        if (!mapElement) {
+            console.error('Map element not found');
+            return null;
+        }
+    
+        try {
+            // Get dimensions but scale them down
+            const mapRect = mapElement.getBoundingClientRect();
+            const scaleFactor = 1.0; // Reduce to 50%
+            
+            const dataUrl = await htmlToImage.toPng(mapElement, {
+                quality: 0.2,  // Reduce quality significantly
+                width: mapRect.width * scaleFactor,
+                height: mapRect.height * scaleFactor,
+                pixelRatio: 0.5,
+                skipAutoScale: true,
+                style: {
+                    transform: 'none'
+                },
+                // Add more aggressive compression options
+                canvasWidth: mapRect.width * scaleFactor,
+                canvasHeight: mapRect.height * scaleFactor,
+                backgroundColor: '#fff'  // Set background to reduce transparency data
+            });
+    
+            // Convert to JPEG for better compression (instead of PNG)
+            const canvas = document.createElement('canvas');
+            const img = new Image();
+            
+            await new Promise((resolve) => {
+                img.onload = resolve;
+                img.src = dataUrl;
+            });
+    
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx?.drawImage(img, 0, 0);
+            
+            // Get compressed JPEG data
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.3);
+            const base64String = compressedDataUrl.split(',')[1];
+    
+            // Log size for debugging
+            console.log('Image size (KB):', Math.round(base64String.length / 1024));
+    
+            this.clientHttpRequest.saveMapImageOnServer(this.map.id, base64String)
+                .subscribe({
+                    next: (updatedMap) => {
+                        console.log('Map preview image saved successfully');
+                    },
+                    error: (error) => {
+                        console.error('Error saving map preview image:', error);
+                    }
+                });
+    
+            // Create download with compressed version
+            const response = await fetch(compressedDataUrl);
+            const blob = await response.blob();
+            
+            // download image for testing
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `map-${this.map.id}-preview.jpg`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+    
+            return blob;
+        } catch (error) {
+            console.error('Error exporting map as image:', error);
+            return null;
+        }
     }
 }

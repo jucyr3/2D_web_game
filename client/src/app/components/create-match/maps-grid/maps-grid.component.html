@@ -1,0 +1,17 @@
+<div class="games-grid">
+    @for (map of mapsForClientService.maps$ | async; track map.id) {
+        <div class="game-card" (click)="mapsForClientService.changeClickedMap(map)">
+          <app-preview-container
+            [map]="map"
+            [selectedMap]="mapsForClientService.selectedMap"
+            (selectedMapChange)="mapsForClientService.selectedMap= $event"
+          />
+          <app-game-info
+            [name]="map.name"
+            [size]="map.size"
+            [mode]="map.gameMode"
+            [lastModified]="map.lastModified"
+          />
+        </div>
+      }
+</div>

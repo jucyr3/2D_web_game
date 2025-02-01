@@ -34,20 +34,6 @@ html, body {
   font-weight: bold;
 }
 
-.games-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 35px;
-  margin-bottom: 100px;
-}
-
-.game-card {
-  overflow: hidden;
-  background: rgb(137, 137, 137);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  font-weight: bold;
-}
-
 .game-card-other {
   overflow: hidden;
   background: rgb(137, 137, 137);

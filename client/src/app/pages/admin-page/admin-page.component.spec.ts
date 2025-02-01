@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { AdminPageComponent } from './admin-page.component';
 import { Map } from '@common/map';
 import { Tile } from '@common/tile';
+import { AdminPageComponent } from './admin-page.component';
 
 describe('AdminPageComponent', () => {
     let component: AdminPageComponent;
@@ -50,8 +50,8 @@ describe('AdminPageComponent', () => {
     });
 
     it('should load games initially', () => {
-        component.loadGames();
-        expect(component.games.length).toBeGreaterThan(0);
+        component.loadMaps();
+        expect(component.maps.length).toBeGreaterThan(0);
     });
 
     it('should toggle game visibility', () => {
@@ -63,26 +63,26 @@ describe('AdminPageComponent', () => {
 
     it('should delete game', () => {
         const game = createTestGame();
-        component.games = [game];
+        component.maps = [game];
         spyOn(window, 'confirm').and.returnValue(true);
         
-        component.deleteGame(game);
-        expect(component.games.length).toBe(0);
+        component.deleteMap(game);
+        expect(component.maps.length).toBe(0);
     });
 
     it('should show and hide game description', () => {
         const game = createTestGame();
         
         component.showDescription(game);
-        expect(component.selectedGame).toBe(game);
+        expect(component.selectedMap).toBe(game);
         
         component.hideDescription();
-        expect(component.selectedGame).toBeNull();
+        expect(component.selectedMap).toBeNull();
     });
 
     it('should have correct game properties after loading', () => {
-        component.loadGames();
-        const firstGame = component.games[0];
+        component.loadMaps();
+        const firstGame = component.maps[0];
         
         expect(firstGame.id).toBeDefined();
         expect(firstGame.gameName).toBeDefined();

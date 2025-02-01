@@ -1,6 +1,8 @@
 <body>
 <div class="admin-container">
+    
     <div class="content-wrapper">
+    
     <header class="admin-header">
         <h1 style="color: rgb(233, 231, 231);">ADMINISTRER LES JEUX</h1>
         <button (click)="openCreateModal()" class="new-game-btn">
@@ -8,121 +10,15 @@
         </button>
     </header>
 
-    <div class="games-grid">
-        @for (game of games; track game.id) {
-            <div class="game-card">
-                <div class="preview-container"
-                     (mouseenter)="showDescription(game)"
-                     (mouseleave)="hideDescription()">
-                    <img [src]="game.previewImage" [alt]="game.name" class="preview-image">
-                    @if (selectedGame === game) {
-                        <div class="description-overlay">
-                            {{ game.description }}
-                        </div>
-                    }
-                </div>
+    <app-games-grid/>
 
-                <div class="game-info">
-                    <h2>{{ game.name }}</h2>
-                    <p>Taille: {{ game.size }} x {{ game.size }}</p>
-                    <p>Mode: {{ game.gameMode }}</p>
-                    <p>Dernière modification: {{ game.lastModified }}</p>
-                </div>
-
-                <div class="game-actions">
-                    <button class="visibility-btn" (click)="toggleVisibility(game)"> <!-- check server -->
-                        <i [class]="game.isVisible ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
-                        {{ game.isVisible ? 'MASQUER' : 'AFFICHER' }}
-                    </button>
-                    
-                    <button (click)="editGame(game)" class="edit-btn">
-                        <i class="fas fa-edit"></i> ÉDITER
-                    </button>
-
-                    <button class="delete-btn" (click)="deleteGame(game)">
-                        <i class="fas fa-trash"></i> SUPPRIMER
-                    </button>
-                </div>
-            </div>
-        }
-    </div>
-
-    <!-- Create Game Modal -->
     @if (isCreateModalOpen) {
-        <div class="modal-overlay">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>CRÉER LE JEU</h2>
-                    <button class="close-btn" (click)="closeCreateModal()">×</button>
-                </div>
-
-                <div class="modal-body">
-
-
-                    <div class="form-section">
-                        <h3>NOM DU JEU:</h3>
-                        <input type="text" 
-                               [(ngModel)]="newGameForm.gameName" 
-                               name="gameName" 
-                               class="game-name-input" 
-                               placeholder="Entrez le nom du jeu">
-                    </div>
-
-
-                    <div class="form-section">
-                        <h3>MODE DE JEU:</h3>
-                        <div class="radio-group">
-                            <label>
-                                <input type="radio" 
-                                       [(ngModel)]="newGameForm.gameMode" 
-                                       name="gameMode" 
-                                       value="CLASSIQUE">
-                                CLASSIQUE
-                            </label>
-                            <label>
-                                <input type="radio" 
-                                       [(ngModel)]="newGameForm.gameMode" 
-                                       name="gameMode" 
-                                       value="CAPTURE_THE_FLAG">
-                                CAPTURE THE FLAG
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <h3>TAILLE DU JEU:</h3>
-                        <div class="radio-group">
-                            <label>
-                                <input type="radio" 
-                                       [(ngModel)]="newGameForm.gameSize" 
-                                       name="gameSize" 
-                                       value="PETIT">
-                                PETIT (10X10)
-                            </label>
-                            <label>
-                                <input type="radio" 
-                                       [(ngModel)]="newGameForm.gameSize" 
-                                       name="gameSize" 
-                                       value="MOYENNE">
-                                MOYENNE (15X15)
-                            </label>
-                            <label>
-                                <input type="radio" 
-                                       [(ngModel)]="newGameForm.gameSize" 
-                                       name="gameSize" 
-                                       value="GRANDE">
-                                GRANDE (20X20)
-                            </label>
-                        </div>
-                    </div>
-
-                    <button class="create-btn" (click)="createGame()">
-                        CRÉER LE JEU
-                    </button>
-                </div>
-            </div>
-        </div>
+        <app-modal
+            (close)="closeCreateModal()"
+            (create)="handleCreateMap($event)"
+        />
     }
+    
 </div>
 </div>
 </body>

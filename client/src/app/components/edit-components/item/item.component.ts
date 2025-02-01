@@ -41,7 +41,6 @@ export class ItemComponent implements OnDestroy, OnInit {
         this.itemService.decreaseItemAmount(this.itemObject.name);
         this.editingToolService.setActiveTool(EditToolTypes.Hand);
         this.dragAndDropService.startDragging(this.itemObject, event, ITEM_CONTAINER_COORDINATES.row, ITEM_CONTAINER_COORDINATES.column);
-        this.tooltip.hide();
     }
 
     onMouseUp(): void {

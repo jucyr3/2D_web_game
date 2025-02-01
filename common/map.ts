@@ -12,7 +12,9 @@ export class Map {
     lastModified: Date;
     previewImage: string; 
 
-    constructor(name: string, id:number, size: number, isVisible: boolean, description: string, gameMode: 'CTF' | 'Classic', tileMatrix?: Tile[][]) {
+    constructor(name: string, id:number, size: number, isVisible: boolean, description: string, gameMode: 'CTF' | 'Classic', tileMatrix?: Tile[][],
+        previewImage?: string)
+     {
         this.name = name;
         this.id = id;
         this.size = size;
@@ -24,8 +26,13 @@ export class Map {
         } else {
             this.tileMatrix = Array.from({ length: size }, () => Array.from({ length: size }, () => new Tile(TileTypes.GROUND_1, false, false)));
         }
-
         this.lastModified = new Date();
+        
+        if (previewImage) {
+            this.previewImage = previewImage;
+        } else {
+            this.previewImage = "";
+        }
     }
 
     get flattenedTileMatrix(): Tile[] {

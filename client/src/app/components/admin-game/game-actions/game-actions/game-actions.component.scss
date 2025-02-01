@@ -1,0 +1,30 @@
+.game-actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    background: rgb(137, 137, 137);
+  
+    button {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+    }
+}
+
+.visibility-btn {
+    background-color: #2196F3;
+    color: white;
+}
+  
+.edit-btn {
+    background-color: #FFC107;
+    color: black;
+}
+  
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}

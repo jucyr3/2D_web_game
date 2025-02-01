@@ -1,0 +1,66 @@
+<div class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>CRÉER LE JEU</h2>
+            <button class="close-btn" (click)="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-section">
+                <h3>NOM DU JEU:</h3>
+                <input type="text" 
+                       [(ngModel)]="newMapForm.mapName" 
+                       name="gameName" 
+                       class="game-name-input" 
+                       placeholder="Entrez le nom du jeu">
+            </div>
+            <div class="form-section">
+                <h3>MODE DE JEU:</h3>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" 
+                               [(ngModel)]="newMapForm.mapSize" 
+                               name="gameMode" 
+                               value="CLASSIQUE">
+                        CLASSIQUE
+                    </label>
+                    <label>
+                        <input type="radio" 
+                               [(ngModel)]="newMapForm.mapMode" 
+                               name="gameMode" 
+                               value="CAPTURE_THE_FLAG">
+                        CAPTURE THE FLAG
+                    </label>
+                </div>
+            </div>
+            <div class="form-section">
+                <h3>TAILLE DU JEU:</h3>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" 
+                               [(ngModel)]="newMapForm.mapSize" 
+                               name="gameSize" 
+                               value="PETIT">
+                        PETIT (10X10)
+                    </label>
+                    <label>
+                        <input type="radio" 
+                               [(ngModel)]="newMapForm.mapSize" 
+                               name="gameSize" 
+                               value="MOYENNE">
+                        MOYENNE (15X15)
+                    </label>
+                    <label>
+                        <input type="radio" 
+                               [(ngModel)]="newMapForm.mapSize" 
+                               name="gameSize" 
+                               value="GRANDE">
+                        GRANDE (20X20)
+                    </label>
+                </div>
+            </div>
+            <button class="create-btn" (click)="createMap()">
+                CRÉER LE JEU
+            </button>
+        </div>
+    </div>
+</div>
