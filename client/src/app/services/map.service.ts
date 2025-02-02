@@ -247,19 +247,16 @@ export class MapService {
         }
     }
 
-    async saveMap() {
-        
+    async saveMap() { // TODO : SHOULD CHANGE WHEN MERGING WITH VINCENT
         this.clientHttpRequest.saveMapToServer(this.map).subscribe({
             next: (savedMap) => {
-                console.log('Map saved successfully:', savedMap);
                 this.map = savedMap;
             },
             error: (error) => {
                 console.error('Error saving map:', error);
             }
         });
-
-        await this.exportMapAsImage(); // TODO : 
+        await this.exportMapAsImage(); // TODO : THERE IS A DELAY AFTER CLICKING ON THE BUTTON
 
     }
 }

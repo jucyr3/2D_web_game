@@ -8,6 +8,7 @@ import { catchError, throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+
 export class ClientHttpRequestsService {
 
   private readonly apiUrl = environment.serverUrl;
@@ -23,7 +24,7 @@ export class ClientHttpRequestsService {
       );
   }
 
-  saveMapToServer(map: Map): Observable<Map> { // TODO : NEEDS TO RETURN ID
+  saveMapToServer(map: Map): Observable<Map> { 
     return this.http.post<Map>(`${this.apiUrl}/maps`, map)
         .pipe(
             catchError((error) => {
@@ -54,10 +55,6 @@ export class ClientHttpRequestsService {
       ).pipe(
           map(response => response)
       );
-  }
-
-  getMapById(mapId: number): Observable<Map>{ // TODO : RETURNS MAP
-      return this.http.get<Map>(`${this.apiUrl}/maps/${mapId}`).pipe(map(response => response));
   }
 
   deleteMap(mapId: number): Observable<void> {

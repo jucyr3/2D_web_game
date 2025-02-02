@@ -79,12 +79,25 @@ export class MapService {
             }
         }
     
-        async createMap(map: Map): Promise<Map> {
+        async saveMap(map: Map): Promise<Map> {
             try {
-                map.id = this.generateRandomId(); // TODO : see if id exists before
-                this.maps.push(map);
-                await this.saveMaps(this.maps);
-                return map;
+                const existingMapById = this.maps.find(m => m.id === map.id);
+                
+                if (existingMapById) { // si la map existe deja sur le serveur // on fait juste changer ses attributs
+                    existingMapById.name = map.name;
+                    existingMapById.description = map.description;
+                    existingMapById.tileMatrix = map.tileMatrix;
+                    existingMapById.previewImage = map.previewImage;
+                    existingMapById.lastModified = new Date;
+                    await this.saveMaps(this.maps);  // Save 
+                    return existingMapById;
+                
+                } else { // sinon, on créé une nouvelle map
+                    map.id = this.generateRandomId(); 
+                    this.maps.push(map);
+                    await this.saveMaps(this.maps);  // Save 
+                    return map;
+                }
             } catch (error) {
                 if (error instanceof BadRequestException) {
                     throw error;

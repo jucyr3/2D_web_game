@@ -88,9 +88,9 @@ export class MapController {
             description: 'Map created successfully',
             type: Map 
         })
-        async createMap(@Body() map: Map): Promise<Map> {
+        async saveMap(@Body() map: Map): Promise<Map> { 
             try {
-                return await this.mapService.createMap(map);
+                return await this.mapService.saveMap(map);
             } catch (error) {
                 this.logger.error(`Failed to create map: ${error.message}`);
                 throw error;

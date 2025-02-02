@@ -28,14 +28,11 @@ export class GameActionsComponent {
     });
   }
 
-  editMap(map: Map) { // TODO : call server properly with new routes
-
-    this.clientHttpRequest.loadMapById(map.id).subscribe({ // TODO : CHANGE SERVER ROUTE : 
+  editMap(map: Map) {
+    this.clientHttpRequest.loadMapById(map.id).subscribe({
         next: (map: Map) => {
-          console.log('Map loaded:', map);
-          
           this.mapService.loadMap(this.mapService.loadMapFromJSON(map)); 
-          this.router.navigate(['edit']); // TODO : NEEDS TO NAVIGATE TO EDIT PAGE WITH MAP.NAME IN URL / MAP.ID
+          this.router.navigate(['edit', map.id]);
         
         },
         error: (err) => {
