@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
+import { CombinedStats } from '@common/stats';
 
 @Injectable({
     providedIn: 'root',
 })
 export class StatsService {
-    combinedStats = {
+    combinedStats: CombinedStats = {
         life: {
             stat: 4,
             label: 'Vie',

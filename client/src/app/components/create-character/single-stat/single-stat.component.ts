@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 
+const DEFAULT_STAT_VALUE = 4;
+
 @Component({
     selector: 'app-single-stat',
     imports: [],
@@ -8,7 +10,7 @@ import { Component, Input } from '@angular/core';
 })
 export class SingleStatComponent {
     @Input() statName: string = 'MonNom';
-    @Input() statValue: number = 4;
+    @Input() statValue: number = DEFAULT_STAT_VALUE;
     @Input() isDiceSix?: boolean = false;
     @Input() showDice: boolean = false;
     d4 = 'assets/images/d4_dice.png';

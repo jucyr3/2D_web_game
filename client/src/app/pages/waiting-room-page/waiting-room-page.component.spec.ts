@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed, } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { WaitingRoomServiceService } from '@app/services/waiting-room-service.service';
+import { WaitingRoomService } from '@app/services/waiting-room-service.service';
 import { WaitingRoomPageComponent } from './waiting-room-page.component';
 import SpyObj = jasmine.SpyObj;
 import { of } from 'rxjs';
@@ -9,19 +9,19 @@ import { of } from 'rxjs';
 describe('WaitingRoomPageComponent', () => {
     let component: WaitingRoomPageComponent;
     let fixture: ComponentFixture<WaitingRoomPageComponent>;
-    let waitingRoomServiceSpy: SpyObj<WaitingRoomServiceService>;
+    let waitingRoomServiceSpy: SpyObj<WaitingRoomService>;
     let dialogSpy: SpyObj<MatDialog>;
     let routerSpy: SpyObj<Router>;
 
     beforeEach(async () => {
-        waitingRoomServiceSpy = jasmine.createSpyObj('WaitingRoomServiceService', ['getRandomFourDigitNumber']);
+        waitingRoomServiceSpy = jasmine.createSpyObj('WaitingRoomService', ['getRandomFourDigitNumber']);
         dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
         routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
         await TestBed.configureTestingModule({
             imports: [WaitingRoomPageComponent],
             providers: [
-                { provide: WaitingRoomServiceService, useValue: waitingRoomServiceSpy },
+                { provide: WaitingRoomService, useValue: waitingRoomServiceSpy },
                 { provide: MatDialog, useValue: dialogSpy },
                 { provide: Router, useValue: routerSpy },
             ],
@@ -44,12 +44,11 @@ describe('WaitingRoomPageComponent', () => {
 
         expect(waitingRoomServiceSpy.getRandomFourDigitNumber).toHaveBeenCalled();
         expect(component.accessCode).toEqual(randomMockNumber);
-        
     });
 
     it('should open quit dialog and navigate to home on confirmation', () => {
         const dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close', 'componentInstance']);
-        dialogRefSpy.componentInstance = { confirmed: of(true) }; 
+        dialogRefSpy.componentInstance = { confirmed: of(true) };
         dialogSpy.open.and.returnValue(dialogRefSpy);
 
         component.openQuitDialog();

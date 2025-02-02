@@ -3,6 +3,7 @@ import { NameComponent } from '@app/components/create-character/name/name.compon
 import { SingleStatComponent } from '@app/components/create-character/single-stat/single-stat.component';
 import { ProfileService } from '@app/services/profile.service';
 import { StatsService } from '@app/services/stats.service';
+import { CombinedStats } from '@common/stats';
 
 @Component({
     selector: 'app-profile-showcase',
@@ -11,7 +12,7 @@ import { StatsService } from '@app/services/stats.service';
     styleUrl: './profile-showcase.component.scss',
 })
 export class ProfileShowcaseComponent {
-    combinedStats: any;
+    combinedStats: CombinedStats;
 
     constructor(
         public profileService: ProfileService,
@@ -19,7 +20,7 @@ export class ProfileShowcaseComponent {
     ) {
         this.combinedStats = this.statsService.getCombinedStats();
     }
-    
+
     assignBonus(stat: 'life' | 'speed') {
         this.statsService.assignBonus(stat);
     }

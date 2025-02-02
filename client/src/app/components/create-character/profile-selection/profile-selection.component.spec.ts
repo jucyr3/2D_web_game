@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { ProfilePictureComponent } from '@app/components/create-character/profile-picture/profile-picture.component';
 import { ProfileService } from '@app/services/profile.service';
-import { ProfilePictureComponent } from '../profile-picture/profile-picture.component';
+import { IMAGES_PATH } from '@common/imagePaths';
 import { ProfileSelectionComponent } from './profile-selection.component';
 
 describe('ProfileSelectionComponent', () => {
@@ -9,23 +10,11 @@ describe('ProfileSelectionComponent', () => {
     let fixture: ComponentFixture<ProfileSelectionComponent>;
     let profileServiceMock: Partial<ProfileService>;
 
+    const SELECTED_ITEM = 4;
     beforeEach(async () => {
         profileServiceMock = {
-            imagesPath: [
-                { id: 1, imagePath: 'assets/images/1.jpg' },
-                { id: 2, imagePath: 'assets/images/2.jpg' },
-                { id: 3, imagePath: 'assets/images/3.jpg' },
-                { id: 4, imagePath: 'assets/images/4.jpg' },
-                { id: 5, imagePath: 'assets/images/5.jpg' },
-                { id: 6, imagePath: 'assets/images/6.jpg' },
-                { id: 7, imagePath: 'assets/images/7.jpg' },
-                { id: 8, imagePath: 'assets/images/8.jpg' },
-                { id: 9, imagePath: 'assets/images/9.jpg' },
-                { id: 10, imagePath: 'assets/images/10.jpg' },
-                { id: 11, imagePath: 'assets/images/11.jpg' },
-                { id: 12, imagePath: 'assets/images/12.jpg' },
-            ],
-            getSelectedItem: jasmine.createSpy('getSelectedItem').and.returnValue(() => 4),
+            imagesPath: IMAGES_PATH,
+            getSelectedItem: jasmine.createSpy('getSelectedItem').and.returnValue(() => SELECTED_ITEM),
             setSelectedItem: jasmine.createSpy('setSelectedItem'),
         };
 
@@ -52,7 +41,7 @@ describe('ProfileSelectionComponent', () => {
     });
     it('shoud have the right selected item from the service', () => {
         const selectedItem = component.itemSelected;
-        expect(selectedItem).toEqual(4);
+        expect(selectedItem).toEqual(SELECTED_ITEM);
     });
 
     it('should render images', () => {
@@ -77,16 +66,16 @@ describe('ProfileSelectionComponent', () => {
     it('should call profileService.getSelectedItem when itemSelected is accessed', () => {
         const selectedItem = component.itemSelected;
         expect(profileServiceMock.getSelectedItem).toHaveBeenCalled();
-        expect(selectedItem).toEqual(4);
+        expect(selectedItem).toEqual(SELECTED_ITEM);
     });
 
     it('should set isSelected=true for the selected item and false for others', () => {
         const profilePictureComponents = fixture.debugElement.queryAll(By.directive(ProfilePictureComponent));
         const selectedItem = component.itemSelected;
 
-        profilePictureComponents.forEach((component, index) => {
-            const isSelected = component.componentInstance.isSelected;
-            const itemNumber = component.componentInstance.itemNumber;
+        profilePictureComponents.forEach((profilePictureComponent) => {
+            const isSelected = profilePictureComponent.componentInstance.isSelected;
+            const itemNumber = profilePictureComponent.componentInstance.itemNumber;
 
             if (itemNumber === selectedItem) {
                 expect(isSelected).toBeTrue();
@@ -95,5 +84,4 @@ describe('ProfileSelectionComponent', () => {
             }
         });
     });
-
 });

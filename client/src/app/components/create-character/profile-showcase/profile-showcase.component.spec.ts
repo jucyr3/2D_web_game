@@ -4,6 +4,7 @@ import { ProfileShowcaseComponent } from './profile-showcase.component';
 import { StatsService } from '@app/services/stats.service';
 
 describe('ProfileShowcaseComponent', () => {
+    const STAT_UPDATED = 6;
     let component: ProfileShowcaseComponent;
     let fixture: ComponentFixture<ProfileShowcaseComponent>;
     let statsService: StatsService;
@@ -42,7 +43,7 @@ describe('ProfileShowcaseComponent', () => {
 
     it('should update combinedStats correctly after assignBonus', () => {
         component.assignBonus('speed');
-        expect(component.combinedStats.speed.stat).toBe(6);
+        expect(component.combinedStats.speed.stat).toBe(STAT_UPDATED);
         expect(component.combinedStats.speed.selected).toBeTrue();
         expect(component.combinedStats.life.selected).toBeFalse();
     });
@@ -52,7 +53,6 @@ describe('ProfileShowcaseComponent', () => {
         expect(component.combinedStats.defense.selected).toBeTrue();
         expect(component.combinedStats.attack.selected).toBeFalse();
     });
-
 
     it('should not modify other stats when assignBonus is called', () => {
         const initialAttackStat = component.combinedStats.attack.stat;

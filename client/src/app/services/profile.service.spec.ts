@@ -14,13 +14,13 @@ describe('ProfileService', () => {
     });
 
     it('should set and get the selected item correctly', () => {
-        let item = 5;
+        const item = 5;
         service.setSelectedItem(item);
         expect(service.getSelectedItem()()).toBe(item);
     });
 
     it('should return the correct image path for the selected item', () => {
-        let item = 3;
+        const item = 3;
         service.setSelectedItem(item);
         expect(service.showImageSelected()).toBe('assets/images/' + item + '.jpg');
     });

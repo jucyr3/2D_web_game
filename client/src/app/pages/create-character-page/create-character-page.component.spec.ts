@@ -11,7 +11,7 @@ describe('CreateCharacterPageComponent', () => {
 
     beforeEach(async () => {
         routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-        profileServiceSpy = jasmine.createSpyObj('ProfileService', ['getName','showImageSelected']);
+        profileServiceSpy = jasmine.createSpyObj('ProfileService', ['getName', 'showImageSelected']);
 
         await TestBed.configureTestingModule({
             imports: [CreateCharacterPageComponent],

@@ -9,14 +9,14 @@ import { ProfileService } from '@app/services/profile.service';
     styleUrl: './profile-selection.component.scss',
 })
 export class ProfileSelectionComponent {
+    constructor(private profileService: ProfileService) {}
     get imagesPath() {
         return this.profileService.imagesPath;
     }
-    public get itemSelected() {
+    get itemSelected() {
         return this.profileService.getSelectedItem()();
     }
     clickItem(event: number) {
         this.profileService.setSelectedItem(event);
     }
-    constructor(private profileService: ProfileService) {}
 }
