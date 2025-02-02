@@ -60,7 +60,7 @@ export class EditPageComponent implements OnInit {
 
     onMouseDown(event: MouseEvent) {
         this.mouseService.isMouseDown = true;
-        this.mouseService.isRightClick = event.button === 2; // 1: left-click, 2: right-click (MDN Web Docs)
+        this.mouseService.isRightClick = event.button === 2; // 0: left-click, 2: right-click (MDN Web Docs)
     }
 
     onMouseUp(): void {
@@ -68,7 +68,7 @@ export class EditPageComponent implements OnInit {
 
         const item = this.dragAndDropService.currentDraggedItem;
         if (item) {
-            this.dragAndDropService.handleDraggedItemPlacement(-1, -1);
+            this.dragAndDropService.handleDraggedItemPlacement(-1, -1); // for outside of the map
             this.dragAndDropService.onMouseUp(item.name);
         }
     }

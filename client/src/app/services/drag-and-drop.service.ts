@@ -19,9 +19,7 @@ export class DragAndDropService {
     private _currentDraggedItem: ItemObject | null = null;
     private _isDragging: boolean = false;
 
-    constructor(
-        private readonly mapService: MapService,
-    ) {}
+    constructor(private readonly mapService: MapService) {}
 
     // Expose the currently dragged item's ID
     get currentDraggedItem(): ItemObject | null {
