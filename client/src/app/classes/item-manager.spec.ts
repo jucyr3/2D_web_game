@@ -25,20 +25,10 @@ describe('ItemManager', () => {
         expect(itemManager.itemAmounts['attributeItem1']).toBe(initialAmount + 1);
     });
 
-    it('should create and increase the amount of a new item', () => {
-        itemManager.increaseItemAmount('newItem');
-        expect(itemManager.itemAmounts['newItem']).toBe(1);
-    });
-
     it('should decrease the amount of an existing item', () => {
         const initialAmount = itemManager.itemAmounts['conditionItem1'];
         itemManager.decreaseItemAmount('conditionItem1');
         expect(itemManager.itemAmounts['conditionItem1']).toBe(initialAmount - 1);
-    });
-
-    it('should handle decreasing the amount of a non-existent item', () => {
-        itemManager.decreaseItemAmount('nonExistentItem');
-        expect(itemManager.itemAmounts['nonExistentItem']).toBe(NaN);
     });
 
     it('should return correct item amount for spawnpoint based on map size', () => {

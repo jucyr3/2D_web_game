@@ -1,14 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ResetButtonComponent } from './reset-button.component';
 import { By } from '@angular/platform-browser';
+import { MapService } from '@app/services/map.service'; // Import the actual MapService
+
+class MockMapService {
+    resetMap = jasmine.createSpy('resetMap');
+}
 
 describe('ResetButtonComponent', () => {
     let component: ResetButtonComponent;
     let fixture: ComponentFixture<ResetButtonComponent>;
+    let mockMapService: MockMapService;
 
     beforeEach(async () => {
+        mockMapService = new MockMapService();
+
         await TestBed.configureTestingModule({
             imports: [ResetButtonComponent],
+            providers: [{ provide: MapService, useValue: mockMapService }], // Provide MockMapService for MapService
         }).compileComponents();
     });
 
@@ -34,25 +43,19 @@ describe('ResetButtonComponent', () => {
 
     it('should proceed with reset logic if user confirms', () => {
         spyOn(window, 'confirm').and.returnValue(true);
-        spyOn(component, 'reset').and.callThrough();
 
-        const button = fixture.debugElement.query(By.css('button'));
-        button.triggerEventHandler('click', null);
-        fixture.detectChanges();
+        component.reset();
 
         expect(window.confirm).toHaveBeenCalledWith('Êtes-vous sûr de vouloir réinitialiser ?');
-        expect(component.reset).toHaveBeenCalled();
+        expect(mockMapService.resetMap).toHaveBeenCalled();
     });
 
     it('should not proceed with reset logic if user cancels', () => {
         spyOn(window, 'confirm').and.returnValue(false);
-        spyOn(component, 'reset').and.callThrough();
 
-        const button = fixture.debugElement.query(By.css('button'));
-        button.triggerEventHandler('click', null);
-        fixture.detectChanges();
+        component.reset();
 
         expect(window.confirm).toHaveBeenCalledWith('Êtes-vous sûr de vouloir réinitialiser ?');
-        expect(component.reset).toHaveBeenCalled();
+        expect(mockMapService.resetMap).not.toHaveBeenCalled();
     });
 });

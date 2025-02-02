@@ -8,11 +8,9 @@ import { MapService } from '@app/services/map.service';
     styleUrl: './save-button.component.scss',
 })
 export class SaveButtonComponent {
-
-    constructor(private mapService: MapService) { } 
+    constructor(private mapService: MapService) {}
 
     save() {
         this.mapService.saveMap();
-            
     }
 }
