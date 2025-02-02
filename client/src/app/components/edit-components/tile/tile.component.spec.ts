@@ -12,6 +12,8 @@ import { ItemTooltipComponent } from '@app/components/edit-components/item-toolt
 import { provideTippyLoader, provideTippyConfig, tooltipVariation, popperVariation } from '@ngneat/helipopper/config';
 import { TippyDirective } from '@ngneat/helipopper';
 
+/* eslint-disable */
+
 class MockItemManager {
     increaseItemAmount = jasmine.createSpy('increaseItemAmount');
     decreaseItemAmount = jasmine.createSpy('decreaseItemAmount');

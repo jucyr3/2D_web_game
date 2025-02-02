@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TitleComponent } from './title.component';
 import { MapService } from '@app/services/map.service';
 
+/* eslint-disable */
+
 describe('TitleComponent', () => {
     let component: TitleComponent;
     let fixture: ComponentFixture<TitleComponent>;

@@ -8,12 +8,11 @@ import { MapService } from '@app/services/map.service';
     styleUrl: './reset-button.component.scss',
 })
 export class ResetButtonComponent {
-    constructor(private mapService: MapService) { }
+    constructor(private mapService: MapService) {}
 
     reset() {
         if (confirm('Êtes-vous sûr de vouloir réinitialiser ?')) {
             this.mapService.resetMap();
-
-        } 
+        }
     }
 }

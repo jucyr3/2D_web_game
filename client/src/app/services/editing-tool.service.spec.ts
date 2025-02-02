@@ -7,6 +7,7 @@ import { MapService } from './map.service';
 import { ItemObject } from '@common/ItemObject';
 import { MouseService } from './mouse.service';
 
+/* eslint-disable */
 
 class MockItemManager {
     increaseItemAmount = jasmine.createSpy('increaseItemAmount');
@@ -32,11 +33,7 @@ describe('EditingToolService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [
-                EditingToolService,
-                { provide: MapService, useClass: MockMapService },
-                { provide: MouseService, useClass: MockMouseService },
-            ]
+            providers: [EditingToolService, { provide: MapService, useClass: MockMapService }, { provide: MouseService, useClass: MockMouseService }],
         });
         service = TestBed.inject(EditingToolService);
         mapService = TestBed.inject(MapService) as unknown as MockMapService;
@@ -159,9 +156,9 @@ describe('EditingToolService', () => {
         spyOn(service, 'getPath').and.returnValue([]);
         spyOn(service, 'eraseTile');
         spyOn(service, 'placeTile');
-        
+
         service.paintInterpolatedPath();
-        
+
         expect(service.eraseTile).not.toHaveBeenCalled();
         expect(service.placeTile).not.toHaveBeenCalled();
     });
@@ -171,108 +168,105 @@ describe('EditingToolService', () => {
         service.startTile = { row: 0, column: 0 };
         service.endTile = { row: 0, column: 0 };
         service.previousStartTile = { row: 1, column: 1 }; // Different from startTile
-        service.previousEndTile = { row: 1, column: 1 };   // Different from endTile
-    
+        service.previousEndTile = { row: 1, column: 1 }; // Different from endTile
+
         // First call to paintInterpolatedPath to add the tile to processedTiles
         spyOn(service, 'getPath').and.returnValue([{ row: 0, column: 0 }]);
         service['processedTiles'].add('0,0');
-              
+
         // Reset the spies
         spyOn(service, 'eraseTile');
         spyOn(service, 'placeTile');
-    
+
         // Second call to paintInterpolatedPath
         service.paintInterpolatedPath();
-        
+
         expect(service.eraseTile).not.toHaveBeenCalled();
         expect(service.placeTile).toHaveBeenCalledTimes(1);
     });
-    
-    
+
     it('should remove tiles from processedTiles if they are not in currentTileKeys', () => {
-        
         // First call to paintInterpolatedPath to add the tile to processedTiles
-        let getPathSpy = spyOn(service, 'getPath').and.returnValue([{ row: 0, column: 0 }]);
+        const getPathSpy = spyOn(service, 'getPath').and.returnValue([{ row: 0, column: 0 }]);
         spyOn(service, 'eraseTile');
         spyOn(service, 'placeTile');
-        
+
         service.paintInterpolatedPath();
-        
+
         // Reset the spies
         (service.eraseTile as jasmine.Spy).calls.reset();
         (service.placeTile as jasmine.Spy).calls.reset();
-        
 
         getPathSpy.and.returnValue([{ row: 1, column: 1 }]);
 
         // Second call to paintInterpolatedPath
         service.paintInterpolatedPath();
-        
+
         expect(service['processedTiles'].has('0,0')).toBeFalse();
     });
-    
+
     it('should remove tiles from processedTiles if they are not in currentTileKeys', () => {
-    service['processedTiles'].add('0,0');
-    service['processedTiles'].add('1,1');
-    service.startTile = { row: 0, column: 0 };
-    service.endTile = { row: 2, column: 2 };
-    
-    spyOn(service, 'getPath').and.returnValue([
-        { row: 0, column: 0 },
-        { row: 2, column: 2 }
-    ]);
+        service['processedTiles'].add('0,0');
+        service['processedTiles'].add('1,1');
+        service.startTile = { row: 0, column: 0 };
+        service.endTile = { row: 2, column: 2 };
 
-    service.paintInterpolatedPath();
+        spyOn(service, 'getPath').and.returnValue([
+            { row: 0, column: 0 },
+            { row: 2, column: 2 },
+        ]);
 
-    expect(service['processedTiles'].has('0,0')).toBeTrue();
-    expect(service['processedTiles'].has('1,1')).toBeFalse();
+        service.paintInterpolatedPath();
+
+        expect(service['processedTiles'].has('0,0')).toBeTrue();
+        expect(service['processedTiles'].has('1,1')).toBeFalse();
     });
 
     it('should skip processed tiles under certain conditions', () => {
-    service['processedTiles'].add('0,0');
-    service.startTile = { row: 0, column: 0 };
-    service.endTile = { row: 1, column: 1 };
-    service.previousStartTile = { row: 0, column: 0 };
-    service.previousEndTile = { row: 1, column: 1 };
-    
-    spyOn(service, 'getPath').and.returnValue([
-        { row: 0, column: 0 },
-        { row: 1, column: 1 }
-    ]);
-    spyOn(service, 'placeTile');
+        service['processedTiles'].add('0,0');
+        service.startTile = { row: 0, column: 0 };
+        service.endTile = { row: 1, column: 1 };
+        service.previousStartTile = { row: 0, column: 0 };
+        service.previousEndTile = { row: 1, column: 1 };
 
-    service.paintInterpolatedPath();
+        spyOn(service, 'getPath').and.returnValue([
+            { row: 0, column: 0 },
+            { row: 1, column: 1 },
+        ]);
+        spyOn(service, 'placeTile');
 
-    expect(service.placeTile).toHaveBeenCalledTimes(1);
-    expect(service.placeTile).toHaveBeenCalledWith(1, 1, TileTypes.GROUND_1);
+        service.paintInterpolatedPath();
+
+        expect(service.placeTile).toHaveBeenCalledTimes(1);
+        expect(service.placeTile).toHaveBeenCalledWith(1, 1, TileTypes.GROUND_1);
     });
 
     it('should call eraseTile when mouseService.isRightClick is true', () => {
-    service.startTile = { row: 0, column: 0 };
-    service.endTile = { row: 0, column: 0 };
-    spyOn(service, 'getPath').and.returnValue([{ row: 0, column: 0 }]);
-    spyOn(service, 'eraseTile');
-    spyOn(service, 'placeTile');
-    
-    (mouseService as any).isRightClick = true;
+        service.startTile = { row: 0, column: 0 };
+        service.endTile = { row: 0, column: 0 };
+        spyOn(service, 'getPath').and.returnValue([{ row: 0, column: 0 }]);
+        spyOn(service, 'eraseTile');
+        spyOn(service, 'placeTile');
 
-    service.paintInterpolatedPath();
+        (mouseService as any).isRightClick = true;
 
-    expect(service.eraseTile).toHaveBeenCalledWith(0, 0);
-    expect(service.placeTile).not.toHaveBeenCalled();
+        service.paintInterpolatedPath();
+
+        expect(service.eraseTile).toHaveBeenCalledWith(0, 0);
+        expect(service.placeTile).not.toHaveBeenCalled();
     });
 
     it('should remove item object when placing wall or door on tile with item', () => {
-    const itemObject = { name: 'TestItem' } as ItemObject;
-    mapService.getItemObject.and.returnValue(itemObject);
-    mapService.getTileType.and.returnValue(TileTypes.GROUND_1);
-    
-    spyOn(service, 'removeItemObjectFromTile');
-    spyOn(service as any, 'isBrushWallOrDoor').and.returnValue(true);
+        const itemObject = { name: 'TestItem' } as ItemObject;
+        mapService.getItemObject.and.returnValue(itemObject);
+        mapService.getTileType.and.returnValue(TileTypes.GROUND_1);
 
-    service.placeTile(0, 0, TileTypes.WALL);
+        spyOn(service, 'removeItemObjectFromTile');
+        spyOn(service as any, 'isBrushWallOrDoor').and.returnValue(true);
 
-    expect(service.removeItemObjectFromTile).toHaveBeenCalledWith(0, 0, itemObject);
+        service.placeTile(0, 0, TileTypes.WALL);
+
+        expect(service.removeItemObjectFromTile).toHaveBeenCalledWith(0, 0, itemObject);
     });
 
     it('should place tile if there is no item object on the tile', () => {
@@ -299,6 +293,4 @@ describe('EditingToolService', () => {
         service.eraseTile(0, 0);
         expect(service.placeTile).toHaveBeenCalled();
     });
-    
-    
 });

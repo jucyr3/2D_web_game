@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ItemGridComponent } from './item-grid.component';
 import { provideTippyLoader, provideTippyConfig, tooltipVariation, popperVariation } from '@ngneat/helipopper/config';
+
+/* eslint-disable */
 
 describe('ItemGridComponent', () => {
     let component: ItemGridComponent;

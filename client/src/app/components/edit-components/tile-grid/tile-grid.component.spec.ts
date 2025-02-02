@@ -7,27 +7,29 @@ import { MouseService } from '@app/services/mouse.service';
 import { Renderer2 } from '@angular/core';
 import { NgFor } from '@angular/common';
 
+/* eslint-disable */
+
 describe('TileGridComponent', () => {
-    let component: TileGridComponent;
-    let fixture: ComponentFixture<TileGridComponent>;
-    let mockDragAndDropService: jasmine.SpyObj<DragAndDropService>;
-    let mockEditingToolService: jasmine.SpyObj<EditingToolService>;
-    let mouseService: MouseService;
-    let mockRenderer = jasmine.createSpyObj('Renderer2', ['listen']);
+  let component: TileGridComponent;
+  let fixture: ComponentFixture<TileGridComponent>;
+  let mockDragAndDropService: jasmine.SpyObj<DragAndDropService>;
+  let mockEditingToolService: jasmine.SpyObj<EditingToolService>;
+  let mouseService: MouseService;
+  let mockRenderer = jasmine.createSpyObj('Renderer2', ['listen']);
 
   beforeEach(async () => {
 
-    
+
     mockDragAndDropService = jasmine.createSpyObj('DragAndDropService', ['setCurrentHoveredTile']);
-    
+
     mockEditingToolService = jasmine.createSpyObj('EditingToolService', [
-      'resetInterpolationPoints', 
+      'resetInterpolationPoints',
       'resetProcessedTiles'
     ]);
 
 
     await TestBed.configureTestingModule({
-      imports: [ TileGridComponent, TileComponent, NgFor ],
+      imports: [TileGridComponent, TileComponent, NgFor],
       providers: [
         MouseService,
         { provide: Renderer2, useValue: mockRenderer },
@@ -62,17 +64,17 @@ describe('TileGridComponent', () => {
   it('should handle mouse down with right click', () => {
     const mockEvent = { button: 2 } as MouseEvent;
     component.onMouseDown(mockEvent);
-    
+
     expect(mouseService.isRightClick).toBe(true);
   });
 
   it('should prevent default action on context menu', () => {
     const mockEvent = new MouseEvent('contextmenu');
     spyOn(mockEvent, 'preventDefault');
-    
+
     component.onContextMenu(mockEvent);
-    
+
     expect(mockEvent.preventDefault).toHaveBeenCalled();
   });
-  
+
 });

@@ -78,7 +78,7 @@ export class MapService {
         // TODO: for the server implementation
         // call the proper service to get the map from the server
 
-        //this.createMapFromJSON(mapDuServeur);
+        // this.createMapFromJSON(mapDuServeur);
         return false;
     }
 

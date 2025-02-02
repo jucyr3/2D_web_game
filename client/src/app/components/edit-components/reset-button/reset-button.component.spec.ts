@@ -3,6 +3,8 @@ import { ResetButtonComponent } from './reset-button.component';
 import { By } from '@angular/platform-browser';
 import { MapService } from '@app/services/map.service'; // Import the actual MapService
 
+/* eslint-disable */
+
 class MockMapService {
     resetMap = jasmine.createSpy('resetMap');
 }

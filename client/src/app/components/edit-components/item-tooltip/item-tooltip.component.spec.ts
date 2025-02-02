@@ -5,6 +5,8 @@ import { ItemObject } from '@common/ItemObject';
 import { TIPPY_REF } from '@ngneat/helipopper';
 import { itemDescriptions } from 'src/assets/items/item-descriptions';
 
+/* eslint-disable */
+
 describe('ItemTooltipComponent', () => {
     let component: ItemTooltipComponent;
     let fixture: ComponentFixture<ItemTooltipComponent>;
@@ -54,7 +56,7 @@ describe('ItemTooltipComponent', () => {
         const testItem = { name: 'testItem' } as ItemObject;
         component.itemObject = testItem;
         itemDescriptions['testItem'] = { name: 'Test Item', description: 'This is a rare item with damage and health.' };
-        
+
         component.itemDescription;
 
         expect(sanitizerSpy.bypassSecurityTrustHtml).toHaveBeenCalledWith(

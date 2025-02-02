@@ -9,7 +9,9 @@ import { MouseService } from '@app/services/mouse.service';
 import { ItemObject } from '@common/ItemObject';
 import { TippyDirective } from '@ngneat/helipopper';
 import { popperVariation, provideTippyConfig, provideTippyLoader, tooltipVariation } from '@ngneat/helipopper/config';
-import { ItemComponent } from './item.component';
+import { ItemComponent } from '@app/components/edit-components/item/item.component';
+
+/* eslint-disable */
 
 class MockItemManager {
     increaseItemAmount = jasmine.createSpy('increaseItemAmount');

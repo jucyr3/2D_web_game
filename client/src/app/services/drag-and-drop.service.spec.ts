@@ -4,6 +4,8 @@ import { MapService } from './map.service';
 import { ItemObject } from '@common/ItemObject';
 import { TileTypes } from '@common/tileType.constants';
 
+/* eslint-disable */
+
 describe('DragAndDropService', () => {
     let service: DragAndDropService;
     let mockMapService: jasmine.SpyObj<MapService>;

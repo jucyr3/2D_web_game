@@ -5,6 +5,7 @@ import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
 import { MapJson, MapService } from './map.service';
 
+/* eslint-disable */
 describe('MapService', () => {
     let service: MapService;
 

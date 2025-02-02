@@ -4,6 +4,8 @@ import { TestBed } from '@angular/core/testing';
 import { CommunicationService } from '@app/services/communication.service';
 import { Message } from '@common/message';
 
+/* eslint-disable */
+
 describe('CommunicationService', () => {
     let httpMock: HttpTestingController;
     let service: CommunicationService;

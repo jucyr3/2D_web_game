@@ -1,5 +1,6 @@
 import { ItemManager } from '@app/classes/item-manager'; // Adjust the import path as needed
 
+/* eslint-disable */
 describe('ItemManager', () => {
     let itemManager: ItemManager;
 

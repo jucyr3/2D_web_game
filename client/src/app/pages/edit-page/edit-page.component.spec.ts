@@ -7,6 +7,8 @@ import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { MouseService } from '@app/services/mouse.service';
 import { of } from 'rxjs';
 
+/* eslint-disable */
+
 describe('EditPageComponent', () => {
     let component: EditPageComponent;
     let fixture: ComponentFixture<EditPageComponent>;
