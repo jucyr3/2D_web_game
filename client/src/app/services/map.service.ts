@@ -246,4 +246,20 @@ export class MapService {
             return null;
         }
     }
+
+    async saveMap() {
+        
+        this.clientHttpRequest.saveMapToServer(this.map).subscribe({
+            next: (savedMap) => {
+                console.log('Map saved successfully:', savedMap);
+                this.map = savedMap;
+            },
+            error: (error) => {
+                console.error('Error saving map:', error);
+            }
+        });
+
+        await this.exportMapAsImage(); // TODO : 
+
+    }
 }

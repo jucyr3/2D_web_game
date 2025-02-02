@@ -15,7 +15,7 @@ export class GameActionsComponent {
   @Input() map: Map;
   @Output() refresh = new EventEmitter<void>();
   
-  constructor(private clientHttpRequest: ClientHttpRequestsService, private mapService: MapService, private router: Router) {}
+  constructor(protected clientHttpRequest: ClientHttpRequestsService, protected mapService: MapService, private router: Router) {}
   
   toggleVisibility(map: Map) {
     this.clientHttpRequest.updateMapVisibility(map.id, !map.isVisible).subscribe({
@@ -28,13 +28,15 @@ export class GameActionsComponent {
     });
   }
 
-  editMap(map: Map) { // TODO : call server properly
-    console.log('Editing game:', map.id);
-    this.clientHttpRequest.loadMapById(map.id).subscribe({
+  editMap(map: Map) { // TODO : call server properly with new routes
+
+    this.clientHttpRequest.loadMapById(map.id).subscribe({ // TODO : CHANGE SERVER ROUTE : 
         next: (map: Map) => {
           console.log('Map loaded:', map);
-          this.mapService.loadMap(this.mapService.loadMapFromJSON(map));
-          this.router.navigate(['edit']);
+          
+          this.mapService.loadMap(this.mapService.loadMapFromJSON(map)); 
+          this.router.navigate(['edit']); // TODO : NEEDS TO NAVIGATE TO EDIT PAGE WITH MAP.NAME IN URL / MAP.ID
+        
         },
         error: (err) => {
           console.error('Error loading map:', err);

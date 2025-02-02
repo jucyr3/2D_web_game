@@ -40,7 +40,7 @@ export class MapController {
             }
         }
     
-        @Get(':id')
+        @Get(':id') // TODO : TEST THIS THING
         @ApiOperation({ summary: 'Get map by ID' })
         @ApiParam({ name: 'id', type: Number })
         @ApiResponse({ 
@@ -62,7 +62,8 @@ export class MapController {
                 throw error;
             }
         }
-    
+
+        
         @Get('/visibility/isVisible')
         @ApiOperation({ summary: 'Get maps by visibility status' })
         @ApiResponse({ 

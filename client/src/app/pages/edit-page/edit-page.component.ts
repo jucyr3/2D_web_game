@@ -91,19 +91,6 @@ export class EditPageComponent {
         this.mapService.map.description = this.description;
         // Add any additional logic you need to handle the updated value
     }
-
-    async saveMap(): Promise<void> {
-        try {
-            const blob = await this.mapService.exportMapAsImage();
-            if (blob) {
-                console.log('Map image exported and saved successfully');
-            } else {
-                console.error('Failed to export map image');
-            }
-        } catch (error) {
-            console.error('Error saving map:', error);
-        }
-    }
 }
 
 // TODO: make the hovered tile a different color when dragging an item over it

@@ -40,7 +40,7 @@ export class AdminPageComponent {
                 formData.mapSize === 'MOYENNE' ? '15' : '20'
         };
     
-        this.mapService.createEmptyMap(mapData);
+        this.mapService.createEmptyMap(mapData); // TODO : CREATES EMPTY MAP AND GOES TO EDIT PAGE
         this.router.navigate(['edit']);
         this.closeCreateModal();
     }

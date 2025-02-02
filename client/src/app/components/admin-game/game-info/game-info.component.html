@@ -2,5 +2,5 @@
     <h2>{{ name }}</h2>
     <p>Taille: {{ size }} x {{ size }}</p>
     <p>Mode: {{ mode }}</p>
-    <p>Dernière modification: {{ lastModified }}</p>
+    <p>Dernière modification: {{ lastModified | date:'yyyy-MM-dd | HH:mm' }}</p>
 </div>

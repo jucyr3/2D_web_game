@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Map } from '@common/map';
 import { Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,16 @@ export class ClientHttpRequestsService {
           })
       );
   }
+
+  saveMapToServer(map: Map): Observable<Map> { // TODO : NEEDS TO RETURN ID
+    return this.http.post<Map>(`${this.apiUrl}/maps`, map)
+        .pipe(
+            catchError((error) => {
+                console.error('Error saving map:', error);
+                return throwError(() => error);
+            })
+        );
+    }
 
   getAllMapsByVisibility(): Observable<Map[]> {
       return this.http.get<Map[]>(`${this.apiUrl}/maps/visibility/isVisible`).pipe(
@@ -45,7 +56,7 @@ export class ClientHttpRequestsService {
       );
   }
 
-  getMapById(mapId: number): Observable<Map>{
+  getMapById(mapId: number): Observable<Map>{ // TODO : RETURNS MAP
       return this.http.get<Map>(`${this.apiUrl}/maps/${mapId}`).pipe(map(response => response));
   }
 

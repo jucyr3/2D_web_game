@@ -9,11 +9,11 @@ export class Map {
     description: string;
     gameMode: 'CTF' | 'Classic';
     tileMatrix: Tile[][];
-    lastModified: Date;
+    lastModified: Date; // TODO : CHANGE THIS 
     previewImage: string; 
 
     constructor(name: string, id:number, size: number, isVisible: boolean, description: string, gameMode: 'CTF' | 'Classic', tileMatrix?: Tile[][],
-        previewImage?: string)
+        previewImage?: string, lastModified?: Date)
      {
         this.name = name;
         this.id = id;
@@ -26,7 +26,12 @@ export class Map {
         } else {
             this.tileMatrix = Array.from({ length: size }, () => Array.from({ length: size }, () => new Tile(TileTypes.GROUND_1, false, false)));
         }
-        this.lastModified = new Date();
+        
+        if(lastModified){
+            this.lastModified = lastModified;
+        } else {
+            this.lastModified = new Date();
+        }
         
         if (previewImage) {
             this.previewImage = previewImage;

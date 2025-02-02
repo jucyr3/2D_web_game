@@ -21,7 +21,7 @@ interface MapJson {
             description: string;
         } | null;
     }[][];
-    lastModified: string;
+    lastModified: Date;
     previewImage: string;
 }
 
@@ -36,7 +36,7 @@ export class MapService {
                 if (this.maps) {
                     return this.maps;
                 }
-                const data = await fs.readFile(this.mapsFilePath, 'utf8'); // reads json file
+                const data = await fs.readFile(this.mapsFilePath, 'utf8'); // reads json file on server
                 const mapsData = JSON.parse(data).maps;
                 this.maps = mapsData.map(map => this.loadMapFromJSON(map));
                 return this.maps;
@@ -63,8 +63,8 @@ export class MapService {
     
         async getMapById(id: number): Promise<Map> {
             try {
-                const maps = await this.getAllMaps();
-                const map = maps.find(map => map.id === id);
+                
+                const map = this.maps.find(map => map.id === id);
                 
                 if (!map) {
                     throw new NotFoundException(`Map with ID ${id} not found`);
@@ -81,7 +81,7 @@ export class MapService {
     
         async createMap(map: Map): Promise<Map> {
             try {
-                map.id = this.generateRandomId();
+                map.id = this.generateRandomId(); // TODO : see if id exists before
                 this.maps.push(map);
                 await this.saveMaps(this.maps);
                 return map;
@@ -190,6 +190,6 @@ export class MapService {
     
         loadMapFromJSON(json: MapJson): Map {
             const tileMatrix = this.parseTileMatrix(json);
-            return new Map(json.name, json.id, json.size, json.isVisible, json.description, json.gameMode, tileMatrix, json.previewImage);
+            return new Map(json.name, json.id, json.size, json.isVisible, json.description, json.gameMode, tileMatrix, json.previewImage, json.lastModified);
         }
 }
