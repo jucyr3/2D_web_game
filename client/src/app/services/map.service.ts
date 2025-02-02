@@ -231,14 +231,6 @@ export class MapService {
             const response = await fetch(compressedDataUrl);
             const blob = await response.blob();
             
-            // download image for testing
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `map-${this.map.id}-preview.jpg`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(link.href);
     
             return blob;
         } catch (error) {
