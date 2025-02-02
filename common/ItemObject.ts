@@ -10,7 +10,6 @@ export enum Items {
     flag = 'flag',
 }
 
-
 export class ItemObject {
     name: string;
 
@@ -19,7 +18,6 @@ export class ItemObject {
     }
 
     use(): void {
-        console.log(`${this.name} was used.`);
         //useItemManager.useItem(name);
     }
 }

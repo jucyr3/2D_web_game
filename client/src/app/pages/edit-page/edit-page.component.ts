@@ -92,19 +92,6 @@ export class EditPageComponent implements OnInit {
         this.description = (event.target as HTMLInputElement).value;
     }
 
-    onBlur() {
-        this.updateValue();
-    }
-
-    updateValue() {
-        if (!this.title || this.title.trim() === '') {
-            this.title = 'Untitled'; // Reset to default if empty
-        }
-        this.mapService.map.name = this.title;
-        this.mapService.map.description = this.description;
-        // Add any additional logic you need to handle the updated value
-    }
-
     openQuitDialog(): void {
         const dialogRef = this.dialog.open(PopUpComponent, {
             width: '35%',
