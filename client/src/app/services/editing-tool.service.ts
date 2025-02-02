@@ -14,16 +14,16 @@ export const TILE_TEXTURE_PATH = 'assets/tiles/';
 export class EditingToolService {
     // TODO set inital tile type cleaner
 
-    private readonly processedTiles: Set<string> = new Set();
-
-    private activeTool: EditToolTypes = EditToolTypes.Hand;
-    private currentTileTypeOnBrush: TileTypes = TileTypes.GROUND_1;
-
     startTile: Coordinate | null = null;
     endTile: Coordinate | null = null;
 
     previousStartTile: Coordinate | null = null;
     previousEndTile: Coordinate | null = null;
+
+    private readonly processedTiles: Set<string> = new Set();
+
+    private activeTool: EditToolTypes = EditToolTypes.Hand;
+    private currentTileTypeOnBrush: TileTypes = TileTypes.GROUND_1;
 
     constructor(
         private readonly mapService: MapService,

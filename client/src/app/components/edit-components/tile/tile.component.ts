@@ -31,7 +31,7 @@ export class TileComponent implements OnInit {
     @Input() tileNumber: number;
     @Input() tileObject: Tile;
 
-    ITEM_TEXTURE_PATH = ITEM_TEXTURE_PATH;
+    itemTexturePath = ITEM_TEXTURE_PATH;
 
     tilePosition: Coordinate;
 

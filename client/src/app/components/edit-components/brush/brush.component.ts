@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { EditToolTypes } from '@app/services/editing-tool.constants';
-import { EditingToolService, TILE_TEXTURE_PATH } from '@app/services/editing-tool.service';
+import { EditingToolService } from '@app/services/editing-tool.service';
 import { TileTypes } from '@common/tileType.constants';
 import { TippyDirective } from '@ngneat/helipopper';
 import { BrushTooltipComponent } from '@app/components/edit-components/brush-tooltip/brush-tooltip.component';
@@ -15,8 +15,6 @@ import { MouseService } from '@app/services/mouse.service';
 export class BrushComponent {
     @Input() tileType: TileTypes;
     @Input() isActive: boolean;
-
-    TILE_TEXTURE_PATH = TILE_TEXTURE_PATH;
 
     constructor(
         private readonly editingToolService: EditingToolService,

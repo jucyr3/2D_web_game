@@ -13,7 +13,7 @@
     [ngStyle]="{ 'background-image': this.tileTexture }"
 >
     @if (this.itemObject) {
-    <img [src]="ITEM_TEXTURE_PATH + this.itemObject.name + '.png'" draggable="false" alt="{{ this.itemObject.name }}" />
+    <img [src]="itemTexturePath + this.itemObject.name + '.png'" draggable="false" alt="{{ this.itemObject.name }}" />
     }
 </div>
 

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { TestBed } from '@angular/core/testing';
 import { EditingToolService } from './editing-tool.service';
 import { TileTypes } from '@app/../../../common/tileType.constants';
@@ -7,7 +8,6 @@ import { MapService } from './map.service';
 import { ItemObject } from '@common/ItemObject';
 import { MouseService } from './mouse.service';
 
-/* eslint-disable */
 
 class MockItemManager {
     increaseItemAmount = jasmine.createSpy('increaseItemAmount');

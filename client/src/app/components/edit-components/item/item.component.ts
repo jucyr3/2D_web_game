@@ -19,19 +19,11 @@ import { MapService } from '@app/services/map.service';
 export class ItemComponent implements OnDestroy, OnInit {
     @Input() itemId: string; // Unique identifier for each item
 
-    ITEM_TEXTURE_PATH = ITEM_TEXTURE_PATH;
-
-    get isTooltipEnabled() {
-        return !this.mouseService.isMouseDown;
-    }
+    itemTexturePath = ITEM_TEXTURE_PATH;
 
     duration = 0;
 
     itemObject: ItemObject;
-
-    get itemAmount() {
-        return this.mapService.itemManager.itemAmounts[this.itemObject.name];
-    }
 
     constructor(
         protected readonly dragAndDropService: DragAndDropService,
@@ -39,6 +31,14 @@ export class ItemComponent implements OnDestroy, OnInit {
         protected readonly mouseService: MouseService,
         protected mapService: MapService,
     ) {}
+
+    get isTooltipEnabled() {
+        return !this.mouseService.isMouseDown;
+    }
+
+    get itemAmount() {
+        return this.mapService.itemManager.itemAmounts[this.itemObject.name];
+    }
 
     get draggingState() {
         return this.dragAndDropService.getDraggingState(this.itemObject.name);

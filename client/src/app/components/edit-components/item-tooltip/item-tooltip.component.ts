@@ -15,9 +15,6 @@ export class ItemTooltipComponent {
     tippy = injectTippyRef();
 
     // Inject DomSanitizer
-    constructor(private readonly sanitizer: DomSanitizer) {}
-
-    // Map of words to their corresponding colors
     private readonly highlightedWords: { [key: string]: string } = {
         rare: '#007bff', // Blue for "rare"
         epic: '#6f42c1', // Purple for "epic"
@@ -25,6 +22,9 @@ export class ItemTooltipComponent {
         damage: '#dc3545', // Red for "damage"
         health: '#28a745', // Green for "health"
     };
+    constructor(private readonly sanitizer: DomSanitizer) {}
+
+    // Map of words to their corresponding colors
 
     get itemDescription(): SafeHtml {
         // 💀 trust me bro
