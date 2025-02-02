@@ -2,6 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SaveButtonComponent } from './save-button.component';
 import { By } from '@angular/platform-browser';
 
+class MockMapService {
+    saveMap() {}
+}
 describe('ResetButtonComponent', () => {
     let component: SaveButtonComponent;
     let fixture: ComponentFixture<SaveButtonComponent>;
