@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ItemObject } from '@common/ItemObject';
 import { TileTypes } from '@common/tileType.constants';
-import { ITEM_CONTAINER_COORDINATES, ItemService } from './item.service';
 import { MapService } from './map.service';
+
+export const ITEM_CONTAINER_COORDINATES = { row: -2, column: -2 };
 
 @Injectable({
     providedIn: 'root',
@@ -20,7 +21,6 @@ export class DragAndDropService {
 
     constructor(
         private readonly mapService: MapService,
-        private readonly itemService: ItemService,
     ) {}
 
     // Expose the currently dragged item's ID
@@ -91,7 +91,7 @@ export class DragAndDropService {
 
     private handleInvalidItemPlacement(draggedItem: ItemObject): void {
         if (this.isItemFromContainer()) {
-            this.itemService.increaseItemAmount(draggedItem.name);
+            this.mapService.itemManager.increaseItemAmount(draggedItem.name);
         } else {
             this.mapService.resetItemToStartPosition(this.startTile.row, this.startTile.column, draggedItem);
         }

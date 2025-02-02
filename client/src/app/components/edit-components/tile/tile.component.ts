@@ -5,7 +5,7 @@ import { Component, Input, OnInit } from '@angular/core';
 // Services
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditingToolService } from '@app/services/editing-tool.service';
-import { ItemService, ITEM_TEXTURE_PATH } from '@app/services/item.service';
+import { ITEM_TEXTURE_PATH } from '@app/../assets/items/item-texture-path';
 import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
 import { TippyDirective } from '@ngneat/helipopper';
@@ -40,7 +40,6 @@ export class TileComponent implements OnInit {
         protected readonly mouseService: MouseService,
         protected readonly mapService: MapService,
         private readonly dragAndDropService: DragAndDropService,
-        private readonly itemService: ItemService,
     ) {}
 
     get tileTexture(): string {
@@ -99,9 +98,5 @@ export class TileComponent implements OnInit {
         const row = Math.floor(this.tileNumber / this.mapService.map.size);
         const column = this.tileNumber % this.mapService.map.size;
         this.tilePosition = { row, column };
-
-        if (this.itemObject) {
-            this.itemService.decreaseItemAmount(this.itemObject.name);
-        }
     }
 }

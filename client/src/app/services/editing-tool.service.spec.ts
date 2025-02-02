@@ -2,14 +2,13 @@ import { TestBed } from '@angular/core/testing';
 import { EditingToolService } from './editing-tool.service';
 import { TileTypes } from '@app/../../../common/tileType.constants';
 import { Coordinate } from '@app/interfaces/coordinate';
-import { ItemService } from './item.service';
 import { EditToolTypes } from './editing-tool.constants';
 import { MapService } from './map.service';
 import { ItemObject } from '@common/ItemObject';
 import { MouseService } from './mouse.service';
 
 
-class MockItemService {
+class MockItemManager {
     increaseItemAmount = jasmine.createSpy('increaseItemAmount');
 }
 
@@ -18,6 +17,7 @@ class MockMapService {
     getItemObject = jasmine.createSpy('getItemObject');
     removeGameObject = jasmine.createSpy('removeGameObject');
     changeTileType = jasmine.createSpy('changeTileType');
+    itemManager = new MockItemManager();
 }
 
 class MockMouseService {
@@ -27,7 +27,6 @@ class MockMouseService {
 
 describe('EditingToolService', () => {
     let service: EditingToolService;
-    let itemService: MockItemService;
     let mapService: MockMapService;
     let mouseService: MockMouseService;
 
@@ -35,13 +34,11 @@ describe('EditingToolService', () => {
         TestBed.configureTestingModule({
             providers: [
                 EditingToolService,
-                { provide: ItemService, useClass: MockItemService },
                 { provide: MapService, useClass: MockMapService },
                 { provide: MouseService, useClass: MockMouseService },
             ]
         });
         service = TestBed.inject(EditingToolService);
-        itemService = TestBed.inject(ItemService) as unknown as MockItemService;
         mapService = TestBed.inject(MapService) as unknown as MockMapService;
         mouseService = TestBed.inject(MouseService) as unknown as MockMouseService;
     });
@@ -107,7 +104,7 @@ describe('EditingToolService', () => {
     it('should remove item object from tile', () => {
         const itemObject: ItemObject = { name: 'TestItem' } as ItemObject;
         service.removeItemObjectFromTile(0, 0, itemObject);
-        expect(itemService.increaseItemAmount).toHaveBeenCalledWith('TestItem');
+        expect(mapService.itemManager.increaseItemAmount).toHaveBeenCalledWith('TestItem');
         expect(mapService.removeGameObject).toHaveBeenCalledWith(0, 0);
     });
 

@@ -3,7 +3,6 @@ import { TileTypes } from '@app/../../../common/tileType.constants';
 import { Coordinate } from '@app/interfaces/coordinate';
 import { ItemObject } from '@common/ItemObject';
 import { EditToolTypes } from './editing-tool.constants';
-import { ItemService } from './item.service';
 import { MapService } from './map.service';
 import { MouseService } from './mouse.service';
 
@@ -29,7 +28,6 @@ export class EditingToolService {
     constructor(
         private readonly mapService: MapService,
         private readonly mouseService: MouseService,
-        private readonly itemService: ItemService,
     ) {}
 
     setActiveTool(tool: EditToolTypes) {
@@ -192,7 +190,7 @@ export class EditingToolService {
     }
 
     removeItemObjectFromTile(row: number, column: number, itemObject: ItemObject): void {
-        this.itemService.increaseItemAmount(itemObject.name);
+        this.mapService.itemManager.increaseItemAmount(itemObject.name);
         this.mapService.removeGameObject(row, column);
     }
 

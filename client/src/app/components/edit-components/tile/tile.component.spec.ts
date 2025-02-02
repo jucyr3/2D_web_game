@@ -3,7 +3,6 @@ import { NgStyle } from '@angular/common';
 import { TileComponent } from './tile.component';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditingToolService } from '@app/services/editing-tool.service';
-import { ItemService} from '@app/services/item.service';
 import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
 import { EditToolTypes } from '@app/services/editing-tool.constants';
@@ -12,20 +11,21 @@ import { ItemObject } from '@common/ItemObject';
 import { ItemTooltipComponent } from '@app/components/edit-components/item-tooltip/item-tooltip.component';
 import { provideTippyLoader, provideTippyConfig, tooltipVariation, popperVariation } from '@ngneat/helipopper/config';
 import { TippyDirective } from '@ngneat/helipopper';
+import { ItemManager } from '@app/classes/item-manager';
 
 describe('TileComponent', () => {
     let component: TileComponent;
     let fixture: ComponentFixture<TileComponent>;
     let mockDragAndDropService: jasmine.SpyObj<DragAndDropService>;
     let mockEditingToolService: jasmine.SpyObj<EditingToolService>;
-    let mockItemService: jasmine.SpyObj<ItemService>;
+    let mockItemManager: jasmine.SpyObj<ItemManager>;
     let mockMapService: jasmine.SpyObj<MapService>;
     let mockMouseService: jasmine.SpyObj<MouseService>;
 
     beforeEach(async () => {
         mockDragAndDropService = jasmine.createSpyObj('DragAndDropService', ['startDragging', 'handleDraggedItemPlacement', 'onMouseUp', 'setCurrentHoveredTile']);
         mockEditingToolService = jasmine.createSpyObj('EditingToolService', ['setActiveTool', 'setInterpolationPoints', 'onMouseUp', 'removeItemObjectFromTile']);
-        mockItemService = jasmine.createSpyObj('ItemService', ['decreaseItemAmount']);
+        mockItemManager = jasmine.createSpyObj('ItemManager', ['decreaseItemAmount']);
         mockMapService = jasmine.createSpyObj('MapService', ['getTileTexture', 'getItemObject', 'removeGameObject']);
         mockMouseService = jasmine.createSpyObj('MouseService', [], {isMouseDown: false, isRightClick: false});
 
@@ -34,7 +34,6 @@ describe('TileComponent', () => {
             providers: [
                 { provide: DragAndDropService, useValue: mockDragAndDropService },
                 { provide: EditingToolService, useValue: mockEditingToolService },
-                { provide: ItemService, useValue: mockItemService },
                 { provide: MapService, useValue: mockMapService },
                 { provide: MouseService, useValue: mockMouseService },
                 provideTippyConfig({
@@ -78,7 +77,7 @@ describe('TileComponent', () => {
 
         component['initializeTile']();
 
-        expect(mockItemService.decreaseItemAmount).toHaveBeenCalled();
+        expect(mockItemManager.decreaseItemAmount).toHaveBeenCalled();
 
 
     });

@@ -4,6 +4,8 @@ import { Map } from '@common/map';
 import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
 
+import { ItemManager } from '@app/classes/item-manager';
+
 interface MapJson {
     name: string;
     id: number;
@@ -28,6 +30,7 @@ interface MapJson {
 })
 export class MapService {
     map: Map;
+    itemManager: ItemManager;
 
     constructor() {
         console.log("trying to load map from session storage");
@@ -38,9 +41,13 @@ export class MapService {
                 console.log("failed to load map from server");
                 console.log("setting default map");
                 this.setDefaultMap();
+                this.saveMapToSessionStorage();
+                this.itemManager = new ItemManager(this.map.size);
             }
         }
     }
+
+    
 
     setDefaultMap(): void {
         const mapSize = 15;
@@ -58,12 +65,17 @@ export class MapService {
                 // TODO: Fix this
                 const gameObject = tileData.gameObject ? new ItemObject(tileData.gameObject.name) : null;
 
+                if (gameObject) {
+                    this.itemManager.decreaseItemAmount(gameObject.name);
+                }
+
                 return new Tile(type, isOccupied, isObstacle, gameObject);
             }),
         );
     }
 
     createMapFromJSON(json: MapJson): Map {
+        this.itemManager = new ItemManager(json.size);
         const tileMatrix = this.parseTileMatrix(json);
         return new Map(json.name, json.id, json.size, json.isVisible, json.description, json.gameMode, tileMatrix);
     }
@@ -72,6 +84,9 @@ export class MapService {
     // returns true if map is loaded from server
     loadMapFromServer(): boolean {
         // TODO: for the server implementation
+        // call the proper service to get the map from the server
+
+        //this.createMapFromJSON(mapDuServeur);
         return false;
     }
 
@@ -84,8 +99,8 @@ export class MapService {
         this.saveMapToServer();
     }
 
-    resetMap(): void {
-        window.location.reload();
+    resetMap(): void {    
+        this.loadMapFromSessionStorage();
     }
 
 
@@ -100,6 +115,7 @@ export class MapService {
         }
 
         this.map = this.createMapFromJSON(JSON.parse(mapJson));
+        
         return true;
     }
 

@@ -1,7 +1,7 @@
 <div [tp]="ItemTooltipComponent" class="item-container" [tpDuration]="0" tpPlacement="right" tpMaxWidth="200px" [tpIsEnabled]="isTooltipEnabled">
     <img
         class="item"
-        [ngClass]="{ grayscale: this.itemService.itemAmounts[this.itemObject.name] <= 0 }"
+        [ngClass]="{ grayscale: this.mapService.itemManager.itemAmounts[this.itemObject.name] <= 0 }"
         [src]="ITEM_TEXTURE_PATH + itemId + '.png'"
         [alt]="itemId"
         draggable="false"
@@ -11,8 +11,8 @@
         onselectstart="return false;"
     />
     <!-- Add this div to display the item amount -->
-    <div *ngIf="itemService.itemAmounts[itemObject.name] > 1" class="item-amount">
-        {{ itemService.itemAmounts[itemObject.name] }}
+    <div *ngIf="mapService.itemManager.itemAmounts[itemObject.name] > 1" class="item-amount">
+        {{ mapService.itemManager.itemAmounts[itemObject.name] }}
     </div>
 </div>
 <div *ngIf="draggingState.isDragging" class="drag-preview" [style.left.px]="draggingState.dragX" [style.top.px]="draggingState.dragY">

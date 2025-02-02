@@ -1,13 +1,14 @@
 import { NgClass, NgIf } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { DragAndDropService } from '@app/services/drag-and-drop.service';
+import { DragAndDropService, ITEM_CONTAINER_COORDINATES } from '@app/services/drag-and-drop.service';
 import { EditToolTypes } from '@app/services/editing-tool.constants';
 import { EditingToolService } from '@app/services/editing-tool.service';
-import { ITEM_CONTAINER_COORDINATES, ITEM_TEXTURE_PATH, ItemService } from '@app/services/item.service';
+import { ITEM_TEXTURE_PATH } from '@app/../assets/items/item-texture-path';
 import { ItemObject } from '@common/ItemObject';
 import { TippyDirective } from '@ngneat/helipopper';
 import { ItemTooltipComponent } from '@app/components/edit-components/item-tooltip/item-tooltip.component';
 import { MouseService } from '@app/services/mouse.service';
+import { MapService } from '@app/services/map.service';
 
 @Component({
     selector: 'app-item',
@@ -28,11 +29,15 @@ export class ItemComponent implements OnDestroy, OnInit {
 
     itemObject: ItemObject;
 
+    get itemAmount() {
+        return this.mapService.itemManager.itemAmounts[this.itemObject.name];
+    }
+
     constructor(
         protected readonly dragAndDropService: DragAndDropService,
         private readonly editingToolService: EditingToolService,
-        protected readonly itemService: ItemService,
         protected readonly mouseService: MouseService,
+        protected mapService: MapService,
     ) {}
 
     get draggingState() {
@@ -40,14 +45,14 @@ export class ItemComponent implements OnDestroy, OnInit {
     }
 
     ngOnInit(): void {
-        this.itemObject = this.itemService.createItem(this.itemId);
+        this.itemObject = new ItemObject(this.itemId);
     }
 
     onMouseDown(event: MouseEvent): void {
-        if (this.itemService.itemAmounts[this.itemObject.name] <= 0) {
+        if (this.mapService.itemManager.itemAmounts[this.itemObject.name] <= 0) {
             return;
         }
-        this.itemService.decreaseItemAmount(this.itemObject.name);
+        this.mapService.itemManager.decreaseItemAmount(this.itemObject.name);
         this.editingToolService.setActiveTool(EditToolTypes.Hand);
         this.dragAndDropService.startDragging(ITEM_CONTAINER_COORDINATES.row, ITEM_CONTAINER_COORDINATES.column, this.itemObject, event);
     }
@@ -56,7 +61,7 @@ export class ItemComponent implements OnDestroy, OnInit {
         if (this.draggingState.isDragging && this.dragAndDropService.currentDraggedItem) {
             // if the dragged items name is the same as this ones
             if (this.dragAndDropService.currentDraggedItem.name === this.itemObject.name) {
-                this.itemService.increaseItemAmount(this.itemObject.name);
+                this.mapService.itemManager.increaseItemAmount(this.itemObject.name);
             }
 
             this.dragAndDropService.onMouseUp(this.itemObject.name);

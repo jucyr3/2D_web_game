@@ -6,7 +6,6 @@ import { TitleComponent } from '@app/components/edit-components/title/title.comp
 import { ItemGridComponent } from '@app/components/edit-components/item-grid/item-grid.component';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditingToolService } from '@app/services/editing-tool.service';
-import { ItemService } from '@app/services/item.service';
 import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
 import { ResetButtonComponent } from '@app/components/edit-components/reset-button/reset-button.component';
@@ -49,7 +48,6 @@ export class EditPageComponent implements OnInit {
         private readonly mouseService: MouseService,
         protected mapService: MapService,
         protected dragAndDropService: DragAndDropService,
-        protected itemService: ItemService,
         readonly dialog: MatDialog,
         private readonly router: Router,
     ) {}
