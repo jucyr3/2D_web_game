@@ -48,9 +48,6 @@ export class MapService {
     
         async getAllMapsByVisibility(): Promise<Map[]> {
             try {
-                if (this.maps) {
-                    return this.maps;
-                }
                 const data = await fs.readFile(this.mapsFilePath, 'utf8');
                 const mapsData = JSON.parse(data).maps;
                 this.maps = mapsData.map(map => this.loadMapFromJSON(map));
