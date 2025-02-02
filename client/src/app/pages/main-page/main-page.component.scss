@@ -6,7 +6,6 @@ $button-border-color: #aaa; // Couleur de la bordure des boutons
 $text-color: #fff; // Couleur principale du texte
 $footer-color: #aaa; // Couleur du texte dans le pied de page
 
-
 @mixin center-align {
     display: flex;
     flex-direction: column;
@@ -18,9 +17,9 @@ $footer-color: #aaa; // Couleur du texte dans le pied de page
     text-align: center;
     padding: 2rem;
     min-height: 100vh;
-    display: flex; 
-    flex-direction: column; 
-    justify-content: space-between; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     box-sizing: border-box;
 
     &__title {
@@ -80,6 +79,4 @@ $footer-color: #aaa; // Couleur du texte dans le pied de page
             }
         }
     }
-
-    
 }

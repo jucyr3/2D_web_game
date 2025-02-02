@@ -19,12 +19,12 @@ $footer-color: #aaa; // Couleur du texte dans le pied de page
     outline: none; /* Remove default outline */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
     resize: none; /* Prevent resizing (if using a textarea) */
-  }
-  
-  .descriptionInput:focus {
+}
+
+.descriptionInput:focus {
     border-color: $primary-color;
-  }
-  
-  .descriptionInput:hover {
+}
+
+.descriptionInput:hover {
     border-color: $primary-color;
-  }
+}

@@ -11,35 +11,37 @@ import { MapService } from '@app/services/map.service';
     templateUrl: './admin-page.component.html',
     styleUrls: ['./admin-page.component.scss'],
     imports: [CommonModule, FormsModule, GameGridComponent, ModalComponent],
-    standalone: true
+    standalone: true,
 })
-
 export class AdminPageComponent {
-    constructor(protected router: Router, protected mapService: MapService) {}
+    constructor(
+        protected router: Router,
+        protected mapService: MapService,
+    ) {}
 
     isCreateModalOpen = false;
     newMapForm = {
-        mapName: '',  
-        mapMode: 'CLASSIQUE' as 'CLASSIQUE' | 'CAPTURE THE FLAG',
-        mapSize: 'PETIT' as 'PETIT' | 'MOYENNE' | 'GRANDE'
+        mapName: '',
+        mapMode: 'Classic' as 'Classic' | 'CTF',
+        mapSize: 'PETIT' as 'PETIT' | 'MOYENNE' | 'GRANDE',
     };
 
     openCreateModal() {
         this.isCreateModalOpen = true;
     }
-    
+
     closeCreateModal() {
         this.isCreateModalOpen = false;
     }
 
-    handleCreateMap(formData: any) { // Creates empty map service
+    handleCreateMap(formData: any) {
+        // Creates empty map service
         const mapData = {
-          name: formData.mapName,
-          gameMode: formData.mapMode,
-          size: formData.mapSize === 'PETIT' ? '10' : 
-                formData.mapSize === 'MOYENNE' ? '15' : '20'
+            name: formData.mapName,
+            gameMode: formData.mapMode,
+            size: formData.mapSize === 'PETIT' ? '10' : formData.mapSize === 'MOYENNE' ? '15' : '20',
         };
-    
+
         this.mapService.createEmptyMap(mapData); // TODO : CREATES EMPTY MAP AND GOES TO EDIT PAGE
         this.router.navigate(['edit']);
         this.closeCreateModal();

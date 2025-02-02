@@ -1,25 +1,24 @@
-<div class="item-container">
-  <img
-      class="item"
-      [ngClass]="{ grayscale: this.itemService.itemAmounts[this.itemObject.name] <= 0 }"
-      [src]="'../assets/' + itemId + '.png'"
-      [alt]="itemId"
-      draggable="false"
-      (mousedown)="onMouseDown($event)"
-      (mouseup)="onMouseUp()"
-      onmousedown="return false;"
-      onselectstart="return false;"
-      [matTooltip]="!this.dragAndDropService.isDragging ? this.getFormattedTooltip() : null"
-      [matTooltipPosition]="'left'"
-      [matTooltipShowDelay]="200"
-      [matTooltipHideDelay]="0"
-      matTooltipClass="description-tooltip"
-  />
-  <!-- Add this div to display the item amount -->
-  <div *ngIf="itemService.itemAmounts[itemObject.name] > 1" class="item-amount">
-      {{ itemService.itemAmounts[itemObject.name] }}
-  </div>
+<div [tp]="ItemTooltipComponent" class="item-container" [tpDuration]="0" tpPlacement="right" tpMaxWidth="200px" [tpIsEnabled]="isTooltipEnabled">
+    <img
+        class="item"
+        [ngClass]="{ grayscale: this.mapService.itemManager.itemAmounts[this.itemObject.name] <= 0 }"
+        [src]="itemTexturePath + itemId + '.png'"
+        [alt]="itemId"
+        draggable="false"
+        (mousedown)="onMouseDown($event)"
+        (mouseup)="onMouseUp()"
+        onmousedown="return false;"
+        onselectstart="return false;"
+    />
+    <!-- Add this div to display the item amount -->
+    <div *ngIf="mapService.itemManager.itemAmounts[itemObject.name] > 1" class="item-amount">
+        {{ mapService.itemManager.itemAmounts[itemObject.name] }}
+    </div>
 </div>
 <div *ngIf="draggingState.isDragging" class="drag-preview" [style.left.px]="draggingState.dragX" [style.top.px]="draggingState.dragY">
-  <img [src]="'../assets/' + itemId + '.png'" [alt]="itemId" />
+    <img [src]="itemTexturePath + itemId + '.png'" [alt]="itemId" />
 </div>
+
+<ng-template #ItemTooltipComponent let-tooltip="tooltip">
+    <app-item-tooltip [itemObject]="itemObject"></app-item-tooltip>
+</ng-template>

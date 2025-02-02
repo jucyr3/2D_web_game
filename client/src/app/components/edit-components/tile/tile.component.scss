@@ -15,10 +15,6 @@
     align-items: center; /* Center vertically */
 }
 
-.tile.grab-cursor {
-    cursor: grab; /* Cursor style for grab */
-}
-
 .tile.grab-cursor:active {
     cursor: grabbing; /* Cursor style for grabbing */
 }

@@ -1,17 +1,24 @@
 import { NgStyle } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BrushGridComponent } from '@app/components/edit-components/brush-grid/brush-grid.component';
 import { DescriptionComponent } from '@app/components/edit-components/description/description.component';
 import { ItemGridComponent } from '@app/components/edit-components/item-grid/item-grid.component';
+import { ResetButtonComponent } from '@app/components/edit-components/reset-button/reset-button.component';
+import { SaveButtonComponent } from '@app/components/edit-components/save-button/save-button.component';
 import { TileGridComponent } from '@app/components/edit-components/tile-grid/tile-grid.component';
 import { TitleComponent } from '@app/components/edit-components/title/title.component';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditingToolService } from '@app/services/editing-tool.service';
-import { ITEM_CONTAINER_COORDINATES, ItemService } from '@app/services/item.service';
 import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
-import { ResetButtonComponent } from '../../components/edit-components/reset-button/reset-button.component';
-import { SaveButtonComponent } from '../../components/edit-components/save-button/save-button.component';
+
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { Router } from '@angular/router';
+import { PopUpComponent } from '@app/components/pop-up/pop-up.component';
 
 @Component({
     selector: 'app-edit-page',
@@ -24,12 +31,16 @@ import { SaveButtonComponent } from '../../components/edit-components/save-butto
         DescriptionComponent,
         SaveButtonComponent,
         ResetButtonComponent,
+        MatFormFieldModule,
+        MatInputModule,
+        FormsModule,
+        MatButtonModule,
     ],
     templateUrl: './edit-page.component.html',
     styleUrl: './edit-page.component.scss',
     providers: [EditingToolService],
 })
-export class EditPageComponent {
+export class EditPageComponent implements OnInit {
     title = this.mapService.map.name;
     description = this.mapService.map.description;
 
@@ -37,31 +48,33 @@ export class EditPageComponent {
         private readonly mouseService: MouseService,
         protected mapService: MapService,
         protected dragAndDropService: DragAndDropService,
-        protected itemService: ItemService,
+        readonly dialog: MatDialog,
+        private readonly router: Router,
     ) {}
+
+    ngOnInit() {
+        // preload image in cache
+        const img = new Image();
+        img.src = 'assets/tiles/openDoorTile.png';
+    }
 
     onMouseDown(event: MouseEvent) {
         this.mouseService.isMouseDown = true;
-        this.mouseService.isRightClick = event.button === 2; // 1: left-click, 2: right-click (MDN Web Docs)
+        this.mouseService.isRightClick = event.button === 2; // 0: left-click, 2: right-click (MDN Web Docs)
     }
 
-    onMouseUp() {
+    onMouseUp(): void {
         this.mouseService.isMouseDown = false;
+
         const item = this.dragAndDropService.currentDraggedItem;
         if (item) {
-            if (this.dragAndDropService.currentHoveredTile.row === -1 && this.dragAndDropService.currentHoveredTile.column === -1) {
-                if (
-                    this.dragAndDropService.startTile.row === ITEM_CONTAINER_COORDINATES.row &&
-                    this.dragAndDropService.startTile.column === ITEM_CONTAINER_COORDINATES.column
-                ) {
-                    this.itemService.increaseItemAmount(item.name);
-                } else {
-                    this.itemService.resetTileToStartPosition(this.dragAndDropService.startTile.row, this.dragAndDropService.startTile.column);
-                }
-            }
-
+            this.dragAndDropService.handleDraggedItemPlacement(-1, -1); // for outside of the map
             this.dragAndDropService.onMouseUp(item.name);
         }
+    }
+
+    onDragEnd() {
+        this.mouseService.isMouseDown = false;
     }
 
     onMouseLeave() {
@@ -79,22 +92,21 @@ export class EditPageComponent {
         this.description = (event.target as HTMLInputElement).value;
     }
 
-    onBlur() {
-        this.updateValue();
-    }
-
-    updateValue() {
-        if (!this.title || this.title.trim() === '') {
-            this.title = 'Untitled'; // Reset to default if empty
-        }
-        this.mapService.map.name = this.title;
-        this.mapService.map.description = this.description;
-        // Add any additional logic you need to handle the updated value
+    openQuitDialog(): void {
+        const dialogRef = this.dialog.open(PopUpComponent, {
+            width: '35%',
+            data: {
+                title: 'Confirmer la sortie',
+                content: 'Quitter maintenant annulera vos modifications. Êtes-vous sûr de vouloir quitter?',
+                cancelButtonLabel: 'Non',
+                confirmButtonLabel: 'Oui',
+            },
+        });
+        dialogRef.componentInstance.confirmed.subscribe((result: boolean) => {
+            if (result) {
+                dialogRef.close();
+                this.router.navigate(['/home']);
+            }
+        });
     }
 }
-
-// TODO: make the hovered tile a different color when dragging an item over it
-// TODO: make click to delete item
-// TODO: when item is not in container, it needs to stay grayed out and not be draggable
-// TODO: replace the ItemId with the GameObject in Item component
-// TODO: add description to ItemObject

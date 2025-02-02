@@ -19,14 +19,14 @@ $footer-color: #aaa; // Couleur du texte dans le pied de page
     border-radius: 8px; /* Rounded corners */
     outline: none; /* Remove default outline */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
-  }
-  
-  .titleInput:focus {
+}
+
+.titleInput:focus {
     border-color: $primary-color; /* Highlight border on focus */
     box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2); /* Stronger shadow on focus */
     background-color: #fff; /* White background on focus */
-  }
-  
-  .titleInput:hover {
+}
+
+.titleInput:hover {
     border-color: $primary-color; /* Highlight border on hover */
-  }
+}

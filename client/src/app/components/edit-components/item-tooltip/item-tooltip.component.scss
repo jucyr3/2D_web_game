@@ -1,0 +1,33 @@
+/* item-tooltip.component.scss */
+.item-tooltip {
+    font-family: 'Arial', sans-serif;
+    background-color: rgba(40, 44, 52, 0.95); // Dark, semi-transparent background
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    padding: 12px;
+    max-width: 200px;
+    border: 1px solid #1e2227;
+}
+
+.item-tooltip__header {
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #3a3f4b;
+}
+
+.item-tooltip__header__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e6e6e6;
+    margin: 0;
+}
+
+.item-tooltip__content {
+    font-size: 14px;
+    color: #b8b8b8;
+    line-height: 1.5;
+}
+
+.item-tooltip__content__description {
+    margin: 0;
+}
