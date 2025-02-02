@@ -112,5 +112,21 @@ describe('EditPageComponent', () => {
         expect(mockRouter.navigate).toHaveBeenCalledWith(['/home']);
     });
 
-    it('should call onMouseMove of dragAndDropService if an item is dragged', () => {});
+    it('should call onMouseMove of dragAndDropService if an item is dragged', () => {
+        const mockEvent = { button: 0 } as MouseEvent;
+        Object.defineProperty(mockDragAndDropService, 'currentDraggedItem', {
+            get: () => ({ name: 'TestItem' }),
+        });
+        component.onMouseMove(mockEvent);
+        expect(mockDragAndDropService.onMouseMove).toHaveBeenCalled();
+    });
+    it('should update description on input change', () => {
+        const mockEvent = { target: { value: 'New Description' } } as unknown as Event;
+
+        component.onDescriptionInput(mockEvent);
+
+        expect(component.description).toBe('New Description');
+    });
+
+
 });
