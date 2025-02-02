@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SingleStatComponent } from './single-stat.component';
 import { By } from '@angular/platform-browser';
-
-const DEFAULT_STAT_VALUE = 4;
+import { characterConstants } from '@app/constants/characterConstants';
+import { SingleStatComponent } from './single-stat.component';
 describe('SingleStatComponent', () => {
     let component: SingleStatComponent;
     let fixture: ComponentFixture<SingleStatComponent>;
@@ -23,7 +22,7 @@ describe('SingleStatComponent', () => {
 
     it('should initialize with default input values', () => {
         expect(component.statName).toBe('MonNom');
-        expect(component.statValue).toBe(DEFAULT_STAT_VALUE);
+        expect(component.statValue).toBe(characterConstants.defaultStatValue);
         expect(component.isDiceSix).toBe(false);
         expect(component.showDice).toBe(false);
     });

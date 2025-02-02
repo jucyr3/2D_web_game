@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ProfilePictureComponent } from '@app/components/create-character/profile-picture/profile-picture.component';
+import { IMAGES_PATH } from '@app/constants/imagePaths';
 import { ProfileService } from '@app/services/profile.service';
-import { IMAGES_PATH } from '@common/imagePaths';
 import { ProfileSelectionComponent } from './profile-selection.component';
 
 describe('ProfileSelectionComponent', () => {

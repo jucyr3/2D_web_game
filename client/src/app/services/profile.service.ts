@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { IMAGES_PATH } from '@common/imagePaths';
+import { IMAGES_PATH } from '@app/constants/imagePaths';
 
 @Injectable({
     providedIn: 'root',

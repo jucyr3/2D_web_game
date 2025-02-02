@@ -1,11 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 
 import { WaitingRoomService } from './waiting-room-service.service';
-
+import { waitRoomConstants } from '@app/constants/waitRoomConstants';
 describe('WaitingRoomService', () => {
     let service: WaitingRoomService;
-    const MIN_VALUE = 1000;
-    const MAX_VALUE = 9999;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
@@ -18,8 +16,8 @@ describe('WaitingRoomService', () => {
 
     it('should generate a random number between 1000 and 9999', () => {
         const randomNumber = service.getRandomFourDigitNumber();
-        expect(randomNumber).toBeGreaterThanOrEqual(MIN_VALUE);
-        expect(randomNumber).toBeLessThanOrEqual(MAX_VALUE);
+        expect(randomNumber).toBeGreaterThanOrEqual(waitRoomConstants.minValue);
+        expect(randomNumber).toBeLessThanOrEqual(waitRoomConstants.maxValue);
     });
 
     it('should generate a different random number on multiple calls', () => {

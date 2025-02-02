@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ProfileShowcaseComponent } from './profile-showcase.component';
+import { characterConstants } from '@app/constants/characterConstants';
 import { StatsService } from '@app/services/stats.service';
+import { ProfileShowcaseComponent } from './profile-showcase.component';
 
 describe('ProfileShowcaseComponent', () => {
-    const STAT_UPDATED = 6;
     let component: ProfileShowcaseComponent;
     let fixture: ComponentFixture<ProfileShowcaseComponent>;
     let statsService: StatsService;
@@ -43,7 +42,7 @@ describe('ProfileShowcaseComponent', () => {
 
     it('should update combinedStats correctly after assignBonus', () => {
         component.assignBonus('speed');
-        expect(component.combinedStats.speed.stat).toBe(STAT_UPDATED);
+        expect(component.combinedStats.speed.stat).toBe(characterConstants.addedBonus);
         expect(component.combinedStats.speed.selected).toBeTrue();
         expect(component.combinedStats.life.selected).toBeFalse();
     });

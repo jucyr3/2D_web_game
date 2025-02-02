@@ -1,14 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 
+import { characterConstants } from '@app/constants/characterConstants';
 import { StatsService } from './stats.service';
 
 describe('StatsService', () => {
     let service: StatsService;
-
-    const INITIAL_STAT_VALUE = 4;
-    const INCREASED_STAT_VALUE = 6;
-    const STAT_SELECTED = true;
-    const STAT_NOT_SELECTED = false;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -23,28 +19,28 @@ describe('StatsService', () => {
 
     it('should increase the stat of the selected stat (life or speed)', () => {
         service.assignBonus('life');
-        expect(service.getCombinedStats().life.stat).toBe(INCREASED_STAT_VALUE);
-        expect(service.getCombinedStats().speed.stat).toBe(INITIAL_STAT_VALUE);
-        expect(service.getCombinedStats().attack.stat).toBe(INITIAL_STAT_VALUE);
-        expect(service.getCombinedStats().defense.stat).toBe(INITIAL_STAT_VALUE);
+        expect(service.getCombinedStats().life.stat).toBe(characterConstants.addedBonus);
+        expect(service.getCombinedStats().speed.stat).toBe(characterConstants.defaultStatValue);
+        expect(service.getCombinedStats().attack.stat).toBe(characterConstants.defaultStatValue);
+        expect(service.getCombinedStats().defense.stat).toBe(characterConstants.defaultStatValue);
     });
 
     it('should set selected to true for the selected stat (life or speed)', () => {
         service.assignBonus('life');
-        expect(service.getCombinedStats().life.selected).toBe(STAT_SELECTED);
-        expect(service.getCombinedStats().speed.selected).toBe(STAT_NOT_SELECTED);
+        expect(service.getCombinedStats().life.selected).toBe(characterConstants.statSelected);
+        expect(service.getCombinedStats().speed.selected).toBe(characterConstants.statNotSelected);
 
         service.assignBonus('speed');
-        expect(service.getCombinedStats().life.selected).toBe(STAT_NOT_SELECTED);
-        expect(service.getCombinedStats().speed.selected).toBe(STAT_SELECTED);
+        expect(service.getCombinedStats().life.selected).toBe(characterConstants.statNotSelected);
+        expect(service.getCombinedStats().speed.selected).toBe(characterConstants.statSelected);
     });
     it('should set selected to true for the selected stat (attack or defense)', () => {
         service.assignDiceSix('attack');
-        expect(service.getCombinedStats().attack.selected).toBe(STAT_SELECTED);
-        expect(service.getCombinedStats().defense.selected).toBe(STAT_NOT_SELECTED);
+        expect(service.getCombinedStats().attack.selected).toBe(characterConstants.statSelected);
+        expect(service.getCombinedStats().defense.selected).toBe(characterConstants.statNotSelected);
 
         service.assignDiceSix('defense');
-        expect(service.getCombinedStats().attack.selected).toBe(STAT_NOT_SELECTED);
-        expect(service.getCombinedStats().defense.selected).toBe(STAT_SELECTED);
+        expect(service.getCombinedStats().attack.selected).toBe(characterConstants.statNotSelected);
+        expect(service.getCombinedStats().defense.selected).toBe(characterConstants.statSelected);
     });
 });

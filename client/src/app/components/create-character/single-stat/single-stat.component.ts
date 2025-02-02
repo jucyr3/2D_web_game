@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { characterConstants } from '@app/constants/characterConstants';
 
 const DEFAULT_STAT_VALUE = 4;
 
@@ -13,6 +14,6 @@ export class SingleStatComponent {
     @Input() statValue: number = DEFAULT_STAT_VALUE;
     @Input() isDiceSix?: boolean = false;
     @Input() showDice: boolean = false;
-    d4 = 'assets/images/d4_dice.png';
-    d6 = 'assets/images/d6_dice.png';
+    d4 = characterConstants.d4Path;
+    d6 = characterConstants.d6Path;
 }
