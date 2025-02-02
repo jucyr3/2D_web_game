@@ -111,7 +111,7 @@ describe('ItemComponent', () => {
     it('should call decreaseItemAmount and startDragging on mouse down when item amount > 0', () => {
         component.itemId = 'test-item';
         fixture.detectChanges();
-        const mockEvent = { clientX: 100, clientY: 200 } as MouseEvent;
+        const mockEvent = { clientX: 100, clientY: 200, button: 0 } as MouseEvent;
 
         component.onMouseDown(mockEvent);
 

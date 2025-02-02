@@ -49,7 +49,7 @@ export class ItemComponent implements OnDestroy, OnInit {
     }
 
     onMouseDown(event: MouseEvent): void {
-        if (this.mapService.itemManager.itemAmounts[this.itemObject.name] <= 0) {
+        if (this.mapService.itemManager.itemAmounts[this.itemObject.name] <= 0 || event.button !== 0) {
             return;
         }
         this.mapService.itemManager.decreaseItemAmount(this.itemObject.name);
