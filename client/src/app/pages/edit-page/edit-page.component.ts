@@ -1,5 +1,5 @@
 import { NgStyle } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BrushGridComponent } from '@app/components/edit-components/brush-grid/brush-grid.component';
 import { DescriptionComponent } from '@app/components/edit-components/description/description.component';
 import { ItemGridComponent } from '@app/components/edit-components/item-grid/item-grid.component';
@@ -13,8 +13,6 @@ import { ITEM_CONTAINER_COORDINATES, ItemService } from '@app/services/item.serv
 import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
 import { ItemObject } from '@common/ItemObject';
-
-import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-edit-page',
@@ -36,15 +34,11 @@ export class EditPageComponent implements OnInit {
     title = this.mapService.map.name;
     description = this.mapService.map.description;
 
-    // constructor for router (there was no space left)
-    protected router = inject(Router);
-
     constructor(
         private readonly mouseService: MouseService,
         protected mapService: MapService,
         protected dragAndDropService: DragAndDropService,
         protected itemService: ItemService,
-        protected saveService: SaveButtonComponent,
     ) {}
 
     ngOnInit() {
@@ -94,11 +88,6 @@ export class EditPageComponent implements OnInit {
 
     onBlur() {
         this.updateValue();
-    }
-
-    onSave() {
-        this.updateValue();
-        this.router.navigate(['/main-page']);
     }
 
     updateValue() {
