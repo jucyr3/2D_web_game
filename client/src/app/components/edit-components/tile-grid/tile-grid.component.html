@@ -7,5 +7,5 @@
     (mousedown)="onMouseDown($event)"
     (contextmenu)="onContextMenu($event)"
 >
-    <app-tile *ngFor="let tile of this.mapService.map.flattenedTileMatrix; let i = index" [tileNumber]="i" [tileObject]="tile" #tileRef></app-tile>
+    <app-tile *ngFor="let tile of this.mapService.flattenedTileMatrix(); let i = index" [tileNumber]="i" [tileObject]="tile" #tileRef></app-tile>
 </div>

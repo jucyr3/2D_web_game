@@ -105,7 +105,7 @@ export class EditPageComponent implements OnInit {
         dialogRef.componentInstance.confirmed.subscribe((result: boolean) => {
             if (result) {
                 dialogRef.close();
-                this.router.navigate(['/home']);
+                this.router.navigate(['/admin']);
             }
         });
     }

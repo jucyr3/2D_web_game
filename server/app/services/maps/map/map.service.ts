@@ -196,16 +196,16 @@ export class MapService {
 
     loadMapFromJSON(json: MapJson): Map {
         const tileMatrix = this.parseTileMatrix(json);
-        return new Map(
-            json.name,
-            json.id,
-            json.size,
-            json.isVisible,
-            json.description,
-            json.gameMode,
-            tileMatrix,
-            json.previewImage,
-            json.lastModified,
-        );
-    }
+        return {
+            id: json.id,
+            name: json.name,
+            size: json.size,
+            isVisible: json.isVisible,
+            description: json.description,
+            gameMode: json.gameMode,
+            tileMatrix: tileMatrix,
+            lastModified: json.lastModified || new Date(),
+            previewImage: json.previewImage
+        };
+     }
 }

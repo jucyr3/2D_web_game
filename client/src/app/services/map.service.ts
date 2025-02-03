@@ -42,15 +42,37 @@ export class MapService {
     }
 
     setDefaultMap(): void {
-        const mapSize = 15;
-        const defaultId = 0;
-        this.map = new Map('Untitled', defaultId, mapSize, true, '', 'Classic');
+        const size = 15;
+        const defaultMap: Map = {
+            id: 0,
+            name: 'Untitled',
+            size: size,
+            isVisible: true,
+            description: '',
+            gameMode: 'Classic',
+            tileMatrix: Array.from({ length: size }, () => Array.from({ length: size }, () => new Tile(TileTypes.GROUND_1, false, false))),
+            lastModified: new Date(),
+            previewImage: ""
+        };
+        this.map = defaultMap;
     }
 
     createEmptyMap(mapData: { name: string; gameMode: 'Classic' | 'CTF'; size: string }): void {
-        this.map = new Map(mapData.name, 0, Number(mapData.size), false, '', mapData.gameMode);
-        this.itemManager = new ItemManager(this.map.size, this.map.gameMode);
-    }
+        const size = Number(mapData.size);
+        const defaultMap: Map = {
+            id: 0,
+            name: mapData.name,
+            size: size,
+            isVisible: false,
+            description: '',
+            gameMode: mapData.gameMode,
+            tileMatrix: Array.from({ length: size }, () => Array.from({ length: size }, () => new Tile(TileTypes.GROUND_1, false, false))),
+            lastModified: new Date(),
+            previewImage: ""
+        };
+        this.map = defaultMap;
+        this.itemManager = new ItemManager(size, mapData.gameMode);
+     }
 
     parseTileMatrix(json: MapJson): Tile[][] {
         // eslint-disable-next-line
@@ -74,8 +96,19 @@ export class MapService {
     createMapFromJSON(json: MapJson): Map {
         this.itemManager = new ItemManager(json.size, json.gameMode);
         const tileMatrix = this.parseTileMatrix(json);
-        return new Map(json.name, json.id, json.size, json.isVisible, json.description, json.gameMode, tileMatrix);
-    }
+        
+        return {
+            id: json.id,
+            name: json.name,
+            size: json.size,
+            isVisible: json.isVisible,
+            description: json.description,
+            gameMode: json.gameMode,
+            tileMatrix: tileMatrix,
+            lastModified: new Date(),
+            previewImage: ""
+        };
+     }
 
     // returns true if map is loaded from server
     loadMapFromServer(id: number): boolean {
@@ -243,5 +276,9 @@ export class MapService {
             console.error('Error exporting map as image:', error);
             return null;
         }
+    }
+
+    flattenedTileMatrix(): Tile[] {
+        return this.map.tileMatrix.reduce((acc, row) => [...acc, ...row], []);
     }
 }
