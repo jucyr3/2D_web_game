@@ -1,13 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GameGridComponent } from '@app/components/admin-game/games-grid/games-grid/games-grid.component';
 import { ModalComponent } from '@app/components/admin-game/modal/modal.component';
 import { MapService } from '@app/services/map.service';
 import { MapsForClientService } from '@app/services/maps-for-client.service';
-import { PopUpComponent } from '@app/components/pop-up/pop-up.component';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-admin-page',
@@ -79,20 +78,6 @@ export class AdminPageComponent {
     }
 
     openQuitDialog(): void {
-        const dialogRef = this.dialog.open(PopUpComponent, {
-                width: '35%',
-                data: {
-                    title: 'Confirmer la sortie',
-                    content: 'Quitter maintenant annulera vos modifications. Êtes-vous sûr de vouloir quitter?',
-                    cancelButtonLabel: 'Non',
-                    confirmButtonLabel: 'Oui',
-                },
-        });
-            dialogRef.componentInstance.confirmed.subscribe((result: boolean) => {
-                if (result) {
-                    dialogRef.close();
-                    this.router.navigate(['/home']);
-                }
-        });
+        this.router.navigate(['/home']);
     }
 }
