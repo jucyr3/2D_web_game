@@ -1,17 +1,18 @@
-import { Tile } from "./tile";
-import { TILE_TYPES } from "./tileType.constants";
+import { Tile } from './tile';
+import { TILE_TYPES } from './tileType.constants';
 
 export class Map {
     name: string;
-    id:number;
+    id: number;
     readonly size: number;
     isVisible: boolean;
     description: string;
-    gameMode: "CTF" | "Classic";
+    gameMode: 'CTF' | 'Classic';
     tileMatrix: Tile[][];
     lastModified: Date;
+    previewImage: string;
 
-    constructor(name: string, size: number, isVisible: boolean, description: string, gameMode: "CTF" | "Classic") {
+    constructor(name: string, size: number, isVisible: boolean, description: string, gameMode: 'CTF' | 'Classic') {
         this.name = name;
         this.size = size;
         this.isVisible = isVisible;
@@ -23,5 +24,5 @@ export class Map {
 
     get flattenedTileMatrix(): Tile[] {
         return this.tileMatrix.reduce((acc, row) => [...acc, ...row], []);
-      }
+    }
 }

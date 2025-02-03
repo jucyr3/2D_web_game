@@ -11,8 +11,8 @@ export class RequestMapTempController {
     ) {}
 
     @Post()
-    async create(@Body('gameName') mapName: string, @Body('map') map: Map) {
-        const reponse = await this.mapService.addMap(mapName, map);
+    async create(@Body() map: Map) {
+        const reponse = await this.mapService.addMap(map);
         return reponse;
     }
 
@@ -30,10 +30,13 @@ export class RequestMapTempController {
     async findOne(@Param('id') id: string) {
         return await this.mapService.getMap(id);
     }
-
     @Patch(':id')
-    async update(@Param('id') id: string, @Body('gameName') mapName: string, @Body('map') map: Map) {
-        return await this.mapService.changeMap(id, mapName, map);
+    async update(@Param('id') id: string, @Body() map: Map) {
+        return await this.mapService.changeMap(id, map);
+    }
+    @Patch(':id/img')
+    async changeImg(@Param('id') id: string, @Body('previewImage') image: string) {
+        return await this.mapService.saveImage(id, image);
     }
 
     @Delete(':id')

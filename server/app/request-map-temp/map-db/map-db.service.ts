@@ -8,11 +8,8 @@ import { MapBP } from './map-db.model';
 export class MapDbService {
     constructor(@InjectModel('Map') private readonly mapModel: Model<MapBP>) {}
 
-    async addMap(name: String, map: Map) {
-        const addedMap = new this.mapModel({
-            name,
-            map,
-        });
+    async addMap(map: Map) {
+        const addedMap = new this.mapModel({ ...map, lastModified: new Date() });
         const response = await addedMap.save();
         return response;
     }
@@ -35,21 +32,20 @@ export class MapDbService {
         return response;
     }
     async getVisible() {
-        let response = await this.mapModel.find({ 'map.isVisible': true }).exec();
+        let response = await this.mapModel.find({ isVisible: true }).exec();
         return response ?? [];
     }
 
-    async changeMap(id: string, name: string, map: Object) {
-        const themap = await this.getMap(id);
-        if (name) {
-            themap.name = name;
-        }
-        if (map) {
-            themap.map = map;
-        }
-        themap.save();
+    async changeMap(id: string, map: Map) {
+        const themap = await this.mapModel.updateOne({ _id: id }, { $set: { ...map } });
+        console.log(map);
+        return themap;
     }
     async remove(id: string) {
         return await this.mapModel.deleteOne({ _id: id }).exec();
+    }
+    async saveImage(id: string, image: string) {
+        const themap = await this.mapModel.updateOne({ _id: id }, { $set: { previewImage: image } });
+        return themap;
     }
 }
