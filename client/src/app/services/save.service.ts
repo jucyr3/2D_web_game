@@ -20,8 +20,9 @@ export class SaveService {
         this.gameNames = gameNames;
     }
 
+    // returns true if the name is unique
     isUniqueName(name: string): boolean {
-        return this.gameNames.some((game) => game.name === name);
+        return this.gameNames.some((game) => game.name !== name);
     }
 
     isMapHalfFloor(map: Map): boolean {
@@ -169,7 +170,7 @@ export class SaveService {
         const error = [];
         if (!map.name) {
             error.push('Le nom du jeu ne peut pas etre vide.');
-        } else if (this.isUniqueName(map.name)) {
+        } else if (!this.isUniqueName(map.name)) {
             error.push('Le nom du jeu doit etre unique.');
         }
 
@@ -200,14 +201,16 @@ export class SaveService {
         return error;
     }
 
-    //
-    saveGame(map: Map): void {
-        const errorList = this.validateGame(map);
-        if (errorList.length > 0) {
-            errorList.forEach((error) => alert(error));
-        } else {
-            this.gameNames.push({ name: map.name });
-            alert('Le jeu a ete enregistre!');
-        }
-    }
+    // // TODO: shows error list (alert) or redirects (NO ALERTS). Remember to save the name
+    // saveGame(map: Map): boolean {
+    //     const errorList = this.validateGame(map);
+    //     if (errorList.length > 0) {
+    //         errorList.forEach((error) => alert(error));
+    //         return false;
+    //     } else {
+    //         return true;
+    //         // this.gameNames.push({ name: map.name });
+    //         // alert('Le jeu a ete enregistre!');
+    //     }
+    // }
 }

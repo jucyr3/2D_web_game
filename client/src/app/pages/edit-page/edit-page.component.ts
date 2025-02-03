@@ -1,18 +1,20 @@
 import { NgStyle } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { BrushGridComponent } from '@app/components/edit-components/brush-grid/brush-grid.component';
 import { DescriptionComponent } from '@app/components/edit-components/description/description.component';
-import { TitleComponent } from '@app/components/edit-components/title/title.component';
 import { ItemGridComponent } from '@app/components/edit-components/item-grid/item-grid.component';
+import { ResetButtonComponent } from '@app/components/edit-components/reset-button/reset-button.component';
+import { SaveButtonComponent } from '@app/components/edit-components/save-button/save-button.component';
+import { TileGridComponent } from '@app/components/edit-components/tile-grid/tile-grid.component';
+import { TitleComponent } from '@app/components/edit-components/title/title.component';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditingToolService } from '@app/services/editing-tool.service';
 import { ITEM_CONTAINER_COORDINATES, ItemService } from '@app/services/item.service';
 import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
-import { ResetButtonComponent } from '@app/components/edit-components/reset-button/reset-button.component';
-import { SaveButtonComponent } from '@app/components/edit-components/save-button/save-button.component';
-import { TileGridComponent } from '@app/components/edit-components/tile-grid/tile-grid.component';
 import { ItemObject } from '@common/ItemObject';
+
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-edit-page',
@@ -30,19 +32,23 @@ import { ItemObject } from '@common/ItemObject';
     styleUrl: './edit-page.component.scss',
     providers: [EditingToolService],
 })
-export class EditPageComponent {
+export class EditPageComponent implements OnInit {
     title = this.mapService.map.name;
     description = this.mapService.map.description;
+
+    // constructor for router (there was no space left)
+    protected router = inject(Router);
 
     constructor(
         private readonly mouseService: MouseService,
         protected mapService: MapService,
         protected dragAndDropService: DragAndDropService,
         protected itemService: ItemService,
+        protected saveService: SaveButtonComponent,
     ) {}
 
     ngOnInit() {
-        //preload image in cache
+        // preload image in cache
         const img = new Image();
         img.src = 'assets/openDoorTile.png';
     }
@@ -88,6 +94,11 @@ export class EditPageComponent {
 
     onBlur() {
         this.updateValue();
+    }
+
+    onSave() {
+        this.updateValue();
+        this.router.navigate(['/main-page']);
     }
 
     updateValue() {

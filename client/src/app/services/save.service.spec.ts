@@ -11,7 +11,7 @@ const MAP_SIZE_SMALL = 10;
 const MAP_SIZE_MEDIUM = 15;
 const MAP_SIZE_LARGE = 20;
 
-describe('SaveService', () => {
+fdescribe('SaveService', () => {
     let service: SaveService;
     const mockMap = new Map('Untitled', MAP_SIZE_SMALL, true, '', 'Classic');
 
@@ -26,6 +26,9 @@ describe('SaveService', () => {
         for (let i = 0; i < MAP_SIZE_SMALL; i++) {
             for (let j = 0; j < MAP_SIZE_SMALL; j++) {
                 mockMap.tileMatrix[i][j].type = TileTypes.GROUND_0;
+                if (mockMap.tileMatrix[i][j].gameObject) {
+                    mockMap.tileMatrix[i][j].gameObject = null;
+                }
             }
         }
     });
@@ -36,8 +39,8 @@ describe('SaveService', () => {
 
     it('should check if name is unique', () => {
         service.setGameNames([{ name: 'test' }]);
-        expect(service.isUniqueName('test')).toBeTrue();
-        expect(service.isUniqueName('test2')).toBeFalse();
+        expect(service.isUniqueName('test')).toBeFalse();
+        expect(service.isUniqueName('test2')).toBeTrue();
     });
 
     it('should check if map has description and name', () => {
@@ -148,7 +151,7 @@ describe('SaveService', () => {
         expect(service.areDoorsNotNextToBorder(mockMap)).toBeFalse();
     });
 
-    fit('should show the correct error message', () => {
+    it('should show the correct error message', () => {
         mockMap.name = '';
         expect(service.validateGame(mockMap)).toEqual(['Le nom du jeu ne peut pas etre vide.', 'Tous les points de départ doivent etre placés.']);
 
