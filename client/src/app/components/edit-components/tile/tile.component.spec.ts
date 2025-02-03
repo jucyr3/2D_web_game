@@ -12,8 +12,6 @@ import { ItemTooltipComponent } from '@app/components/edit-components/item-toolt
 import { provideTippyLoader, provideTippyConfig, tooltipVariation, popperVariation } from '@ngneat/helipopper/config';
 import { TippyDirective } from '@ngneat/helipopper';
 
-/* eslint-disable */
-
 class MockItemManager {
     increaseItemAmount = jasmine.createSpy('increaseItemAmount');
     decreaseItemAmount = jasmine.createSpy('decreaseItemAmount');
@@ -26,7 +24,7 @@ class MockMapService {
     changeTileType = jasmine.createSpy('changeTileType');
     getTileTexture = jasmine.createSpy('getTileTexture');
     itemManager = new MockItemManager();
-    map: any;
+    map: unknown;
 }
 
 describe('TileComponent', () => {
@@ -75,7 +73,7 @@ describe('TileComponent', () => {
         component = fixture.componentInstance;
         component.tileNumber = 0;
         component.tileObject = {} as Tile;
-        mockMapService.map = { size: 10 } as any;
+        mockMapService.map = { size: 10 } as unknown;
 
         // Mock the currentDraggedItem as a read-only property
         Object.defineProperty(mockDragAndDropService, 'currentDraggedItem', {

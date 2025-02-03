@@ -4,7 +4,7 @@ import { MapService } from './map.service';
 import { ItemObject } from '@common/ItemObject';
 import { TileTypes } from '@common/tileType.constants';
 
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 
 describe('DragAndDropService', () => {
     let service: DragAndDropService;

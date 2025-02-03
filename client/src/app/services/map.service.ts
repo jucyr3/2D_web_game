@@ -37,7 +37,7 @@ export class MapService {
             if (!this.loadMapFromServer()) {
                 this.setDefaultMap();
                 this.saveMapToSessionStorage();
-                this.itemManager = new ItemManager(this.map.size);
+                this.itemManager = new ItemManager(this.map.size, this.map.gameMode);
             }
         }
     }
@@ -68,7 +68,7 @@ export class MapService {
     }
 
     createMapFromJSON(json: MapJson): Map {
-        this.itemManager = new ItemManager(json.size);
+        this.itemManager = new ItemManager(json.size, json.gameMode);
         const tileMatrix = this.parseTileMatrix(json);
         return new Map(json.name, json.id, json.size, json.isVisible, json.description, json.gameMode, tileMatrix);
     }

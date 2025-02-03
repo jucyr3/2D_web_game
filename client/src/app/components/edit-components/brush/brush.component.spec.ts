@@ -8,7 +8,6 @@ import { TileComponent } from '@app/components/edit-components/tile/tile.compone
 import { provideTippyLoader, provideTippyConfig, tooltipVariation, popperVariation } from '@ngneat/helipopper/config';
 import { TippyDirective } from '@ngneat/helipopper';
 
-/* eslint-disable */
 describe('BrushComponent', () => {
     let component: BrushComponent;
     let fixture: ComponentFixture<BrushComponent>;

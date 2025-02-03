@@ -7,8 +7,6 @@ import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { MouseService } from '@app/services/mouse.service';
 import { of } from 'rxjs';
 
-/* eslint-disable */
-
 describe('EditPageComponent', () => {
     let component: EditPageComponent;
     let fixture: ComponentFixture<EditPageComponent>;
@@ -106,6 +104,7 @@ describe('EditPageComponent', () => {
 
     it('should open the quit confirmation dialog', () => {
         const mockDialogRef = { componentInstance: { confirmed: of(true) }, close: jasmine.createSpy() };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         mockDialog.open.and.returnValue(mockDialogRef as any);
 
         component.openQuitDialog();
@@ -129,6 +128,4 @@ describe('EditPageComponent', () => {
 
         expect(component.description).toBe('New Description');
     });
-
-
 });

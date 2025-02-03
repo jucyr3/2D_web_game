@@ -8,6 +8,7 @@ export class ItemManager {
     };
 
     mapSize: number;
+    gameMode: 'CTF' | 'Classic';
 
     itemTypes: string[] = [
         'attributeItem1',
@@ -21,7 +22,8 @@ export class ItemManager {
         'flag',
     ];
 
-    constructor(mapSize: number) {
+    constructor(mapSize: number, gameMode: 'CTF' | 'Classic') {
+        this.gameMode = gameMode;
         this.mapSize = mapSize;
         this.setDefaultItemAmounts();
     }
@@ -67,7 +69,7 @@ export class ItemManager {
                 return this.itemMap['size' + this.mapSize];
 
             case 'flag':
-                return (this.itemAmounts['flag'] = 1);
+                return (this.itemAmounts['flag'] = this.gameMode === 'CTF' ? 1 : 0);
 
             default:
                 return 0;

@@ -5,8 +5,6 @@ import { ItemObject } from '@common/ItemObject';
 import { TIPPY_REF } from '@ngneat/helipopper';
 import { itemDescriptions } from 'src/assets/items/item-descriptions';
 
-/* eslint-disable */
-
 describe('ItemTooltipComponent', () => {
     let component: ItemTooltipComponent;
     let fixture: ComponentFixture<ItemTooltipComponent>;
@@ -57,12 +55,14 @@ describe('ItemTooltipComponent', () => {
         component.itemObject = testItem;
         itemDescriptions['testItem'] = { name: 'Test Item', description: 'This is a rare item with damage and health.' };
 
+        // tslint:disable-next-line
         component.itemDescription;
 
         expect(sanitizerSpy.bypassSecurityTrustHtml).toHaveBeenCalledWith(
             'This is a <span style="color: #007bff; font-weight: bold;">rare</span> item with ' +
-            '<span style="color: #dc3545; font-weight: bold;">damage</span> and ' +
-            '<span style="color: #28a745; font-weight: bold;">health</span>.'
+                '<span style="color: #dc3545; font-weight: bold;">damage</span> and ' +
+                '<span style="color: #28a745; font-weight: bold;">health</span>.',
         );
     });
+
 });

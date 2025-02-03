@@ -5,7 +5,7 @@ describe('ItemManager', () => {
     let itemManager: ItemManager;
 
     beforeEach(() => {
-        itemManager = new ItemManager(10);
+        itemManager = new ItemManager(10, 'Classic');
     });
 
     it('should initialize with correct default item amounts', () => {
@@ -17,6 +17,11 @@ describe('ItemManager', () => {
         expect(itemManager.itemAmounts['gameplayItem2']).toBe(1);
         expect(itemManager.itemAmounts['spawnpoint']).toBe(2);
         expect(itemManager.itemAmounts['randomItem']).toBe(2);
+        expect(itemManager.itemAmounts['flag']).toBe(0);
+    });
+
+    it("Should have a flag if game mode is 'CTF'", () => {
+        itemManager = new ItemManager(10, 'CTF');
         expect(itemManager.itemAmounts['flag']).toBe(1);
     });
 
@@ -35,20 +40,20 @@ describe('ItemManager', () => {
     it('should return correct item amount for spawnpoint based on map size', () => {
         expect(itemManager.getItemAmount('spawnpoint')).toBe(2);
 
-        itemManager = new ItemManager(15);
+        itemManager = new ItemManager(15, 'Classic');
         expect(itemManager.getItemAmount('spawnpoint')).toBe(4);
 
-        itemManager = new ItemManager(20);
+        itemManager = new ItemManager(20, 'Classic');
         expect(itemManager.getItemAmount('spawnpoint')).toBe(6);
     });
 
     it('should return correct item amount for randomItem based on map size', () => {
         expect(itemManager.getItemAmount('randomItem')).toBe(2);
 
-        itemManager = new ItemManager(15);
+        itemManager = new ItemManager(15, 'Classic');
         expect(itemManager.getItemAmount('randomItem')).toBe(4);
 
-        itemManager = new ItemManager(20);
+        itemManager = new ItemManager(20, 'Classic');
         expect(itemManager.getItemAmount('randomItem')).toBe(6);
     });
 
@@ -68,7 +73,7 @@ describe('ItemManager', () => {
         expect(itemManager.itemAmounts['gameplayItem2']).toBe(1);
         expect(itemManager.itemAmounts['spawnpoint']).toBe(2);
         expect(itemManager.itemAmounts['randomItem']).toBe(2);
-        expect(itemManager.itemAmounts['flag']).toBe(1);
+        expect(itemManager.itemAmounts['flag']).toBe(0);
     });
 
     it('should get correct item amounts for all item types', () => {
@@ -80,6 +85,6 @@ describe('ItemManager', () => {
         expect(itemManager.getItemAmount('gameplayItem2')).toBe(1);
         expect(itemManager.getItemAmount('spawnpoint')).toBe(2);
         expect(itemManager.getItemAmount('randomItem')).toBe(2);
-        expect(itemManager.getItemAmount('flag')).toBe(1);
+        expect(itemManager.getItemAmount('flag')).toBe(0);
     });
 });

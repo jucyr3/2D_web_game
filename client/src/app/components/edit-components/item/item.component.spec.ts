@@ -11,7 +11,7 @@ import { TippyDirective } from '@ngneat/helipopper';
 import { popperVariation, provideTippyConfig, provideTippyLoader, tooltipVariation } from '@ngneat/helipopper/config';
 import { ItemComponent } from '@app/components/edit-components/item/item.component';
 
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 
 class MockItemManager {
     increaseItemAmount = jasmine.createSpy('increaseItemAmount');
@@ -40,7 +40,7 @@ describe('ItemComponent', () => {
         mockMapService = new MockMapService();
 
         // Initialize the mock item object
-        mockItemObject = new ItemObject('test-item');
+        mockItemObject = new ItemObject('testItem');
 
         await TestBed.configureTestingModule({
             imports: [NgIf, NgClass, TippyDirective, ItemTooltipComponent, ItemComponent],
@@ -64,7 +64,7 @@ describe('ItemComponent', () => {
         component = fixture.componentInstance;
 
         // Setup default mock return values
-        mockMapService.itemManager.itemAmounts = { 'test-item': 1 };
+        mockMapService.itemManager.itemAmounts = { testItem: 1 };
 
         // Setup drag and drop state mock
         mockDragAndDropService.getDraggingState.and.returnValue({
@@ -80,19 +80,18 @@ describe('ItemComponent', () => {
     });
 
     it('should create', () => {
-        component.itemId = 'test-item';
+        component.itemId = 'testItem';
         fixture.detectChanges();
         expect(component).toBeTruthy();
     });
 
     it('should return the correct item amount from mapService.itemManager.itemAmounts', () => {
         // Setup the component with a specific itemId and mock itemObject
-        const itemId = 'test-item';
-        const mockItemObject = new ItemObject(itemId);
+        const itemId = 'testItem';
         component.itemId = itemId;
         component.itemObject = mockItemObject;
 
-        mockMapService.itemManager.itemAmounts = { 'test-item': 5 };
+        mockMapService.itemManager.itemAmounts = { testItem: 5 };
 
         const itemAmount = component.itemAmount;
 
@@ -109,13 +108,13 @@ describe('ItemComponent', () => {
     });
 
     it('should call decreaseItemAmount and startDragging on mouse down when item amount > 0', () => {
-        component.itemId = 'test-item';
+        component.itemId = 'testItem';
         fixture.detectChanges();
         const mockEvent = { clientX: 100, clientY: 200, button: 0 } as MouseEvent;
 
         component.onMouseDown(mockEvent);
 
-        expect(mockMapService.itemManager.decreaseItemAmount).toHaveBeenCalledWith('test-item');
+        expect(mockMapService.itemManager.decreaseItemAmount).toHaveBeenCalledWith('testItem');
         expect(mockEditingToolService.setActiveTool).toHaveBeenCalledWith(EditToolTypes.Hand);
         expect(mockDragAndDropService.startDragging).toHaveBeenCalledWith(
             ITEM_CONTAINER_COORDINATES.row,
@@ -126,8 +125,8 @@ describe('ItemComponent', () => {
     });
 
     it('should not call decreaseItemAmount or startDragging if item amount is zero', () => {
-        component.itemId = 'test-item';
-        mockMapService.itemManager.itemAmounts = { 'test-item': 0 };
+        component.itemId = 'testItem';
+        mockMapService.itemManager.itemAmounts = { testItem: 0 };
         fixture.detectChanges();
         const mockEvent = { clientX: 100, clientY: 200 } as MouseEvent;
 
@@ -139,18 +138,18 @@ describe('ItemComponent', () => {
     });
 
     it('should call increaseItemAmount and onMouseUp when mouse up and dragging', () => {
-        component.itemId = 'test-item';
+        component.itemId = 'testItem';
         fixture.detectChanges();
 
         component.onMouseUp();
 
-        expect(mockMapService.itemManager.increaseItemAmount).toHaveBeenCalledWith('test-item');
-        expect(mockDragAndDropService.onMouseUp).toHaveBeenCalledWith('test-item');
+        expect(mockMapService.itemManager.increaseItemAmount).toHaveBeenCalledWith('testItem');
+        expect(mockDragAndDropService.onMouseUp).toHaveBeenCalledWith('testItem');
         expect(mockEditingToolService.setActiveTool).toHaveBeenCalledWith(EditToolTypes.TileBrush);
     });
 
     it('should not call increaseItemAmount if not dragging on mouse up', () => {
-        component.itemId = 'test-item';
+        component.itemId = 'testItem';
         mockDragAndDropService.getDraggingState.and.returnValue({
             isDragging: false,
             dragX: 0,
@@ -165,11 +164,11 @@ describe('ItemComponent', () => {
     });
 
     it('should clean up dragging state on destroy', () => {
-        component.itemId = 'test-item';
+        component.itemId = 'testItem';
         fixture.detectChanges();
 
         component.ngOnDestroy();
 
-        expect(mockDragAndDropService.onMouseUp).toHaveBeenCalledWith('test-item');
+        expect(mockDragAndDropService.onMouseUp).toHaveBeenCalledWith('testItem');
     });
 });

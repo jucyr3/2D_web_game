@@ -2,8 +2,6 @@ import { TestBed } from '@angular/core/testing';
 
 import { MouseService } from './mouse.service';
 
-/* eslint-disable */
-
 describe('MouseService', () => {
     let service: MouseService;
 
