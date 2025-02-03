@@ -168,6 +168,7 @@ export class SaveService {
     // TODO: put in server
     // TODO: create object instead
     validateGame(map: Map): string[] {
+        // k
         const error = [];
         if (!map.name) {
             error.push('Le nom du jeu ne peut pas etre vide.');
