@@ -162,10 +162,11 @@ export class SaveService {
                 return false;
             }
         }
-
         return true;
     }
 
+    // TODO: put in server
+    // TODO: create object instead
     validateGame(map: Map): string[] {
         const error = [];
         if (!map.name) {

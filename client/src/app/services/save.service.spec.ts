@@ -177,12 +177,6 @@ fdescribe('SaveService', () => {
         mockMap.tileMatrix[8][8].gameObject = new ItemObject('spawnpoint');
         mockMap.tileMatrix[8][9].gameObject = new ItemObject('spawnpoint');
 
-        // >>>>>> checks the list of errors
-        // const temp: string[] = service.validateGame(mockMap);
-        // temp.forEach((element: string) => {
-        //     console.log(element);
-        // });
-
         expect(service.validateGame(mockMap)).toEqual([
             'Le nom du jeu doit etre unique.',
             'Plus de 50% de la surface totale de la zone de jeu doit être occupée par des tuiles de terrain.',
