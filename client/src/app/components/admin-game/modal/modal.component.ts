@@ -15,7 +15,7 @@ export class ModalComponent {
 
   newMapForm = {
     mapName: '',
-    mapMode: 'CLASSIQUE' as 'CLASSIQUE' | 'CAPTURE_THE_FLAG',
+    mapMode: 'Classic' as 'Classic' | 'CTF',
     mapSize: 'PETIT' as 'PETIT' | 'MOYENNE' | 'GRANDE'
   };
 

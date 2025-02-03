@@ -15,6 +15,7 @@ import { WaitingRoomPageComponent } from '@app/pages/waiting-room-page/waiting-r
 import { environment } from './environments/environment';
 import { EditPageComponent } from '@app/pages/edit-page/edit-page.component';
 import { provideTippyLoader, provideTippyConfig, tooltipVariation, popperVariation } from '@ngneat/helipopper/config';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 if (environment.production) {
     enableProdMode();
@@ -46,6 +47,6 @@ bootstrapApplication(AppComponent, {
                 tooltip: tooltipVariation,
                 popper: popperVariation,
             },
-        }),
+        }), provideAnimationsAsync(), provideAnimationsAsync(),
     ],
 });

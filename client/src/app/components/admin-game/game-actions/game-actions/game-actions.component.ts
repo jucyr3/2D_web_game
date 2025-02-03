@@ -3,10 +3,12 @@ import { Router } from '@angular/router';
 import { ClientHttpRequestsService } from '@app/services/client-http-requests.service';
 import { MapService } from '@app/services/map.service';
 import { Map } from '@common/map';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
     selector: 'app-game-actions',
-    imports: [],
+    imports: [MatIconModule, CommonModule],
     templateUrl: './game-actions.component.html',
     styleUrl: './game-actions.component.scss',
 })

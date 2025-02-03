@@ -14,7 +14,7 @@ export interface MapJson {
     size: number;
     isVisible: boolean;
     description: string;
-    gameMode: 'CTF' | 'Classic';
+    gameMode: 'Classic' | 'CTF';
     tileMatrix: {
         type: string;
         isOccupied: boolean;
@@ -47,9 +47,8 @@ export class MapService {
         this.map = new Map('Untitled', defaultId, mapSize, true, '', 'Classic');
     }
 
-    // TODO change this garbage
-    createEmptyMap(mapData: { name: string; gameMode: string; size: string }): void {
-        this.map = new Map(mapData.name, 0, Number(mapData.size), true, '', mapData.gameMode as 'Classic' | 'CTF');
+    createEmptyMap(mapData: { name: string; gameMode: 'Classic' | 'CTF'; size: string }): void {
+        this.map = new Map(mapData.name, 0, Number(mapData.size), false, '', mapData.gameMode);
     }
 
     parseTileMatrix(json: MapJson): Tile[][] {

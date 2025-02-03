@@ -1,7 +1,7 @@
 <div class="game-actions">
     <button class="visibility-btn" (click)="toggleVisibility(map)"> 
         <i [class]="map.isVisible ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
-        {{ map.isVisible ? 'MASQUER' : 'AFFICHER' }}
+        <mat-icon> {{ map.isVisible ? 'visibility' : 'visibility_off' }} </mat-icon>
     </button>
     
     <button (click)="editMap(map)" class="edit-btn">
