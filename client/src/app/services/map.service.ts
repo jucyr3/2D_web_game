@@ -87,7 +87,7 @@ export class MapService {
             description: json.description,
             gameMode: json.gameMode,
             tileMatrix,
-            lastModified: new Date(),
+            lastModified: new Date(json.lastModified),
         };
     }
 
