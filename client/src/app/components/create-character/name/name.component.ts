@@ -8,11 +8,12 @@ import { ProfileService } from '@app/services/profile.service';
     styleUrl: './name.component.scss',
 })
 export class NameComponent {
-    name: string = '';
     @ViewChild('nameInput') nameInput: ElementRef;
+    name: string = '';
+
+    constructor(private profileService: ProfileService) {}
     changeName() {
         this.name = this.nameInput.nativeElement.value;
         this.profileService.setName(this.name);
     }
-    constructor(private profileService: ProfileService) {}
 }

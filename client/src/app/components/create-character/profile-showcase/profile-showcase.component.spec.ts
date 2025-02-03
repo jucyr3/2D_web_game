@@ -1,18 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { characterConstants } from '@app/constants/characterConstants';
+import { StatsService } from '@app/services/stats.service';
 import { ProfileShowcaseComponent } from './profile-showcase.component';
 
 describe('ProfileShowcaseComponent', () => {
     let component: ProfileShowcaseComponent;
     let fixture: ComponentFixture<ProfileShowcaseComponent>;
+    let statsService: StatsService;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [ProfileShowcaseComponent],
+            providers: [StatsService],
         }).compileComponents();
 
         fixture = TestBed.createComponent(ProfileShowcaseComponent);
         component = fixture.componentInstance;
+        statsService = TestBed.inject(StatsService);
         fixture.detectChanges();
     });
 
@@ -20,36 +24,40 @@ describe('ProfileShowcaseComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should update imagePath on profileChosed change', () => {
-        component.profileChosed = 1;
-        component.ngOnChanges({
-            profileChosed: {
-                currentValue: 1,
-                previousValue: null,
-                firstChange: true,
-                isFirstChange: () => true,
-            },
-        });
-        expect(component.imagePath).toBe('assets/images/1.jpg');
+    it('should call assignBonus on StatsService with correct stat', () => {
+        spyOn(statsService, 'assignBonus');
+        component.assignBonus('life');
+        expect(statsService.assignBonus).toHaveBeenCalledWith('life');
     });
 
-    it('should set bonus to true when clickBonus is called with true', () => {
-        component.clickBonus(true);
-        expect(component.bonus).toBe(true);
+    it('should call assignDiceSix on StatsService with correct stat', () => {
+        spyOn(statsService, 'assignDiceSix');
+        component.assignDiceSix('attack');
+        expect(statsService.assignDiceSix).toHaveBeenCalledWith('attack');
     });
 
-    it('should set bonus to false when clickBonus is called with false', () => {
-        component.clickBonus(false);
-        expect(component.bonus).toBe(false);
+    it('should initialize combinedStats correctly', () => {
+        expect(component.combinedStats).toEqual(statsService.getCombinedStats());
     });
 
-    it('should set dice to true when clickDice is called with true', () => {
-        component.clickDice(true);
-        expect(component.dice).toBe(true);
+    it('should update combinedStats correctly after assignBonus', () => {
+        component.assignBonus('speed');
+        expect(component.combinedStats.speed.stat).toBe(characterConstants.addedBonus);
+        expect(component.combinedStats.speed.selected).toBeTrue();
+        expect(component.combinedStats.life.selected).toBeFalse();
     });
 
-    it('should set dice to false when clickDice is called with false', () => {
-        component.clickDice(false);
-        expect(component.dice).toBe(false);
+    it('should update combinedStats correctly after assignDiceSix', () => {
+        component.assignDiceSix('defense');
+        expect(component.combinedStats.defense.selected).toBeTrue();
+        expect(component.combinedStats.attack.selected).toBeFalse();
+    });
+
+    it('should not modify other stats when assignBonus is called', () => {
+        const initialAttackStat = component.combinedStats.attack.stat;
+        const initialDefenseStat = component.combinedStats.defense.stat;
+        component.assignBonus('life');
+        expect(component.combinedStats.attack.stat).toBe(initialAttackStat);
+        expect(component.combinedStats.defense.stat).toBe(initialDefenseStat);
     });
 });

@@ -9,7 +9,7 @@ export class Map {
     description: string;
     gameMode: 'CTF' | 'Classic';
     tileMatrix: Tile[][];
-    lastModified: Date; // TODO : CHANGE THIS 
+    lastModified: Date; 
     previewImage: string; 
 
     constructor(name: string, id:number, size: number, isVisible: boolean, description: string, gameMode: 'CTF' | 'Classic', tileMatrix?: Tile[][],
