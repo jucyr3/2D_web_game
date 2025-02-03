@@ -1,0 +1,40 @@
+<div class="waiting-room">
+    <header class="waiting-room__header">
+        <div class="left-header">
+            <button  mat-raised-button (click)="openQuitDialog()" class=" button waiting-room__quit-button " >Quitter</button>
+            
+            <h1 class="waiting-room__title">SALLE D'ATTENTE</h1>
+        </div>
+        <div>
+            <div class="waiting-room__code">
+                <button class="waiting-room__lock-button button">Bloquer la partie</button>
+                <span class="waiting-room__code-text">CODE DU SERVEUR: {{ accessCode }}</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="waiting-room__content">
+        <div class="waiting-room__chat">
+            <div class="waiting-room__player-header">PLAYER1(ADMIN)</div>
+
+            <div class="waiting-room__messages"></div>
+
+            <div class="waiting-room__input">
+                <input type="text" placeholder="TAPEZ VOTRE MESSAGE" class="message-input" />
+            </div>
+        </div>
+
+        <div class="waiting-room__players">
+            <div class="player player--admin">
+                <div class="player__avatar"></div>
+                <span class="player__name">PLAYER1(ADMIN)</span>
+            </div>
+
+            <button class="waiting-room__add-bot">GÉNÉRER UN JOUEUR VIRTUEL</button>
+        </div>
+    </main>
+
+    <footer class="waiting-room__footer">
+        <button class="waiting-room__start-button button">LANCER LA PARTIE</button>
+    </footer>
+</div>
