@@ -1,10 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { SaveService } from '@app/services/save.service';
 
-// import { GameObject } from '@common/gameObject.interface';
 import { ItemObject } from '@common/ItemObject';
 import { Map } from '@common/map';
-// import { Tile } from '@common/tile';
+import { MapVerification } from '@common/mapVerification.interface';
 import { TileTypes } from '@common/tileType.constants';
 
 const MAP_SIZE_SMALL = 10;
@@ -49,11 +48,11 @@ fdescribe('SaveService', () => {
         mockMap.tileMatrix[0][1].gameObject = new ItemObject('spawnpoint');
 
         mockMap.name = '';
-        expect(service.validateGame(mockMap)).toEqual(['Le nom du jeu ne peut pas etre vide.']);
+        expect(service.validateGame(mockMap).isNamePresent).toBeFalse();
         mockMap.name = 'oiiei';
 
         mockMap.description = '';
-        expect(service.validateGame(mockMap)).toEqual(['La description du jeu ne peut pas etre vide.']);
+        expect(service.validateGame(mockMap).isDescriptionPresent).toBeFalse();
     });
 
     it('should check if map is half floor', () => {
@@ -66,6 +65,8 @@ fdescribe('SaveService', () => {
         expect(service.isMapHalfFloor(mockMap)).toBeFalse();
         mockMap.tileMatrix[0][0].type = TileTypes.GROUND_0;
         expect(service.isMapHalfFloor(mockMap)).toBeTrue();
+        mockMap.tileMatrix[0][0].type = TileTypes.WALL;
+        expect(service.isMapHalfFloor(mockMap)).toBeFalse();
         mockMap.tileMatrix[0][0].type = TileTypes.DOOR;
         expect(service.isMapHalfFloor(mockMap)).toBeFalse();
 
@@ -152,8 +153,18 @@ fdescribe('SaveService', () => {
     });
 
     it('should show the correct error message', () => {
-        mockMap.name = '';
-        expect(service.validateGame(mockMap)).toEqual(['Le nom du jeu ne peut pas etre vide.', 'Tous les points de départ doivent etre placés.']);
+        const listOfErrors = service.validateGame(mockMap);
+        const comparison: MapVerification = {
+            isUniqueName: true,
+            isNamePresent: true,
+            isDescriptionPresent: true,
+            isMapHalfFloor: true,
+            isMapAccessible: true,
+            areStartingPointsValid: false,
+            areDoorsNextToWalls: true,
+            areDoorsNotNextToBorder: true,
+        };
+        expect(listOfErrors).toEqual(comparison);
 
         // triggers isUniqueName
         mockMap.name = 'test';
@@ -174,15 +185,18 @@ fdescribe('SaveService', () => {
         // triggers areDoorsNextToWalls
         mockMap.tileMatrix[1][8].type = TileTypes.DOOR;
 
+        // fixes the spawnpoints
         mockMap.tileMatrix[8][8].gameObject = new ItemObject('spawnpoint');
         mockMap.tileMatrix[8][9].gameObject = new ItemObject('spawnpoint');
 
-        expect(service.validateGame(mockMap)).toEqual([
-            'Le nom du jeu doit etre unique.',
-            'Plus de 50% de la surface totale de la zone de jeu doit être occupée par des tuiles de terrain.',
-            "Aucune tuile de terrain ne doit être inaccessible à cause d'un agencement de murs.",
-            'Chaque tuile de porte doit se trouver entre deux tuiles de mur sur un même axe.',
-            'Une porte ne peut pas être placée sur les bords de la zone de jeu.',
-        ]);
+        comparison.isUniqueName = false;
+        comparison.isMapHalfFloor = false;
+        comparison.isMapAccessible = false;
+        comparison.areDoorsNextToWalls = false;
+        comparison.areDoorsNotNextToBorder = false;
+        comparison.areStartingPointsValid = true;
+
+        const updatedList = service.validateGame(mockMap);
+        expect(updatedList).toEqual(comparison);
     });
 });

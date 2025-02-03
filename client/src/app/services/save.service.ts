@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Map } from '@common/map';
+import { MapVerification } from '@common/mapVerification.interface';
 import { TileTypes } from '@common/tileType.constants';
 
 const MAP_SIZE_SMALL = 10;
@@ -8,6 +9,8 @@ const MAP_SIZE_LARGE = 20;
 const SPAWN_COUNT_SMALL = 2;
 const SPAWN_COUNT_MEDIUM = 4;
 const SPAWN_COUNT_LARGE = 6;
+const MAX_MAP_NAME = 50;
+const MAX_MAP_DESCRIPTION = 500;
 
 @Injectable({
     providedIn: 'root',
@@ -23,6 +26,14 @@ export class SaveService {
     // returns true if the name is unique
     isUniqueName(name: string): boolean {
         return this.gameNames.some((game) => game.name !== name);
+    }
+
+    isNameValid(map: Map): boolean {
+        return map.name.length <= MAX_MAP_NAME;
+    }
+
+    isDescriptionValid(map: Map): boolean {
+        return map.description.length <= MAX_MAP_DESCRIPTION;
     }
 
     isMapHalfFloor(map: Map): boolean {
@@ -166,53 +177,31 @@ export class SaveService {
     }
 
     // TODO: put in server
-    // TODO: create object instead
-    validateGame(map: Map): string[] {
-        // k
-        const error = [];
-        if (!map.name) {
-            error.push('Le nom du jeu ne peut pas etre vide.');
-        } else if (!this.isUniqueName(map.name)) {
-            error.push('Le nom du jeu doit etre unique.');
-        }
+    validateGame(map: Map): MapVerification {
+        const verification: MapVerification = {
+            isUniqueName: this.isUniqueName(map.name),
+            isNamePresent: !!map.name,
+            isDescriptionPresent: !!map.description,
+            isMapHalfFloor: this.isMapHalfFloor(map),
+            isMapAccessible: this.isMapAccessible(map),
+            areStartingPointsValid: this.areStartingPointsValid(map),
+            areDoorsNextToWalls: this.areDoorsNextToWalls(map),
+            areDoorsNotNextToBorder: this.areDoorsNotNextToBorder(map),
+        };
 
-        if (!map.description) {
-            error.push('La description du jeu ne peut pas etre vide.');
-        }
-
-        if (!this.isMapHalfFloor(map)) {
-            error.push('Plus de 50% de la surface totale de la zone de jeu doit être occupée par des tuiles de terrain.');
-        }
-
-        if (!this.isMapAccessible(map)) {
-            error.push("Aucune tuile de terrain ne doit être inaccessible à cause d'un agencement de murs.");
-        }
-
-        if (!this.areStartingPointsValid(map)) {
-            error.push('Tous les points de départ doivent etre placés.');
-        }
-
-        if (!this.areDoorsNextToWalls(map)) {
-            error.push('Chaque tuile de porte doit se trouver entre deux tuiles de mur sur un même axe.');
-        }
-
-        if (!this.areDoorsNotNextToBorder(map)) {
-            error.push('Une porte ne peut pas être placée sur les bords de la zone de jeu.');
-        }
-
-        return error;
+        return verification;
     }
-
-    // // TODO: shows error list (alert) or redirects (NO ALERTS). Remember to save the name
-    // saveGame(map: Map): boolean {
-    //     const errorList = this.validateGame(map);
-    //     if (errorList.length > 0) {
-    //         errorList.forEach((error) => alert(error));
-    //         return false;
-    //     } else {
-    //         return true;
-    //         // this.gameNames.push({ name: map.name });
-    //         // alert('Le jeu a ete enregistre!');
-    //     }
-    // }
 }
+
+// // TODO: shows error list (alert) or redirects (NO ALERTS). Remember to save the name
+// saveGame(map: Map): boolean {
+//     const errorList = this.validateGame(map);
+//     if (errorList.length > 0) {
+//         errorList.forEach((error) => alert(error));
+//         return false;
+//     } else {
+//         return true;
+//         // this.gameNames.push({ name: map.name });
+//         // alert('Le jeu a ete enregistre!');
+//     }
+// }
