@@ -29,4 +29,8 @@ export class CreateMatchPageComponent { // TODO : SERVER DOES NOT SAVE MAP IMAGE
             this.mapsForClient.clickedMap = null;
         }
     }
+
+    openQuitDialog(): void {
+        this.router.navigate(['/home']);
+    }
 }

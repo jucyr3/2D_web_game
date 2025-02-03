@@ -4,7 +4,7 @@
       "name": "ecedecec",
       "id": 17385966376783888,
       "size": 10,
-      "isVisible": false,
+      "isVisible": true,
       "description": "cecec",
       "gameMode": "CTF",
       "tileMatrix": [
@@ -536,7 +536,7 @@
       "name": "ewcewc",
       "id": 17385985486349144,
       "size": 10,
-      "isVisible": false,
+      "isVisible": true,
       "description": "",
       "gameMode": "Classic",
       "tileMatrix": [
@@ -1071,7 +1071,7 @@
       "name": "dededede",
       "id": 1738607510302297,
       "size": 20,
-      "isVisible": false,
+      "isVisible": true,
       "description": "holla",
       "gameMode": "CTF",
       "tileMatrix": [
