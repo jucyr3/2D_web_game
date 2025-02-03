@@ -1,4 +1,4 @@
-export enum TileTypes {
+export enum TILE_TYPES {
     GROUND_0 = 'groundTile0',
     GROUND_1 = 'groundTile1',
     GROUND_2 = 'groundTile2',
