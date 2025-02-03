@@ -4,8 +4,6 @@ import { TIPPY_REF } from '@ngneat/helipopper';
 import { tileDescription } from '@app/../assets/tiles/tile-description';
 import { TileTypes } from '@common/tileType.constants';
 
-/* eslint-disable */
-
 describe('BrushTooltipComponent', () => {
     let component: BrushTooltipComponent;
     let fixture: ComponentFixture<BrushTooltipComponent>;

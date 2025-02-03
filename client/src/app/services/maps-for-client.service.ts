@@ -7,7 +7,7 @@ import { ClientHttpRequestsService } from './client-http-requests.service';
   providedIn: 'root'
 })
 export class MapsForClientService  {
-  private mapsSubject = new BehaviorSubject<Map[]>([]);
+  public mapsSubject = new BehaviorSubject<Map[]>([]);
   maps$ = this.mapsSubject.asObservable();
   
   selectedMap: Map | null = null;

@@ -16,7 +16,7 @@ export class ModalComponent {
   newMapForm = {
     mapName: '',
     mapMode: 'Classic' as 'Classic' | 'CTF',
-    mapSize: 'PETIT' as 'PETIT' | 'MOYENNE' | 'GRANDE'
+    mapSize: 'PETITE' as 'PETITE' | 'MOYENNE' | 'GRANDE'
   };
 
   closeModal() {

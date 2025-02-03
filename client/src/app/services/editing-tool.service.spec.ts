@@ -1,13 +1,15 @@
-/* eslint-disable */
+/* eslint-disable max-classes-per-file */ 
+// La classe TestBed augmente le nombre de classes importees de 2 a 3 et fait donc lancer l'erreur de lint
 import { TestBed } from '@angular/core/testing';
+import { Coordinate } from '@app/interfaces/coordinate';
+import { ItemObject } from '@common/ItemObject';
+
+/* eslint-disable */
 import { EditingToolService } from './editing-tool.service';
 import { TileTypes } from '@app/../../../common/tileType.constants';
-import { Coordinate } from '@app/interfaces/coordinate';
 import { EditToolTypes } from './editing-tool.constants';
 import { MapService } from './map.service';
-import { ItemObject } from '@common/ItemObject';
 import { MouseService } from './mouse.service';
-
 
 class MockItemManager {
     increaseItemAmount = jasmine.createSpy('increaseItemAmount');
@@ -248,6 +250,7 @@ describe('EditingToolService', () => {
         spyOn(service, 'eraseTile');
         spyOn(service, 'placeTile');
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (mouseService as any).isRightClick = true;
 
         service.paintInterpolatedPath();
@@ -262,6 +265,8 @@ describe('EditingToolService', () => {
         mapService.getTileType.and.returnValue(TileTypes.GROUND_1);
 
         spyOn(service, 'removeItemObjectFromTile');
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         spyOn(service as any, 'isBrushWallOrDoor').and.returnValue(true);
 
         service.placeTile(0, 0, TileTypes.WALL);

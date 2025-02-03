@@ -11,7 +11,7 @@
                        [(ngModel)]="newMapForm.mapName" 
                        name="gameName" 
                        class="game-name-input" 
-                       placeholder="Entrez le nom du jeu">
+                       placeholder="Entrez le nom du jeu" maxlength="50">
             </div>
             <div class="form-section">
                 <h3>MODE DE JEU:</h3>
@@ -39,8 +39,8 @@
                         <input type="radio" 
                                [(ngModel)]="newMapForm.mapSize" 
                                name="gameSize" 
-                               value="PETIT">
-                        PETIT (10X10)
+                               value="PETITE">
+                        PETITE (10X10)
                     </label>
                     <label>
                         <input type="radio" 

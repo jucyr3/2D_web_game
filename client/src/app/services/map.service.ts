@@ -37,7 +37,7 @@ export class MapService {
         if (!this.loadMapFromSessionStorage()) {
             this.setDefaultMap();
             this.saveMapToSessionStorage();
-            this.itemManager = new ItemManager(this.map.size);
+            this.itemManager = new ItemManager(this.map.size, this.map.gameMode);
         }
     }
 
@@ -49,6 +49,7 @@ export class MapService {
 
     createEmptyMap(mapData: { name: string; gameMode: 'Classic' | 'CTF'; size: string }): void {
         this.map = new Map(mapData.name, 0, Number(mapData.size), false, '', mapData.gameMode);
+        this.itemManager = new ItemManager(this.map.size, this.map.gameMode);
     }
 
     parseTileMatrix(json: MapJson): Tile[][] {
@@ -71,7 +72,7 @@ export class MapService {
     }
 
     createMapFromJSON(json: MapJson): Map {
-        this.itemManager = new ItemManager(json.size);
+        this.itemManager = new ItemManager(json.size, json.gameMode);
         const tileMatrix = this.parseTileMatrix(json);
         return new Map(json.name, json.id, json.size, json.isVisible, json.description, json.gameMode, tileMatrix);
     }

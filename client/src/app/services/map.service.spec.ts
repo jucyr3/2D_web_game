@@ -5,7 +5,8 @@ import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
 import { MapJson, MapService } from './map.service';
 
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-magic-numbers */
+
 describe('MapService', () => {
     let service: MapService;
 

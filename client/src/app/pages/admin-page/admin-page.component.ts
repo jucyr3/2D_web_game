@@ -5,6 +5,9 @@ import { Router } from '@angular/router';
 import { GameGridComponent } from '@app/components/admin-game/games-grid/games-grid/games-grid.component';
 import { ModalComponent } from '@app/components/admin-game/modal/modal.component';
 import { MapService } from '@app/services/map.service';
+import { MapsForClientService } from '@app/services/maps-for-client.service';
+import { PopUpComponent } from '@app/components/pop-up/pop-up.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-admin-page',
@@ -17,13 +20,15 @@ export class AdminPageComponent {
     constructor(
         protected router: Router,
         protected mapService: MapService,
+        protected mapsForClientService: MapsForClientService,
+        readonly dialog: MatDialog,
     ) {}
 
     isCreateModalOpen = false;
     newMapForm = {
         mapName: '',
         mapMode: 'Classic' as 'Classic' | 'CTF',
-        mapSize: 'PETIT' as 'PETIT' | 'MOYENNE' | 'GRANDE',
+        mapSize: 'PETITE' as 'PETITE' | 'MOYENNE' | 'GRANDE',
     };
 
     openCreateModal() {
@@ -34,16 +39,60 @@ export class AdminPageComponent {
         this.isCreateModalOpen = false;
     }
 
-    handleCreateMap(formData: any) {
-        // Creates empty map service
+    handleCreateMap(formData: any): boolean { // TODO : DEVRAIT METTRE DANS UN SERVICE QUI GÈRE LES VERIFS DU MODAL
+        if (!formData.mapName?.trim()) {
+            alert('Map name cannot be empty');
+            return false;
+        }
+        
+        const existingMap = this.mapsForClientService.mapsSubject.getValue().find(
+            map => map.name.toLowerCase() === formData.mapName.trim().toLowerCase()
+        );
+        
+        if (existingMap) {
+            alert('Map name already exists');
+            return false;
+        }
+    
+        const validSizes = ['PETITE', 'MOYENNE', 'GRANDE'];
+        if (!validSizes.includes(formData.mapSize)) {
+            alert('Invalid map size');
+            return false;
+        }
+    
         const mapData = {
-            name: formData.mapName,
+            name: formData.mapName.trim(),
             gameMode: formData.mapMode,
-            size: formData.mapSize === 'PETIT' ? '10' : formData.mapSize === 'MOYENNE' ? '15' : '20',
+            size: formData.mapSize === 'PETITE' ? '10' : 
+                  formData.mapSize === 'MOYENNE' ? '15' : '20',
         };
+    
+        try {
+            this.mapService.createEmptyMap(mapData);
+            this.router.navigate(['edit']);
+            this.closeCreateModal();
+            return true;
+        } catch (error) {
+            alert('Failed to create map');
+            return false;
+        }
+    }
 
-        this.mapService.createEmptyMap(mapData); // TODO : CREATES EMPTY MAP AND GOES TO EDIT PAGE
-        this.router.navigate(['edit']);
-        this.closeCreateModal();
+    openQuitDialog(): void {
+        const dialogRef = this.dialog.open(PopUpComponent, {
+                width: '35%',
+                data: {
+                    title: 'Confirmer la sortie',
+                    content: 'Quitter maintenant annulera vos modifications. Êtes-vous sûr de vouloir quitter?',
+                    cancelButtonLabel: 'Non',
+                    confirmButtonLabel: 'Oui',
+                },
+        });
+            dialogRef.componentInstance.confirmed.subscribe((result: boolean) => {
+                if (result) {
+                    dialogRef.close();
+                    this.router.navigate(['/home']);
+                }
+        });
     }
 }
