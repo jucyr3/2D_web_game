@@ -25,6 +25,10 @@ export class RequestMapTempController {
     async findVisible() {
         return await this.mapService.getVisible();
     }
+    @Get('image/:id')
+    async findImage(@Param('id') id: string) {
+        return await this.mapService.getImage(id);
+    }
 
     @Get(':id')
     async findOne(@Param('id') id: string) {

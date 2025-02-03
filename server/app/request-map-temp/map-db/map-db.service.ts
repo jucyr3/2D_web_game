@@ -2,11 +2,11 @@ import { Map } from '@common/map';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { MapBP } from './map-db.model';
+import { MapDocument } from './map.interface';
 
 @Injectable()
 export class MapDbService {
-    constructor(@InjectModel('Map') private readonly mapModel: Model<MapBP>) {}
+    constructor(@InjectModel('Map') private readonly mapModel: Model<MapDocument>) {}
 
     async addMap(map: Map) {
         const addedMap = new this.mapModel({ ...map, lastModified: new Date() });
@@ -32,13 +32,12 @@ export class MapDbService {
         return response;
     }
     async getVisible() {
-        let response = await this.mapModel.find({ isVisible: true }).exec();
+        const response = await this.mapModel.find({ isVisible: true }).exec();
         return response ?? [];
     }
 
     async changeMap(id: string, map: Map) {
         const themap = await this.mapModel.updateOne({ _id: id }, { $set: { ...map } });
-        console.log(map);
         return themap;
     }
     async remove(id: string) {
@@ -47,5 +46,9 @@ export class MapDbService {
     async saveImage(id: string, image: string) {
         const themap = await this.mapModel.updateOne({ _id: id }, { $set: { previewImage: image } });
         return themap;
+    }
+    async getImage(id: string) {
+        const theImage = await this.mapModel.findById(id, { previewImage: 1, _id: 0 }).exec();
+        return theImage.previewImage;
     }
 }
