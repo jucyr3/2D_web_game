@@ -1,6 +1,5 @@
-
-
-export interface mapVerification {
+export interface MapVerification {
+    // true if passes
     isUniqueName: boolean;
     isNamePresent: boolean;
     isDescriptionPresent: boolean;
@@ -9,6 +8,4 @@ export interface mapVerification {
     areStartingPointsValid: boolean;
     areDoorsNextToWalls: boolean;
     areDoorsNotNextToBorder: boolean;
-
-
 }
