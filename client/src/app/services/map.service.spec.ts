@@ -4,6 +4,7 @@ import { ItemObject } from '@common/ItemObject';
 import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
 import { MapJson, MapService } from './map.service';
+import { MapVerification } from '@common/mapVerification.interface';
 
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 
@@ -175,5 +176,26 @@ describe('MapService', () => {
         expect(service.itemManager).toBeInstanceOf(ItemManager);
         expect(service.map).toBeDefined();
         expect(service.map.size).toBe(15); // Default map size
+    });
+
+    it('should call handleMapVerificationError when calling saveMapToServer', () => {
+        spyOn(service, 'handleMapVerificationError');
+        service.saveMap();
+        expect(service.handleMapVerificationError).toHaveBeenCalled();
+    });
+
+    it('should return error list with mapVerificationErrors', () => {
+        const mapVerification: MapVerification = {
+            isUniqueName: false,
+            isNamePresent: true,
+            isDescriptionPresent: true,
+            isMapHalfFloor: true,
+            isMapAccessible: true,
+            areStartingPointsValid: true,
+            areDoorsNextToWalls: true,
+            areDoorsNotNextToBorder: true,
+        };
+        service.handleMapVerificationError(mapVerification);
+        expect(service.errorList.length).toBe(1);
     });
 });

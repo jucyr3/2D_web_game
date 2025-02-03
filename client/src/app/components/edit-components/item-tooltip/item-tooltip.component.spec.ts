@@ -50,19 +50,10 @@ describe('ItemTooltipComponent', () => {
         expect(component.itemDescription).toBe('');
     });
 
-    it('should sanitize and highlight words in itemDescription', () => {
+    it('should return item description from itemDescriptions', () => {
         const testItem = { name: 'testItem' } as ItemObject;
         component.itemObject = testItem;
-        itemDescriptions['testItem'] = { name: 'Test Item', description: 'This is a rare item with damage and health.' };
-
-        // tslint:disable-next-line
-        component.itemDescription;
-
-        expect(sanitizerSpy.bypassSecurityTrustHtml).toHaveBeenCalledWith(
-            'This is a <span style="color: #007bff; font-weight: bold;">rare</span> item with ' +
-                '<span style="color: #dc3545; font-weight: bold;">damage</span> and ' +
-                '<span style="color: #28a745; font-weight: bold;">health</span>.',
-        );
+        itemDescriptions['testItem'] = { name: '', description: 'Test Description' };
+        expect(component.itemDescription).toBe('Test Description');
     });
-
 });

@@ -2,23 +2,24 @@ import { NgStyle } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { BrushGridComponent } from '@app/components/edit-components/brush-grid/brush-grid.component';
 import { DescriptionComponent } from '@app/components/edit-components/description/description.component';
-import { TitleComponent } from '@app/components/edit-components/title/title.component';
 import { ItemGridComponent } from '@app/components/edit-components/item-grid/item-grid.component';
+import { ResetButtonComponent } from '@app/components/edit-components/reset-button/reset-button.component';
+import { SaveButtonComponent } from '@app/components/edit-components/save-button/save-button.component';
+import { TileGridComponent } from '@app/components/edit-components/tile-grid/tile-grid.component';
+import { TitleComponent } from '@app/components/edit-components/title/title.component';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditingToolService } from '@app/services/editing-tool.service';
 import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
-import { ResetButtonComponent } from '@app/components/edit-components/reset-button/reset-button.component';
-import { SaveButtonComponent } from '@app/components/edit-components/save-button/save-button.component';
-import { TileGridComponent } from '@app/components/edit-components/tile-grid/tile-grid.component';
 
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { PopUpComponent } from '@app/components/pop-up/pop-up.component';
 import { Router } from '@angular/router';
+import { PopUpComponent } from '@app/components/pop-up/pop-up.component';
+import { ErrorListComponent } from '@app/components/edit-components/error-list/error-list.component';
 
 @Component({
     selector: 'app-edit-page',
@@ -35,6 +36,7 @@ import { Router } from '@angular/router';
         MatInputModule,
         FormsModule,
         MatButtonModule,
+        ErrorListComponent,
     ],
     templateUrl: './edit-page.component.html',
     styleUrl: './edit-page.component.scss',

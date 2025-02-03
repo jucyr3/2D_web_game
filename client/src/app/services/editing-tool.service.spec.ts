@@ -1,4 +1,4 @@
-/* eslint-disable max-classes-per-file */ 
+/* eslint-disable max-classes-per-file */
 // La classe TestBed augmente le nombre de classes importees de 2 a 3 et fait donc lancer l'erreur de lint
 import { TestBed } from '@angular/core/testing';
 import { Coordinate } from '@app/interfaces/coordinate';

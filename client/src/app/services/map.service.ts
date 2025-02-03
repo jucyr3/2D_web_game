@@ -5,6 +5,7 @@ import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
 
 import { ItemManager } from '@app/classes/item-manager';
+import { MapVerification } from '@common/mapVerification.interface';
 
 export interface MapJson {
     name: string;
@@ -31,6 +32,7 @@ export interface MapJson {
 export class MapService {
     map: Map;
     itemManager: ItemManager;
+    errorList: string[] = [];
 
     constructor() {
         if (!this.loadMapFromSessionStorage()) {
@@ -45,17 +47,24 @@ export class MapService {
     setDefaultMap(): void {
         const mapSize = 15;
         const defaultId = 0;
-        this.map = new Map('Untitled', defaultId, mapSize, true, '', 'Classic');
+        this.map = {
+            id: defaultId,
+            name: 'Untitled',
+            size: mapSize,
+            isVisible: false,
+            description: '',
+            gameMode: 'Classic',
+            tileMatrix: Array.from({ length: mapSize }, () => Array.from({ length: mapSize }, () => new Tile(TileTypes.GROUND_1, false, false))),
+            lastModified: new Date(),
+        };
     }
 
     parseTileMatrix(json: MapJson): Tile[][] {
-        // eslint-disable-next-line
         return json.tileMatrix.map((row) =>
             row.map((tileData) => {
                 const type = tileData.type as TileTypes;
                 const isOccupied = tileData.isOccupied;
                 const isObstacle = tileData.isObstacle;
-                // TODO: Fix this
                 const gameObject = tileData.gameObject ? new ItemObject(tileData.gameObject.name) : null;
 
                 if (gameObject) {
@@ -70,7 +79,16 @@ export class MapService {
     createMapFromJSON(json: MapJson): Map {
         this.itemManager = new ItemManager(json.size, json.gameMode);
         const tileMatrix = this.parseTileMatrix(json);
-        return new Map(json.name, json.id, json.size, json.isVisible, json.description, json.gameMode, tileMatrix);
+        return {
+            id: json.id,
+            name: json.name,
+            size: json.size,
+            isVisible: json.isVisible,
+            description: json.description,
+            gameMode: json.gameMode,
+            tileMatrix,
+            lastModified: new Date(),
+        };
     }
 
     // returns true if map is loaded from server
@@ -84,6 +102,34 @@ export class MapService {
 
     saveMapToServer(): void {
         // TODO: for the server implementation
+        // temp object
+        const mapVerification: MapVerification = {
+            isUniqueName: false,
+            isNamePresent: true,
+            isDescriptionPresent: true,
+            isMapHalfFloor: true,
+            isMapAccessible: true,
+            areStartingPointsValid: true,
+            areDoorsNextToWalls: true,
+            areDoorsNotNextToBorder: true,
+        };
+        this.handleMapVerificationError(mapVerification);
+    }
+
+    handleMapVerificationError(mapVerification: MapVerification): void {
+        this.errorList = [];
+        for (const key in mapVerification) {
+            if (Object.prototype.hasOwnProperty.call(mapVerification, key)) {
+                const typedKey = key as keyof MapVerification;
+                if (!mapVerification[typedKey]) {
+                    this.errorList.push(typedKey);
+                }
+            }
+        }
+    }
+
+    flattenedTileMatrix(): Tile[] {
+        return this.map.tileMatrix.reduce((acc, row) => [...acc, ...row], []);
     }
 
     saveMap(): void {
