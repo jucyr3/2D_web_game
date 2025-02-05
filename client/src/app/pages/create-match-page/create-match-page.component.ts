@@ -12,7 +12,7 @@ import { MapsForClientService } from '@app/services/maps-for-client.service';
     imports: [CommonModule, FormsModule, MapsGridComponent],
     standalone: true
 })
-export class CreateMatchPageComponent { // TODO : SERVER DOES NOT SAVE MAP IMAGES LIKE IN ADMIN PAGE 
+export class CreateMatchPageComponent {
     constructor(
         protected router: Router, 
         protected mapsForClient: MapsForClientService,
@@ -24,7 +24,7 @@ export class CreateMatchPageComponent { // TODO : SERVER DOES NOT SAVE MAP IMAGE
     }
 
     onBodyClick(event: MouseEvent): void {
-        if (!(event.target as HTMLElement).closest('.game-card') && // TODO : error in console
+        if (!(event.target as HTMLElement).closest('.game-card') &&
             !(event.target as HTMLElement).closest('button')) {
             this.mapsForClient.clickedMap = null;
         }

@@ -1,25 +1,20 @@
 <body>
-
 <div class="admin-container">
     <button mat-raised-button (click)="openQuitDialog()" class="quit-button">Page Accueil</button>
     <div class="content-wrapper">
-    
     <header class="admin-header">
         <h1 style="color: rgb(233, 231, 231);">ADMINISTRER LES JEUX</h1>
         <button (click)="openCreateModal()" class="new-game-btn">
             <i class="fas fa-plus"></i> CRÉER UN NOUVEAU JEU
         </button>
     </header>
-
     <app-games-grid/>
-
     @if (isCreateModalOpen) {
         <app-modal
             (close)="closeCreateModal()"
             (create)="handleCreateMap($event)"
         />
     }
-    
-</div>
+    </div>
 </div>
 </body>

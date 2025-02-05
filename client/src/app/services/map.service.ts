@@ -96,7 +96,6 @@ export class MapService {
     createMapFromJSON(json: MapJson): Map {
         this.itemManager = new ItemManager(json.size, json.gameMode);
         const tileMatrix = this.parseTileMatrix(json);
-        
         return {
             id: json.id,
             name: json.name,
@@ -110,7 +109,6 @@ export class MapService {
         };
      }
 
-    // returns true if map is loaded from server
     loadMapFromServer(id: number): boolean {
         this.clientHttpRequest.loadMapById(id).subscribe({
             next: (map: Map) => {
@@ -157,9 +155,7 @@ export class MapService {
         if (!mapJson) {
             return false;
         }
-
         this.map = this.createMapFromJSON(JSON.parse(mapJson));
-
         return true;
     }
 
@@ -272,6 +268,7 @@ export class MapService {
             const blob = await response.blob();
 
             return blob;
+        
         } catch (error) {
             console.error('Error exporting map as image:', error);
             return null;
