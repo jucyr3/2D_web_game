@@ -10,7 +10,7 @@ import { BrushComponent } from '@app/components/edit-components/brush/brush.comp
     styleUrl: './brush-grid.component.scss',
 })
 export class BrushGridComponent {
-    tileTypes = TileTypes; // ? dw about it, its needed
+    tileTypes = TileTypes;
 
     constructor(protected readonly editingToolService: EditingToolService) {}
 }

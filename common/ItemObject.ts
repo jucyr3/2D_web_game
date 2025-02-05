@@ -10,14 +10,6 @@ export enum Items {
     flag = 'flag',
 }
 
-export class ItemObject {
+export interface ItemObject {
     name: string;
-
-    constructor(name: string) {
-        this.name = name;
-    }
-
-    use(): void {
-        //useItemManager.useItem(name);
-    }
 }

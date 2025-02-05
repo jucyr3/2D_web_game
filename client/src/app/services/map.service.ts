@@ -18,7 +18,7 @@ export interface MapJson {
         type: string;
         isOccupied: boolean;
         isObstacle: boolean;
-        gameObject?: {
+        itemObject?: {
             name: string;
             description: string;
         } | null;
@@ -54,7 +54,9 @@ export class MapService {
             isVisible: false,
             description: '',
             gameMode: 'Classic',
-            tileMatrix: Array.from({ length: mapSize }, () => Array.from({ length: mapSize }, () => new Tile(TileTypes.GROUND_1, false, false))),
+            tileMatrix: Array.from({ length: mapSize }, () =>
+                Array.from({ length: mapSize }, () => ({ type: TileTypes.GROUND_1, isOccupied: false, isObstacle: false, itemObject: null }) as Tile),
+            ),
             lastModified: new Date(),
         };
     }
@@ -65,13 +67,13 @@ export class MapService {
                 const type = tileData.type as TileTypes;
                 const isOccupied = tileData.isOccupied;
                 const isObstacle = tileData.isObstacle;
-                const gameObject = tileData.gameObject ? new ItemObject(tileData.gameObject.name) : null;
+                const itemObject: ItemObject | null = tileData.itemObject ? { name: tileData.itemObject.name } : null;
 
-                if (gameObject) {
-                    this.itemManager.decreaseItemAmount(gameObject.name);
+                if (itemObject) {
+                    this.itemManager.decreaseItemAmount(itemObject.name);
                 }
 
-                return new Tile(type, isOccupied, isObstacle, gameObject);
+                return { type, isOccupied, isObstacle, itemObject } as Tile;
             }),
         );
     }
@@ -91,7 +93,6 @@ export class MapService {
         };
     }
 
-    // returns true if map is loaded from server
     loadMapFromServer(): boolean {
         // TODO: for the server implementation
         // call the proper service to get the map from the server
@@ -162,7 +163,7 @@ export class MapService {
 
     getTileTexture(row: number, column: number): string {
         const tileType: TileTypes = this.getTileType(row, column);
-        return `url(assets/tiles/${tileType}.png)`; // Use the tileType parameter
+        return `url(assets/tiles/${tileType}.png)`;
     }
 
     changeTileType(row: number, column: number, newType: TileTypes): void {
@@ -178,27 +179,27 @@ export class MapService {
     }
 
     placeGameObject(row: number, column: number, gameObject: ItemObject): void {
-        this.map.tileMatrix[row][column].gameObject = gameObject;
+        this.map.tileMatrix[row][column].itemObject = gameObject;
     }
 
     moveGameObject(row: number, column: number, newRow: number, newColumn: number): void {
-        this.map.tileMatrix[newRow][newColumn].gameObject = this.map.tileMatrix[row][column].gameObject;
-        this.map.tileMatrix[row][column].gameObject = null;
+        this.map.tileMatrix[newRow][newColumn].itemObject = this.map.tileMatrix[row][column].itemObject;
+        this.map.tileMatrix[row][column].itemObject = null;
     }
 
     getItemObject(row: number, column: number): ItemObject | null {
         try {
-            return this.map.tileMatrix[row][column].gameObject;
+            return this.map.tileMatrix[row][column].itemObject;
         } catch (error) {
             return null;
         }
     }
 
     removeGameObject(row: number, column: number): void {
-        this.map.tileMatrix[row][column].gameObject = null;
+        this.map.tileMatrix[row][column].itemObject = null;
     }
 
     resetItemToStartPosition(row: number, column: number, draggedItem: ItemObject): void {
-        this.map.tileMatrix[row][column].gameObject = draggedItem;
+        this.map.tileMatrix[row][column].itemObject = draggedItem;
     }
 }

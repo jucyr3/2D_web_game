@@ -33,34 +33,37 @@ export class ItemManager {
     }
 
     decreaseItemAmount(itemName: string): void {
+        if (this.itemAmounts[itemName] === 0) {
+            return;
+        }
         this.itemAmounts[itemName]--;
     }
 
     setDefaultItemAmounts(): void {
         for (const item of this.itemTypes) {
-            this.itemAmounts[item] = this.getItemAmount(item);
+            this.itemAmounts[item] = this.getDefaultItemAmount(item);
         }
     }
 
-    getItemAmount(itemName: string): number {
+    getDefaultItemAmount(itemName: string): number {
         switch (itemName) {
             case 'attributeItem1':
-                return (this.itemAmounts['attributeItem1'] = 1);
+                return 1;
 
             case 'conditionItem1':
-                return (this.itemAmounts['conditionItem1'] = 1);
+                return 1;
 
             case 'gameplayItem1':
-                return (this.itemAmounts['gameplayItem1'] = 1);
+                return 1;
 
             case 'attributeItem2':
-                return (this.itemAmounts['attributeItem2'] = 1);
+                return 1;
 
             case 'conditionItem2':
-                return (this.itemAmounts['conditionItem2'] = 1);
+                return 1;
 
             case 'gameplayItem2':
-                return (this.itemAmounts['gameplayItem2'] = 1);
+                return 1;
 
             case 'spawnpoint':
                 return this.itemMap['size' + this.mapSize];
@@ -69,7 +72,7 @@ export class ItemManager {
                 return this.itemMap['size' + this.mapSize];
 
             case 'flag':
-                return (this.itemAmounts['flag'] = this.gameMode === 'CTF' ? 1 : 0);
+                return this.gameMode === 'CTF' ? 1 : 0;
 
             default:
                 return 0;

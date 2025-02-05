@@ -3,7 +3,6 @@ import { MapService } from '@app/services/map.service';
 
 @Component({
     selector: 'app-description',
-    imports: [],
     templateUrl: './description.component.html',
     styleUrl: './description.component.scss',
 })
@@ -22,7 +21,7 @@ export class DescriptionComponent {
 
     updateValue() {
         if (!this.description || this.description.trim() === '') {
-            this.description = ''; // Reset to default if empty
+            this.description = '';
         }
         this.mapService.map.description = this.description;
     }

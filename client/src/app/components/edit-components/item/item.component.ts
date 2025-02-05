@@ -1,13 +1,12 @@
 import { NgClass, NgIf } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { DragAndDropService, ITEM_CONTAINER_COORDINATES } from '@app/services/drag-and-drop.service';
-import { EditToolTypes } from '@app/services/editing-tool.constants';
-import { EditingToolService } from '@app/services/editing-tool.service';
+import { EditingToolService, EditToolTypes } from '@app/services/editing-tool.service';
 import { ITEM_TEXTURE_PATH } from '@app/../assets/items/item-texture-path';
 import { ItemObject } from '@common/ItemObject';
 import { TippyDirective } from '@ngneat/helipopper';
 import { ItemTooltipComponent } from '@app/components/edit-components/item-tooltip/item-tooltip.component';
-import { MouseService } from '@app/services/mouse.service';
+import { MouseService, MouseButton } from '@app/services/mouse.service';
 import { MapService } from '@app/services/map.service';
 
 @Component({
@@ -17,7 +16,7 @@ import { MapService } from '@app/services/map.service';
     styleUrls: ['./item.component.scss'],
 })
 export class ItemComponent implements OnDestroy, OnInit {
-    @Input() itemId: string; // Unique identifier for each item
+    @Input() itemId: string;
 
     itemTexturePath = ITEM_TEXTURE_PATH;
 
@@ -45,11 +44,11 @@ export class ItemComponent implements OnDestroy, OnInit {
     }
 
     ngOnInit(): void {
-        this.itemObject = new ItemObject(this.itemId);
+        this.itemObject = { name: this.itemId };
     }
 
     onMouseDown(event: MouseEvent): void {
-        if (this.mapService.itemManager.itemAmounts[this.itemObject.name] <= 0 || event.button !== 0) {
+        if (this.mapService.itemManager.itemAmounts[this.itemObject.name] <= 0 || event.button !== MouseButton.Left) {
             return;
         }
         this.mapService.itemManager.decreaseItemAmount(this.itemObject.name);
@@ -59,7 +58,6 @@ export class ItemComponent implements OnDestroy, OnInit {
 
     onMouseUp(): void {
         if (this.draggingState.isDragging && this.dragAndDropService.currentDraggedItem) {
-            // if the dragged items name is the same as this ones
             if (this.dragAndDropService.currentDraggedItem.name === this.itemObject.name) {
                 this.mapService.itemManager.increaseItemAmount(this.itemObject.name);
             }
@@ -70,7 +68,6 @@ export class ItemComponent implements OnDestroy, OnInit {
     }
 
     ngOnDestroy(): void {
-        // Clean up dragging state for this item
         this.dragAndDropService.onMouseUp(this.itemObject.name);
     }
 }

@@ -3,7 +3,6 @@ import { MapService } from '@app/services/map.service';
 
 @Component({
     selector: 'app-title',
-    imports: [],
     templateUrl: './title.component.html',
     styleUrl: './title.component.scss',
 })
@@ -22,7 +21,7 @@ export class TitleComponent {
 
     updateValue() {
         if (!this.title || this.title.trim() === '') {
-            this.title = 'Untitled'; // Reset to default if empty
+            this.title = 'Untitled';
         }
         this.mapService.map.name = this.title;
     }

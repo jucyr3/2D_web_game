@@ -4,7 +4,7 @@ import { TileComponent } from '@app/components/edit-components/tile/tile.compone
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
 import { EditingToolService } from '@app/services/editing-tool.service';
 import { MapService } from '@app/services/map.service';
-import { MouseService } from '@app/services/mouse.service';
+import { MouseService, MouseButton } from '@app/services/mouse.service';
 
 @Component({
     selector: 'app-tile-grid',
@@ -18,7 +18,7 @@ export class TileGridComponent {
     constructor(
         private readonly mouseService: MouseService,
         protected mapService: MapService,
-        private readonly dragAndDropService: DragAndDropService, // Inject Renderer2
+        private readonly dragAndDropService: DragAndDropService,
         private readonly editingToolService: EditingToolService,
     ) {}
 
@@ -37,6 +37,6 @@ export class TileGridComponent {
     }
 
     onMouseDown(event: MouseEvent) {
-        this.mouseService.isRightClick = event.button === 2;
+        this.mouseService.isRightClick = event.button === MouseButton.Right;
     }
 }

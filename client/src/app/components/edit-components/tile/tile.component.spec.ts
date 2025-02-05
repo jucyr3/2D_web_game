@@ -2,10 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgStyle } from '@angular/common';
 import { TileComponent } from './tile.component';
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
-import { EditingToolService } from '@app/services/editing-tool.service';
+import { EditingToolService, EditToolTypes } from '@app/services/editing-tool.service';
 import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
-import { EditToolTypes } from '@app/services/editing-tool.constants';
 import { Tile } from '@common/tile';
 import { ItemObject } from '@common/ItemObject';
 import { ItemTooltipComponent } from '@app/components/edit-components/item-tooltip/item-tooltip.component';
@@ -75,7 +74,6 @@ describe('TileComponent', () => {
         component.tileObject = {} as Tile;
         mockMapService.map = { size: 10 } as unknown;
 
-        // Mock the currentDraggedItem as a read-only property
         Object.defineProperty(mockDragAndDropService, 'currentDraggedItem', {
             get: () => ({ name: 'MockedItem' }) as ItemObject,
             configurable: true,

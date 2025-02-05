@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { DragAndDropService } from './drag-and-drop.service';
-import { MapService } from './map.service';
 import { ItemObject } from '@common/ItemObject';
 import { TileTypes } from '@common/tileType.constants';
+import { DragAndDropService } from './drag-and-drop.service';
+import { MapService } from './map.service';
 
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 
@@ -36,7 +36,7 @@ describe('DragAndDropService', () => {
     });
 
     it('should start dragging with correct values', () => {
-        const mockItem = new ItemObject('testItem');
+        const mockItem = { name: 'testItem' } as ItemObject;
         const event = new MouseEvent('mousedown', { clientX: 100, clientY: 200 });
 
         service.startDragging(2, 3, mockItem, event);
@@ -48,7 +48,7 @@ describe('DragAndDropService', () => {
     });
 
     it('should update dragging state on mouse move', () => {
-        const mockItem = new ItemObject('testItem');
+        const mockItem = { name: 'testItem' } as ItemObject;
         const startEvent = new MouseEvent('mousedown', { clientX: 100, clientY: 200 });
         service.startDragging(2, 3, mockItem, startEvent);
 
@@ -59,7 +59,7 @@ describe('DragAndDropService', () => {
     });
 
     it('should stop dragging on mouse up', () => {
-        const mockItem = new ItemObject('testItem');
+        const mockItem = { name: 'testItem' } as ItemObject;
         const startEvent = new MouseEvent('mousedown', { clientX: 100, clientY: 200 });
         service.startDragging(2, 3, mockItem, startEvent);
 
@@ -71,7 +71,7 @@ describe('DragAndDropService', () => {
     });
 
     it('should handle dragged item placement correctly', () => {
-        const mockItem = new ItemObject('testItem');
+        const mockItem = { name: 'testItem' } as ItemObject;
         service.startDragging(2, 3, mockItem, new MouseEvent('mousedown'));
 
         mockMapService.getTileType.and.returnValue(TileTypes.GROUND_1);
@@ -83,7 +83,7 @@ describe('DragAndDropService', () => {
     });
 
     it('should handle dragged item placement correctly if there is no currently dragged item', () => {
-        const mockItem = new ItemObject('testItem');
+        const mockItem = { name: 'testItem' } as ItemObject;
         service.startDragging(2, 3, mockItem, new MouseEvent('mousedown'));
 
         mockMapService.getTileType.and.returnValue(TileTypes.GROUND_1);
@@ -96,7 +96,7 @@ describe('DragAndDropService', () => {
     });
 
     it('should handle invalid item placement if on wall or occupied tile', () => {
-        const mockItem = new ItemObject('testItem');
+        const mockItem = { name: 'testItem' } as ItemObject;
         service.startDragging(2, 3, mockItem, new MouseEvent('mousedown'));
 
         mockMapService.getTileType.and.returnValue(TileTypes.WALL);
@@ -106,7 +106,7 @@ describe('DragAndDropService', () => {
     });
 
     it('should increase item amount if item is from container', () => {
-        const mockItem = new ItemObject('testItem');
+        const mockItem = { name: 'testItem' } as ItemObject;
         service.startDragging(-2, -2, mockItem, new MouseEvent('mousedown'));
 
         service.handleDraggedItemPlacement(4, 5);

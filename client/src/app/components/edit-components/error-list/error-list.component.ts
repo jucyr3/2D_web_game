@@ -3,7 +3,6 @@ import { MapService } from '@app/services/map.service';
 
 @Component({
     selector: 'app-error-list',
-    imports: [],
     templateUrl: './error-list.component.html',
     styleUrl: './error-list.component.scss',
 })

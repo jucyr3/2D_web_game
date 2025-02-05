@@ -1,25 +1,18 @@
-// Angular Core and Common Modules
 import { NgStyle } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 
-// Services
 import { DragAndDropService } from '@app/services/drag-and-drop.service';
-import { EditingToolService } from '@app/services/editing-tool.service';
+import { EditingToolService, EditToolTypes } from '@app/services/editing-tool.service';
 import { ITEM_TEXTURE_PATH } from '@app/../assets/items/item-texture-path';
 import { MapService } from '@app/services/map.service';
-import { MouseService } from '@app/services/mouse.service';
+import { MouseService, MouseButton } from '@app/services/mouse.service';
 import { TippyDirective } from '@ngneat/helipopper';
 
-// Components
 import { ItemTooltipComponent } from '@app/components/edit-components/item-tooltip/item-tooltip.component';
 
-// Interfaces and Models
 import { Coordinate } from '@app/interfaces/coordinate';
 import { ItemObject } from '@common/ItemObject';
 import { Tile } from '@common/tile';
-
-// Constants
-import { EditToolTypes } from '@app/services/editing-tool.constants';
 
 @Component({
     selector: 'app-tile',
@@ -59,7 +52,7 @@ export class TileComponent implements OnInit {
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.mouseService.isRightClick = event.button === 2;
+        this.mouseService.isRightClick = event.button === MouseButton.Right;
 
         if (this.itemObject && !this.mouseService.isRightClick) {
             this.editingToolService.setActiveTool(EditToolTypes.Hand);

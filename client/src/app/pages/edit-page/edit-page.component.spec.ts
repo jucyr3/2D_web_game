@@ -32,7 +32,7 @@ describe('EditPageComponent', () => {
         mockMouseService = jasmine.createSpyObj('MouseService', [], { isMouseDown: false });
         Object.defineProperty(mockMouseService, 'isMouseDown', {
             value: false,
-            writable: true, // Permet la modification de la valeur dans le test
+            writable: true,
         });
 
         await TestBed.configureTestingModule({

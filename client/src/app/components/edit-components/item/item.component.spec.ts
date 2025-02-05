@@ -2,8 +2,7 @@ import { NgClass, NgIf } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ItemTooltipComponent } from '@app/components/edit-components/item-tooltip/item-tooltip.component';
 import { DragAndDropService, ITEM_CONTAINER_COORDINATES } from '@app/services/drag-and-drop.service';
-import { EditToolTypes } from '@app/services/editing-tool.constants';
-import { EditingToolService } from '@app/services/editing-tool.service';
+import { EditingToolService, EditToolTypes } from '@app/services/editing-tool.service';
 import { MapService } from '@app/services/map.service';
 import { MouseService } from '@app/services/mouse.service';
 import { ItemObject } from '@common/ItemObject';
@@ -33,14 +32,12 @@ describe('ItemComponent', () => {
     let mockMapService: MockMapService;
 
     beforeEach(async () => {
-        // Create spy objects for all services
         mockDragAndDropService = jasmine.createSpyObj('DragAndDropService', ['startDragging', 'onMouseUp', 'getDraggingState']);
         mockEditingToolService = jasmine.createSpyObj('EditingToolService', ['setActiveTool']);
         mockMouseService = jasmine.createSpyObj('MouseService', ['isMouseDown']);
         mockMapService = new MockMapService();
 
-        // Initialize the mock item object
-        mockItemObject = new ItemObject('testItem');
+        mockItemObject = { name: 'testItem' };
 
         await TestBed.configureTestingModule({
             imports: [NgIf, NgClass, TippyDirective, ItemTooltipComponent, ItemComponent],
@@ -48,7 +45,7 @@ describe('ItemComponent', () => {
                 { provide: DragAndDropService, useValue: mockDragAndDropService },
                 { provide: EditingToolService, useValue: mockEditingToolService },
                 { provide: MouseService, useValue: mockMouseService },
-                { provide: MapService, useValue: mockMapService }, // Use the mock instance
+                { provide: MapService, useValue: mockMapService },
                 provideTippyConfig({
                     defaultVariation: 'tooltip',
                     variations: {
@@ -63,17 +60,14 @@ describe('ItemComponent', () => {
         fixture = TestBed.createComponent(ItemComponent);
         component = fixture.componentInstance;
 
-        // Setup default mock return values
         mockMapService.itemManager.itemAmounts = { testItem: 1 };
 
-        // Setup drag and drop state mock
         mockDragAndDropService.getDraggingState.and.returnValue({
             isDragging: true,
             dragX: 100,
             dragY: 200,
         });
 
-        // Define the currentDraggedItem getter
         Object.defineProperty(mockDragAndDropService, 'currentDraggedItem', {
             get: () => mockItemObject,
         });
@@ -85,8 +79,13 @@ describe('ItemComponent', () => {
         expect(component).toBeTruthy();
     });
 
+    it('should not show toolTip if mouse is down', () => {
+        mockMouseService.isMouseDown = true;
+        fixture.detectChanges();
+        expect(component.isTooltipEnabled).toBeFalse();
+    });
+
     it('should return the correct item amount from mapService.itemManager.itemAmounts', () => {
-        // Setup the component with a specific itemId and mock itemObject
         const itemId = 'testItem';
         component.itemId = itemId;
         component.itemObject = mockItemObject;
@@ -103,7 +102,7 @@ describe('ItemComponent', () => {
         component.itemId = '123';
         fixture.detectChanges();
         expect(component.itemObject).toBeDefined();
-        expect(component.itemObject instanceof ItemObject).toBeTrue();
+        expect(component.itemObject).toEqual(jasmine.objectContaining<ItemObject>({ name: '123' }));
         expect(component.itemObject.name).toEqual('123');
     });
 

@@ -5,9 +5,8 @@ import { Coordinate } from '@app/interfaces/coordinate';
 import { ItemObject } from '@common/ItemObject';
 
 /* eslint-disable */
-import { EditingToolService } from './editing-tool.service';
+import { EditingToolService, EditToolTypes } from './editing-tool.service';
 import { TileTypes } from '@app/../../../common/tileType.constants';
-import { EditToolTypes } from './editing-tool.constants';
 import { MapService } from './map.service';
 import { MouseService } from './mouse.service';
 
@@ -59,7 +58,6 @@ describe('EditingToolService', () => {
     it('should reset on mouse up', () => {
         service.onMouseUp();
         expect(service.getActiveTool()).toBe(EditToolTypes.TileBrush);
-        // Add more expectations for reset behavior if needed
     });
 
     it('should get path between two points', () => {
@@ -166,21 +164,17 @@ describe('EditingToolService', () => {
     });
 
     it('If a tile has been processed, it should not be placed again', () => {
-        // Setup
         service.startTile = { row: 0, column: 0 };
         service.endTile = { row: 0, column: 0 };
-        service.previousStartTile = { row: 1, column: 1 }; // Different from startTile
-        service.previousEndTile = { row: 1, column: 1 }; // Different from endTile
+        service.previousStartTile = { row: 1, column: 1 };
+        service.previousEndTile = { row: 1, column: 1 };
 
-        // First call to paintInterpolatedPath to add the tile to processedTiles
         spyOn(service, 'getPath').and.returnValue([{ row: 0, column: 0 }]);
         service['processedTiles'].add('0,0');
 
-        // Reset the spies
         spyOn(service, 'eraseTile');
         spyOn(service, 'placeTile');
 
-        // Second call to paintInterpolatedPath
         service.paintInterpolatedPath();
 
         expect(service.eraseTile).not.toHaveBeenCalled();
@@ -188,20 +182,17 @@ describe('EditingToolService', () => {
     });
 
     it('should remove tiles from processedTiles if they are not in currentTileKeys', () => {
-        // First call to paintInterpolatedPath to add the tile to processedTiles
         const getPathSpy = spyOn(service, 'getPath').and.returnValue([{ row: 0, column: 0 }]);
         spyOn(service, 'eraseTile');
         spyOn(service, 'placeTile');
 
         service.paintInterpolatedPath();
 
-        // Reset the spies
         (service.eraseTile as jasmine.Spy).calls.reset();
         (service.placeTile as jasmine.Spy).calls.reset();
 
         getPathSpy.and.returnValue([{ row: 1, column: 1 }]);
 
-        // Second call to paintInterpolatedPath
         service.paintInterpolatedPath();
 
         expect(service['processedTiles'].has('0,0')).toBeFalse();
@@ -250,7 +241,6 @@ describe('EditingToolService', () => {
         spyOn(service, 'eraseTile');
         spyOn(service, 'placeTile');
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (mouseService as any).isRightClick = true;
 
         service.paintInterpolatedPath();
@@ -297,5 +287,105 @@ describe('EditingToolService', () => {
         spyOn(service, 'placeTile');
         service.eraseTile(0, 0);
         expect(service.placeTile).toHaveBeenCalled();
+    });
+
+    it('should return false if startTile or endTile is null', () => {
+        service.startTile = null;
+        service.endTile = { row: 5, column: 5 };
+        expect(service['isValidStartAndEndTile']()).toBeFalse();
+    });
+
+    it('should return true if both startTile and endTile are set', () => {
+        service.startTile = { row: 0, column: 0 };
+        service.endTile = { row: 5, column: 5 };
+        expect(service['isValidStartAndEndTile']()).toBeTrue();
+    });
+
+    it('should not update tiles if start or end tile is invalid', () => {
+        spyOn<any>(service, 'updateProcessedTiles');
+        spyOn<any>(service, 'processTiles');
+
+        service.startTile = null;
+        service.endTile = { row: 5, column: 5 };
+        service.paintInterpolatedPath();
+
+        expect(service['updateProcessedTiles']).not.toHaveBeenCalled();
+        expect(service['processTiles']).not.toHaveBeenCalled();
+    });
+
+    it('should call updateProcessedTiles and processTiles with correct points', () => {
+        spyOn<any>(service, 'updateProcessedTiles');
+        spyOn<any>(service, 'processTiles');
+        spyOn(service, 'getPath').and.returnValue([
+            { row: 0, column: 0 },
+            { row: 1, column: 1 },
+            { row: 2, column: 2 },
+        ]);
+
+        service.startTile = { row: 0, column: 0 };
+        service.endTile = { row: 2, column: 2 };
+        service.paintInterpolatedPath();
+
+        expect(service['updateProcessedTiles']).toHaveBeenCalledWith([
+            { row: 0, column: 0 },
+            { row: 1, column: 1 },
+            { row: 2, column: 2 },
+        ]);
+        expect(service['processTiles']).toHaveBeenCalledWith([
+            { row: 0, column: 0 },
+            { row: 1, column: 1 },
+            { row: 2, column: 2 },
+        ]);
+    });
+
+    it('should remove tiles from processedTiles that are not in the current path', () => {
+        ['1,1', '2,2', '3,3'].forEach((tile) => service['processedTiles'].add(tile));
+        spyOn<any>(service, 'getTileKey');
+
+        service['updateProcessedTiles']([
+            { row: 0, column: 0 },
+            { row: 1, column: 1 },
+        ]);
+
+        expect(service['processedTiles'].has('2,2')).toBeFalse();
+        expect(service['processedTiles'].has('3,3')).toBeFalse();
+    });
+
+    it('should not process tiles if getPath returns an empty array', () => {
+        spyOn(service, 'getPath').and.returnValue([]);
+        spyOn<any>(service, 'updateProcessedTiles');
+        spyOn<any>(service, 'processTiles');
+
+        service.startTile = { row: 0, column: 0 };
+        service.endTile = { row: 2, column: 2 };
+        service.paintInterpolatedPath();
+
+        expect(service['updateProcessedTiles']).not.toHaveBeenCalled();
+        expect(service['processTiles']).not.toHaveBeenCalled();
+    });
+
+    it('should process the correct path when start and end tiles are valid', () => {
+        spyOn(service, 'getPath').and.returnValue([
+            { row: 0, column: 0 },
+            { row: 0, column: 1 },
+            { row: 0, column: 2 },
+        ]);
+        spyOn<any>(service, 'updateProcessedTiles');
+        spyOn<any>(service, 'processTiles');
+
+        service.startTile = { row: 0, column: 0 };
+        service.endTile = { row: 0, column: 2 };
+        service.paintInterpolatedPath();
+
+        expect(service['updateProcessedTiles']).toHaveBeenCalledWith([
+            { row: 0, column: 0 },
+            { row: 0, column: 1 },
+            { row: 0, column: 2 },
+        ]);
+        expect(service['processTiles']).toHaveBeenCalledWith([
+            { row: 0, column: 0 },
+            { row: 0, column: 1 },
+            { row: 0, column: 2 },
+        ]);
     });
 });

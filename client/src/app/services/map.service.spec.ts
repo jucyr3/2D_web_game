@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { ItemManager } from '@app/classes/item-manager';
 import { ItemObject } from '@common/ItemObject';
-import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
 import { MapJson, MapService } from './map.service';
 import { MapVerification } from '@common/mapVerification.interface';
+import { Tile } from '@common/tile';
 
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 
@@ -52,7 +52,7 @@ describe('MapService', () => {
 
     it('should place and remove a game object', () => {
         service.setDefaultMap();
-        const item = new ItemObject('Sword');
+        const item: ItemObject = { name: 'Sword' };
         service.placeGameObject(2, 3, item);
         expect(service.getItemObject(2, 3)).toEqual(item);
         service.removeGameObject(2, 3);
@@ -61,7 +61,7 @@ describe('MapService', () => {
 
     it('should move a game object', () => {
         service.setDefaultMap();
-        const item = new ItemObject('Shield');
+        const item: ItemObject = { name: 'Shield' };
         service.placeGameObject(1, 1, item);
         service.moveGameObject(1, 1, 2, 2);
         expect(service.getItemObject(2, 2)).toEqual(item);
@@ -70,7 +70,7 @@ describe('MapService', () => {
 
     it('should reset item to start position', () => {
         service.setDefaultMap();
-        const item = new ItemObject('Bow');
+        const item: ItemObject = { name: 'Bow' };
         service.resetItemToStartPosition(3, 3, item);
         expect(service.getItemObject(3, 3)).toEqual(item);
     });
@@ -92,12 +92,12 @@ describe('MapService', () => {
             gameMode: 'Classic',
             tileMatrix: [
                 [
-                    { type: 'GROUND_1', isOccupied: false, isObstacle: false },
-                    { type: 'GROUND_1', isOccupied: false, isObstacle: false, gameObject: { name: 'Sword' } },
+                    { type: TileTypes.GROUND_1, isOccupied: false, isObstacle: false } as Tile,
+                    { type: TileTypes.GROUND_1, isOccupied: false, isObstacle: false, itemObject: { name: 'Sword' } } as Tile,
                 ],
                 [
-                    { type: 'GROUND_1', isOccupied: false, isObstacle: false },
-                    { type: 'GROUND_1', isOccupied: false, isObstacle: false },
+                    { type: TileTypes.GROUND_1, isOccupied: false, isObstacle: false } as Tile,
+                    { type: TileTypes.GROUND_1, isOccupied: false, isObstacle: false } as Tile,
                 ],
             ],
             lastModified: '2025-02-01',
@@ -106,9 +106,7 @@ describe('MapService', () => {
         const tileMatrix = service.parseTileMatrix(json);
 
         expect(tileMatrix.length).toBe(2);
-        expect(tileMatrix[0][0] instanceof Tile).toBeTrue();
-        expect(tileMatrix[0][1].gameObject instanceof ItemObject).toBeTrue();
-        expect(tileMatrix[0][1].gameObject?.name).toBe('Sword');
+        expect(tileMatrix[0][1].itemObject?.name).toBe('Sword');
         expect(mockItemManager.decreaseItemAmount).toHaveBeenCalledWith('Sword');
     });
 
@@ -158,16 +156,13 @@ describe('MapService', () => {
     });
 
     it('should set default map and initialize itemManager if both loadMapFromSessionStorage and loadMapFromServer fail', () => {
-        // Arrange: Mock both load methods to return false
         spyOn(MapService.prototype, 'loadMapFromSessionStorage').and.returnValue(false);
         spyOn(MapService.prototype, 'loadMapFromServer').and.returnValue(false);
         spyOn(MapService.prototype, 'setDefaultMap').and.callThrough();
         spyOn(MapService.prototype, 'saveMapToSessionStorage').and.callThrough();
 
-        // Act: Create an instance of the service (trigger the constructor)
         service = new MapService();
 
-        // Assert: Verify the expected behavior
         expect(service.loadMapFromSessionStorage).toHaveBeenCalled();
         expect(service.loadMapFromServer).toHaveBeenCalled();
         expect(service.setDefaultMap).toHaveBeenCalled();
@@ -175,7 +170,7 @@ describe('MapService', () => {
         expect(service.itemManager).toBeDefined();
         expect(service.itemManager).toBeInstanceOf(ItemManager);
         expect(service.map).toBeDefined();
-        expect(service.map.size).toBe(15); // Default map size
+        expect(service.map.size).toBe(15);
     });
 
     it('should call handleMapVerificationError when calling saveMapToServer', () => {

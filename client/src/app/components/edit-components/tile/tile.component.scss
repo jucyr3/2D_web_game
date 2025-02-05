@@ -10,13 +10,13 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    display: flex; /* Enable Flexbox */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .tile.grab-cursor:active {
-    cursor: grabbing; /* Cursor style for grabbing */
+    cursor: grabbing;
 }
 
 img {

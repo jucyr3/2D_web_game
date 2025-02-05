@@ -2,18 +2,20 @@ import { Injectable } from '@angular/core';
 import { TileTypes } from '@app/../../../common/tileType.constants';
 import { Coordinate } from '@app/interfaces/coordinate';
 import { ItemObject } from '@common/ItemObject';
-import { EditToolTypes } from './editing-tool.constants';
 import { MapService } from './map.service';
 import { MouseService } from './mouse.service';
 
 export const TILE_TEXTURE_PATH = 'assets/tiles/';
 
+export enum EditToolTypes {
+    TileBrush = 'tileBrush',
+    Hand = 'hand',
+}
+
 @Injectable({
     providedIn: 'root',
 })
 export class EditingToolService {
-    // TODO set inital tile type cleaner
-
     startTile: Coordinate | null = null;
     endTile: Coordinate | null = null;
 
@@ -53,11 +55,9 @@ export class EditingToolService {
     }
 
     getPath(start: Coordinate, end: Coordinate): Coordinate[] {
-        // Calculate the distance between start and end
+        // Bresenham's Line Algorithm
         const dx = Math.abs(end.column - start.column);
         const dy = Math.abs(end.row - start.row);
-
-        // Return an empty array if the distance is less than 2
 
         const points: Coordinate[] = [];
         let x = start.column;
@@ -67,29 +67,25 @@ export class EditingToolService {
         const stepY = y < end.row ? 1 : -1;
 
         let error = dx - dy;
-        const maxIterations = dx + dy; // Maximum steps needed
+        const maxIterations = dx + dy;
         let iterations = 0;
 
         while (iterations <= maxIterations) {
             iterations++;
 
-            // Add current point to path
             points.push({ row: y, column: x });
 
-            // Check if reached the end
             if (x === end.column && y === end.row) {
                 break;
             }
 
             const error2 = 2 * error;
 
-            // Adjust error and move along x
             if (error2 > -dy) {
                 error -= dy;
                 x += stepX;
             }
 
-            // Adjust error and move along y
             if (error2 < dx) {
                 error += dx;
                 y += stepY;
@@ -103,44 +99,21 @@ export class EditingToolService {
     }
 
     paintInterpolatedPath(): void {
-        if (this.startTile === null || this.endTile === null) {
+        if (!this.isValidStartAndEndTile()) {
             return;
         }
 
-        const points = this.getPath(this.startTile, this.endTile);
+        let points: Coordinate[] = [];
+        if (this.startTile && this.endTile) {
+            points = this.getPath(this.startTile, this.endTile);
+        }
 
         if (points.length === 0) {
             return;
         }
 
-        const currentTileKeys = new Set(points.map((point) => `${point.row},${point.column}`));
-
-        for (const tileKey of this.processedTiles) {
-            if (!currentTileKeys.has(tileKey)) {
-                this.processedTiles.delete(tileKey);
-            }
-        }
-
-        for (const point of points) {
-            const tileKey = `${point.row},${point.column}`;
-
-            const arePreviousTilesEqual =
-                this.previousStartTile?.row === this.previousEndTile?.row && this.previousEndTile?.column === this.previousStartTile?.column;
-            const isStartTileEqual = this.startTile?.row === point.row && this.startTile?.column === point.column;
-            // Logique uniquement pour le fonctionnement des portes
-
-            if (this.processedTiles.has(tileKey) && !arePreviousTilesEqual && isStartTileEqual) {
-                continue;
-            }
-
-            this.processedTiles.add(tileKey);
-
-            if (this.mouseService.isRightClick) {
-                this.eraseTile(point.row, point.column);
-            } else {
-                this.placeTile(point.row, point.column, this.currentTileTypeOnBrush);
-            }
-        }
+        this.updateProcessedTiles(points);
+        this.processTiles(points);
     }
 
     resetInterpolationPoints(): void {
@@ -191,6 +164,54 @@ export class EditingToolService {
     removeItemObjectFromTile(row: number, column: number, itemObject: ItemObject): void {
         this.mapService.itemManager.increaseItemAmount(itemObject.name);
         this.mapService.removeGameObject(row, column);
+    }
+
+    private isValidStartAndEndTile(): boolean {
+        return this.startTile !== null && this.endTile !== null;
+    }
+
+    private updateProcessedTiles(points: { row: number; column: number }[]): void {
+        const currentTileKeys = new Set(points.map((point) => this.getTileKey(point)));
+
+        for (const tileKey of this.processedTiles) {
+            if (!currentTileKeys.has(tileKey)) {
+                this.processedTiles.delete(tileKey);
+            }
+        }
+    }
+
+    private processTiles(points: { row: number; column: number }[]): void {
+        for (const point of points) {
+            const tileKey = this.getTileKey(point);
+
+            if (this.shouldSkipTile(point, tileKey)) {
+                continue;
+            }
+
+            this.processedTiles.add(tileKey);
+            this.handleTileAction(point);
+        }
+    }
+
+    private getTileKey(point: { row: number; column: number }): string {
+        return `${point.row},${point.column}`;
+    }
+
+    private shouldSkipTile(point: { row: number; column: number }, tileKey: string): boolean {
+        const arePreviousTilesEqual =
+            this.previousStartTile?.row === this.previousEndTile?.row && this.previousEndTile?.column === this.previousStartTile?.column;
+
+        const isStartTileEqual = this.startTile?.row === point.row && this.startTile?.column === point.column;
+
+        return this.processedTiles.has(tileKey) && !arePreviousTilesEqual && isStartTileEqual;
+    }
+
+    private handleTileAction(point: { row: number; column: number }): void {
+        if (this.mouseService.isRightClick) {
+            this.eraseTile(point.row, point.column);
+        } else {
+            this.placeTile(point.row, point.column, this.currentTileTypeOnBrush);
+        }
     }
 
     private isBrushWallOrDoor(tileType: TileTypes): boolean {
