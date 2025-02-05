@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ResetButtonComponent } from './reset-button.component';
 import { By } from '@angular/platform-browser';
-import { MapService } from '@app/services/map.service';
+import { MapService } from '@app/services/edit-services/map.service';
 
 class MockMapService {
     resetMap = jasmine.createSpy('resetMap');

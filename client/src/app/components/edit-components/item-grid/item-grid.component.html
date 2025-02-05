@@ -1,12 +1,6 @@
 <h2>Objets</h2>
 <div id="item-grid">
-    <app-item itemId="attributeItem1"></app-item>
-    <app-item itemId="conditionItem1"></app-item>
-    <app-item itemId="gameplayItem1"></app-item>
-    <app-item itemId="attributeItem2"></app-item>
-    <app-item itemId="conditionItem2"></app-item>
-    <app-item itemId="gameplayItem2"></app-item>
-    <app-item itemId="randomItem"></app-item>
-    <app-item itemId="spawnpoint"></app-item>
-    <app-item itemId="flag"></app-item>
+    @for(item of this.getItemsArray(); track item) {
+        <app-item [itemId]="item"></app-item>
+    }
 </div>

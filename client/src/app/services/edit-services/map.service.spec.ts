@@ -2,9 +2,10 @@ import { TestBed } from '@angular/core/testing';
 import { ItemManager } from '@app/classes/item-manager';
 import { ItemObject } from '@common/ItemObject';
 import { TileTypes } from '@common/tileType.constants';
-import { MapJson, MapService } from './map.service';
+import { MapService } from './map.service';
 import { MapVerification } from '@common/mapVerification.interface';
 import { Tile } from '@common/tile';
+import { Map } from '@common/map';
 
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 
@@ -100,8 +101,8 @@ describe('MapService', () => {
                     { type: TileTypes.GROUND_1, isOccupied: false, isObstacle: false } as Tile,
                 ],
             ],
-            lastModified: '2025-02-01',
-        } as MapJson;
+            lastModified: new Date('2025-02-01'),
+        } as Map;
 
         const tileMatrix = service.parseTileMatrix(json);
 
@@ -121,8 +122,8 @@ describe('MapService', () => {
             tileMatrix: Array(10)
                 .fill([])
                 .map(() => Array(10).fill({ type: 'GROUND_1', isOccupied: false, isObstacle: false })),
-            lastModified: '2025-02-01',
-        } as MapJson;
+            lastModified: new Date('2025-02-01'),
+        } as Map;
         const newMap = service.createMapFromJSON(json);
         expect(newMap.name).toBe('Test Map');
         expect(newMap.size).toBe(10);

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TileComponent } from '@app/components/edit-components/tile/tile.component';
-import { EditingToolService, EditToolTypes } from '@app/services/editing-tool.service';
-import { MapService } from '@app/services/map.service';
+import { EditingToolService, EditToolTypes } from '@app/services/edit-services/editing-tool.service';
+import { MapService } from '@app/services/edit-services/map.service';
 import { TileTypes } from '@common/tileType.constants';
 import { TippyDirective } from '@ngneat/helipopper';
 import { popperVariation, provideTippyConfig, provideTippyLoader, tooltipVariation } from '@ngneat/helipopper/config';

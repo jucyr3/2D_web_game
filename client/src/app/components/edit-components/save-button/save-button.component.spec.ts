@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SaveButtonComponent } from './save-button.component';
 import { By } from '@angular/platform-browser';
-import { MapService } from '@app/services/map.service';
+import { MapService } from '@app/services/edit-services/map.service';
 
 class MockMapService {
     saveMap = jasmine.createSpy('saveMap');

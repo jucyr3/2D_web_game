@@ -7,8 +7,8 @@ import { ItemObject } from '@common/ItemObject';
 /* eslint-disable */
 import { EditingToolService, EditToolTypes } from './editing-tool.service';
 import { TileTypes } from '@app/../../../common/tileType.constants';
-import { MapService } from './map.service';
-import { MouseService } from './mouse.service';
+import { MapService } from '@app/services/edit-services/map.service';
+import { MouseService } from '@app/services/edit-services/mouse.service';
 
 class MockItemManager {
     increaseItemAmount = jasmine.createSpy('increaseItemAmount');

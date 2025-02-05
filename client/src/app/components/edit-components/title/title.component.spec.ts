@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TitleComponent } from './title.component';
-import { MapService } from '@app/services/map.service';
+import { MapService } from '@app/services/edit-services/map.service';
 
 describe('TitleComponent', () => {
     let component: TitleComponent;

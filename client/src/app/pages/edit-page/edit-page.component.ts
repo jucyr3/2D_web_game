@@ -7,10 +7,10 @@ import { ResetButtonComponent } from '@app/components/edit-components/reset-butt
 import { SaveButtonComponent } from '@app/components/edit-components/save-button/save-button.component';
 import { TileGridComponent } from '@app/components/edit-components/tile-grid/tile-grid.component';
 import { TitleComponent } from '@app/components/edit-components/title/title.component';
-import { DragAndDropService } from '@app/services/drag-and-drop.service';
-import { EditingToolService } from '@app/services/editing-tool.service';
-import { MapService } from '@app/services/map.service';
-import { MouseService, MouseButton } from '@app/services/mouse.service';
+import { DragAndDropService } from '@app/services/edit-services/drag-and-drop.service';
+import { EditingToolService } from '@app/services/edit-services/editing-tool.service';
+import { MapService } from '@app/services/edit-services/map.service';
+import { MouseService, MouseButton } from '@app/services/edit-services/mouse.service';
 
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';

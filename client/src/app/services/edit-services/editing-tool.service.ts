@@ -3,7 +3,7 @@ import { TileTypes } from '@app/../../../common/tileType.constants';
 import { Coordinate } from '@app/interfaces/coordinate';
 import { ItemObject } from '@common/ItemObject';
 import { MapService } from './map.service';
-import { MouseService } from './mouse.service';
+import { MouseService } from '@app/services/edit-services/mouse.service';
 
 export const TILE_TEXTURE_PATH = 'assets/tiles/';
 

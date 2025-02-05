@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { EditingToolService, EditToolTypes } from '@app/services/editing-tool.service';
+import { EditingToolService, EditToolTypes } from '@app/services/edit-services/editing-tool.service';
 import { TileTypes } from '@common/tileType.constants';
 import { TippyDirective } from '@ngneat/helipopper';
 import { BrushTooltipComponent } from '@app/components/edit-components/brush-tooltip/brush-tooltip.component';
-import { MouseService } from '@app/services/mouse.service';
+import { MouseService } from '@app/services/edit-services/mouse.service';
 
 @Component({
     selector: 'app-brush',

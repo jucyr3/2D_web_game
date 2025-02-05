@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TileGridComponent } from './tile-grid.component';
 import { TileComponent } from '@app/components/edit-components/tile/tile.component';
-import { DragAndDropService } from '@app/services/drag-and-drop.service';
-import { EditingToolService } from '@app/services/editing-tool.service';
-import { MouseService } from '@app/services/mouse.service';
+import { DragAndDropService } from '@app/services/edit-services/drag-and-drop.service';
+import { EditingToolService } from '@app/services/edit-services/editing-tool.service';
+import { MouseService } from '@app/services/edit-services/mouse.service';
 import { Renderer2 } from '@angular/core';
 import { NgFor } from '@angular/common';
 

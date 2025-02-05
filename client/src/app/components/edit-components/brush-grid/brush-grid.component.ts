@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EditingToolService } from '@app/services/editing-tool.service';
+import { EditingToolService } from '@app/services/edit-services/editing-tool.service';
 import { TileTypes } from '@common/tileType.constants';
 import { BrushComponent } from '@app/components/edit-components/brush/brush.component';
 

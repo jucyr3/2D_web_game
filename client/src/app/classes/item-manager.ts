@@ -1,3 +1,5 @@
+import { Items } from '@common/ItemObject';
+
 export class ItemManager {
     itemAmounts: { [itemName: string]: number } = {};
 
@@ -9,18 +11,6 @@ export class ItemManager {
 
     mapSize: number;
     gameMode: 'CTF' | 'Classic';
-
-    itemTypes: string[] = [
-        'attributeItem1',
-        'conditionItem1',
-        'gameplayItem1',
-        'attributeItem2',
-        'conditionItem2',
-        'gameplayItem2',
-        'spawnpoint',
-        'randomItem',
-        'flag',
-    ];
 
     constructor(mapSize: number, gameMode: 'CTF' | 'Classic') {
         this.gameMode = gameMode;
@@ -40,8 +30,10 @@ export class ItemManager {
     }
 
     setDefaultItemAmounts(): void {
-        for (const item of this.itemTypes) {
-            this.itemAmounts[item] = this.getDefaultItemAmount(item);
+        for (const item in Items) {
+            if (isNaN(Number(item))) {
+                this.itemAmounts[item] = this.getDefaultItemAmount(item);
+            }
         }
     }
 

@@ -1,10 +1,10 @@
 import { NgClass, NgIf } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ItemTooltipComponent } from '@app/components/edit-components/item-tooltip/item-tooltip.component';
-import { DragAndDropService, ITEM_CONTAINER_COORDINATES } from '@app/services/drag-and-drop.service';
-import { EditingToolService, EditToolTypes } from '@app/services/editing-tool.service';
-import { MapService } from '@app/services/map.service';
-import { MouseService } from '@app/services/mouse.service';
+import { DragAndDropService, ITEM_CONTAINER_COORDINATES } from '@app/services/edit-services/drag-and-drop.service';
+import { EditingToolService, EditToolTypes } from '@app/services/edit-services/editing-tool.service';
+import { MapService } from '@app/services/edit-services/map.service';
+import { MouseService } from '@app/services/edit-services/mouse.service';
 import { ItemObject } from '@common/ItemObject';
 import { TippyDirective } from '@ngneat/helipopper';
 import { popperVariation, provideTippyConfig, provideTippyLoader, tooltipVariation } from '@ngneat/helipopper/config';

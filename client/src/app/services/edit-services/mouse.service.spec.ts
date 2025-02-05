@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MouseService } from './mouse.service';
+import { MouseService } from '@app/services/edit-services/mouse.service';
 
 describe('MouseService', () => {
     let service: MouseService;

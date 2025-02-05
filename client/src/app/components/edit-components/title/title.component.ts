@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MapService } from '@app/services/map.service';
+import { MapService } from '@app/services/edit-services/map.service';
 
 @Component({
     selector: 'app-title',

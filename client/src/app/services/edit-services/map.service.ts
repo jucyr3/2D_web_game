@@ -7,25 +7,6 @@ import { TileTypes } from '@common/tileType.constants';
 import { ItemManager } from '@app/classes/item-manager';
 import { MapVerification } from '@common/mapVerification.interface';
 
-export interface MapJson {
-    name: string;
-    id: number;
-    size: number;
-    isVisible: boolean;
-    description: string;
-    gameMode: 'CTF' | 'Classic';
-    tileMatrix: {
-        type: string;
-        isOccupied: boolean;
-        isObstacle: boolean;
-        itemObject?: {
-            name: string;
-            description: string;
-        } | null;
-    }[][];
-    lastModified: string;
-}
-
 @Injectable({
     providedIn: 'root',
 })
@@ -61,10 +42,10 @@ export class MapService {
         };
     }
 
-    parseTileMatrix(json: MapJson): Tile[][] {
+    parseTileMatrix(json: Map): Tile[][] {
         return json.tileMatrix.map((row) =>
             row.map((tileData) => {
-                const type = tileData.type as TileTypes;
+                const type: TileTypes = tileData.type;
                 const isOccupied = tileData.isOccupied;
                 const isObstacle = tileData.isObstacle;
                 const itemObject: ItemObject | null = tileData.itemObject ? { name: tileData.itemObject.name } : null;
@@ -78,7 +59,7 @@ export class MapService {
         );
     }
 
-    createMapFromJSON(json: MapJson): Map {
+    createMapFromJSON(json: Map): Map {
         this.itemManager = new ItemManager(json.size, json.gameMode);
         const tileMatrix = this.parseTileMatrix(json);
         return {
@@ -97,7 +78,7 @@ export class MapService {
         // TODO: for the server implementation
         // call the proper service to get the map from the server
 
-        // this.createMapFromJSON(mapDuServeur);
+        // TODO: this.createMapFromJSON(mapDuServeur);
         return false;
     }
 
@@ -109,7 +90,7 @@ export class MapService {
             isNamePresent: true,
             isDescriptionPresent: true,
             isMapHalfFloor: true,
-            isMapAccessible: true,
+            isMapAccessible: false,
             areStartingPointsValid: true,
             areDoorsNextToWalls: true,
             areDoorsNotNextToBorder: true,
@@ -119,12 +100,9 @@ export class MapService {
 
     handleMapVerificationError(mapVerification: MapVerification): void {
         this.errorList = [];
-        for (const key in mapVerification) {
-            if (Object.prototype.hasOwnProperty.call(mapVerification, key)) {
-                const typedKey = key as keyof MapVerification;
-                if (!mapVerification[typedKey]) {
-                    this.errorList.push(typedKey);
-                }
+        for (const [key, value] of Object.entries(mapVerification)) {
+            if (!value) {
+                this.errorList.push(key as keyof MapVerification);
             }
         }
     }

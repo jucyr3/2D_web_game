@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { injectTippyRef } from '@ngneat/helipopper';
-import { tileDescription } from '@app/../assets/tiles/tile-description';
+import { tileDetails } from '@app/../assets/tiles/tile-details';
 import { TileTypes } from '@common/tileType.constants';
 @Component({
     selector: 'app-brush-tooltip',
@@ -13,10 +13,10 @@ export class BrushTooltipComponent {
     tippy = injectTippyRef();
 
     get tileNameText(): string {
-        return tileDescription[this.tileType].name;
+        return tileDetails[this.tileType].name;
     }
 
     get tileDescriptionText(): string {
-        return tileDescription[this.tileType].description;
+        return tileDetails[this.tileType].description;
     }
 }

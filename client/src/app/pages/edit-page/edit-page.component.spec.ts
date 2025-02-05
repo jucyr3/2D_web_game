@@ -3,8 +3,8 @@ import { EditPageComponent } from './edit-page.component';
 import { provideTippyLoader, provideTippyConfig, tooltipVariation, popperVariation } from '@ngneat/helipopper/config';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { DragAndDropService } from '@app/services/drag-and-drop.service';
-import { MouseService } from '@app/services/mouse.service';
+import { DragAndDropService } from '@app/services/edit-services/drag-and-drop.service';
+import { MouseService } from '@app/services/edit-services/mouse.service';
 import { of } from 'rxjs';
 
 describe('EditPageComponent', () => {

@@ -1,13 +1,13 @@
 import { NgClass, NgIf } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { DragAndDropService, ITEM_CONTAINER_COORDINATES } from '@app/services/drag-and-drop.service';
-import { EditingToolService, EditToolTypes } from '@app/services/editing-tool.service';
+import { DragAndDropService, ITEM_CONTAINER_COORDINATES } from '@app/services/edit-services/drag-and-drop.service';
+import { EditingToolService, EditToolTypes } from '@app/services/edit-services/editing-tool.service';
 import { ITEM_TEXTURE_PATH } from '@app/../assets/items/item-texture-path';
 import { ItemObject } from '@common/ItemObject';
 import { TippyDirective } from '@ngneat/helipopper';
 import { ItemTooltipComponent } from '@app/components/edit-components/item-tooltip/item-tooltip.component';
-import { MouseService, MouseButton } from '@app/services/mouse.service';
-import { MapService } from '@app/services/map.service';
+import { MouseService, MouseButton } from '@app/services/edit-services/mouse.service';
+import { MapService } from '@app/services/edit-services/map.service';
 
 @Component({
     selector: 'app-item',
