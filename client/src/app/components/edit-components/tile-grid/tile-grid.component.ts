@@ -1,4 +1,4 @@
-import { Component, QueryList, ViewChildren } from '@angular/core';
+import { Component } from '@angular/core';
 import { TileComponent } from '@app/components/edit-components/tile/tile.component';
 import { DragAndDropService } from '@app/services/edit-services/drag-and-drop.service';
 import { EditingToolService } from '@app/services/edit-services/editing-tool.service';
@@ -12,8 +12,6 @@ import { MouseService, MouseButton } from '@app/services/edit-services/mouse.ser
     styleUrls: ['./tile-grid.component.scss'],
 })
 export class TileGridComponent {
-    @ViewChildren('tileRef') tileComponents!: QueryList<TileComponent>;
-
     constructor(
         private readonly mouseService: MouseService,
         protected mapService: MapService,

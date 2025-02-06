@@ -1,4 +1,4 @@
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ItemTooltipComponent } from '@app/components/edit-components/item-tooltip/item-tooltip.component';
 import { DragAndDropService, ITEM_CONTAINER_COORDINATES } from '@app/services/edit-services/drag-and-drop.service';
@@ -40,7 +40,7 @@ describe('ItemComponent', () => {
         mockItemObject = { name: 'testItem' };
 
         await TestBed.configureTestingModule({
-            imports: [NgIf, NgClass, TippyDirective, ItemTooltipComponent, ItemComponent],
+            imports: [NgClass, TippyDirective, ItemTooltipComponent, ItemComponent],
             providers: [
                 { provide: DragAndDropService, useValue: mockDragAndDropService },
                 { provide: EditingToolService, useValue: mockEditingToolService },

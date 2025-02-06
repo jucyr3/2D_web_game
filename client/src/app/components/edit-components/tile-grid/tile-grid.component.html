@@ -9,7 +9,7 @@
 >
 
     @for (tile of mapService.flattenedTileMatrix(); track i; let i = $index) {
-    <app-tile [tileNumber]="i" [tileObject]="tile" #tileRef></app-tile>
+        <app-tile [tileNumber]="i" [tileObject]="tile" #tileRef></app-tile>
     }
 
 </div>

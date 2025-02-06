@@ -38,36 +38,14 @@ export class ItemManager {
     }
 
     getDefaultItemAmount(itemName: string): number {
-        switch (itemName) {
-            case 'attributeItem1':
-                return 1;
+        const defaultItems = new Set(['attributeItem1', 'conditionItem1', 'gameplayItem1', 'attributeItem2', 'conditionItem2', 'gameplayItem2']);
 
-            case 'conditionItem1':
-                return 1;
+        if (defaultItems.has(itemName)) return 1;
 
-            case 'gameplayItem1':
-                return 1;
-
-            case 'attributeItem2':
-                return 1;
-
-            case 'conditionItem2':
-                return 1;
-
-            case 'gameplayItem2':
-                return 1;
-
-            case 'spawnpoint':
-                return this.itemMap['size' + this.mapSize];
-
-            case 'randomItem':
-                return this.itemMap['size' + this.mapSize];
-
-            case 'flag':
-                return this.gameMode === 'CTF' ? 1 : 0;
-
-            default:
-                return 0;
+        if (['spawnpoint', 'randomItem'].includes(itemName)) {
+            return this.itemMap['size' + this.mapSize];
         }
+
+        return itemName === 'flag' && this.gameMode === 'CTF' ? 1 : 0;
     }
 }

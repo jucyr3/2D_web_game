@@ -10,13 +10,18 @@
         onmousedown="return false;"
         onselectstart="return false;"
     />
-    <div *ngIf="mapService.itemManager.itemAmounts[itemObject.name] > 1" class="item-amount">
-        {{ mapService.itemManager.itemAmounts[itemObject.name] }}
+    @if (mapService.itemManager.itemAmounts[itemObject.name] > 1) {
+        <div class="item-amount">
+            {{ mapService.itemManager.itemAmounts[itemObject.name] }}
+        </div>
+    }
+</div>
+
+@if (draggingState.isDragging) {
+    <div class="drag-preview" [style.left.px]="draggingState.dragX" [style.top.px]="draggingState.dragY">
+        <img [src]="itemTexturePath + itemId + '.png'" [alt]="itemId" />
     </div>
-</div>
-<div *ngIf="draggingState.isDragging" class="drag-preview" [style.left.px]="draggingState.dragX" [style.top.px]="draggingState.dragY">
-    <img [src]="itemTexturePath + itemId + '.png'" [alt]="itemId" />
-</div>
+}
 
 <ng-template #ItemTooltipComponent let-tooltip="tooltip">
     <app-item-tooltip [itemObject]="itemObject"></app-item-tooltip>

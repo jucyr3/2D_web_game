@@ -5,7 +5,6 @@ import { DragAndDropService } from '@app/services/edit-services/drag-and-drop.se
 import { EditingToolService } from '@app/services/edit-services/editing-tool.service';
 import { MouseService } from '@app/services/edit-services/mouse.service';
 import { Renderer2 } from '@angular/core';
-import { NgFor } from '@angular/common';
 
 describe('TileGridComponent', () => {
     let component: TileGridComponent;
@@ -21,7 +20,7 @@ describe('TileGridComponent', () => {
         mockEditingToolService = jasmine.createSpyObj('EditingToolService', ['resetInterpolationPoints', 'resetProcessedTiles']);
 
         await TestBed.configureTestingModule({
-            imports: [TileGridComponent, TileComponent, NgFor],
+            imports: [TileGridComponent, TileComponent],
             providers: [
                 MouseService,
                 { provide: Renderer2, useValue: mockRenderer },

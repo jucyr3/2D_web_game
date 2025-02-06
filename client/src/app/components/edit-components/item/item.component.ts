@@ -1,4 +1,4 @@
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { DragAndDropService, ITEM_CONTAINER_COORDINATES } from '@app/services/edit-services/drag-and-drop.service';
 import { EditingToolService, EditToolTypes } from '@app/services/edit-services/editing-tool.service';
@@ -11,7 +11,7 @@ import { MapService } from '@app/services/edit-services/map.service';
 
 @Component({
     selector: 'app-item',
-    imports: [NgIf, NgClass, TippyDirective, ItemTooltipComponent],
+    imports: [NgClass, TippyDirective, ItemTooltipComponent],
     templateUrl: './item.component.html',
     styleUrls: ['./item.component.scss'],
 })

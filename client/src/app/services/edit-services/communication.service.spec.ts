@@ -13,7 +13,6 @@ describe('CommunicationService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [],
             providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
         });
         service = TestBed.inject(CommunicationService);
