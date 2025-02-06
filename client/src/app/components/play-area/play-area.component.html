@@ -3,11 +3,15 @@
     <section id="timer-container">
         <h2>Débutez une minuterie de 5 secondes</h2>
         <button (click)="mouseHitDetect($event)">Commencer</button>
-        @if(time){ <p>Temps restant : {{ time }}</p> }
+        @if(time){
+        <p>Temps restant : {{ time }}</p>
+        }
     </section>
 
     <div id="position-display">
         <p>Appuyez sur une touche du clavier pour la détecter</p>
-        @if(buttonPressed !== '') {<p> Touche : {{ buttonPressed }}</p> }
+        @if(buttonPressed !== '') {
+        <p>Touche : {{ buttonPressed }}</p>
+        }
     </div>
 </div>

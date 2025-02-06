@@ -1,6 +1,4 @@
-import { GameObject } from './gameObject.interface';
-
-export class PlayerObject implements GameObject {
+export class PlayerObject {
     name: string;
     team: '1' | '2' | 'ffa';
 

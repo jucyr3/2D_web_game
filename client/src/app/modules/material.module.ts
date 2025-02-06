@@ -26,6 +26,5 @@ const modules = [
 @NgModule({
     imports: [...modules],
     exports: [...modules],
-    providers: [],
 })
 export class AppMaterialModule {}

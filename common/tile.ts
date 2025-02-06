@@ -1,14 +1,8 @@
-import { GameObject } from './gameObject.interface';
+import { ItemObject } from './ItemObject';
 import { TileTypes } from './tileType.constants';
-export class Tile {
+export interface Tile {
     type: TileTypes;
     isOccupied: boolean;
     isObstacle: boolean;
-    gameObject: GameObject;
-
-    constructor(type: TileTypes, isOccupied: boolean, isObstacle: boolean) {
-        this.type = type;
-        this.isOccupied = isOccupied;
-        this.isObstacle = isObstacle;
-    }
+    itemObject: ItemObject | null;
 }

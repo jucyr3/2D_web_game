@@ -1,0 +1,15 @@
+<div
+    class="tile-grid"
+    [style.grid-template-columns]="'repeat(' + this.mapService.map.size + ', 1fr)'"
+    [style.grid-template-rows]="'repeat(' + this.mapService.map.size + ', 1fr)'"
+    (mouseleave)="onMouseLeave()"
+    (mouseup)="onMouseUp()"
+    (mousedown)="onMouseDown($event)"
+    (contextmenu)="onContextMenu($event)"
+>
+
+    @for (tile of mapService.flattenedTileMatrix(); track i; let i = $index) {
+        <app-tile [tileNumber]="i" [tileObject]="tile" #tileRef></app-tile>
+    }
+
+</div>

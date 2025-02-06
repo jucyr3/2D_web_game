@@ -24,8 +24,6 @@ export class PlayAreaComponent {
     buttonPressed = '';
     private readonly timer = 5;
 
-    // Injection de dépendance hors du constructeur
-    // Équivalent à constructor(priate readonly timeService: TimeService)
     private readonly timeService: TimeService = inject(TimeService);
 
     get time(): number {

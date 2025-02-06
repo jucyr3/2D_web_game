@@ -11,6 +11,8 @@ import { environment } from './environments/environment';
 import { CreateCharacterPageComponent } from '@app/pages/create-character-page/create-character-page.component';
 import { CreateMatchPageComponent } from '@app/pages/create-match-page/create-match-page.component';
 import { WaitingRoomPageComponent } from '@app/pages/waiting-room-page/waiting-room-page.component';
+import { EditPageComponent } from '@app/pages/edit-page/edit-page.component';
+import { provideTippyLoader, provideTippyConfig, tooltipVariation, popperVariation } from '@ngneat/helipopper/config';
 
 if (environment.production) {
     enableProdMode();
@@ -24,9 +26,22 @@ const routes: Routes = [
     { path: 'character', component: CreateCharacterPageComponent },
     { path: 'match', component: CreateMatchPageComponent },
     { path: 'waitingRoom', component: WaitingRoomPageComponent },
-    { path: '**', redirectTo: '/home' },
+    { path: 'edit', component: EditPageComponent },
+    { path: '**', redirectTo: '/edit' },
 ];
 
 bootstrapApplication(AppComponent, {
-    providers: [provideHttpClient(), provideRouter(routes, withHashLocation()), provideAnimations()],
+    providers: [
+        provideHttpClient(),
+        provideRouter(routes, withHashLocation()),
+        provideAnimations(),
+        provideTippyLoader(() => import('tippy.js')),
+        provideTippyConfig({
+            defaultVariation: 'tooltip',
+            variations: {
+                tooltip: tooltipVariation,
+                popper: popperVariation,
+            },
+        }),
+    ],
 });

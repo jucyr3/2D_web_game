@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { By } from '@angular/platform-browser';
 import { DialogData, PopUpComponent } from './pop-up.component';
 
 describe('PopUpComponent', () => {
     let component: PopUpComponent;
     let fixture: ComponentFixture<PopUpComponent>;
+
     const dialogData: DialogData = {
         title: 'Test Title',
         content: 'Test Content',
@@ -16,7 +17,10 @@ describe('PopUpComponent', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [PopUpComponent],
-            providers: [{ provide: MAT_DIALOG_DATA, useValue: dialogData }],
+            providers: [
+                { provide: MAT_DIALOG_DATA, useValue: dialogData },
+                { provide: MatDialogRef, useValue: { close: jasmine.createSpy('close') } },
+            ],
         }).compileComponents();
 
         fixture = TestBed.createComponent(PopUpComponent);
@@ -54,6 +58,7 @@ describe('PopUpComponent', () => {
         confirmButtonElement.click();
         expect(component.confirmed.emit).toHaveBeenCalledWith(true);
     });
+
     it('should initialize with provided dialog data', () => {
         expect(component.title).toBe(dialogData.title);
         expect(component.content).toBe(dialogData.content);

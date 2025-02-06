@@ -1,0 +1,28 @@
+<div [tp]="ItemTooltipComponent" class="item-container" [tpDuration]="0" tpPlacement="right" tpMaxWidth="200px" [tpIsEnabled]="isTooltipEnabled">
+    <img
+        class="item"
+        [ngClass]="{ grayscale: this.mapService.itemManager.itemAmounts[this.itemObject.name] <= 0 }"
+        [src]="itemTexturePath + itemId + '.png'"
+        [alt]="itemId"
+        draggable="false"
+        (mousedown)="onMouseDown($event)"
+        (mouseup)="onMouseUp()"
+        onmousedown="return false;"
+        onselectstart="return false;"
+    />
+    @if (mapService.itemManager.itemAmounts[itemObject.name] > 1) {
+        <div class="item-amount">
+            {{ mapService.itemManager.itemAmounts[itemObject.name] }}
+        </div>
+    }
+</div>
+
+@if (draggingState.isDragging) {
+    <div class="drag-preview" [style.left.px]="draggingState.dragX" [style.top.px]="draggingState.dragY">
+        <img [src]="itemTexturePath + itemId + '.png'" [alt]="itemId" />
+    </div>
+}
+
+<ng-template #ItemTooltipComponent let-tooltip="tooltip">
+    <app-item-tooltip [itemObject]="itemObject"></app-item-tooltip>
+</ng-template>

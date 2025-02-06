@@ -1,14 +1,15 @@
-import { GameObject } from './gameObject.interface';
+export enum Items {
+    attributeItem1 = 'attributeItem1',
+    conditionItem1 = 'conditionItem1',
+    gameplayItem1 = 'gameplayItem1',
+    attributeItem2 = 'attributeItem2',
+    conditionItem2 = 'conditionItem2',
+    gameplayItem2 = 'gameplayItem2',
+    randomItem = 'randomItem',
+    spawnpoint = 'spawnpoint',
+    flag = 'flag',
+}
 
-export class ItemObject implements GameObject {
+export interface ItemObject {
     name: string;
-
-    constructor(name: string) {
-        this.name = name;
-    }
-
-    use(): void {
-        console.log(`${this.name} was used.`);
-        //useItemManager.useItem(name);
-    }
 }

@@ -1,0 +1,6 @@
+<h2>Objets</h2>
+<div id="item-grid">
+    @for(item of this.getItemsArray(); track item) {
+        <app-item [itemId]="item"></app-item>
+    }
+</div>
