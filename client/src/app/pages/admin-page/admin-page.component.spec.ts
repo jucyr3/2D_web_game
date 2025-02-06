@@ -1,94 +1,133 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
-import { Map } from '@common/map';
-import { Tile } from '@common/tile';
 import { AdminPageComponent } from './admin-page.component';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { MapService } from '@app/services/map.service';
+import { MapsForClientService } from '@app/services/maps-for-client.service';
+import { BehaviorSubject } from 'rxjs';
+import { Map } from '@common/map';
 
-describe('AdminPageComponent', () => {
-    let component: AdminPageComponent;
-    let fixture: ComponentFixture<AdminPageComponent>;
+fdescribe('AdminPageComponent', () => {
+  let component: AdminPageComponent;
+  let fixture: ComponentFixture<AdminPageComponent>;
+  let router: jasmine.SpyObj<Router>;
+  let mapService: jasmine.SpyObj<MapService>;
+  let mapsForClientService: jasmine.SpyObj<MapsForClientService>;
+
+  const mockMap: Map = {
+    id: 1,
+    name: 'Test Map',
+    size: 10,
+    isVisible: true,
+    description: 'Test',
+    gameMode: 'Classic',
+    tileMatrix: [],
+    lastModified: new Date(),
+    previewImage: ''
+  };
+
+  beforeEach(async () => {
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    const mapServiceSpy = jasmine.createSpyObj('MapService', ['createEmptyMap']);
+    const mapsServiceSpy = jasmine.createSpyObj('MapsForClientService', 
+      ['loadMaps', 'loadMapsByVisibility'],
+      {
+        mapsSubject: new BehaviorSubject<Map[]>([mockMap])
+      }
+    );
+
+    await TestBed.configureTestingModule({
+      imports: [AdminPageComponent],
+      providers: [
+        { provide: Router, useValue: routerSpy },
+        { provide: MapService, useValue: mapServiceSpy },
+        { provide: MapsForClientService, useValue: mapsServiceSpy },
+        { provide: MatDialog, useValue: jasmine.createSpyObj('MatDialog', ['open']) }
+      ]
+    }).compileComponents();
+
+    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    mapService = TestBed.inject(MapService) as jasmine.SpyObj<MapService>;
+    mapsForClientService = TestBed.inject(MapsForClientService) as jasmine.SpyObj<MapsForClientService>;
+    fixture = TestBed.createComponent(AdminPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+    expect(mapsForClientService.loadMaps).toHaveBeenCalled();
+  });
+
+  it('should navigate to home', () => {
+    component.openQuitDialog();
+    expect(router.navigate).toHaveBeenCalledWith(['/home']);
+  });
+
+  it('should toggle modal state', () => {
+    component.openCreateModal();
+    expect(component.isCreateModalOpen).toBeTrue();
     
-    const createTestTileMatrix = (size: number): Tile[][] => {
-        return Array(size).fill(null).map(() => 
-            Array(size).fill(null).map(() => ({
-                type: "Grass",
-                isOccupied: false,
-                isObstacle: false
-            }))
-        );
-    };
+    component.closeCreateModal();
+    expect(component.isCreateModalOpen).toBeFalse();
+  });
 
-    const createTestGame = (id: number = 1, size: number = 10): Map => {
-        const tileMatrix = createTestTileMatrix(size);
-        const map = new Map(
-            "Test Map",
-            size,
-            true,
-            "Test Description",
-            "Classic",
-            tileMatrix,
-            new Date(), "null"
-        );
-        return new Game(id, "Test Game", map);
-    };
-
-    beforeEach(async () => {
-        await TestBed.configureTestingModule({
-            imports: [AdminPageComponent],
-            providers: [
-                provideRouter([])
-            ]
-        }).compileComponents();
-
-        fixture = TestBed.createComponent(AdminPageComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
+  describe('handleCreateMap', () => {
+    beforeEach(() => {
+      spyOn(window, 'alert');
     });
 
-    it('should create', () => {
-        expect(component).toBeTruthy();
+    it('should validate empty name', () => {
+      const result = component.handleCreateMap({ mapName: '   ' });
+      expect(result).toBeFalse();
+      expect(window.alert).toHaveBeenCalledWith('Map name cannot be empty');
     });
 
-    it('should load games initially', () => {
-        component.loadMaps();
-        expect(component.maps.length).toBeGreaterThan(0);
+    it('should validate duplicate name', () => {
+      const result = component.handleCreateMap({ mapName: 'Test Map' });
+      expect(result).toBeFalse();
+      expect(window.alert).toHaveBeenCalledWith('Map name already exists');
     });
 
-    it('should toggle game visibility', () => {
-        const game = createTestGame();
-        const initialVisibility = game.map.isVisible;
-        component.toggleVisibility(game);
-        expect(game.map.isVisible).toBe(!initialVisibility);
+    it('should validate map size', () => {
+      const result = component.handleCreateMap({ 
+        mapName: 'New Map', 
+        mapSize: 'INVALID' 
+      });
+      expect(result).toBeFalse();
+      expect(window.alert).toHaveBeenCalledWith('Invalid map size');
     });
 
-    it('should delete game', () => {
-        const game = createTestGame();
-        component.maps = [game];
-        spyOn(window, 'confirm').and.returnValue(true);
-        
-        component.deleteMap(game);
-        expect(component.maps.length).toBe(0);
+    it('should create map successfully', () => {
+      const formData = {
+        mapName: 'New Map',
+        mapMode: 'Classic',
+        mapSize: 'PETITE'
+      };
+
+      const result = component.handleCreateMap(formData);
+      
+      expect(result).toBeTrue();
+      expect(mapService.createEmptyMap).toHaveBeenCalledWith({
+        name: 'New Map',
+        gameMode: 'Classic',
+        size: '10'
+      });
+      expect(router.navigate).toHaveBeenCalledWith(['edit']);
+      expect(component.isCreateModalOpen).toBeFalse();
     });
 
-    it('should show and hide game description', () => {
-        const game = createTestGame();
-        
-        component.showDescription(game);
-        expect(component.selectedMap).toBe(game);
-        
-        component.hideDescription();
-        expect(component.selectedMap).toBeNull();
+    it('should handle creation error', () => {
+      mapService.createEmptyMap.and.throwError('Error');
+      
+      const result = component.handleCreateMap({
+        mapName: 'New Map',
+        mapMode: 'Classic',
+        mapSize: 'PETITE'
+      });
+      
+      expect(result).toBeFalse();
+      expect(window.alert).toHaveBeenCalledWith('Failed to create map');
     });
-
-    it('should have correct game properties after loading', () => {
-        component.loadMaps();
-        const firstGame = component.maps[0];
-        
-        expect(firstGame.id).toBeDefined();
-        expect(firstGame.gameName).toBeDefined();
-        expect(firstGame.map).toBeDefined();
-        expect(firstGame.map.size).toBeDefined();
-        expect(firstGame.map.gameMode).toBeDefined();
-        expect(Array.isArray(firstGame.map.tileMatrix)).toBe(true);
-    });
+  });
 });

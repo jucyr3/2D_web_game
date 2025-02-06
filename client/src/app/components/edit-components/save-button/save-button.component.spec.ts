@@ -33,17 +33,17 @@ describe('SaveButtonComponent', () => {
     });
 
     it('should call save method when the button is clicked', () => {
-        spyOn(component, 'save');
+        spyOn(component, 'saveMap');
         const button = fixture.debugElement.query(By.css('button'));
 
         button.triggerEventHandler('click', null);
         fixture.detectChanges();
 
-        expect(component.save).toHaveBeenCalled();
+        expect(component.saveMap).toHaveBeenCalled();
     });
 
     it('should call saveMap on the MapService when save is called', () => {
-        component.save();
+        component.saveMap();
         expect(mockMapService.saveMap).toHaveBeenCalled();
     });
 });

@@ -40,7 +40,7 @@ export class MapController {
             }
         }
     
-        @Get(':id') // TODO : TEST THIS THING
+        @Get(':id')
         @ApiOperation({ summary: 'Get map by ID' })
         @ApiParam({ name: 'id', type: Number })
         @ApiResponse({ 
@@ -121,7 +121,7 @@ export class MapController {
             }
         }
     
-        @Patch(':id/previewImage') // TODO : change preview image of map on server
+        @Patch(':id/previewImage')
         @ApiOperation({ summary: 'Update map image' })
         @ApiParam({ name: 'id', type: Number })
         @ApiResponse({ 

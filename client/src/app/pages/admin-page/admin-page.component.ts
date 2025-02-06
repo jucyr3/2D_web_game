@@ -38,7 +38,7 @@ export class AdminPageComponent {
         this.isCreateModalOpen = false;
     }
 
-    handleCreateMap(formData: any): boolean { // TODO : DEVRAIT METTRE DANS UN SERVICE QUI GÈRE LES VERIFS DU MODAL
+    handleCreateMap(formData: any): boolean {
         if (!formData.mapName?.trim()) {
             alert('Map name cannot be empty');
             return false;

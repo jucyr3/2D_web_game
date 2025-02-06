@@ -75,7 +75,7 @@ describe('MapService', () => {
     });
 
     it('should return false when loading map from server', () => {
-        expect(service.loadMapFromServer()).toBeFalse();
+        expect(service.loadMapFromServer(10)).toBeFalse();
     });
 
     it('should correctly parse tile matrix and handle gameObjects', () => {
@@ -99,7 +99,8 @@ describe('MapService', () => {
                     { type: 'GROUND_1', isOccupied: false, isObstacle: false },
                 ],
             ],
-            lastModified: '2025-02-01',
+            lastModified: new Date(),
+            previewImage: "dd"
         } as MapJson;
 
         const tileMatrix = service.parseTileMatrix(json);
@@ -122,7 +123,7 @@ describe('MapService', () => {
             tileMatrix: Array(10)
                 .fill([])
                 .map(() => Array(10).fill({ type: 'GROUND_1', isOccupied: false, isObstacle: false })),
-            lastModified: '2025-02-01',
+            lastModified: new Date(),
         } as MapJson;
         const newMap = service.createMapFromJSON(json);
         expect(newMap.name).toBe('Test Map');
@@ -164,7 +165,7 @@ describe('MapService', () => {
         spyOn(MapService.prototype, 'saveMapToSessionStorage').and.callThrough();
 
         // Act: Create an instance of the service (trigger the constructor)
-        service = new MapService();
+        
 
         // Assert: Verify the expected behavior
         expect(service.loadMapFromSessionStorage).toHaveBeenCalled();
