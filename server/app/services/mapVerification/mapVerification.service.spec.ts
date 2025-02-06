@@ -1,11 +1,10 @@
-// import { TestBed } from '@angular/core/testing';
-
 import { MapVerificationService } from '@app/services/mapVerification/mapVerification.service';
 import { ItemObject } from '@common/ItemObject';
 import { Map } from '@common/map';
 import { MapVerification } from '@common/mapVerification.interface';
 import { TileTypes } from '@common/tileType.constants';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Tile } from '@common/tile'
 
 const MAP_SIZE_SMALL = 10;
 const MAP_SIZE_MEDIUM = 15;
@@ -13,7 +12,30 @@ const MAP_SIZE_LARGE = 20;
 
 describe('MapVerificationService', () => {
     let service: MapVerificationService;
-    let mockMap: Map;
+    //let mockMap: Map;
+    let defaultTile: Tile = {
+        type: TileTypes.GROUND_0,
+        isOccupied: false,
+        isObstacle: false,
+        itemObject: null,
+    }
+
+    const mockMap: Map = {
+        id: 1,
+        name: 'Untitled',
+        size: MAP_SIZE_SMALL,
+        isVisible: true,
+        description: 'No description',
+        gameMode: 'Classic',
+        tileMatrix: Array.from({ length: MAP_SIZE_SMALL }, () =>
+            Array.from({ length: MAP_SIZE_SMALL }, () => ({ ...defaultTile }))
+        ),
+        lastModified: new Date(),
+    }
+
+    const spawnpoint: ItemObject = {
+        name: 'spawnpoint'
+    }
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -21,19 +43,14 @@ describe('MapVerificationService', () => {
         }).compile();
 
         service = module.get<MapVerificationService>(MapVerificationService);
-        mockMap = new Map('Untitled', MAP_SIZE_SMALL, true, '', 'Classic');
+
         mockMap.name = 'Untitled';
         mockMap.isVisible = true;
-        mockMap.description = 'blblabla';
+        mockMap.description = 'No description';
         mockMap.gameMode = 'Classic';
-        for (let i = 0; i < MAP_SIZE_SMALL; i++) {
-            for (let j = 0; j < MAP_SIZE_SMALL; j++) {
-                mockMap.tileMatrix[i][j].type = TileTypes.GROUND_0;
-                if (mockMap.tileMatrix[i][j].gameObject) {
-                    mockMap.tileMatrix[i][j].gameObject = null;
-                }
-            }
-        }
+        mockMap.tileMatrix = Array.from({ length: MAP_SIZE_SMALL }, () =>
+            Array.from({ length: MAP_SIZE_SMALL }, () => ({ ...defaultTile }))
+        );
     });
 
     it('should be created', () => {
@@ -48,8 +65,8 @@ describe('MapVerificationService', () => {
 
     it('should check if map has description and name', () => {
         // set up valid map
-        mockMap.tileMatrix[0][0].gameObject = new ItemObject('spawnpoint');
-        mockMap.tileMatrix[0][1].gameObject = new ItemObject('spawnpoint');
+        mockMap.tileMatrix[0][0].itemObject = { ...spawnpoint };
+        mockMap.tileMatrix[0][1].itemObject = { ...spawnpoint };
 
         mockMap.name = '';
         expect(service.validateGame(mockMap).isNamePresent).toBeFalsy();
@@ -103,6 +120,7 @@ describe('MapVerificationService', () => {
         mockMap.tileMatrix[1][1].type = TileTypes.WALL;
         mockMap.tileMatrix[1][0].type = TileTypes.WALL;
         expect(service.isMapAccessible(mockMap)).toBeFalsy();
+
         mockMap.tileMatrix[1][1].type = TileTypes.GROUND_0;
         expect(service.isMapAccessible(mockMap)).toBeFalsy();
         mockMap.tileMatrix[0][0].type = TileTypes.WALL;
@@ -114,32 +132,54 @@ describe('MapVerificationService', () => {
         expect(service.isMapAccessible(mockMap)).toBeFalsy();
     });
 
-    it('should check if starting points are placed', () => {
-        // for 10x10 map
+    it('should validate starting points placement correctly', () => {
+        // for MAP_SIZE_SMALL map
         expect(service.areStartingPointsValid(mockMap)).toBeFalsy();
-        mockMap.tileMatrix[0][0].gameObject = new ItemObject('spawnpoint');
-        mockMap.tileMatrix[0][1].gameObject = new ItemObject('spawnpoint');
+        mockMap.tileMatrix[0][0].itemObject = { ...spawnpoint };
+        mockMap.tileMatrix[0][1].itemObject = { ...spawnpoint };
         expect(service.areStartingPointsValid(mockMap)).toBeTruthy();
 
-        // 15x15 map
-        const mockMap15 = new Map('Map by 15', MAP_SIZE_MEDIUM, true, '', 'Classic');
+        // MAP_SIZE_MEDIUM map
+        const mockMap15: Map = {
+            id: 2,
+            name: 'Untitled2',
+            size: MAP_SIZE_MEDIUM,
+            isVisible: true,
+            description: 'No description',
+            gameMode: 'Classic',
+            tileMatrix: Array.from({ length: MAP_SIZE_MEDIUM }, () =>
+                Array.from({ length: MAP_SIZE_MEDIUM }, () => ({ ...defaultTile }))
+            ),
+            lastModified: new Date(),
+        }
         expect(service.areStartingPointsValid(mockMap15)).toBeFalsy();
-        mockMap15.tileMatrix[0][0].gameObject = new ItemObject('spawnpoint');
-        mockMap15.tileMatrix[0][1].gameObject = new ItemObject('spawnpoint');
+        mockMap15.tileMatrix[0][0].itemObject = { ...spawnpoint };
+        mockMap15.tileMatrix[0][1].itemObject = { ...spawnpoint };
         expect(service.areStartingPointsValid(mockMap15)).toBeFalsy();
-        mockMap15.tileMatrix[0][2].gameObject = new ItemObject('spawnpoint');
-        mockMap15.tileMatrix[0][3].gameObject = new ItemObject('spawnpoint');
+        mockMap15.tileMatrix[0][2].itemObject = { ...spawnpoint };
+        mockMap15.tileMatrix[0][3].itemObject = { ...spawnpoint };
         expect(service.areStartingPointsValid(mockMap15)).toBeTruthy();
 
-        // 20x20 map
-        const mockMap20 = new Map('Map by 20', MAP_SIZE_LARGE, true, '', 'Classic');
-        mockMap20.tileMatrix[0][0].gameObject = new ItemObject('spawnpoint');
-        mockMap20.tileMatrix[0][1].gameObject = new ItemObject('spawnpoint');
-        mockMap20.tileMatrix[0][2].gameObject = new ItemObject('spawnpoint');
-        mockMap20.tileMatrix[0][3].gameObject = new ItemObject('spawnpoint');
-        mockMap20.tileMatrix[0][4].gameObject = new ItemObject('spawnpoint');
+        // MAP_SIZE_LARGE map
+        const mockMap20: Map = {
+            id: 3,
+            name: 'Untitled3',
+            size: MAP_SIZE_LARGE,
+            isVisible: true,
+            description: 'No description',
+            gameMode: 'Classic',
+            tileMatrix: Array.from({ length: MAP_SIZE_LARGE }, () =>
+                Array.from({ length: MAP_SIZE_LARGE }, () => ({ ...defaultTile }))
+            ),
+            lastModified: new Date(),
+        }
+        mockMap20.tileMatrix[0][0].itemObject = { ...spawnpoint };
+        mockMap20.tileMatrix[0][1].itemObject = { ...spawnpoint };
+        mockMap20.tileMatrix[0][2].itemObject = { ...spawnpoint };
+        mockMap20.tileMatrix[0][3].itemObject = { ...spawnpoint };
+        mockMap20.tileMatrix[0][4].itemObject = { ...spawnpoint };
         expect(service.areStartingPointsValid(mockMap20)).toBeFalsy();
-        mockMap20.tileMatrix[0][5].gameObject = new ItemObject('spawnpoint');
+        mockMap20.tileMatrix[0][5].itemObject = { ...spawnpoint };
         expect(service.areStartingPointsValid(mockMap20)).toBeTruthy();
     });
 
@@ -206,8 +246,8 @@ describe('MapVerificationService', () => {
         mockMap.tileMatrix[1][8].type = TileTypes.DOOR;
 
         // fixes the spawnpoints
-        mockMap.tileMatrix[8][8].gameObject = new ItemObject('spawnpoint');
-        mockMap.tileMatrix[8][9].gameObject = new ItemObject('spawnpoint');
+        mockMap.tileMatrix[8][8].itemObject = { ...spawnpoint };
+        mockMap.tileMatrix[8][9].itemObject = { ...spawnpoint };
 
         comparison.isUniqueName = false;
         comparison.isMapHalfFloor = false;

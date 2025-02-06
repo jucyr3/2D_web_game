@@ -1,21 +1,10 @@
-// import { Injectable } from '@angular/core';
 import { Map } from '@common/map';
 import { MapVerification } from '@common/mapVerification.interface';
 import { TileTypes } from '@common/tileType.constants';
+import { MapProperties } from '@common/map.constants';
+// import { Injectable } from '@nestjs/common'
 
-const MAP_SIZE_SMALL = 10;
-const MAP_SIZE_MEDIUM = 15;
-const MAP_SIZE_LARGE = 20;
-const SPAWN_COUNT_SMALL = 2;
-const SPAWN_COUNT_MEDIUM = 4;
-const SPAWN_COUNT_LARGE = 6;
-const MAX_MAP_NAME = 50;
-const MAX_MAP_DESCRIPTION = 500;
-
-// @Injectable({
-//     providedIn: 'root',
-// })
-
+// @Injectable
 export class MapVerificationService {
     // temporary storage for game names
     private gameNames: { name: string }[] = [{ name: 'test' }];
@@ -24,25 +13,38 @@ export class MapVerificationService {
         this.gameNames = gameNames;
     }
 
-    // returns true if the name is unique
     isUniqueName(name: string): boolean {
         return this.gameNames.some((game) => game.name !== name);
     }
 
     isNameValid(map: Map): boolean {
-        return map.name.length <= MAX_MAP_NAME;
+        return map.name.length <= MapProperties.MAX_MAP_NAME;
     }
 
     isDescriptionValid(map: Map): boolean {
-        return map.description.length <= MAX_MAP_DESCRIPTION;
+        return map.description.length <= MapProperties.MAX_MAP_DESCRIPTION;
     }
 
     isMapHalfFloor(map: Map): boolean {
-        const flatMap = map.flattenedTileMatrix;
-        const tilesCount = flatMap.filter(
-            (tile) => tile.type === TileTypes.GROUND_0 || tile.type === TileTypes.GROUND_1 || tile.type === TileTypes.GROUND_2,
-        ).length;
-        return tilesCount > (map.size * map.size) / 2;
+        const tileMatrix = map.tileMatrix;
+        let tilesCount = 0;
+        const totalTiles = map.size * map.size;
+
+        for (let i = 0; i < map.size; i++) {
+            for (let j = 0; j < map.size; j++) {
+                if (
+                    tileMatrix[i][j].type === TileTypes.GROUND_0 ||
+                    tileMatrix[i][j].type === TileTypes.GROUND_1 ||
+                    tileMatrix[i][j].type === TileTypes.GROUND_2
+                ) {
+                    tilesCount++;
+                    if (tilesCount > totalTiles / 2) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return tilesCount > totalTiles / 2;
     }
 
     isMapAccessible(map: Map): boolean {
@@ -77,7 +79,7 @@ export class MapVerificationService {
             while (stack.length > 0) {
                 const popped = stack.pop();
                 if (popped === undefined) {
-                    return; // TODO: take care of error
+                    return;
                 }
                 const [tempx, tempy] = popped;
                 for (const [dirx, diry] of directions) {
@@ -89,7 +91,7 @@ export class MapVerificationService {
                         resy >= 0 &&
                         resy < cols &&
                         !visited[resx][resy] &&
-                        tileMatrix[resx][resy].type !== TileTypes.WALL
+                        (tileMatrix[resx][resy].type !== TileTypes.WALL)
                     ) {
                         visited[resx][resy] = true;
                         stack.push([resx, resy]);
@@ -111,15 +113,23 @@ export class MapVerificationService {
     }
 
     areStartingPointsValid(map: Map): boolean {
-        const flatMap = map.flattenedTileMatrix;
-        // if there is a gameObject...
-        const startCount = flatMap.filter((tile) => tile.gameObject && tile.gameObject.name === 'spawnpoint').length;
-        if (map.size === MAP_SIZE_SMALL) {
-            return startCount === SPAWN_COUNT_SMALL;
-        } else if (map.size === MAP_SIZE_MEDIUM) {
-            return startCount === SPAWN_COUNT_MEDIUM;
-        } else if (map.size === MAP_SIZE_LARGE) {
-            return startCount === SPAWN_COUNT_LARGE;
+        const tileMatrix = map.tileMatrix;
+        let startCount = 0;
+
+        for (let i = 0; i < map.size; i++){
+            for (let j = 0; j < map.size; j++){
+                if (tileMatrix[i][j].itemObject !== null && tileMatrix[i][j].itemObject.name === 'spawnpoint') {
+                    startCount++;
+                }
+            }
+        }
+
+        if (map.size === MapProperties.MAP_SIZE_SMALL) {
+            return startCount === MapProperties.SPAWN_COUNT_SMALL;
+        } else if (map.size === MapProperties.MAP_SIZE_MEDIUM) {
+            return startCount === MapProperties.SPAWN_COUNT_MEDIUM;
+        } else if (map.size === MapProperties.MAP_SIZE_LARGE) {
+            return startCount === MapProperties.SPAWN_COUNT_LARGE;
         } else {
             return false;
         }
