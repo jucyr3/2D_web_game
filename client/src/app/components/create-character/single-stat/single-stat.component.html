@@ -1,0 +1,7 @@
+<div class="main-div">
+    <p class="statName">{{ statName }} :</p>
+    @if (showDice) {
+    <img [src]="isDiceSix ? d6 : d4" alt="Dice" />
+    }
+    <p>{{ statValue }}</p>
+</div>

@@ -3,9 +3,13 @@
     [style.grid-template-columns]="'repeat(' + this.mapService.map.size + ', 1fr)'"
     [style.grid-template-rows]="'repeat(' + this.mapService.map.size + ', 1fr)'"
     (mouseleave)="onMouseLeave()"
-    (mouseenter)="onMouseEnter($event)"
     (mouseup)="onMouseUp()"
     (mousedown)="onMouseDown($event)"
+    (contextmenu)="onContextMenu($event)"
 >
-    <app-tile *ngFor="let tile of this.mapService.map.flattenedTileMatrix; let i = index" [tileNumber]="i" [tileObject]="tile" #tileRef></app-tile>
+
+    @for (tile of mapService.flattenedTileMatrix(); track i; let i = $index) {
+        <app-tile [tileNumber]="i" [tileObject]="tile" #tileRef></app-tile>
+    }
+
 </div>

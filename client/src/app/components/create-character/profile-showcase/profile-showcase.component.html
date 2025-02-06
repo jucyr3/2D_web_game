@@ -1,0 +1,63 @@
+<div class="container">
+    <div class="character-section">
+        <div class="info">
+            &#9432;
+            <div class="infoText">
+                <p>Vie : Points de vie du personnage</p>
+                <p>Rapidité : Ordre des tours et points de mouvement par tour</p>
+                <p>Attaque : Force avec laquelle une attaque est faite</p>
+                <p>Défense : Capacité à bloquer une attaque.</p>
+            </div>
+        </div>
+        <img [src]="this.profileService.showImageSelected()" atl="img" />
+        <app-name></app-name>
+    </div>
+
+    <div class="attributes-choices-section">
+        <div class="attributes-display">
+            <div class="attribute">
+                <app-single-stat [statName]="combinedStats.life.label" [statValue]="combinedStats.life.stat" [showDice]="false"></app-single-stat>
+            </div>
+            <div class="attribute">
+                <app-single-stat [statName]="combinedStats.speed.label" [statValue]="combinedStats.speed.stat" [showDice]="false"></app-single-stat>
+            </div>
+            <div class="attribute">
+                <app-single-stat
+                    [statName]="combinedStats.attack.label"
+                    [statValue]="combinedStats.attack.stat"
+                    [isDiceSix]="combinedStats.attack.selected"
+                    [showDice]="true"
+                >
+                    ></app-single-stat
+                >
+            </div>
+            <div class="attribute">
+                <app-single-stat
+                    [statName]="combinedStats.defense.label"
+                    [statValue]="combinedStats.defense.stat"
+                    [isDiceSix]="combinedStats.defense.selected"
+                    [showDice]="true"
+                >
+                    ></app-single-stat
+                >
+            </div>
+        </div>
+        <div class="choices-section">
+            <div class="bonus-section">
+                <div class="subtitle">Choisissez Votre Bonus +2 :</div>
+                <div class="bonus-choice">
+                    <button [class.selected]="combinedStats.life.selected" (click)="assignBonus('life')">VIE</button>
+                    <button [class.selected]="combinedStats.speed.selected" (click)="assignBonus('speed')">RAPIDITÉ</button>
+                </div>
+            </div>
+
+            <div class="dice-section">
+                <div class="subtitle">Choisissez L'Attribut Pour Le Dé à 6 Faces:</div>
+                <div class="dice-choice">
+                    <button [class.selected]="combinedStats.attack.selected" (click)="assignDiceSix('attack')">ATTAQUE</button>
+                    <button [class.selected]="combinedStats.defense.selected" (click)="assignDiceSix('defense')">DÉFENSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

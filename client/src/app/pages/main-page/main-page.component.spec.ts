@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Routes, provideRouter } from '@angular/router';
 import { MainPageComponent } from './main-page.component';
 
+/* eslint-disable */
+
 describe('MainPageComponent', () => {
     let component: MainPageComponent;
     let fixture: ComponentFixture<MainPageComponent>;

@@ -1,6 +1,15 @@
 <button
     class="brush-button"
+    [tp]="BrushTooltipComponent"
+    [tpDuration]="0"
+    [tpIsEnabled]="isTooltipEnabled"
+    tpPlacement="right"
+    tpMaxWidth="200px"
     (click)="changeBrushTile(tileType)"
     [class.active]="isActive"
-    style="background-image: url('../assets/{{ tileType }}.png')"
+    style="background-image: url('../assets/tiles/{{ tileType }}.png')"
 ></button>
+
+<ng-template #BrushTooltipComponent let-tooltip="tooltip">
+    <app-brush-tooltip [tileType]="tileType"></app-brush-tooltip>
+</ng-template>
