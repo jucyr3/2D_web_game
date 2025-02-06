@@ -1,10 +1,14 @@
-import { GameObject } from './gameObject.interface';
+export class ItemObject {
+    name: string;
+    description: string;
 
-export class ItemObject implements GameObject {
-    name: string; // 'spawnpoint'
-
-    constructor(name: string) {
+    constructor(name: string, description?: string) {
         this.name = name;
+        if (description) {
+            this.description = description;
+        } else {
+            this.description = "";
+        }
     }
 
     use(): void {

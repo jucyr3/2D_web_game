@@ -1,0 +1,89 @@
+$primary-color: #a85cf9; // Couleur du titre
+$background-color: #333; // Couleur de fond de la page
+$button-color: #eee; // Couleur des boutons
+$button-hover-color: #ddd; // Couleur des boutons au survol
+$button-border-color: #aaa; // Couleur de la bordure des boutons
+$text-color: #fff; // Couleur principale du texte
+$footer-color: #aaa; // Couleur du texte dans le pied de page
+
+/* Disable scrolling on the entire page */
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Disable scrolling */
+    height: 100%; /* Ensure the body takes full height */
+}
+
+#edit-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full viewport height */
+    padding: 16px;
+    box-sizing: border-box;
+    overflow: hidden; /* Disable scrolling inside the container */
+    background-color: $background-color;
+    user-select: none;
+}
+
+#edit-page ::ng-deep h2 {
+    color: $text-color; /* Use primary color for the title */
+    margin-bottom: 8px; /* Add some spacing below the title */
+}
+
+.app-layout {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    flex-grow: 1;
+    overflow: hidden;
+    justify-content: center;
+}
+
+.brush-grid {
+    grid-area: brush-grid;
+}
+
+.item-grid {
+    grid-area: item-grid;
+}
+
+.tile-grid {
+    grid-area: tile-grid;
+    margin-left: 16px; /* Add some spacing between the left and right sections */
+    overflow: hidden; /* Disable scrolling inside the tile-grid */
+}
+
+/* Style for the print button */
+button {
+    grid-area: print-button; /* Place the button in the bottom-left corner */
+    width: fit-content; /* Make the button small */
+    padding: 8px 16px; /* Adjust padding to make it compact */
+    font-size: 12px; /* Smaller font size */
+    border: 1px solid #ccc; /* Subtle border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer;
+    margin-top: 16px; /* Add some spacing above the button */
+    background-color: $button-color;
+}
+
+button:hover {
+    background-color: #e0e0e0; /* Slightly darker on hover */
+}
+
+::ng-deep .description-tooltip {
+    pointer-events: none; /* Prevent interaction with the tooltip */
+    position: fixed; /* Position relative to the viewport */
+    --mdc-plain-tooltip-container-color: rgba(0, 0, 0, 0.8);
+    font-family: 'Consolas', 'Courier New', monospace;
+    white-space: pre-line;
+    transition-duration: 0ms;
+}
+
+#buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 16px;
+}
