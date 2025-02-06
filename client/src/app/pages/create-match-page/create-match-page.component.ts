@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MapsGridComponent } from '@app/components/create-match/maps-grid/maps-grid.component';
 import { MapsForClientService } from '@app/services/maps-for-client.service';
+import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'app-create-match-page',
@@ -19,8 +20,20 @@ export class CreateMatchPageComponent {
     ) {}
 
     createGame() {
-        console.log(this.mapsForClient.clickedMap?.name);
-        this.router.navigate(['/character']);
+        this.mapsForClient.loadMapsByVisibility();
+        this.mapsForClient.maps$.pipe(
+            map(maps => maps.find(map => map === this.mapsForClient.clickedMap))
+        ).subscribe(existedMap => {
+            if (existedMap) {
+                this.router.navigate(['/character']);
+            } else {
+                this.router.navigate(['/match']).then(() => {
+                    setTimeout(() => {
+                        alert("La carte fut cachée ou effacée");
+                    }, 500);
+                });
+            }
+        });
     }
 
     onBodyClick(event: MouseEvent): void {
