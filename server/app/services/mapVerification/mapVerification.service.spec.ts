@@ -1,41 +1,38 @@
 import { MapVerificationService } from '@app/services/mapVerification/mapVerification.service';
 import { ItemObject } from '@common/ItemObject';
 import { Map } from '@common/map';
+import { MapProperties } from '@common/map.constants';
 import { MapVerification } from '@common/mapVerification.interface';
+import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Tile } from '@common/tile'
-
-const MAP_SIZE_SMALL = 10;
-const MAP_SIZE_MEDIUM = 15;
-const MAP_SIZE_LARGE = 20;
 
 describe('MapVerificationService', () => {
     let service: MapVerificationService;
-    //let mockMap: Map;
-    let defaultTile: Tile = {
+    // let mockMap: Map;
+    const defaultTile: Tile = {
         type: TileTypes.GROUND_0,
         isOccupied: false,
         isObstacle: false,
         itemObject: null,
-    }
+    };
 
     const mockMap: Map = {
         id: 1,
         name: 'Untitled',
-        size: MAP_SIZE_SMALL,
+        size: MapProperties.MAP_SIZE_SMALL,
         isVisible: true,
         description: 'No description',
         gameMode: 'Classic',
-        tileMatrix: Array.from({ length: MAP_SIZE_SMALL }, () =>
-            Array.from({ length: MAP_SIZE_SMALL }, () => ({ ...defaultTile }))
+        tileMatrix: Array.from({ length: MapProperties.MAP_SIZE_SMALL }, () =>
+            Array.from({ length: MapProperties.MAP_SIZE_SMALL }, () => ({ ...defaultTile })),
         ),
         lastModified: new Date(),
-    }
+    };
 
     const spawnpoint: ItemObject = {
-        name: 'spawnpoint'
-    }
+        name: 'spawnpoint',
+    };
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -48,8 +45,8 @@ describe('MapVerificationService', () => {
         mockMap.isVisible = true;
         mockMap.description = 'No description';
         mockMap.gameMode = 'Classic';
-        mockMap.tileMatrix = Array.from({ length: MAP_SIZE_SMALL }, () =>
-            Array.from({ length: MAP_SIZE_SMALL }, () => ({ ...defaultTile }))
+        mockMap.tileMatrix = Array.from({ length: MapProperties.MAP_SIZE_SMALL }, () =>
+            Array.from({ length: MapProperties.MAP_SIZE_SMALL }, () => ({ ...defaultTile })),
         );
     });
 
@@ -94,8 +91,8 @@ describe('MapVerificationService', () => {
 
     it('should check if map is half floor', () => {
         expect(service.isMapHalfFloor(mockMap)).toBeTruthy();
-        for (let i = 0; i < MAP_SIZE_SMALL / 2; i++) {
-            for (let j = 0; j < MAP_SIZE_SMALL; j++) {
+        for (let i = 0; i < MapProperties.MAP_SIZE_SMALL / 2; i++) {
+            for (let j = 0; j < MapProperties.MAP_SIZE_SMALL; j++) {
                 mockMap.tileMatrix[i][j].type = TileTypes.WALL;
             }
         }
@@ -107,8 +104,8 @@ describe('MapVerificationService', () => {
         mockMap.tileMatrix[0][0].type = TileTypes.DOOR;
         expect(service.isMapHalfFloor(mockMap)).toBeFalsy();
 
-        for (let i = MAP_SIZE_SMALL / 2; i < MAP_SIZE_SMALL; i++) {
-            for (let j = 0; j < MAP_SIZE_SMALL; j++) {
+        for (let i = MapProperties.MAP_SIZE_SMALL / 2; i < MapProperties.MAP_SIZE_SMALL; i++) {
+            for (let j = 0; j < MapProperties.MAP_SIZE_SMALL; j++) {
                 mockMap.tileMatrix[i][j].type = TileTypes.WALL;
             }
         }
@@ -126,7 +123,7 @@ describe('MapVerificationService', () => {
         mockMap.tileMatrix[0][0].type = TileTypes.WALL;
         expect(service.isMapAccessible(mockMap)).toBeTruthy();
 
-        for (let i = 0; i < MAP_SIZE_SMALL; i++) {
+        for (let i = 0; i < MapProperties.MAP_SIZE_SMALL; i++) {
             mockMap.tileMatrix[i][4].type = TileTypes.WALL;
         }
         expect(service.isMapAccessible(mockMap)).toBeFalsy();
@@ -143,15 +140,15 @@ describe('MapVerificationService', () => {
         const mockMap15: Map = {
             id: 2,
             name: 'Untitled2',
-            size: MAP_SIZE_MEDIUM,
+            size: MapProperties.MAP_SIZE_MEDIUM,
             isVisible: true,
             description: 'No description',
             gameMode: 'Classic',
-            tileMatrix: Array.from({ length: MAP_SIZE_MEDIUM }, () =>
-                Array.from({ length: MAP_SIZE_MEDIUM }, () => ({ ...defaultTile }))
+            tileMatrix: Array.from({ length: MapProperties.MAP_SIZE_MEDIUM }, () =>
+                Array.from({ length: MapProperties.MAP_SIZE_MEDIUM }, () => ({ ...defaultTile })),
             ),
             lastModified: new Date(),
-        }
+        };
         expect(service.areStartingPointsValid(mockMap15)).toBeFalsy();
         mockMap15.tileMatrix[0][0].itemObject = { ...spawnpoint };
         mockMap15.tileMatrix[0][1].itemObject = { ...spawnpoint };
@@ -164,15 +161,15 @@ describe('MapVerificationService', () => {
         const mockMap20: Map = {
             id: 3,
             name: 'Untitled3',
-            size: MAP_SIZE_LARGE,
+            size: MapProperties.MAP_SIZE_LARGE,
             isVisible: true,
             description: 'No description',
             gameMode: 'Classic',
-            tileMatrix: Array.from({ length: MAP_SIZE_LARGE }, () =>
-                Array.from({ length: MAP_SIZE_LARGE }, () => ({ ...defaultTile }))
+            tileMatrix: Array.from({ length: MapProperties.MAP_SIZE_LARGE }, () =>
+                Array.from({ length: MapProperties.MAP_SIZE_LARGE }, () => ({ ...defaultTile })),
             ),
             lastModified: new Date(),
-        }
+        };
         mockMap20.tileMatrix[0][0].itemObject = { ...spawnpoint };
         mockMap20.tileMatrix[0][1].itemObject = { ...spawnpoint };
         mockMap20.tileMatrix[0][2].itemObject = { ...spawnpoint };
@@ -208,7 +205,7 @@ describe('MapVerificationService', () => {
         expect(service.areDoorsNotNextToBorder(mockMap)).toBeFalsy();
 
         mockMap.tileMatrix[0][1].type = TileTypes.WALL;
-        mockMap.tileMatrix[5][MAP_SIZE_SMALL - 1].type = TileTypes.DOOR;
+        mockMap.tileMatrix[5][MapProperties.MAP_SIZE_SMALL - 1].type = TileTypes.DOOR;
         expect(service.areDoorsNotNextToBorder(mockMap)).toBeFalsy();
     });
 
@@ -230,18 +227,18 @@ describe('MapVerificationService', () => {
         mockMap.name = 'test';
 
         // triggers isMapHalfFloor
-        for (let i = 0; i < MAP_SIZE_SMALL / 2; i++) {
-            for (let j = 0; j < MAP_SIZE_SMALL; j++) {
+        for (let i = 0; i < MapProperties.MAP_SIZE_SMALL / 2; i++) {
+            for (let j = 0; j < MapProperties.MAP_SIZE_SMALL; j++) {
                 mockMap.tileMatrix[i][j].type = TileTypes.WALL;
             }
         }
 
         // triggers isMapAccessible
-        mockMap.tileMatrix[MAP_SIZE_SMALL - 1][1].type = TileTypes.WALL;
-        mockMap.tileMatrix[MAP_SIZE_SMALL - 2][0].type = TileTypes.WALL;
+        mockMap.tileMatrix[MapProperties.MAP_SIZE_SMALL - 1][1].type = TileTypes.WALL;
+        mockMap.tileMatrix[MapProperties.MAP_SIZE_SMALL - 2][0].type = TileTypes.WALL;
 
         // triggers areDoorsNotNextToBorder
-        mockMap.tileMatrix[MAP_SIZE_SMALL - 1][5].type = TileTypes.DOOR;
+        mockMap.tileMatrix[MapProperties.MAP_SIZE_SMALL - 1][5].type = TileTypes.DOOR;
         // triggers areDoorsNextToWalls
         mockMap.tileMatrix[1][8].type = TileTypes.DOOR;
 

@@ -1,10 +1,8 @@
 import { Map } from '@common/map';
+import { MapProperties } from '@common/map.constants';
 import { MapVerification } from '@common/mapVerification.interface';
 import { TileTypes } from '@common/tileType.constants';
-import { MapProperties } from '@common/map.constants';
-// import { Injectable } from '@nestjs/common'
 
-// @Injectable
 export class MapVerificationService {
     // temporary storage for game names
     private gameNames: { name: string }[] = [{ name: 'test' }];
@@ -91,7 +89,7 @@ export class MapVerificationService {
                         resy >= 0 &&
                         resy < cols &&
                         !visited[resx][resy] &&
-                        (tileMatrix[resx][resy].type !== TileTypes.WALL)
+                        tileMatrix[resx][resy].type !== TileTypes.WALL
                     ) {
                         visited[resx][resy] = true;
                         stack.push([resx, resy]);
@@ -116,8 +114,8 @@ export class MapVerificationService {
         const tileMatrix = map.tileMatrix;
         let startCount = 0;
 
-        for (let i = 0; i < map.size; i++){
-            for (let j = 0; j < map.size; j++){
+        for (let i = 0; i < map.size; i++) {
+            for (let j = 0; j < map.size; j++) {
                 if (tileMatrix[i][j].itemObject !== null && tileMatrix[i][j].itemObject.name === 'spawnpoint') {
                     startCount++;
                 }
