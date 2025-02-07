@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { ItemManager } from '@app/classes/item-manager';
 import { ItemObject } from '@common/ItemObject';
-import { TileTypes } from '@common/tileType.constants';
-import { MapService } from './map.service';
+import { Map } from '@common/map';
 import { MapVerification } from '@common/mapVerification.interface';
 import { Tile } from '@common/tile';
-import { Map } from '@common/map';
+import { TileTypes } from '@common/tileType.constants';
+import { MapService } from './map.service';
 
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 
@@ -190,6 +190,8 @@ describe('MapService', () => {
             areStartingPointsValid: true,
             areDoorsNextToWalls: true,
             areDoorsNotNextToBorder: true,
+            isNameValid: true,
+            isDescriptionValid: true,
         };
         service.handleMapVerificationError(mapVerification);
         expect(service.errorList.length).toBe(1);

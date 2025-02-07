@@ -8,4 +8,6 @@ export interface MapVerification {
     areStartingPointsValid: boolean;
     areDoorsNextToWalls: boolean;
     areDoorsNotNextToBorder: boolean;
+    isNameValid: boolean;
+    isDescriptionValid: boolean;
 }

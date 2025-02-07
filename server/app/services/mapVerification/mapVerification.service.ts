@@ -1,18 +1,19 @@
 import { Map } from '@common/map';
 import { MapProperties } from '@common/map.constants';
 import { MapVerification } from '@common/mapVerification.interface';
+import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
 
 export class MapVerificationService {
-    // temporary storage for game names
-    private gameNames: { name: string }[] = [{ name: 'test' }];
+    // temporary storage for game name
+    private gameNames: Set<string> = new Set(['test']);
 
     setGameNames(gameNames: { name: string }[]): void {
-        this.gameNames = gameNames;
+        this.gameNames = new Set(gameNames.map((game) => game.name));
     }
 
     isUniqueName(name: string): boolean {
-        return this.gameNames.some((game) => game.name !== name);
+        return !this.gameNames.has(name);
     }
 
     isNameValid(map: Map): boolean {
@@ -45,17 +46,38 @@ export class MapVerificationService {
         return false;
     }
 
-    isMapAccessible(map: Map): boolean {
-        const tileMatrix = map.tileMatrix;
+    depthFirstSearch(x: number, y: number, tileMatrix: Tile[][], visited: boolean[][]) {
         const rows = tileMatrix.length;
         const cols = tileMatrix[0].length;
-        const visited = Array.from({ length: rows }, () => Array.from({ length: cols }, () => false));
         const directions = [
             [0, 1],
             [0, -1],
             [1, 0],
             [-1, 0],
         ];
+        const stack = [[x, y]];
+        while (stack.length > 0) {
+            const popped = stack.pop();
+            if (popped === undefined) {
+                return;
+            }
+            const [tempx, tempy] = popped;
+            for (const [dirx, diry] of directions) {
+                const resx = tempx + dirx;
+                const resy = tempy + diry;
+                if (resx >= 0 && resx < rows && resy >= 0 && resy < cols && !visited[resx][resy] && tileMatrix[resx][resy].type !== TileTypes.WALL) {
+                    visited[resx][resy] = true;
+                    stack.push([resx, resy]);
+                }
+            }
+        }
+    }
+
+    isMapAccessible(map: Map): boolean {
+        const tileMatrix = map.tileMatrix;
+        const rows = tileMatrix.length;
+        const cols = tileMatrix[0].length;
+        const visited = Array.from({ length: rows }, () => Array.from({ length: cols }, () => false));
 
         // find starting point
         let startX = 0;
@@ -70,33 +92,7 @@ export class MapVerificationService {
             }
         }
         visited[startX][startY] = true;
-        dfs(startX, startY);
-
-        function dfs(x: number, y: number) {
-            const stack = [[x, y]];
-            while (stack.length > 0) {
-                const popped = stack.pop();
-                if (popped === undefined) {
-                    return;
-                }
-                const [tempx, tempy] = popped;
-                for (const [dirx, diry] of directions) {
-                    const resx = tempx + dirx;
-                    const resy = tempy + diry;
-                    if (
-                        resx >= 0 &&
-                        resx < rows &&
-                        resy >= 0 &&
-                        resy < cols &&
-                        !visited[resx][resy] &&
-                        tileMatrix[resx][resy].type !== TileTypes.WALL
-                    ) {
-                        visited[resx][resy] = true;
-                        stack.push([resx, resy]);
-                    }
-                }
-            }
-        }
+        this.depthFirstSearch(startX, startY, tileMatrix, visited);
 
         // check if all non-wall tiles are visited
         for (let i = 0; i < rows; i++) {
@@ -122,14 +118,15 @@ export class MapVerificationService {
             }
         }
 
-        if (map.size === MapProperties.MAP_SIZE_SMALL) {
-            return startCount === MapProperties.SPAWN_COUNT_SMALL;
-        } else if (map.size === MapProperties.MAP_SIZE_MEDIUM) {
-            return startCount === MapProperties.SPAWN_COUNT_MEDIUM;
-        } else if (map.size === MapProperties.MAP_SIZE_LARGE) {
-            return startCount === MapProperties.SPAWN_COUNT_LARGE;
-        } else {
-            return false;
+        switch (map.size) {
+            case MapProperties.MAP_SIZE_SMALL:
+                return startCount === MapProperties.SPAWN_COUNT_SMALL;
+            case MapProperties.MAP_SIZE_MEDIUM:
+                return startCount === MapProperties.SPAWN_COUNT_MEDIUM;
+            case MapProperties.MAP_SIZE_LARGE:
+                return startCount === MapProperties.SPAWN_COUNT_LARGE;
+            default:
+                return false;
         }
     }
 
@@ -172,17 +169,13 @@ export class MapVerificationService {
 
     areDoorsNotNextToBorder(map: Map): boolean {
         const tileMatrix = map.tileMatrix;
-        const rows = tileMatrix.length;
-        const cols = tileMatrix[0].length;
+        const size = map.size;
 
-        for (let i = 0; i < rows; i++) {
-            if (tileMatrix[i][0].type === TileTypes.DOOR || tileMatrix[i][cols - 1].type === TileTypes.DOOR) {
+        for (let i = 0; i < size; i++) {
+            if (tileMatrix[i][0].type === TileTypes.DOOR || tileMatrix[i][size - 1].type === TileTypes.DOOR) {
                 return false;
             }
-        }
-
-        for (let j = 0; j < cols; j++) {
-            if (tileMatrix[0][j].type === TileTypes.DOOR || tileMatrix[rows - 1][j].type === TileTypes.DOOR) {
+            if (tileMatrix[0][i].type === TileTypes.DOOR || tileMatrix[size - 1][i].type === TileTypes.DOOR) {
                 return false;
             }
         }
@@ -199,6 +192,8 @@ export class MapVerificationService {
             areStartingPointsValid: this.areStartingPointsValid(map),
             areDoorsNextToWalls: this.areDoorsNextToWalls(map),
             areDoorsNotNextToBorder: this.areDoorsNotNextToBorder(map),
+            isNameValid: this.isNameValid(map),
+            isDescriptionValid: this.isDescriptionValid(map),
         };
 
         return verification;

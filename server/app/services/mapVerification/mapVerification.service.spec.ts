@@ -202,6 +202,8 @@ describe('MapVerificationService', () => {
             areStartingPointsValid: false,
             areDoorsNextToWalls: true,
             areDoorsNotNextToBorder: true,
+            isNameValid: true,
+            isDescriptionValid: true,
         };
         expect(listOfErrors).toEqual(comparison);
 
