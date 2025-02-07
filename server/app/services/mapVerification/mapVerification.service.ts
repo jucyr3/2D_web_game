@@ -42,7 +42,7 @@ export class MapVerificationService {
                 }
             }
         }
-        return tilesCount > totalTiles / 2;
+        return false;
     }
 
     isMapAccessible(map: Map): boolean {
@@ -153,10 +153,14 @@ export class MapVerificationService {
             for (let j = 1; j < cols - 1; j++) {
                 if (tileMatrix[i][j].type === TileTypes.DOOR) {
                     if (tileMatrix[i][j - 1].type === TileTypes.WALL && tileMatrix[i][j + 1].type === TileTypes.WALL) {
-                        return isGround(i - 1, j) && isGround(i + 1, j);
+                        if (!(isGround(i - 1, j) && isGround(i + 1, j))) {
+                            return false;
+                        }
                     }
                     if (tileMatrix[i - 1][j].type === TileTypes.WALL && tileMatrix[i + 1][j].type === TileTypes.WALL) {
-                        return isGround(i, j - 1) && isGround(i, j + 1);
+                        if (!(isGround(i, j - 1) && isGround(i, j + 1))) {
+                            return false;
+                        }
                     } else {
                         return false;
                     }

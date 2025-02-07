@@ -9,7 +9,20 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 describe('MapVerificationService', () => {
     let service: MapVerificationService;
-    // let mockMap: Map;
+
+    function createMockMap(id: number, size: number): Map {
+        return {
+            id,
+            name: `Untitled${id}`,
+            size,
+            isVisible: true,
+            description: 'No description',
+            gameMode: 'Classic',
+            tileMatrix: Array.from({ length: size }, () => Array.from({ length: size }, () => ({ ...defaultTile }))),
+            lastModified: new Date(),
+        };
+    }
+
     const defaultTile: Tile = {
         type: TileTypes.GROUND_0,
         isOccupied: false,
@@ -17,18 +30,7 @@ describe('MapVerificationService', () => {
         itemObject: null,
     };
 
-    const mockMap: Map = {
-        id: 1,
-        name: 'Untitled',
-        size: MapProperties.MAP_SIZE_SMALL,
-        isVisible: true,
-        description: 'No description',
-        gameMode: 'Classic',
-        tileMatrix: Array.from({ length: MapProperties.MAP_SIZE_SMALL }, () =>
-            Array.from({ length: MapProperties.MAP_SIZE_SMALL }, () => ({ ...defaultTile })),
-        ),
-        lastModified: new Date(),
-    };
+    const mockMap: Map = createMockMap(1, MapProperties.MAP_SIZE_SMALL);
 
     const spawnpoint: ItemObject = {
         name: 'spawnpoint',
@@ -137,18 +139,8 @@ describe('MapVerificationService', () => {
         expect(service.areStartingPointsValid(mockMap)).toBeTruthy();
 
         // MAP_SIZE_MEDIUM map
-        const mockMap15: Map = {
-            id: 2,
-            name: 'Untitled2',
-            size: MapProperties.MAP_SIZE_MEDIUM,
-            isVisible: true,
-            description: 'No description',
-            gameMode: 'Classic',
-            tileMatrix: Array.from({ length: MapProperties.MAP_SIZE_MEDIUM }, () =>
-                Array.from({ length: MapProperties.MAP_SIZE_MEDIUM }, () => ({ ...defaultTile })),
-            ),
-            lastModified: new Date(),
-        };
+        const mockMap15: Map = createMockMap(2, MapProperties.MAP_SIZE_MEDIUM);
+
         expect(service.areStartingPointsValid(mockMap15)).toBeFalsy();
         mockMap15.tileMatrix[0][0].itemObject = { ...spawnpoint };
         mockMap15.tileMatrix[0][1].itemObject = { ...spawnpoint };
@@ -158,18 +150,8 @@ describe('MapVerificationService', () => {
         expect(service.areStartingPointsValid(mockMap15)).toBeTruthy();
 
         // MAP_SIZE_LARGE map
-        const mockMap20: Map = {
-            id: 3,
-            name: 'Untitled3',
-            size: MapProperties.MAP_SIZE_LARGE,
-            isVisible: true,
-            description: 'No description',
-            gameMode: 'Classic',
-            tileMatrix: Array.from({ length: MapProperties.MAP_SIZE_LARGE }, () =>
-                Array.from({ length: MapProperties.MAP_SIZE_LARGE }, () => ({ ...defaultTile })),
-            ),
-            lastModified: new Date(),
-        };
+        const mockMap20: Map = createMockMap(2, MapProperties.MAP_SIZE_LARGE);
+
         mockMap20.tileMatrix[0][0].itemObject = { ...spawnpoint };
         mockMap20.tileMatrix[0][1].itemObject = { ...spawnpoint };
         mockMap20.tileMatrix[0][2].itemObject = { ...spawnpoint };
