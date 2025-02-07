@@ -1,0 +1,10 @@
+export enum MapProperties {
+    MAP_SIZE_SMALL = 10,
+    MAP_SIZE_MEDIUM = 15,
+    MAP_SIZE_LARGE = 20,
+    SPAWN_COUNT_SMALL = 2,
+    SPAWN_COUNT_MEDIUM = 4,
+    SPAWN_COUNT_LARGE = 6,
+    MAX_MAP_NAME = 50,
+    MAX_MAP_DESCRIPTION = 500,
+}

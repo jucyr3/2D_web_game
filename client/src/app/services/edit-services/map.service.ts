@@ -94,6 +94,8 @@ export class MapService {
             areStartingPointsValid: true,
             areDoorsNextToWalls: true,
             areDoorsNotNextToBorder: true,
+            isNameValid: true,
+            isDescriptionValid: true,
         };
         this.handleMapVerificationError(mapVerification);
     }
