@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MapService } from './map.service';
 import { MapVerificationService } from '@app/services/mapVerification/mapVerification.service';
 import { Map } from '@common/map';
-import { Tile } from '@common/Tile';
+import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
 import * as fs from 'fs/promises';
 
