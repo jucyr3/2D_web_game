@@ -9,20 +9,19 @@ export class MapDbService {
     constructor(@InjectModel('Map') private readonly mapModel: Model<MapDocument>) {}
 
     async addMap(map: Map) {
-        const addedMap = new this.mapModel({ ...map, lastModified: new Date() });
-        const response = await addedMap.save();
+        const response = await this.mapModel.create({ ...map, lastModified: new Date() });
         return response;
     }
 
     async getAllMap() {
-        const response = await this.mapModel.find().exec();
+        const response = await this.mapModel.find();
         return response;
     }
 
     async getMap(id: string) {
         let response;
         try {
-            response = await this.mapModel.findById(id).exec();
+            response = await this.mapModel.findById(id);
         } catch (error) {
             throw new NotFoundException('Map not found');
         }
@@ -32,7 +31,7 @@ export class MapDbService {
         return response;
     }
     async getVisible() {
-        const response = await this.mapModel.find({ isVisible: true }).exec();
+        const response = await this.mapModel.find({ isVisible: true });
         return response ?? [];
     }
 
@@ -41,14 +40,14 @@ export class MapDbService {
         return themap;
     }
     async remove(id: string) {
-        return await this.mapModel.deleteOne({ _id: id }).exec();
+        return await this.mapModel.deleteOne({ _id: id });
     }
     async saveImage(id: string, image: string) {
         const themap = await this.mapModel.updateOne({ _id: id }, { $set: { previewImage: image } });
         return themap;
     }
     async getImage(id: string) {
-        const theImage = await this.mapModel.findById(id, { previewImage: 1, _id: 0 }).exec();
+        const theImage = await this.mapModel.findById(id, { previewImage: 1, _id: 0 });
         return theImage.previewImage;
     }
 }
