@@ -3,7 +3,7 @@ import { PreviewContainerComponent } from './preview-container.component';
 import { Map } from '@common/map';
 import { Tile } from '@common/tile';
 
-fdescribe('PreviewContainerComponent', () => {
+describe('PreviewContainerComponent', () => {
   let component: PreviewContainerComponent;
   let fixture: ComponentFixture<PreviewContainerComponent>;
   

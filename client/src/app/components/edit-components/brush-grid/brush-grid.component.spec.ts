@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrushGridComponent } from './brush-grid.component';
 import { provideTippyLoader, provideTippyConfig, tooltipVariation, popperVariation } from '@ngneat/helipopper/config';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('BrushGridComponent', () => {
     let component: BrushGridComponent;
@@ -18,6 +19,7 @@ describe('BrushGridComponent', () => {
                     },
                 }),
                 provideTippyLoader(async () => import('tippy.js')),
+                provideHttpClient(),
             ],
         }).compileComponents();
 

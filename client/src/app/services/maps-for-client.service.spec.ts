@@ -4,7 +4,7 @@ import { ClientHttpRequestsService } from './client-http-requests.service';
 import { of, throwError } from 'rxjs';
 import { Map } from '@common/map';
 
-fdescribe('MapsForClientService', () => {
+describe('MapsForClientService', () => {
   let service: MapsForClientService;
   let httpService: jasmine.SpyObj<ClientHttpRequestsService>;
 

@@ -2,12 +2,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AdminPageComponent } from './admin-page.component';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { MapService } from '@app/services/map.service';
+import { MapService } from '@app/services/edit-services/map.service';
 import { MapsForClientService } from '@app/services/maps-for-client.service';
 import { BehaviorSubject } from 'rxjs';
 import { Map } from '@common/map';
 
-fdescribe('AdminPageComponent', () => {
+describe('AdminPageComponent', () => {
   let component: AdminPageComponent;
   let fixture: ComponentFixture<AdminPageComponent>;
   let router: jasmine.SpyObj<Router>;

@@ -6,7 +6,7 @@ import { GameInfoComponent } from '@app/components/admin-game/game-info/game-inf
 import { BehaviorSubject } from 'rxjs';
 import { Map } from '@common/map';
 
-fdescribe('MapsGridComponent', () => {
+describe('MapsGridComponent', () => {
   let component: MapsGridComponent;
   let fixture: ComponentFixture<MapsGridComponent>;
   let mapsService: jasmine.SpyObj<MapsForClientService>;

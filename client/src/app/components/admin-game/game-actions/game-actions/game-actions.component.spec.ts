@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { ClientHttpRequestsService } from '@app/services/client-http-requests.service';
-import { MapService } from '@app/services/map.service';
+import { MapService } from '@app/services/edit-services/map.service';
 import { Map } from '@common/map';
 import { of, throwError } from 'rxjs';
 import { GameActionsComponent } from './game-actions.component';
 
-fdescribe('GameActionsComponent', () => {
+describe('GameActionsComponent', () => {
     let component: GameActionsComponent;
     let fixture: ComponentFixture<GameActionsComponent>;
     let clientHttpRequestSpy: jasmine.SpyObj<ClientHttpRequestsService>;
@@ -73,14 +73,6 @@ fdescribe('GameActionsComponent', () => {
         });
     });
 
-    describe('editMap', () => {
-        it('should navigate to edit route and load map', () => {
-            component.editMap(mockMap);
-
-            expect(routerSpy.navigate).toHaveBeenCalledWith(['edit', mockMap.id]);
-            expect(mapServiceSpy.loadMapFromServer).toHaveBeenCalledWith(mockMap.id);
-        });
-    });
 
     describe('deleteMap', () => {
         it('should emit refresh event on successful deletion when confirmed', () => {

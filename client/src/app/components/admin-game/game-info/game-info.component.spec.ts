@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GameInfoComponent } from './game-info.component';
 
-fdescribe('GameInfoComponent', () => {
+describe('GameInfoComponent', () => {
   let component: GameInfoComponent;
   let fixture: ComponentFixture<GameInfoComponent>;
   let element: HTMLElement;

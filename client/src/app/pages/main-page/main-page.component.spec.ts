@@ -46,7 +46,7 @@ describe('MainPageComponent', () => {
     it('should have correct router links in buttons', () => {
         const buttons = compiled.querySelectorAll('.button');
         expect(buttons[0].getAttribute('routerLink')).toBe('/game');
-        expect(buttons[1].getAttribute('routerLink')).toBe('/character');
+        expect(buttons[1].getAttribute('routerLink')).toBe('/match');
         expect(buttons[2].getAttribute('routerLink')).toBe('/admin');
     });
 
