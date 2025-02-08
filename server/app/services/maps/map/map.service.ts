@@ -2,7 +2,7 @@ import { MapVerificationService } from '@app/services/mapVerification/mapVerific
 import { ItemObject } from '@common/ItemObject';
 import { Map } from '@common/map';
 import { MapResponse } from '@common/mapResponse';
-import { Tile } from '@common/Tile';
+import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs/promises';
