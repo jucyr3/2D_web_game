@@ -1,5 +1,8 @@
 import { MapService } from '@app/services/maps/map/map.service';
 import { Map } from '@common/map';
+import { MapResponse } from '@common/mapResponse';
+import { MapVerification } from '@common/mapVerification.interface';
+
 import {
     Body,
     Controller,
@@ -12,9 +15,18 @@ import {
     Param,
     ParseIntPipe,
     Patch,
-    Post
+    Post,
+    HttpException
 } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags, ApiProperty } from '@nestjs/swagger';
+
+class MapResponseDto {
+    @ApiProperty()
+    id: number;
+
+    @ApiProperty()
+    mapVerification: MapVerification;
+}
 
 @ApiTags('Maps')
 @Controller('maps')
@@ -83,17 +95,22 @@ export class MapController {
     
         @Post('/')
         @ApiOperation({ summary: 'Create a new map' })
-        @ApiResponse({ 
-            status: HttpStatus.CREATED, 
-            description: 'Map created successfully',
-            type: Map 
+        @ApiResponse({
+        status: HttpStatus.CREATED,
+        description: 'Map created successfully',
+        type: MapResponseDto
         })
-        async saveMap(@Body() map: Map): Promise<Map> { 
+        async saveMap(@Body() map: Map): Promise<MapResponse> {
             try {
-                return await this.mapService.saveMap(map);
+                const savedMap = await this.mapService.saveMap(map);
+                const response: MapResponse = {
+                    id: savedMap.id,
+                    mapVerification: savedMap.mapVerification
+                };
+                return response;
             } catch (error) {
-                this.logger.error(`Failed to create map: ${error.message}`);
-                throw error;
+                this.logger.error(`Failed to create map: ${error.message}`, error.stack);
+                throw new HttpException('Failed to create map', HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     

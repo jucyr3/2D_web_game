@@ -1,3 +1,5 @@
+import { Items } from '@common/ItemObject';
+
 export class ItemManager {
     itemAmounts: { [itemName: string]: number } = {};
 
@@ -10,18 +12,6 @@ export class ItemManager {
     mapSize: number;
     gameMode: 'CTF' | 'Classic';
 
-    itemTypes: string[] = [
-        'attributeItem1',
-        'conditionItem1',
-        'gameplayItem1',
-        'attributeItem2',
-        'conditionItem2',
-        'gameplayItem2',
-        'spawnpoint',
-        'randomItem',
-        'flag',
-    ];
-
     constructor(mapSize: number, gameMode: 'CTF' | 'Classic') {
         this.gameMode = gameMode;
         this.mapSize = mapSize;
@@ -33,46 +23,29 @@ export class ItemManager {
     }
 
     decreaseItemAmount(itemName: string): void {
+        if (this.itemAmounts[itemName] === 0) {
+            return;
+        }
         this.itemAmounts[itemName]--;
     }
 
     setDefaultItemAmounts(): void {
-        for (const item of this.itemTypes) {
-            this.itemAmounts[item] = this.getItemAmount(item);
+        for (const item in Items) {
+            if (isNaN(Number(item))) {
+                this.itemAmounts[item] = this.getDefaultItemAmount(item);
+            }
         }
     }
 
-    getItemAmount(itemName: string): number {
-        switch (itemName) {
-            case 'attributeItem1':
-                return (this.itemAmounts['attributeItem1'] = 1);
+    getDefaultItemAmount(itemName: string): number {
+        const defaultItems = new Set(['attributeItem1', 'conditionItem1', 'gameplayItem1', 'attributeItem2', 'conditionItem2', 'gameplayItem2']);
 
-            case 'conditionItem1':
-                return (this.itemAmounts['conditionItem1'] = 1);
+        if (defaultItems.has(itemName)) return 1;
 
-            case 'gameplayItem1':
-                return (this.itemAmounts['gameplayItem1'] = 1);
-
-            case 'attributeItem2':
-                return (this.itemAmounts['attributeItem2'] = 1);
-
-            case 'conditionItem2':
-                return (this.itemAmounts['conditionItem2'] = 1);
-
-            case 'gameplayItem2':
-                return (this.itemAmounts['gameplayItem2'] = 1);
-
-            case 'spawnpoint':
-                return this.itemMap['size' + this.mapSize];
-
-            case 'randomItem':
-                return this.itemMap['size' + this.mapSize];
-
-            case 'flag':
-                return (this.itemAmounts['flag'] = this.gameMode === 'CTF' ? 1 : 0);
-
-            default:
-                return 0;
+        if (['spawnpoint', 'randomItem'].includes(itemName)) {
+            return this.itemMap['size' + this.mapSize];
         }
+
+        return itemName === 'flag' && this.gameMode === 'CTF' ? 1 : 0;
     }
 }

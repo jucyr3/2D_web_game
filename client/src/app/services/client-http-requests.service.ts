@@ -4,6 +4,8 @@ import { Map } from '@common/map';
 import { Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { catchError, throwError } from 'rxjs';
+import { MapResponse } from '@common/mapResponse';
+
 
 @Injectable({
   providedIn: 'root'
@@ -24,15 +26,22 @@ export class ClientHttpRequestsService {
       );
   }
 
-  saveMapToServer(map: Map): Observable<Map> { 
-    return this.http.post<Map>(`${this.apiUrl}/maps`, map)
-        .pipe(
-            catchError((error) => {
-                console.error('Error saving map:', error);
-                return throwError(() => error);
-            })
-        );
+  loadMapById(mapId: number): Observable<Map> {
+        console.log(mapId);
+        return this.http.get<Map>(`${this.apiUrl}/maps/${mapId}`).pipe(map(response => {
+            return response;
+        }));
     }
+
+  saveMapToServer(map: Map): Observable<MapResponse> {
+    return this.http.post<MapResponse>(`${this.apiUrl}/maps`, map)
+      .pipe(
+        catchError((error) => {
+          console.error('Error saving map:', error);
+          return throwError(() => error);
+        })
+      );
+  }
 
   getAllMapsByVisibility(): Observable<Map[]> {
       return this.http.get<Map[]>(`${this.apiUrl}/maps/visibility/isVisible`).pipe(
@@ -59,13 +68,5 @@ export class ClientHttpRequestsService {
 
   deleteMap(mapId: number): Observable<void> {
       return this.http.delete<void>(`${this.apiUrl}/maps/${mapId}`);
-  }
-
-  loadMapById(mapId: number): Observable<Map> {
-      console.log(mapId);
-      return this.http.get<Map>(`${this.apiUrl}/maps/${mapId}`).pipe(map(response => {
-          console.log(response);
-          return response;
-      }));
   }
 }

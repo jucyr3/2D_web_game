@@ -1,24 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SaveButtonComponent } from './save-button.component';
 import { By } from '@angular/platform-browser';
-import { MapService } from '@app/services/map.service'; // Import the actual MapService
+import { MapService } from '@app/services/edit-services/map.service';
 
 class MockMapService {
     saveMap = jasmine.createSpy('saveMap');
 }
 
 describe('SaveButtonComponent', () => {
-    // Changed from ResetButtonComponent to SaveButtonComponent
     let component: SaveButtonComponent;
     let fixture: ComponentFixture<SaveButtonComponent>;
     let mockMapService: MockMapService;
 
     beforeEach(async () => {
-        mockMapService = new MockMapService(); // Create instance of MockMapService
+        mockMapService = new MockMapService();
 
         await TestBed.configureTestingModule({
             imports: [SaveButtonComponent],
-            providers: [{ provide: MapService, useValue: mockMapService }], // Provide MockMapService for MapService
+            providers: [{ provide: MapService, useValue: mockMapService }],
         }).compileComponents();
     });
 

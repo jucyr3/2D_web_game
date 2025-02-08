@@ -4,27 +4,10 @@ import { Map } from '@common/map';
 import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
 import * as htmlToImage from 'html-to-image';
-import { ClientHttpRequestsService } from './client-http-requests.service';
-
+import { ClientHttpRequestsService } from '../client-http-requests.service';
 import { ItemManager } from '@app/classes/item-manager';
-
-export interface MapJson {
-    name: string;
-    id: number;
-    size: number;
-    isVisible: boolean;
-    description: string;
-    gameMode: 'Classic' | 'CTF';
-    tileMatrix: {
-        type: string;
-        isOccupied: boolean;
-        isObstacle: boolean;
-        gameObject?: {
-            name: string;
-        } | null;
-    }[][];
-    lastModified: Date;
-}
+import { MapVerification } from '@common/mapVerification.interface';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root',
@@ -32,8 +15,9 @@ export interface MapJson {
 export class MapService {
     map: Map;
     itemManager: ItemManager;
+    errorList: string[] = [];
 
-    constructor(protected clientHttpRequest: ClientHttpRequestsService) {
+    constructor(protected clientHttpRequest: ClientHttpRequestsService, private router: Router) {
         if (!this.loadMapFromSessionStorage()) {
             this.setDefaultMap();
             this.saveMapToSessionStorage();
@@ -42,22 +26,23 @@ export class MapService {
     }
 
     setDefaultMap(): void {
-        const size = 15;
-        const defaultMap: Map = {
-            id: 0,
+        const mapSize = 15;
+        const defaultId = 0;
+        this.map = {
+            id: defaultId,
             name: 'Untitled',
-            size: size,
-            isVisible: true,
+            size: mapSize,
+            isVisible: false,
             description: '',
             gameMode: 'Classic',
-            tileMatrix: Array.from({ length: size }, () => Array.from({ length: size }, () => new Tile(TileTypes.GROUND_1, false, false))),
+            tileMatrix: Array.from({ length: mapSize }, () =>
+                Array.from({ length: mapSize }, () => ({ type: TileTypes.GROUND_1, isOccupied: false, isObstacle: false, itemObject: null }) as Tile),
+            ),
             lastModified: new Date(),
-            previewImage: ""
         };
-        this.map = defaultMap;
     }
 
-    createEmptyMap(mapData: { name: string; gameMode: 'Classic' | 'CTF'; size: string }): void {
+    createEmptyMap(mapData: { name: string; gameMode: 'Classic' | 'CTF'; size: string }): void { // TODO : NEEDS TESTING
         const size = Number(mapData.size);
         const defaultMap: Map = {
             id: 0,
@@ -66,7 +51,9 @@ export class MapService {
             isVisible: false,
             description: '',
             gameMode: mapData.gameMode,
-            tileMatrix: Array.from({ length: size }, () => Array.from({ length: size }, () => new Tile(TileTypes.GROUND_1, false, false))),
+            tileMatrix: Array.from({ length: size }, () =>
+                Array.from({ length: size }, () => ({ type: TileTypes.GROUND_1, isOccupied: false, isObstacle: false, itemObject: null }) as Tile),
+            ),
             lastModified: new Date(),
             previewImage: ""
         };
@@ -74,26 +61,24 @@ export class MapService {
         this.itemManager = new ItemManager(size, mapData.gameMode);
      }
 
-    parseTileMatrix(json: MapJson): Tile[][] {
-        // eslint-disable-next-line
+    parseTileMatrix(json: Map): Tile[][] {
         return json.tileMatrix.map((row) =>
             row.map((tileData) => {
-                const type = tileData.type as TileTypes;
+                const type: TileTypes = tileData.type;
                 const isOccupied = tileData.isOccupied;
                 const isObstacle = tileData.isObstacle;
-                // TODO: Fix this
-                const gameObject = tileData.gameObject ? new ItemObject(tileData.gameObject.name) : null;
+                const itemObject: ItemObject | null = tileData.itemObject ? { name: tileData.itemObject.name } : null;
 
-                if (gameObject) {
-                    this.itemManager.decreaseItemAmount(gameObject.name);
+                if (itemObject) {
+                    this.itemManager.decreaseItemAmount(itemObject.name);
                 }
 
-                return new Tile(type, isOccupied, isObstacle, gameObject);
+                return { type, isOccupied, isObstacle, itemObject } as Tile;
             }),
         );
     }
 
-    createMapFromJSON(json: MapJson): Map {
+    createMapFromJSON(json: Map): Map {
         this.itemManager = new ItemManager(json.size, json.gameMode);
         const tileMatrix = this.parseTileMatrix(json);
         return {
@@ -103,43 +88,63 @@ export class MapService {
             isVisible: json.isVisible,
             description: json.description,
             gameMode: json.gameMode,
-            tileMatrix: tileMatrix,
-            lastModified: new Date(),
-            previewImage: ""
+            tileMatrix,
+            lastModified: new Date(json.lastModified),
         };
-     }
-
-    loadMapFromServer(id: number): boolean {
-        this.clientHttpRequest.loadMapById(id).subscribe({
-            next: (map: Map) => {
-                this.map = this.createMapFromJSON(map);
-                this.saveMapToSessionStorage();
-                return true;
-            },
-            error: (err) => {
-                console.error('Error loading map:', err);
-                return false;
-            },
-        });
-        return false;
     }
 
-    async saveMapToServer(): Promise<void> {
-        this.clientHttpRequest.saveMapToServer(this.map).subscribe({
-            next: (savedMap) => {
-                this.map = savedMap;
-            },
-            error: (error) => {
-                console.error('Error saving map:', error);
-            },
-        });
 
-        await this.exportMapAsImage();
+    async loadMapFromServer(id: number): Promise<Boolean> {
+        return new Promise((resolve, reject) => {
+            this.errorList = [];
+            this.clientHttpRequest.loadMapById(id).subscribe({
+                next: (map: Map) => {
+                    this.map = this.createMapFromJSON(map);
+                    this.saveMapToSessionStorage();
+                    resolve(true);
+                },
+                error: (err) => {
+                    console.error('Error loading map:', err);
+                    reject(err);
+                },
+            });
+        });
+    }
+
+    async saveMapToServer(): Promise<MapVerification> { 
+        return new Promise((resolve, reject) => {
+            this.clientHttpRequest.saveMapToServer(this.map).subscribe({ 
+                next: (mapResponse) => {
+                    this.map.id = mapResponse.id;
+                    resolve(mapResponse.mapVerification);
+                },
+                error: (error) => {
+                    console.error('Error saving map:', error);
+                    reject(error);
+                },
+            });
+        });
+    }
+
+    handleMapVerificationError(mapVerification: MapVerification): void { 
+        this.errorList = [];
+        for (const [key, value] of Object.entries(mapVerification)) {
+            if (!value) {
+                this.errorList.push(key as keyof MapVerification);
+            }
+        }
     }
 
     async saveMap(): Promise<void> {
         this.saveMapToSessionStorage();
-        await this.saveMapToServer();
+        const mapVerification = await this.saveMapToServer();
+        this.handleMapVerificationError(mapVerification); 
+
+        if (this.errorList.length === 0) { 
+            await this.exportMapAsImage();
+            this.errorList = [];
+            this.router.navigate(['/admin']);
+        }
     }
 
     resetMap(): void {
@@ -156,6 +161,7 @@ export class MapService {
             return false;
         }
         this.map = this.createMapFromJSON(JSON.parse(mapJson));
+        
         return true;
     }
 
@@ -165,7 +171,7 @@ export class MapService {
 
     getTileTexture(row: number, column: number): string {
         const tileType: TileTypes = this.getTileType(row, column);
-        return `url(assets/tiles/${tileType}.png)`; // Use the tileType parameter
+        return `url(assets/tiles/${tileType}.png)`;
     }
 
     changeTileType(row: number, column: number, newType: TileTypes): void {
@@ -181,28 +187,28 @@ export class MapService {
     }
 
     placeGameObject(row: number, column: number, gameObject: ItemObject): void {
-        this.map.tileMatrix[row][column].gameObject = gameObject;
+        this.map.tileMatrix[row][column].itemObject = gameObject;
     }
 
     moveGameObject(row: number, column: number, newRow: number, newColumn: number): void {
-        this.map.tileMatrix[newRow][newColumn].gameObject = this.map.tileMatrix[row][column].gameObject;
-        this.map.tileMatrix[row][column].gameObject = null;
+        this.map.tileMatrix[newRow][newColumn].itemObject = this.map.tileMatrix[row][column].itemObject;
+        this.map.tileMatrix[row][column].itemObject = null;
     }
 
     getItemObject(row: number, column: number): ItemObject | null {
         try {
-            return this.map.tileMatrix[row][column].gameObject;
+            return this.map.tileMatrix[row][column].itemObject;
         } catch (error) {
             return null;
         }
     }
 
     removeGameObject(row: number, column: number): void {
-        this.map.tileMatrix[row][column].gameObject = null;
+        this.map.tileMatrix[row][column].itemObject = null;
     }
 
     resetItemToStartPosition(row: number, column: number, draggedItem: ItemObject): void {
-        this.map.tileMatrix[row][column].gameObject = draggedItem;
+        this.map.tileMatrix[row][column].itemObject = draggedItem;
     }
 
     async exportMapAsImage(): Promise<Blob | null> {

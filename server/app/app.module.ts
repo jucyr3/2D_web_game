@@ -11,6 +11,7 @@ import { ExampleService } from '@app/services/example/example.service';
 import { ExampleController } from '@app/controllers/example/example.controller';
 import { MapController } from './controllers/maps/map/map.controller';
 import { MapService } from './services/maps/map/map.service';
+import { MapVerificationService } from './services/mapVerification/mapVerification.service';
 
 @Module({
     imports: [
@@ -25,6 +26,6 @@ import { MapService } from './services/maps/map/map.service';
         MongooseModule.forFeature([{ name: Course.name, schema: courseSchema }]),
     ],
     controllers: [CourseController, DateController, ExampleController, MapController],
-    providers: [ChatGateway, CourseService, DateService, ExampleService, Logger, MapService],
+    providers: [ChatGateway, CourseService, DateService, ExampleService, Logger, MapService, MapVerificationService],
 })
 export class AppModule {}

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientHttpRequestsService } from '@app/services/client-http-requests.service';
-import { MapService } from '@app/services/map.service';
+import { MapService } from '@app/services/edit-services/map.service';
 import { Map } from '@common/map';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -33,9 +33,9 @@ export class GameActionsComponent {
         });
     }
 
-    editMap(map: Map) {
+    async editMap(map: Map) {
+        await this.mapService.loadMapFromServer(map.id);
         this.router.navigate(['edit', map.id]);
-        this.mapService.loadMapFromServer(map.id);
     }
 
     deleteMap(map: Map) {

@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GameGridComponent } from '@app/components/admin-game/games-grid/games-grid/games-grid.component';
 import { ModalComponent } from '@app/components/admin-game/modal/modal.component';
-import { MapService } from '@app/services/map.service';
+import { MapService } from '@app/services/edit-services/map.service';
 import { MapsForClientService } from '@app/services/maps-for-client.service';
 
 @Component({

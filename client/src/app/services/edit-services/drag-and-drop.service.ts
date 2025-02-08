@@ -15,13 +15,11 @@ export class DragAndDropService {
 
     private draggingStates: { [itemId: string]: { isDragging: boolean; dragX: number; dragY: number } } = {};
 
-    // Track the currently dragged item's ID
     private _currentDraggedItem: ItemObject | null = null;
     private _isDragging: boolean = false;
 
     constructor(private readonly mapService: MapService) {}
 
-    // Expose the currently dragged item's ID
     get currentDraggedItem(): ItemObject | null {
         return this._currentDraggedItem;
     }
@@ -62,7 +60,6 @@ export class DragAndDropService {
             this.draggingStates[itemId].isDragging = false;
         }
 
-        // Reset the currently dragged item's ID
         this._currentDraggedItem = null;
     }
 

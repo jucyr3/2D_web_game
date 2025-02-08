@@ -18,12 +18,7 @@ describe('MapService', () => {
         isVisible: true,
         description: 'First test map',
         gameMode: 'Classic' as const,
-        tileMatrix: [[{ 
-          type: TileTypes.GROUND_0, 
-          isOccupied: false, 
-          isObstacle: false,
-          gameObject: null
-        }]],
+        tileMatrix: [],
         lastModified: new Date(),
         previewImage: 'preview1.jpg'
       },
@@ -34,12 +29,7 @@ describe('MapService', () => {
         isVisible: false,
         description: 'Second test map',
         gameMode: 'CTF' as const,
-        tileMatrix: [[{ 
-          type: TileTypes.GROUND_0, 
-          isOccupied: true, 
-          isObstacle: true,
-          gameObject: { name: 'Test Object', description: 'Test description' }
-        }]],
+        tileMatrix: [],
         lastModified: new Date(),
         previewImage: 'preview2.jpg'
       }

@@ -1,6 +1,6 @@
 import { TileTypes } from '@common/tileType.constants';
 
-export const tileDescription: { [key: string]: { name: string; description: string } } = {
+export const tileDetails: { [key: string]: { name: string; description: string } } = {
     [TileTypes.GROUND_0]: {
         name: '❄️ Glace',
         description: 'Une surface glacée lisse et brillante. **Coût de marche : 0** - Glissez comme sur une banane !',

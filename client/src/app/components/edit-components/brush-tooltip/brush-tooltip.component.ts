@@ -1,31 +1,22 @@
 import { Component, Input } from '@angular/core';
 import { injectTippyRef } from '@ngneat/helipopper';
-import { tileDescription } from 'src/assets/tiles/tile-description';
-
+import { tileDetails } from '@app/../assets/tiles/tile-details';
+import { TileTypes } from '@common/tileType.constants';
 @Component({
     selector: 'app-brush-tooltip',
-    imports: [],
     templateUrl: './brush-tooltip.component.html',
     styleUrl: './brush-tooltip.component.scss',
 })
 export class BrushTooltipComponent {
-    @Input() tileType: string;
+    @Input() tileType: TileTypes;
 
     tippy = injectTippyRef();
 
-    get tileName(): string {
-        try {
-            return tileDescription[this.tileType].name;
-        } catch (e) {
-            return 'unknown tile';
-        }
+    get tileNameText(): string {
+        return tileDetails[this.tileType].name;
     }
 
-    get tileDescription(): string {
-        try {
-            return tileDescription[this.tileType].description;
-        } catch (e) {
-            return 'unknown tile so no description';
-        }
+    get tileDescriptionText(): string {
+        return tileDetails[this.tileType].description;
     }
 }

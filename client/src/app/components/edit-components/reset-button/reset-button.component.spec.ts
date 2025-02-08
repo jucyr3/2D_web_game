@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ResetButtonComponent } from './reset-button.component';
 import { By } from '@angular/platform-browser';
-import { MapService } from '@app/services/map.service'; // Import the actual MapService
+import { MapService } from '@app/services/edit-services/map.service';
 
 class MockMapService {
     resetMap = jasmine.createSpy('resetMap');
@@ -17,7 +17,7 @@ describe('ResetButtonComponent', () => {
 
         await TestBed.configureTestingModule({
             imports: [ResetButtonComponent],
-            providers: [{ provide: MapService, useValue: mockMapService }], // Provide MockMapService for MapService
+            providers: [{ provide: MapService, useValue: mockMapService }],
         }).compileComponents();
     });
 

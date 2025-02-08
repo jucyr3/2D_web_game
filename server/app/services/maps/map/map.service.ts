@@ -1,29 +1,11 @@
+import { MapVerificationService } from '@app/services/mapVerification/mapVerification.service';
 import { ItemObject } from '@common/ItemObject';
 import { Map } from '@common/map';
+import { MapResponse } from '@common/mapResponse';
 import { Tile } from '@common/Tile';
 import { TileTypes } from '@common/tileType.constants';
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs/promises';
-
-interface MapJson {
-    name: string;
-    id: number;
-    size: number;
-    isVisible: boolean;
-    description: string;
-    gameMode: 'CTF' | 'Classic';
-    tileMatrix: {
-        type: string;
-        isOccupied: boolean;
-        isObstacle: boolean;
-        gameObject?: {
-            name: string;
-            description: string;
-        } | null;
-    }[][];
-    lastModified: Date;
-    previewImage: string;
-}
 
 @Injectable()
 export class MapService {
@@ -31,14 +13,17 @@ export class MapService {
     private mapsFilePath = 'assets/maps.json';
     private maps: Map[] | null = null;
 
+    constructor(private mapVerificationService: MapVerificationService) {}
+
     async getAllMaps(): Promise<Map[]> {
         try {
             if (this.maps) {
                 return this.maps;
             }
-            const data = await fs.readFile(this.mapsFilePath, 'utf8'); // reads json file on server
+            const data = await fs.readFile(this.mapsFilePath, 'utf8'); 
             const mapsData = JSON.parse(data).maps;
             this.maps = mapsData.map((map) => this.loadMapFromJSON(map));
+            this.mapVerificationService.setAllMapsNames(this.maps); 
             return this.maps;
         } catch (error) {
             this.logger.error(`Failed to read maps: ${error.message}`, error.stack);
@@ -60,7 +45,8 @@ export class MapService {
 
     async getMapById(id: number): Promise<Map> {
         try {
-            const map = this.maps.find((map) => map.id === id);
+            const maps = await this.getAllMaps();
+            const map = maps.find((map) => map.id === id);
 
             if (!map) {
                 throw new NotFoundException(`Map with ID ${id} not found`);
@@ -75,25 +61,46 @@ export class MapService {
         }
     }
 
-    async saveMap(map: Map): Promise<Map> {
+    async saveMap(map: Map): Promise<MapResponse> {
         try {
-            const existingMapById = this.maps.find((m) => m.id === map.id);
-
+            const existingMapById = this.maps.find((m) => m.id === map.id); // si map Existe deja
+            
+            if (existingMapById){
+                this.mapVerificationService.removeMapName(existingMapById.name);
+            }
+            
+            const verification = this.mapVerificationService.validateGame(map);
+            
+            for (const [key, value] of Object.entries(verification)) {
+                if (!value) {
+                    return {
+                        id: 0,
+                        mapVerification: verification
+                    } as MapResponse;
+                }
+            }
+                        
             if (existingMapById) {
-                // si la map existe deja sur le serveur // on fait juste changer ses attributs
                 existingMapById.name = map.name;
                 existingMapById.description = map.description;
                 existingMapById.tileMatrix = map.tileMatrix;
                 existingMapById.previewImage = map.previewImage;
                 existingMapById.lastModified = new Date();
-                await this.saveMaps(this.maps); // Save
-                return existingMapById;
+                await this.saveMaps(this.maps); 
+                return {
+                    id: map.id,
+                    mapVerification: verification
+                } as MapResponse;
+            
             } else {
                 // sinon, on créé une nouvelle map
                 map.id = this.generateRandomId();
                 this.maps.push(map);
                 await this.saveMaps(this.maps); // Save
-                return map;
+                return {
+                    id: map.id,
+                    mapVerification: verification
+                } as MapResponse;
             }
         } catch (error) {
             if (error instanceof BadRequestException) {
@@ -167,6 +174,7 @@ export class MapService {
         try {
             await fs.writeFile(this.mapsFilePath, JSON.stringify({ maps: maps }, null, 2), 'utf8');
             this.maps = maps;
+            this.mapVerificationService.setAllMapsNames(this.maps);
         } catch (error) {
             this.logger.error(`Failed to save games: ${error.message}`, error.stack);
             throw new Error(`Failed to save games to file: ${error.message}`);
@@ -179,22 +187,19 @@ export class MapService {
         return parseInt(`${timestamp}${random}`);
     }
 
-    parseTileMatrix(json: MapJson): Tile[][] {
-        // eslint-disable-next-line
+    parseTileMatrix(json: Map): Tile[][] {
         return json.tileMatrix.map((row) =>
             row.map((tileData) => {
                 const type = tileData.type as TileTypes;
                 const isOccupied = tileData.isOccupied;
                 const isObstacle = tileData.isObstacle;
-                // TODO: Fix this
-                const gameObject = tileData.gameObject ? new ItemObject(tileData.gameObject.name) : null;
-
-                return new Tile(type, isOccupied, isObstacle, gameObject);
+                const itemObject: ItemObject | null = tileData.itemObject ? { name: tileData.itemObject.name } : null;
+                return { type, isOccupied, isObstacle, itemObject } as Tile;
             }),
         );
     }
 
-    loadMapFromJSON(json: MapJson): Map {
+    loadMapFromJSON(json: Map): Map {
         const tileMatrix = this.parseTileMatrix(json);
         return {
             id: json.id,
@@ -207,5 +212,5 @@ export class MapService {
             lastModified: json.lastModified || new Date(),
             previewImage: json.previewImage
         };
-     }
+    }
 }

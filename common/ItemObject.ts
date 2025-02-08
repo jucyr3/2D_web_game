@@ -5,19 +5,11 @@ export enum Items {
     attributeItem2 = 'attributeItem2',
     conditionItem2 = 'conditionItem2',
     gameplayItem2 = 'gameplayItem2',
-    spawnpoint = 'spawnpoint',
     randomItem = 'randomItem',
+    spawnpoint = 'spawnpoint',
     flag = 'flag',
 }
 
-export class ItemObject {
+export interface ItemObject {
     name: string;
-
-    constructor(name: string) {
-        this.name = name;
-    }
-
-    use(): void {
-        //useItemManager.useItem(name);
-    }
 }

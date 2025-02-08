@@ -11,8 +11,8 @@ import { GamePageComponent } from '@app/pages/game-page/game-page.component';
 import { MainPageComponent } from '@app/pages/main-page/main-page.component';
 import { MaterialPageComponent } from '@app/pages/material-page/material-page.component';
 import { TestComponent } from '@app/pages/test/test.component';
-import { WaitingRoomPageComponent } from '@app/pages/waiting-room-page/waiting-room-page.component';
 import { environment } from './environments/environment';
+import { WaitingRoomPageComponent } from '@app/pages/waiting-room-page/waiting-room-page.component';
 import { EditPageComponent } from '@app/pages/edit-page/edit-page.component';
 import { provideTippyLoader, provideTippyConfig, tooltipVariation, popperVariation } from '@ngneat/helipopper/config';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -47,6 +47,6 @@ bootstrapApplication(AppComponent, {
                 tooltip: tooltipVariation,
                 popper: popperVariation,
             },
-        }), provideAnimationsAsync(), provideAnimationsAsync(),
+        }), provideAnimationsAsync(),
     ],
 });

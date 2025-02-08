@@ -4,5 +4,8 @@
     "@ngneat/helipopper": "^10.2.0-alpha.2",
     "html-to-image": "^1.11.11",
     "html2canvas": "^1.4.1"
+  },
+  "devDependencies": {
+    "jasmine": "^5.5.0"
   }
 }

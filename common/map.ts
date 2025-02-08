@@ -9,5 +9,5 @@ export interface Map {
     gameMode: 'CTF' | 'Classic';
     tileMatrix: Tile[][];
     lastModified: Date;
-    previewImage: string;
+    previewImage?: string;
 }

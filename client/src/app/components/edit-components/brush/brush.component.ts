@@ -1,10 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { EditToolTypes } from '@app/services/editing-tool.constants';
-import { EditingToolService } from '@app/services/editing-tool.service';
+import { EditingToolService, EditToolTypes } from '@app/services/edit-services/editing-tool.service';
 import { TileTypes } from '@common/tileType.constants';
 import { TippyDirective } from '@ngneat/helipopper';
 import { BrushTooltipComponent } from '@app/components/edit-components/brush-tooltip/brush-tooltip.component';
-import { MouseService } from '@app/services/mouse.service';
+import { MouseService } from '@app/services/edit-services/mouse.service';
 
 @Component({
     selector: 'app-brush',
@@ -25,12 +24,8 @@ export class BrushComponent {
         return !this.mouseService.isMouseDown;
     }
 
-    changeTool(tool: EditToolTypes) {
-        this.editingToolService.setActiveTool(tool);
-    }
-
     changeBrushTile(tileType: TileTypes) {
-        this.changeTool(EditToolTypes.TileBrush);
+        this.editingToolService.setActiveTool(EditToolTypes.TileBrush);
         this.editingToolService.setTileTypeOnBrush(tileType);
     }
 }

@@ -5,7 +5,6 @@ const DEFAULT_STAT_VALUE = 4;
 
 @Component({
     selector: 'app-single-stat',
-    imports: [],
     templateUrl: './single-stat.component.html',
     styleUrl: './single-stat.component.scss',
 })
