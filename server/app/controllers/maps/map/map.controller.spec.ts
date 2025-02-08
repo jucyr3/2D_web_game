@@ -2,46 +2,63 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MapController } from './map.controller';
 import { MapService } from '@app/services/maps/map/map.service';
 import { Map } from '@common/map';
-import { NotFoundException } from '@nestjs/common';
+import { MapResponse } from '@common/mapResponse';
+import { HttpException, NotFoundException, Logger } from '@nestjs/common';
+import { TileTypes } from '@common/tileType.constants';
 
-fdescribe('MapController', () => {
-  let mapController: MapController;
-  let mapService: MapService;
+describe('MapController', () => {
+  let controller: MapController;
+  let mapService: jest.Mocked<MapService>;
+  let loggerSpy: jest.SpyInstance;
 
-  const mockMapService = {
-    getAllMaps: jest.fn(),
-    getMapById: jest.fn(),
-    getAllMapsByVisibility: jest.fn(),
-    saveMap: jest.fn(),
-    updateMapVisibility: jest.fn(),
-    updateMapImage: jest.fn(),
-    deleteMap: jest.fn()
+  const mockTileMatrix = [
+    [
+      { type: TileTypes.GROUND_0, isOccupied: false, isObstacle: false, itemObject: null },
+      { type: TileTypes.WALL, isOccupied: false, isObstacle: true, itemObject: null }
+    ],
+    [
+      { type: TileTypes.GROUND_1, isOccupied: true, isObstacle: false, itemObject: { name: 'StartPoint' } },
+      { type: TileTypes.DOOR, isOccupied: false, isObstacle: true, itemObject: null }
+    ]
+  ];
+
+  const mockMap: Map = {
+    id: 1,
+    name: 'Test Map',
+    size: 10,
+    isVisible: true,
+    description: 'Test Description',
+    gameMode: 'CTF',
+    tileMatrix: mockTileMatrix,
+    lastModified: new Date(),
+    previewImage: 'test.jpg'
   };
 
-  const mockMaps: Map[] = [
-    {
-      id: 1,
-      name: 'Test Map 1',
-      size: 10,
-      isVisible: true,
-      description: 'First test map',
-      gameMode: 'Classic',
-      tileMatrix: [],
-      lastModified: new Date(),
-      previewImage: 'preview1.jpg'
-    },
-    {
-      id: 2,
-      name: 'Test Map 2',
-      size: 12,
-      isVisible: false,
-      description: 'Second test map',
-      gameMode: 'CTF',
-      tileMatrix: [],
-      lastModified: new Date(),
-      previewImage: 'preview2.jpg'
-    }
-  ];
+  const mockMapVerification = {
+    isUniqueName: true,
+    isNamePresent: true,
+    isDescriptionPresent: true,
+    isMapHalfFloor: true,
+    isMapAccessible: true,
+    areStartingPointsValid: true,
+    areDoorsNextToWalls: true,
+    areDoorsNotNextToBorder: true,
+    isNameValid: true,
+    isDescriptionValid: true
+  };
+
+  const mockMapResponse: MapResponse = {
+    id: 1,
+    mapVerification: mockMapVerification
+  };
+
+  beforeAll(() => {
+    loggerSpy = jest.spyOn(Logger.prototype, 'error').mockImplementation(() => {});
+  });
+
+  afterAll(() => {
+    loggerSpy.mockRestore();
+  });
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -49,96 +66,185 @@ fdescribe('MapController', () => {
       providers: [
         {
           provide: MapService,
-          useValue: mockMapService
+          useValue: {
+            getAllMaps: jest.fn(),
+            getAllMapsByVisibility: jest.fn(),
+            getMapById: jest.fn(),
+            saveMap: jest.fn(),
+            updateMapVisibility: jest.fn(),
+            updateMapImage: jest.fn(),
+            deleteMap: jest.fn(),
+          }
         }
       ]
     }).compile();
 
-    mapController = module.get<MapController>(MapController);
-    mapService = module.get<MapService>(MapService);
-  });
+    controller = module.get<MapController>(MapController);
+    mapService = module.get(MapService);
 
-  afterEach(() => {
     jest.clearAllMocks();
   });
 
   describe('getAllMaps', () => {
-    it('should return all maps', async () => {
-      mockMapService.getAllMaps.mockResolvedValue(mockMaps);
+    it('should return an array of maps', async () => {
+      const maps = [mockMap];
+      mapService.getAllMaps.mockResolvedValue(maps);
 
-      const result = await mapController.getAllMaps();
-      expect(result).toEqual(mockMaps);
-      expect(mockMapService.getAllMaps).toHaveBeenCalled();
+      const result = await controller.getAllMaps();
+
+      expect(result).toEqual(maps);
+      expect(mapService.getAllMaps).toHaveBeenCalled();
+    });
+
+    it('should handle database errors appropriately', async () => {
+      const error = new Error('Database error');
+      mapService.getAllMaps.mockRejectedValue(error);
+
+      await expect(controller.getAllMaps()).rejects.toThrow(error);
+      expect(loggerSpy).toHaveBeenCalled();
+      expect(loggerSpy.mock.calls[0][0]).toMatch(/Failed to get all maps/);
     });
   });
 
   describe('getMapById', () => {
-    it('should return a map by ID', async () => {
-      const mockMap = mockMaps[0];
-      mockMapService.getMapById.mockResolvedValue(mockMap);
+    it('should return a single map', async () => {
+      mapService.getMapById.mockResolvedValue(mockMap);
 
-      const result = await mapController.getMapById(1);
+      const result = await controller.getMapById(1);
+
       expect(result).toEqual(mockMap);
-      expect(mockMapService.getMapById).toHaveBeenCalledWith(1);
+      expect(mapService.getMapById).toHaveBeenCalledWith(1);
     });
 
-    it('should throw NotFoundException for non-existent map', async () => {
-      mockMapService.getMapById.mockRejectedValue(new NotFoundException('Map not found'));
+    it('should handle not found errors properly', async () => {
+      const notFoundError = new NotFoundException('Map not found');
+      mapService.getMapById.mockRejectedValue(notFoundError);
 
-      await expect(mapController.getMapById(999)).rejects.toThrow(NotFoundException);
+      await expect(controller.getMapById(999)).rejects.toThrow(NotFoundException);
+      expect(loggerSpy).toHaveBeenCalled();
+      expect(loggerSpy.mock.calls[0][0]).toMatch(/Failed to get map/);
     });
   });
 
   describe('getMapsByVisibility', () => {
     it('should return visible maps', async () => {
-      const visibleMaps = mockMaps.filter(map => map.isVisible);
-      mockMapService.getAllMapsByVisibility.mockResolvedValue(visibleMaps);
+      const visibleMaps = [mockMap];
+      mapService.getAllMapsByVisibility.mockResolvedValue(visibleMaps);
 
-      const result = await mapController.getMapsByVisibility();
+      const result = await controller.getMapsByVisibility();
+
       expect(result).toEqual(visibleMaps);
-      expect(mockMapService.getAllMapsByVisibility).toHaveBeenCalled();
+      expect(mapService.getAllMapsByVisibility).toHaveBeenCalled();
+    });
+
+    it('should handle service errors appropriately', async () => {
+      const error = new Error('Service error');
+      mapService.getAllMapsByVisibility.mockRejectedValue(error);
+
+      await expect(controller.getMapsByVisibility()).rejects.toThrow(error);
+      expect(loggerSpy).toHaveBeenCalled();
+      expect(loggerSpy.mock.calls[0][0]).toMatch(/Failed to get maps by visibility/);
     });
   });
 
   describe('saveMap', () => {
-    it('should create a new map', async () => {
-      const newMap = mockMaps[0];
-      mockMapService.saveMap.mockResolvedValue(newMap);
+    it('should create a new map successfully', async () => {
+      mapService.saveMap.mockResolvedValue(mockMapResponse);
 
-      const result = await mapController.saveMap(newMap);
-      expect(result).toEqual(newMap);
-      expect(mockMapService.saveMap).toHaveBeenCalledWith(newMap);
+      const result = await controller.saveMap(mockMap);
+
+      expect(result).toEqual(mockMapResponse);
+      expect(mapService.saveMap).toHaveBeenCalledWith(mockMap);
+    });
+
+    it('should handle validation failures appropriately', async () => {
+      const invalidResponse = {
+        id: 0,
+        mapVerification: { ...mockMapVerification, isUniqueName: false }
+      };
+      mapService.saveMap.mockResolvedValue(invalidResponse);
+
+      const result = await controller.saveMap(mockMap);
+
+      expect(result.id).toBe(0);
+      expect(result.mapVerification.isUniqueName).toBe(false);
+    });
+
+    it('should handle service errors with proper status code', async () => {
+      const serviceError = new Error('Service error');
+      mapService.saveMap.mockRejectedValue(serviceError);
+
+      await expect(controller.saveMap(mockMap)).rejects.toThrow(HttpException);
+      expect(loggerSpy).toHaveBeenCalled();
+      expect(loggerSpy.mock.calls[0][0]).toMatch(/Failed to create map/);
+      expect(loggerSpy.mock.calls[0][0]).toContain(serviceError.message);
     });
   });
 
   describe('updateMapVisibility', () => {
-    it('should update map visibility', async () => {
-      const updatedMap = { ...mockMaps[0], isVisible: false };
-      mockMapService.updateMapVisibility.mockResolvedValue(updatedMap);
+    it('should update map visibility successfully', async () => {
+      const updatedMap = { ...mockMap, isVisible: false };
+      mapService.updateMapVisibility.mockResolvedValue(updatedMap);
 
-      const result = await mapController.updateMapVisibility(1, false);
-      expect(result).toEqual(updatedMap);
-      expect(mockMapService.updateMapVisibility).toHaveBeenCalledWith(1, false);
+      const result = await controller.updateMapVisibility(1, false);
+
+      expect(result.isVisible).toBe(false);
+      expect(mapService.updateMapVisibility).toHaveBeenCalledWith(1, false);
+    });
+
+    it('should handle not found errors properly', async () => {
+      mapService.updateMapVisibility.mockRejectedValue(new NotFoundException());
+
+      await expect(controller.updateMapVisibility(999, false)).rejects.toThrow(NotFoundException);
+      expect(loggerSpy).toHaveBeenCalled();
+      expect(loggerSpy.mock.calls[0][0]).toMatch(/Failed to update map.*visibility/);
     });
   });
 
   describe('updatePreviewImage', () => {
-    it('should update map preview image', async () => {
-      const updatedMap = { ...mockMaps[0], previewImage: 'new-preview.jpg' };
-      mockMapService.updateMapImage.mockResolvedValue(updatedMap);
+    it('should update preview image successfully', async () => {
+      const updatedMap = { ...mockMap, previewImage: 'new-image.jpg' };
+      mapService.updateMapImage.mockResolvedValue(updatedMap);
 
-      const result = await mapController.updatePreviewImage(1, 'new-preview.jpg');
-      expect(result).toEqual(updatedMap);
-      expect(mockMapService.updateMapImage).toHaveBeenCalledWith(1, 'new-preview.jpg');
+      const result = await controller.updatePreviewImage(1, 'new-image.jpg');
+
+      expect(result.previewImage).toBe('new-image.jpg');
+      expect(mapService.updateMapImage).toHaveBeenCalledWith(1, 'new-image.jpg');
+    });
+
+    it('should handle update errors properly', async () => {
+      mapService.updateMapImage.mockRejectedValue(new NotFoundException());
+
+      await expect(controller.updatePreviewImage(999, 'new-image.jpg')).rejects.toThrow(NotFoundException);
+      expect(loggerSpy).toHaveBeenCalled();
+      expect(loggerSpy.mock.calls[0][0]).toMatch(/Failed to update map.*image/);
     });
   });
 
   describe('deleteMap', () => {
-    it('should delete a map', async () => {
-      mockMapService.deleteMap.mockResolvedValue(undefined);
+    it('should delete map successfully', async () => {
+      mapService.deleteMap.mockResolvedValue(undefined);
 
-      await expect(mapController.deleteMap(1)).resolves.toBeUndefined();
-      expect(mockMapService.deleteMap).toHaveBeenCalledWith(1);
+      await controller.deleteMap(1);
+
+      expect(mapService.deleteMap).toHaveBeenCalledWith(1);
+    });
+
+    it('should handle delete errors properly', async () => {
+      const error = new Error('Delete failed');
+      mapService.deleteMap.mockRejectedValue(error);
+
+      await expect(controller.deleteMap(1)).rejects.toThrow('Delete failed');
+      expect(loggerSpy).toHaveBeenCalled();
+      expect(loggerSpy.mock.calls[0][0]).toMatch(/Failed to delete map/);
+    });
+
+    it('should handle not found errors during deletion', async () => {
+      mapService.deleteMap.mockRejectedValue(new NotFoundException());
+
+      await expect(controller.deleteMap(999)).rejects.toThrow(NotFoundException);
+      expect(loggerSpy).toHaveBeenCalled();
+      expect(loggerSpy.mock.calls[0][0]).toMatch(/Failed to delete map/);
     });
   });
 });
