@@ -5,21 +5,20 @@ import { PreviewContainerComponent } from '@app/components/admin-game/preview-co
 import { MapsForClientService } from '@app/services/maps-for-client.service';
 
 @Component({
-  selector: 'app-maps-grid',
-  imports: [CommonModule, PreviewContainerComponent, GameInfoComponent],
-  templateUrl: './maps-grid.component.html',
-  styleUrl: './maps-grid.component.scss'
+    selector: 'app-maps-grid',
+    imports: [CommonModule, PreviewContainerComponent, GameInfoComponent],
+    templateUrl: './maps-grid.component.html',
+    styleUrl: './maps-grid.component.scss',
 })
 export class MapsGridComponent implements OnInit {
-  
-  constructor(protected mapsForClientService: MapsForClientService) {}
+    constructor(protected mapsForClientService: MapsForClientService) {}
 
-  ngOnInit(): void {
-    this.onRefresh();
-  }
-  
-  onRefresh(): void {
-    this.mapsForClientService.loadMapsByVisibility();
-    this.mapsForClientService.changeClickedMap(null);
-  }
+    ngOnInit(): void {
+        this.onRefresh();
+    }
+
+    onRefresh(): void {
+        this.mapsForClientService.loadMapsByVisibility();
+        this.mapsForClientService.changeClickedMap(null);
+    }
 }

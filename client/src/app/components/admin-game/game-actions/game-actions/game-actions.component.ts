@@ -24,7 +24,7 @@ export class GameActionsComponent {
 
     toggleVisibility(map: Map) {
         this.clientHttpRequest.updateMapVisibility(map.id, !map.isVisible).subscribe({
-            next: (updatedMap) => {
+            next: () => {
                 this.refresh.emit();
             },
             error: (error) => {

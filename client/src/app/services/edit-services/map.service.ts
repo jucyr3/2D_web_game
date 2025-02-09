@@ -17,7 +17,10 @@ export class MapService {
     itemManager: ItemManager;
     errorList: string[] = [];
 
-    constructor(protected clientHttpRequest: ClientHttpRequestsService, private router: Router) {
+    constructor(
+        protected clientHttpRequest: ClientHttpRequestsService,
+        private router: Router,
+    ) {
         if (!this.loadMapFromSessionStorage()) {
             this.setDefaultMap();
             this.saveMapToSessionStorage();
@@ -42,12 +45,13 @@ export class MapService {
         };
     }
 
-    createEmptyMap(mapData: { name: string; gameMode: 'Classic' | 'CTF'; size: string }): void { // TODO : NEEDS TESTING
+    createEmptyMap(mapData: { name: string; gameMode: 'Classic' | 'CTF'; size: string }): void {
+        // TODO : NEEDS TESTING
         const size = Number(mapData.size);
         const defaultMap: Map = {
             id: 0,
             name: mapData.name,
-            size: size,
+            size,
             isVisible: false,
             description: '',
             gameMode: mapData.gameMode,
@@ -55,11 +59,11 @@ export class MapService {
                 Array.from({ length: size }, () => ({ type: TileTypes.GROUND_1, isOccupied: false, isObstacle: false, itemObject: null }) as Tile),
             ),
             lastModified: new Date(),
-            previewImage: ""
+            previewImage: '',
         };
         this.map = defaultMap;
         this.itemManager = new ItemManager(size, mapData.gameMode);
-     }
+    }
 
     parseTileMatrix(json: Map): Tile[][] {
         return json.tileMatrix.map((row) =>
@@ -93,7 +97,6 @@ export class MapService {
         };
     }
 
-
     async loadMapFromServer(id: number): Promise<Boolean> {
         return new Promise((resolve, reject) => {
             this.errorList = [];
@@ -111,9 +114,9 @@ export class MapService {
         });
     }
 
-    async saveMapToServer(): Promise<MapVerification> { 
+    async saveMapToServer(): Promise<MapVerification> {
         return new Promise((resolve, reject) => {
-            this.clientHttpRequest.saveMapToServer(this.map).subscribe({ 
+            this.clientHttpRequest.saveMapToServer(this.map).subscribe({
                 next: (mapResponse) => {
                     this.map.id = mapResponse.id;
                     resolve(mapResponse.mapVerification);
@@ -126,7 +129,7 @@ export class MapService {
         });
     }
 
-    handleMapVerificationError(mapVerification: MapVerification): void { 
+    handleMapVerificationError(mapVerification: MapVerification): void {
         this.errorList = [];
         for (const [key, value] of Object.entries(mapVerification)) {
             if (!value) {
@@ -138,9 +141,9 @@ export class MapService {
     async saveMap(): Promise<void> {
         this.saveMapToSessionStorage();
         const mapVerification = await this.saveMapToServer();
-        this.handleMapVerificationError(mapVerification); 
+        this.handleMapVerificationError(mapVerification);
 
-        if (this.errorList.length === 0) { 
+        if (this.errorList.length === 0) {
             await this.exportMapAsImage();
             this.errorList = [];
             this.router.navigate(['/admin']);
@@ -161,7 +164,7 @@ export class MapService {
             return false;
         }
         this.map = this.createMapFromJSON(JSON.parse(mapJson));
-        
+
         return true;
     }
 
@@ -213,71 +216,56 @@ export class MapService {
 
     async exportMapAsImage(): Promise<Blob | null> {
         const mapElement = document.querySelector('.map') as HTMLElement;
-
+    
         if (!mapElement) {
-            console.error('Map element not found');
-            return null;
+            throw new Error('Map element not found');
         }
-
+    
         try {
-            // Get dimensions but scale them down
             const mapRect = mapElement.getBoundingClientRect();
-            const scaleFactor = 1.0; // Reduce to 50%
-
+            const scaleFactor = 1.0;
             const dataUrl = await htmlToImage.toPng(mapElement, {
-                quality: 0.2, // Reduce quality significantly
+                quality: 0.2,
                 width: mapRect.width * scaleFactor,
                 height: mapRect.height * scaleFactor,
                 pixelRatio: 0.5,
                 skipAutoScale: true,
-                style: {
-                    transform: 'none',
-                },
-                // Add more aggressive compression options
+                style: { transform: 'none' },
                 canvasWidth: mapRect.width * scaleFactor,
                 canvasHeight: mapRect.height * scaleFactor,
-                backgroundColor: '#fff', // Set background to reduce transparency data
+                backgroundColor: '#fff',
             });
-
-            // Convert to JPEG for better compression (instead of PNG)
+    
             const canvas = document.createElement('canvas');
             const img = new Image();
-
-            await new Promise((resolve) => {
-                img.onload = resolve;
+            await new Promise<void>((resolve) => {
+                img.onload = () => resolve();
                 img.src = dataUrl;
             });
-
+    
             canvas.width = img.width;
             canvas.height = img.height;
             const ctx = canvas.getContext('2d');
-            ctx?.drawImage(img, 0, 0);
-
-            // Get compressed JPEG data
+            
+            if (!ctx) {
+                throw new Error('Failed to get canvas context');
+            }
+    
+            ctx.drawImage(img, 0, 0);
             const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.3);
             const base64String = compressedDataUrl.split(',')[1];
-
-            // Log size for debugging
-            console.log('Image size (KB):', Math.round(base64String.length / 1024));
-
+    
             this.clientHttpRequest.saveMapImageOnServer(this.map.id, base64String).subscribe({
-                next: (updatedMap) => {
-                    console.log('Map preview image saved successfully');
-                },
-                error: (error) => {
-                    console.error('Error saving map preview image:', error);
-                },
+                error: (error: Error) => {
+                    throw new Error(`Failed to save map preview image: ${error.message}`);
+                }
             });
-
-            // Create download with compressed version
+    
             const response = await fetch(compressedDataUrl);
-            const blob = await response.blob();
-
-            return blob;
-        
+            return response.blob();
         } catch (error) {
-            console.error('Error exporting map as image:', error);
-            return null;
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            throw new Error(`Error exporting map as image: ${errorMessage}`);
         }
     }
 

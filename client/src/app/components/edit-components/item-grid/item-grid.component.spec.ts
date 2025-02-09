@@ -12,10 +12,7 @@ describe('ItemGridComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [
-                ItemGridComponent,
-                HttpClientTestingModule
-            ],
+            imports: [ItemGridComponent, HttpClientTestingModule],
             providers: [
                 DragAndDropService,
                 MapService,

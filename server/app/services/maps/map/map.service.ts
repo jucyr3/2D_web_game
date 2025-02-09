@@ -20,10 +20,10 @@ export class MapService {
             if (this.maps) {
                 return this.maps;
             }
-            const data = await fs.readFile(this.mapsFilePath, 'utf8'); 
+            const data = await fs.readFile(this.mapsFilePath, 'utf8');
             const mapsData = JSON.parse(data).maps;
             this.maps = mapsData.map((map) => this.loadMapFromJSON(map));
-            this.mapVerificationService.setAllMapsNames(this.maps); 
+            this.mapVerificationService.setAllMapsNames(this.maps);
             return this.maps;
         } catch (error) {
             this.logger.error(`Failed to read maps: ${error.message}`, error.stack);
@@ -46,12 +46,11 @@ export class MapService {
     async getMapById(id: number): Promise<Map> {
         try {
             const maps = await this.getAllMaps();
-            const map = maps.find((map) => map.id === id);
-
-            if (!map) {
+            const foundMap = maps.find((currentMap) => currentMap.id === id);
+            if (!foundMap) {
                 throw new NotFoundException(`Map with ID ${id} not found`);
             }
-            return map;
+            return foundMap;
         } catch (error) {
             if (error instanceof NotFoundException) {
                 throw error;
@@ -64,34 +63,39 @@ export class MapService {
     async saveMap(map: Map): Promise<MapResponse> {
         try {
             const existingMapById = this.maps.find((m) => m.id === map.id); // si map Existe deja
-            
-            if (existingMapById){
+
+            if (existingMapById) {
                 this.mapVerificationService.removeMapName(existingMapById.name);
             }
-            
+
             const verification = this.mapVerificationService.validateGame(map);
-            
-            for (const [key, value] of Object.entries(verification)) {
-                if (!value) {
+
+            for (const [, value] of Object.entries(verification)) {
+                if (!value && !existingMapById) {
                     return {
                         id: 0,
-                        mapVerification: verification
+                        mapVerification: verification,
+                    } as MapResponse;
+                }
+                if (!value && existingMapById) {
+                    return {
+                        id: map.id,
+                        mapVerification: verification,
                     } as MapResponse;
                 }
             }
-                        
+
             if (existingMapById) {
                 existingMapById.name = map.name;
                 existingMapById.description = map.description;
                 existingMapById.tileMatrix = map.tileMatrix;
                 existingMapById.previewImage = map.previewImage;
                 existingMapById.lastModified = new Date();
-                await this.saveMaps(this.maps); 
+                await this.saveMaps(this.maps);
                 return {
                     id: map.id,
-                    mapVerification: verification
+                    mapVerification: verification,
                 } as MapResponse;
-            
             } else {
                 // sinon, on créé une nouvelle map
                 map.id = this.generateRandomId();
@@ -99,7 +103,7 @@ export class MapService {
                 await this.saveMaps(this.maps); // Save
                 return {
                     id: map.id,
-                    mapVerification: verification
+                    mapVerification: verification,
                 } as MapResponse;
             }
         } catch (error) {
@@ -170,23 +174,6 @@ export class MapService {
         }
     }
 
-    private async saveMaps(maps: Map[]): Promise<void> {
-        try {
-            await fs.writeFile(this.mapsFilePath, JSON.stringify({ maps: maps }, null, 2), 'utf8');
-            this.maps = maps;
-            this.mapVerificationService.setAllMapsNames(this.maps);
-        } catch (error) {
-            this.logger.error(`Failed to save games: ${error.message}`, error.stack);
-            throw new Error(`Failed to save games to file: ${error.message}`);
-        }
-    }
-
-    private generateRandomId(): number {
-        const timestamp = Date.now();
-        const random = Math.floor(Math.random() * 10000);
-        return parseInt(`${timestamp}${random}`);
-    }
-
     parseTileMatrix(json: Map): Tile[][] {
         return json.tileMatrix.map((row) =>
             row.map((tileData) => {
@@ -208,9 +195,27 @@ export class MapService {
             isVisible: json.isVisible,
             description: json.description,
             gameMode: json.gameMode,
-            tileMatrix: tileMatrix,
+            tileMatrix,
             lastModified: json.lastModified || new Date(),
-            previewImage: json.previewImage
+            previewImage: json.previewImage,
         };
+    }
+
+    private async saveMaps(maps: Map[]): Promise<void> {
+        try {
+            await fs.writeFile(this.mapsFilePath, JSON.stringify({ maps }, null, 2), 'utf8');
+            this.maps = maps;
+            this.mapVerificationService.setAllMapsNames(this.maps);
+        } catch (error) {
+            this.logger.error(`Failed to save games: ${error.message}`, error.stack);
+            throw new Error(`Failed to save games to file: ${error.message}`);
+        }
+    }
+
+    private generateRandomId(): number {
+        const MAX_RANDOM_VALUE = 10000;
+        const timestamp = Date.now();
+        const random = Math.floor(Math.random() * MAX_RANDOM_VALUE);
+        return parseInt(`${timestamp}${random}`, 10);
     }
 }

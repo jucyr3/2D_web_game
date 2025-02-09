@@ -47,25 +47,24 @@ export class AdminPageComponent {
         const existingMap = this.mapsForClientService.mapsSubject.getValue().find(
             map => map.name.toLowerCase() === formData.mapName.trim().toLowerCase()
         );
-        
+
         if (existingMap) {
             alert('Map name already exists');
             return false;
         }
-    
+
         const validSizes = ['PETITE', 'MOYENNE', 'GRANDE'];
         if (!validSizes.includes(formData.mapSize)) {
             alert('Invalid map size');
             return false;
         }
-    
+
         const mapData = {
             name: formData.mapName.trim(),
             gameMode: formData.mapMode,
-            size: formData.mapSize === 'PETITE' ? '10' : 
-                  formData.mapSize === 'MOYENNE' ? '15' : '20',
+            size: formData.mapSize === 'PETITE' ? '10' : formData.mapSize === 'MOYENNE' ? '15' : '20',
         };
-    
+
         try {
             this.mapService.createEmptyMap(mapData);
             this.router.navigate(['edit']);

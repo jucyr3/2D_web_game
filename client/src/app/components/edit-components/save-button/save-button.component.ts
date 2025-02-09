@@ -7,9 +7,7 @@ import { MapService } from '@app/services/edit-services/map.service';
     styleUrl: './save-button.component.scss',
 })
 export class SaveButtonComponent {
-    constructor(
-        protected mapService: MapService,
-    ) {}
+    constructor(protected mapService: MapService) {}
 
     async saveMap() {
         await this.mapService.saveMap();

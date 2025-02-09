@@ -16,10 +16,10 @@
 //   let fixture: ComponentFixture<GameGridComponent>;
 //   let mapsService: MapsForClientService;
 //   let httpService: jasmine.SpyObj<ClientHttpRequestsService>;
-  
+
 //   const testDate = new Date('2025-02-06T12:14:33-05:00');
-//   const createTileMatrix = (size: number): Tile[][] => 
-//     Array(size).fill(null).map(() => 
+//   const createTileMatrix = (size: number): Tile[][] =>
+//     Array(size).fill(null).map(() =>
 //         Array(size).fill(null).map(() => ({
 //             type: TileTypes.GROUND_0,
 //             isOccupied: false,

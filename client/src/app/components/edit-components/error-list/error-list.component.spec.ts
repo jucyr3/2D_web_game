@@ -9,13 +9,8 @@ describe('ErrorListComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [
-                ErrorListComponent,
-                HttpClientTestingModule
-            ],
-            providers: [
-                ClientHttpRequestsService
-            ]
+            imports: [ErrorListComponent, HttpClientTestingModule],
+            providers: [ClientHttpRequestsService],
         }).compileComponents();
 
         fixture = TestBed.createComponent(ErrorListComponent);

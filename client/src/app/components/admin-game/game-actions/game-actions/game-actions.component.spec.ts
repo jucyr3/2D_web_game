@@ -21,9 +21,9 @@ describe('GameActionsComponent', () => {
         isVisible: true,
         description: 'Test description',
         gameMode: 'Classic',
-        tileMatrix: Array(10).fill(Array(10).fill(null)),
+        tileMatrix: [],
         lastModified: new Date('2024-02-06'),
-        previewImage: 'test-image.png'
+        previewImage: 'test-image.png',
     };
 
     beforeEach(async () => {
@@ -37,8 +37,8 @@ describe('GameActionsComponent', () => {
             providers: [
                 { provide: ClientHttpRequestsService, useValue: clientHttpRequestSpy },
                 { provide: MapService, useValue: mapServiceSpy },
-                { provide: Router, useValue: routerSpy }
-            ]
+                { provide: Router, useValue: routerSpy },
+            ],
         }).compileComponents();
 
         fixture = TestBed.createComponent(GameActionsComponent);
@@ -73,7 +73,6 @@ describe('GameActionsComponent', () => {
         });
     });
 
-
     describe('deleteMap', () => {
         it('should emit refresh event on successful deletion when confirmed', () => {
             confirmSpy.and.returnValue(true);
@@ -99,7 +98,7 @@ describe('GameActionsComponent', () => {
 
         it('should not delete when user cancels confirmation', () => {
             confirmSpy.and.returnValue(false);
-            
+
             component.deleteMap(mockMap);
 
             expect(clientHttpRequestSpy.deleteMap).not.toHaveBeenCalled();

@@ -5,18 +5,17 @@ import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
 
 export class MapVerificationService {
-    // temporary storage for game name
     private gameNames: Set<string> = new Set(['test']); // TODO : REPRENDRE TOUS LES NOMS DES MAPS DANS LA DB
 
     setGameNames(gameNames: { name: string }[]): void {
         this.gameNames = new Set(gameNames.map((game) => game.name));
     }
 
-    setAllMapsNames(maps: Map[]): void { 
+    setAllMapsNames(maps: Map[]): void {
         this.gameNames = new Set(maps.map((map) => map.name));
     }
 
-    isUniqueName(name: string): boolean { 
+    isUniqueName(name: string): boolean {
         return !this.gameNames.has(name);
     }
 
@@ -25,7 +24,6 @@ export class MapVerificationService {
     }
 
     isNameValid(map: Map): boolean {
-        console.log(map.name);
         return map.name.length > 0 && map.name.length <= MapProperties.MAX_MAP_NAME;
     }
 
@@ -194,7 +192,6 @@ export class MapVerificationService {
     validateGame(map: Map): MapVerification {
         const verification: MapVerification = {
             isUniqueName: this.isUniqueName(map.name),
-            //isNamePresent: !!map.name,
             isNamePresent: this.isNameValid(map),
             isDescriptionPresent: !!map.description,
             isMapHalfFloor: this.isMapHalfFloor(map),
