@@ -12,6 +12,7 @@ describe('CreateMatchPageComponent', () => {
     let router: jasmine.SpyObj<Router>;
     let mapsForClient: jasmine.SpyObj<MapsForClientService>;
     let clientHttpRequest: jasmine.SpyObj<ClientHttpRequestsService>;
+    let clickedMapValue: Map | null;
 
     const mockMap: Map = {
         id: 1,
@@ -25,16 +26,20 @@ describe('CreateMatchPageComponent', () => {
     };
 
     beforeEach(async () => {
+        clickedMapValue = null;
+
         const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-        const mapsForClientSpy = jasmine.createSpyObj(
-            'MapsForClientService',
-            ['loadMaps', 'loadMapsByVisibility', 'changeSelectedMap', 'changeClickedMap'],
-            {
-                clickedMap: null,
-                mapsSubject: of([mockMap]),
-                maps$: of([mockMap]),
+        const mapsForClientSpy = {
+            ...jasmine.createSpyObj('MapsForClientService', ['loadMaps', 'loadMapsByVisibility', 'changeSelectedMap', 'changeClickedMap']),
+            get clickedMap() {
+                return clickedMapValue;
             },
-        );
+            set clickedMap(value) {
+                clickedMapValue = value;
+            },
+            mapsSubject: of([mockMap]),
+            maps$: of([mockMap]),
+        };
         const clientHttpRequestSpy = jasmine.createSpyObj('ClientHttpRequestsService', ['getAllMapsByVisibility']);
 
         await TestBed.configureTestingModule({
@@ -50,7 +55,6 @@ describe('CreateMatchPageComponent', () => {
         mapsForClient = TestBed.inject(MapsForClientService) as jasmine.SpyObj<MapsForClientService>;
         clientHttpRequest = TestBed.inject(ClientHttpRequestsService) as jasmine.SpyObj<ClientHttpRequestsService>;
 
-        // Setup default spy behavior
         mapsForClient.loadMapsByVisibility.and.returnValue(undefined);
         mapsForClient.loadMaps.and.returnValue(undefined);
     });
@@ -67,13 +71,13 @@ describe('CreateMatchPageComponent', () => {
 
     describe('createGame', () => {
         it('should do nothing if no map is clicked', () => {
-            Object.defineProperty(mapsForClient, 'clickedMap', { value: null });
+            clickedMapValue = null;
             component.createGame();
             expect(clientHttpRequest.getAllMapsByVisibility).not.toHaveBeenCalled();
         });
 
         it('should navigate to character page if clicked map is visible', fakeAsync(() => {
-            Object.defineProperty(mapsForClient, 'clickedMap', { value: mockMap });
+            clickedMapValue = mockMap;
             clientHttpRequest.getAllMapsByVisibility.and.returnValue(of([mockMap]));
 
             component.createGame();
@@ -82,9 +86,9 @@ describe('CreateMatchPageComponent', () => {
             expect(router.navigate).toHaveBeenCalledWith(['/character']);
         }));
 
-        it('should show alert and refresh maps if clicked map is not visible', fakeAsync(() => {
+        it('should show alert, refresh maps, and clear clicked map if clicked map is not visible', fakeAsync(() => {
             const invisibleMap = { ...mockMap, isVisible: false };
-            Object.defineProperty(mapsForClient, 'clickedMap', { value: invisibleMap });
+            clickedMapValue = invisibleMap;
             clientHttpRequest.getAllMapsByVisibility.and.returnValue(of([]));
 
             spyOn(window, 'alert');
@@ -94,51 +98,51 @@ describe('CreateMatchPageComponent', () => {
 
             expect(window.alert).toHaveBeenCalledWith('la map sélectionnée fut cachée ou effacée');
             expect(mapsForClient.loadMapsByVisibility).toHaveBeenCalled();
+            expect(mapsForClient.clickedMap).toBeNull();
             expect(router.navigate).not.toHaveBeenCalled();
         }));
+    });
 
-        describe('onBodyClick', () => {
-            it('should clear clickedMap if click is outside game-card and button', () => {
-                const mockEvent = new MouseEvent('click');
-                const mockTarget = document.createElement('div');
-                Object.defineProperty(mockEvent, 'target', { value: mockTarget });
+    describe('onBodyClick', () => {
+        it('should clear clickedMap if click is outside game-card and button', () => {
+            const mockEvent = new MouseEvent('click');
+            const mockTarget = document.createElement('div');
+            Object.defineProperty(mockEvent, 'target', { value: mockTarget });
 
-                component.onBodyClick(mockEvent);
+            clickedMapValue = mockMap;
+            component.onBodyClick(mockEvent);
 
-                expect(mapsForClient.clickedMap).toBeNull();
-            });
-
-            it('should not clear clickedMap if click is inside game-card', () => {
-                const mockEvent = new MouseEvent('click');
-                const mockTarget = document.createElement('div');
-                mockTarget.className = 'game-card';
-                Object.defineProperty(mockEvent, 'target', { value: mockTarget });
-
-                Object.defineProperty(mapsForClient, 'clickedMap', { value: mockMap });
-
-                component.onBodyClick(mockEvent);
-
-                expect(mapsForClient.clickedMap).toBe(mockMap);
-            });
-
-            it('should not clear clickedMap if click is on a button', () => {
-                const mockEvent = new MouseEvent('click');
-                const mockTarget = document.createElement('button');
-                Object.defineProperty(mockEvent, 'target', { value: mockTarget });
-
-                Object.defineProperty(mapsForClient, 'clickedMap', { value: mockMap });
-
-                component.onBodyClick(mockEvent);
-
-                expect(mapsForClient.clickedMap).toBe(mockMap);
-            });
+            expect(mapsForClient.clickedMap).toBeNull();
         });
 
-        describe('openQuitDialog', () => {
-            it('should navigate to home page', () => {
-                component.openQuitDialog();
-                expect(router.navigate).toHaveBeenCalledWith(['/home']);
-            });
+        it('should not clear clickedMap if click is inside game-card', () => {
+            const mockEvent = new MouseEvent('click');
+            const mockTarget = document.createElement('div');
+            mockTarget.className = 'game-card';
+            Object.defineProperty(mockEvent, 'target', { value: mockTarget });
+
+            clickedMapValue = mockMap;
+            component.onBodyClick(mockEvent);
+
+            expect(mapsForClient.clickedMap).toBe(mockMap);
+        });
+
+        it('should not clear clickedMap if click is on a button', () => {
+            const mockEvent = new MouseEvent('click');
+            const mockTarget = document.createElement('button');
+            Object.defineProperty(mockEvent, 'target', { value: mockTarget });
+
+            clickedMapValue = mockMap;
+            component.onBodyClick(mockEvent);
+
+            expect(mapsForClient.clickedMap).toBe(mockMap);
+        });
+    });
+
+    describe('openQuitDialog', () => {
+        it('should navigate to home page', () => {
+            component.openQuitDialog();
+            expect(router.navigate).toHaveBeenCalledWith(['/home']);
         });
     });
 });
