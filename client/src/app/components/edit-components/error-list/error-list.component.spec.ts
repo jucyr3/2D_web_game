@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ErrorListComponent } from './error-list.component';
 import { ClientHttpRequestsService } from '@app/services/client-http-requests.service';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('ErrorListComponent', () => {
     let component: ErrorListComponent;
@@ -9,8 +10,8 @@ describe('ErrorListComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ErrorListComponent, HttpClientTestingModule],
-            providers: [ClientHttpRequestsService],
+            imports: [ErrorListComponent],
+            providers: [ClientHttpRequestsService, provideHttpClientTesting(), provideHttpClient()],
         }).compileComponents();
 
         fixture = TestBed.createComponent(ErrorListComponent);

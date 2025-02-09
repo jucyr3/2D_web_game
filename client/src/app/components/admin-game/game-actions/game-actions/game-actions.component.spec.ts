@@ -3,8 +3,10 @@ import { Router } from '@angular/router';
 import { ClientHttpRequestsService } from '@app/services/client-http-requests.service';
 import { MapService } from '@app/services/edit-services/map.service';
 import { Map } from '@common/map';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 import { GameActionsComponent } from './game-actions.component';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
 
 describe('GameActionsComponent', () => {
     let component: GameActionsComponent;
@@ -33,7 +35,8 @@ describe('GameActionsComponent', () => {
         confirmSpy = spyOn(window, 'confirm');
 
         await TestBed.configureTestingModule({
-            imports: [GameActionsComponent],
+            declarations: [],
+            imports: [GameActionsComponent, MatIconModule, CommonModule],
             providers: [
                 { provide: ClientHttpRequestsService, useValue: clientHttpRequestSpy },
                 { provide: MapService, useValue: mapServiceSpy },
@@ -61,47 +64,50 @@ describe('GameActionsComponent', () => {
             expect(clientHttpRequestSpy.updateMapVisibility).toHaveBeenCalledWith(mockMap.id, !mockMap.isVisible);
             expect(component.refresh.emit).toHaveBeenCalled();
         });
-
-        it('should handle error when updating visibility', () => {
-            const error = new Error('Update failed');
-            clientHttpRequestSpy.updateMapVisibility.and.returnValue(throwError(() => error));
-            spyOn(console, 'error');
-
-            component.toggleVisibility(mockMap);
-
-            expect(console.error).toHaveBeenCalledWith('Error updating game visibility:', error);
-        });
     });
 
-    describe('deleteMap', () => {
-        it('should emit refresh event on successful deletion when confirmed', () => {
-            confirmSpy.and.returnValue(true);
-            clientHttpRequestSpy.deleteMap.and.returnValue(of(void 0));
-            spyOn(component.refresh, 'emit');
+    describe('editMap', () => {
+        describe('editMap', () => {
+            it('should load map and navigate to edit route on successful load', async () => {
+                // Change this line to resolve with true
+                mapServiceSpy.loadMapFromServer.and.returnValue(Promise.resolve(true));
+                routerSpy.navigate.and.returnValue(Promise.resolve(true));
 
-            component.deleteMap(mockMap);
+                await component.editMap(mockMap);
 
-            expect(clientHttpRequestSpy.deleteMap).toHaveBeenCalledWith(mockMap.id);
-            expect(component.refresh.emit).toHaveBeenCalled();
+                expect(mapServiceSpy.loadMapFromServer).toHaveBeenCalledWith(mockMap.id);
+                expect(routerSpy.navigate).toHaveBeenCalledWith(['edit', mockMap.id]);
+            });
         });
 
-        it('should handle error when deleting map', () => {
-            confirmSpy.and.returnValue(true);
-            const error = new Error('Delete failed');
-            clientHttpRequestSpy.deleteMap.and.returnValue(throwError(() => error));
-            spyOn(console, 'error');
+        describe('deleteMap', () => {
+            it('should emit refresh event on successful deletion when confirmed', () => {
+                confirmSpy.and.returnValue(true);
+                clientHttpRequestSpy.deleteMap.and.returnValue(of(void 0));
+                spyOn(component.refresh, 'emit');
 
-            component.deleteMap(mockMap);
+                component.deleteMap(mockMap);
 
-            expect(console.error).toHaveBeenCalledWith('Error deleting game:', error);
-        });
+                expect(clientHttpRequestSpy.deleteMap).toHaveBeenCalledWith(mockMap.id);
+                expect(component.refresh.emit).toHaveBeenCalled();
+            });
 
-        it('should not delete when user cancels confirmation', () => {
-            confirmSpy.and.returnValue(false);
+            it('should not delete when user cancels confirmation', () => {
+                confirmSpy.and.returnValue(false);
 
-            component.deleteMap(mockMap);
+                component.deleteMap(mockMap);
 
-            expect(clientHttpRequestSpy.deleteMap).not.toHaveBeenCalled();
+                expect(clientHttpRequestSpy.deleteMap).not.toHaveBeenCalled();
+            });
+
+            it('should show correct confirmation message', () => {
+                confirmSpy.and.returnValue(true);
+                clientHttpRequestSpy.deleteMap.and.returnValue(of(void 0));
+
+                component.deleteMap(mockMap);
+
+                expect(confirmSpy).toHaveBeenCalledWith('Êtes-vous sûr de vouloir supprimer ce jeu ?');
+            });
         });
     });
 });

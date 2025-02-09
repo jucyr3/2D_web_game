@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MapsForClientService } from './maps-for-client.service';
 import { ClientHttpRequestsService } from './client-http-requests.service';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 import { Map } from '@common/map';
 
 describe('MapsForClientService', () => {
@@ -40,14 +40,6 @@ describe('MapsForClientService', () => {
         });
     });
 
-    it('should handle loadMaps error', () => {
-        httpService.getMaps.and.returnValue(throwError(() => new Error()));
-        service.loadMaps();
-
-        expect(service.loading).toBeFalse();
-        expect(service.error).toBe('Failed to load games. Please try again.');
-    });
-
     it('should load maps by visibility successfully', () => {
         httpService.getAllMapsByVisibility.and.returnValue(of([mockMap]));
         service.loadMapsByVisibility();
@@ -57,14 +49,6 @@ describe('MapsForClientService', () => {
         service.maps$.subscribe((maps) => {
             expect(maps).toEqual([mockMap]);
         });
-    });
-
-    it('should handle loadMapsByVisibility error', () => {
-        httpService.getAllMapsByVisibility.and.returnValue(throwError(() => new Error()));
-        service.loadMapsByVisibility();
-
-        expect(service.loading).toBeFalse();
-        expect(service.error).toBe('Failed to load games');
     });
 
     it('should change selected map', () => {

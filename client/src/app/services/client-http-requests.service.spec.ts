@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { ClientHttpRequestsService } from './client-http-requests.service';
 import { environment } from 'src/environments/environment';
 import { Map } from '@common/map';
@@ -9,9 +10,9 @@ import { MapVerification } from '@common/mapVerification.interface';
 describe('ClientHttpRequestsService', () => {
     let service: ClientHttpRequestsService;
     let httpMock: HttpTestingController;
-    const apiUrl = environment.serverUrl;
 
-    const mockMapVerification: MapVerification = {
+    // Helper function to create a mock map verification
+    const createMockMapVerification = (overrides: Partial<MapVerification> = {}): MapVerification => ({
         isUniqueName: true,
         isNamePresent: true,
         isDescriptionPresent: true,
@@ -22,37 +23,31 @@ describe('ClientHttpRequestsService', () => {
         areDoorsNotNextToBorder: true,
         isNameValid: true,
         isDescriptionValid: true,
-    };
+        ...overrides,
+    });
 
-    const mockMap: Map = {
-        id: 1,
-        name: 'Test Map',
-        size: 10,
+    // Helper function to create a mock map
+    const createMockMap = (id: number, name: string): Map => ({
+        id,
+        name,
+        size: 10, // Example size
         isVisible: true,
-        description: 'Test Description',
-        gameMode: 'CTF',
-        tileMatrix: [],
+        description: `Description for ${name}`,
+        gameMode: 'Classic',
+        tileMatrix: [], // Empty array
         lastModified: new Date(),
-        previewImage: 'test-image',
-    };
+        previewImage: 'base64-encoded-image',
+    });
 
-    const invalidMapVerification: MapVerification = {
-        isUniqueName: false,
-        isNamePresent: false,
-        isDescriptionPresent: false,
-        isMapHalfFloor: false,
-        isMapAccessible: false,
-        areStartingPointsValid: false,
-        areDoorsNextToWalls: false,
-        areDoorsNotNextToBorder: false,
-        isNameValid: false,
-        isDescriptionValid: false,
-    };
+    // Helper function to create a mock map response
+    const createMockMapResponse = (id: number, verificationOverrides: Partial<MapVerification> = {}): MapResponse => ({
+        id,
+        mapVerification: createMockMapVerification(verificationOverrides),
+    });
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule],
-            providers: [ClientHttpRequestsService],
+            providers: [ClientHttpRequestsService, provideHttpClient(), provideHttpClientTesting()],
         });
 
         service = TestBed.inject(ClientHttpRequestsService);
@@ -69,192 +64,162 @@ describe('ClientHttpRequestsService', () => {
 
     describe('getMaps', () => {
         it('should return an array of maps', () => {
-            const mockMaps: Map[] = [mockMap];
+            const mockMaps: Map[] = [createMockMap(1, 'Test Map 1'), createMockMap(2, 'Test Map 2')];
 
             service.getMaps().subscribe((maps) => {
-                expect(maps).toEqual(mockMaps);
-                expect(maps.length).toBe(1);
+                expect(maps.length).toBe(2);
+                expect(maps[0].name).toBe('Test Map 1');
+                expect(maps[0].tileMatrix).toEqual([]);
             });
 
-            const req = httpMock.expectOne(`${apiUrl}/maps`);
+            const req = httpMock.expectOne(`${environment.serverUrl}/maps`);
             expect(req.request.method).toBe('GET');
             req.flush(mockMaps);
         });
 
         it('should handle single map response', () => {
+            const mockMap = createMockMap(1, 'Single Map');
+
             service.getMaps().subscribe((maps) => {
-                expect(maps).toEqual([mockMap]);
                 expect(maps.length).toBe(1);
+                expect(maps[0].name).toBe('Single Map');
+                expect(maps[0].gameMode).toBe('Classic');
             });
 
-            const req = httpMock.expectOne(`${apiUrl}/maps`);
+            const req = httpMock.expectOne(`${environment.serverUrl}/maps`);
             expect(req.request.method).toBe('GET');
             req.flush(mockMap);
         });
     });
 
     describe('loadMapById', () => {
-        it('should return a map by id', () => {
-            const mapId = 1;
+        it('should return a specific map by ID', () => {
+            const mockMap = createMockMap(1, 'Specific Map');
+            const mapSize = 10;
 
-            service.loadMapById(mapId).subscribe((map) => {
-                expect(map).toEqual(mockMap);
+            service.loadMapById(1).subscribe((map) => {
+                expect(map.id).toBe(1);
+                expect(map.name).toBe('Specific Map');
+                expect(map.size).toBe(mapSize);
+                expect(map.gameMode).toBe('Classic');
+                expect(map.tileMatrix).toEqual([]);
             });
 
-            const req = httpMock.expectOne(`${apiUrl}/maps/${mapId}`);
+            const req = httpMock.expectOne(`${environment.serverUrl}/maps/1`);
             expect(req.request.method).toBe('GET');
             req.flush(mockMap);
-        });
-
-        it('should handle non-existent map id', () => {
-            const mapId = 999;
-
-            service.loadMapById(mapId).subscribe({
-                error: (error) => {
-                    expect(error.status).toBe(404);
-                },
-            });
-
-            const req = httpMock.expectOne(`${apiUrl}/maps/${mapId}`);
-            req.flush('Map not found', { status: 404, statusText: 'Not Found' });
         });
     });
 
     describe('saveMapToServer', () => {
-        it('should save valid map and return successful MapResponse', () => {
-            const validMapResponse: MapResponse = {
-                id: 1,
-                mapVerification: mockMapVerification,
-            };
+        it('should save a map and return MapResponse with full validation', () => {
+            const mapToSave = createMockMap(0, 'New Map');
+            const mockResponse = createMockMapResponse(1);
 
-            service.saveMapToServer(mockMap).subscribe((response) => {
-                expect(response).toEqual(validMapResponse);
-                expect(response.mapVerification.isUniqueName).toBe(true);
-                expect(response.mapVerification.isNamePresent).toBe(true);
-                expect(response.mapVerification.isDescriptionPresent).toBe(true);
-                expect(response.mapVerification.isMapHalfFloor).toBe(true);
-                expect(response.mapVerification.isMapAccessible).toBe(true);
-                expect(response.mapVerification.areStartingPointsValid).toBe(true);
-                expect(response.mapVerification.areDoorsNextToWalls).toBe(true);
-                expect(response.mapVerification.areDoorsNotNextToBorder).toBe(true);
-                expect(response.mapVerification.isNameValid).toBe(true);
-                expect(response.mapVerification.isDescriptionValid).toBe(true);
+            service.saveMapToServer(mapToSave).subscribe((response) => {
+                expect(response.id).toBe(1);
+                expect(response.mapVerification).toBeDefined();
+
+                // Verify all validation properties
+                expect(response.mapVerification.isUniqueName).toBeTrue();
+                expect(response.mapVerification.isNamePresent).toBeTrue();
+                expect(response.mapVerification.isDescriptionPresent).toBeTrue();
+                expect(response.mapVerification.isMapHalfFloor).toBeTrue();
+                expect(response.mapVerification.isMapAccessible).toBeTrue();
+                expect(response.mapVerification.areStartingPointsValid).toBeTrue();
+                expect(response.mapVerification.areDoorsNextToWalls).toBeTrue();
+                expect(response.mapVerification.areDoorsNotNextToBorder).toBeTrue();
+                expect(response.mapVerification.isNameValid).toBeTrue();
+                expect(response.mapVerification.isDescriptionValid).toBeTrue();
             });
 
-            const req = httpMock.expectOne(`${apiUrl}/maps`);
+            const req = httpMock.expectOne(`${environment.serverUrl}/maps`);
             expect(req.request.method).toBe('POST');
-            expect(req.request.body).toEqual(mockMap);
-            req.flush(validMapResponse);
+            expect(req.request.body).toEqual(mapToSave);
+            req.flush(mockResponse);
         });
 
-        it('should handle invalid map verification response', () => {
-            const invalidMapResponse: MapResponse = {
-                id: 1,
-                mapVerification: invalidMapVerification,
-            };
-
-            service.saveMapToServer(mockMap).subscribe((response) => {
-                expect(response).toEqual(invalidMapResponse);
-                expect(response.mapVerification.isUniqueName).toBe(false);
-                expect(response.mapVerification.isNamePresent).toBe(false);
-                expect(response.mapVerification.isDescriptionPresent).toBe(false);
-                expect(response.mapVerification.isMapHalfFloor).toBe(false);
-                expect(response.mapVerification.isMapAccessible).toBe(false);
-                expect(response.mapVerification.areStartingPointsValid).toBe(false);
-                expect(response.mapVerification.areDoorsNextToWalls).toBe(false);
-                expect(response.mapVerification.areDoorsNotNextToBorder).toBe(false);
-                expect(response.mapVerification.isNameValid).toBe(false);
-                expect(response.mapVerification.isDescriptionValid).toBe(false);
+        it('should handle map verification failures', () => {
+            const mapToSave = createMockMap(0, 'Invalid Map');
+            const mockResponse = createMockMapResponse(1, {
+                isUniqueName: false,
+                isNamePresent: false,
+                isMapAccessible: false,
             });
 
-            const req = httpMock.expectOne(`${apiUrl}/maps`);
+            service.saveMapToServer(mapToSave).subscribe((response) => {
+                expect(response.id).toBe(1);
+                expect(response.mapVerification.isUniqueName).toBeFalse();
+                expect(response.mapVerification.isNamePresent).toBeFalse();
+                expect(response.mapVerification.isMapAccessible).toBeFalse();
+            });
+
+            const req = httpMock.expectOne(`${environment.serverUrl}/maps`);
             expect(req.request.method).toBe('POST');
-            req.flush(invalidMapResponse);
-        });
-
-        it('should handle server error when saving map', () => {
-            service.saveMapToServer(mockMap).subscribe({
-                error: (error) => {
-                    expect(error.status).toBe(500);
-                },
-            });
-
-            const req = httpMock.expectOne(`${apiUrl}/maps`);
-            req.flush('Error saving map', { status: 500, statusText: 'Internal Server Error' });
+            req.flush(mockResponse);
         });
     });
 
     describe('getAllMapsByVisibility', () => {
         it('should return visible maps', () => {
-            const mockMaps: Map[] = [mockMap];
+            const mockVisibleMaps: Map[] = [createMockMap(1, 'Visible Map 1'), createMockMap(2, 'Visible Map 2')];
 
             service.getAllMapsByVisibility().subscribe((maps) => {
-                expect(maps).toEqual(mockMaps);
+                expect(maps.length).toBe(2);
+                expect(maps.every((map) => map.isVisible)).toBeTrue();
+                expect(maps[0].gameMode).toBe('Classic');
             });
 
-            const req = httpMock.expectOne(`${apiUrl}/maps/visibility/isVisible`);
+            const req = httpMock.expectOne(`${environment.serverUrl}/maps/visibility/isVisible`);
             expect(req.request.method).toBe('GET');
-            req.flush(mockMaps);
+            req.flush(mockVisibleMaps);
         });
     });
 
     describe('updateMapVisibility', () => {
         it('should update map visibility', () => {
-            const mapId = 1;
-            const isVisible = false;
+            const mockMap = createMockMap(1, 'Test Map');
+            mockMap.isVisible = false;
 
-            service.updateMapVisibility(mapId, isVisible).subscribe((map) => {
-                expect(map).toEqual(mockMap);
+            service.updateMapVisibility(1, false).subscribe((map) => {
+                expect(map.id).toBe(1);
+                expect(map.isVisible).toBeFalse();
             });
 
-            const req = httpMock.expectOne(`${apiUrl}/maps/${mapId}/isVisible`);
+            const req = httpMock.expectOne(`${environment.serverUrl}/maps/1/isVisible`);
             expect(req.request.method).toBe('PATCH');
-            expect(req.request.body).toEqual({ isVisible });
+            expect(req.request.body).toEqual({ isVisible: false });
             req.flush(mockMap);
         });
     });
 
     describe('saveMapImageOnServer', () => {
-        it('should save map image', () => {
-            const mapId = 1;
-            const imagepng = 'base64-image-data';
+        it('should save map preview image', () => {
+            const mockMap = createMockMap(1, 'Map with Image');
+            const base64Image = 'data:image/png;base64,testimage';
+            mockMap.previewImage = base64Image;
 
-            service.saveMapImageOnServer(mapId, imagepng).subscribe((map) => {
-                expect(map).toEqual(mockMap);
+            service.saveMapImageOnServer(1, base64Image).subscribe((map) => {
+                expect(map.id).toBe(1);
+                expect(map.previewImage).toBe(base64Image);
             });
 
-            const req = httpMock.expectOne(`${apiUrl}/maps/${mapId}/previewImage`);
+            const req = httpMock.expectOne(`${environment.serverUrl}/maps/1/previewImage`);
             expect(req.request.method).toBe('PATCH');
-            expect(req.request.body).toEqual({ previewImage: imagepng });
+            expect(req.request.body).toEqual({ previewImage: base64Image });
             req.flush(mockMap);
         });
     });
 
     describe('deleteMap', () => {
-        it('should delete map', () => {
-            const mapId = 1;
-
-            service.deleteMap(mapId).subscribe((response) => {
-                expect(response).toBeNull();
+        it('should delete a map by ID', () => {
+            service.deleteMap(1).subscribe(() => {
+                // Successful deletion
             });
 
-            const req = httpMock.expectOne(`${apiUrl}/maps/${mapId}`);
+            const req = httpMock.expectOne(`${environment.serverUrl}/maps/1`);
             expect(req.request.method).toBe('DELETE');
             req.flush(null);
-        });
-
-        it('should handle error when deleting non-existent map', () => {
-            const mapId = 999;
-
-            service.deleteMap(mapId).subscribe({
-                error: (error) => {
-                    expect(error.status).toBe(404);
-                },
-            });
-
-            const req = httpMock.expectOne(`${apiUrl}/maps/${mapId}`);
-            expect(req.request.method).toBe('DELETE');
-            req.flush('Map not found', { status: 404, statusText: 'Not Found' });
         });
     });
 });

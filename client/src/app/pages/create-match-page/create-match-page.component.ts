@@ -20,18 +20,21 @@ export class CreateMatchPageComponent {
     ) {}
 
     createGame() {
+        const timeOut = 500;
         this.mapsForClient.loadMapsByVisibility();
-        this.mapsForClient.maps$.pipe(map((maps) => maps.find((map) => map === this.mapsForClient.clickedMap))).subscribe((existedMap) => {
-            if (existedMap) {
-                this.router.navigate(['/character']);
-            } else {
-                this.router.navigate(['/match']).then(() => {
-                    setTimeout(() => {
-                        alert('La carte fut cachée ou effacée');
-                    }, 500);
-                });
-            }
-        });
+        this.mapsForClient.maps$
+            .pipe(map((maps) => maps.find((createMap) => createMap === this.mapsForClient.clickedMap)))
+            .subscribe((existedMap) => {
+                if (existedMap) {
+                    this.router.navigate(['/character']);
+                } else {
+                    this.router.navigate(['/match']).then(() => {
+                        setTimeout(() => {
+                            alert('La carte fut cachée ou effacée');
+                        }, timeOut);
+                    });
+                }
+            });
     }
 
     onBodyClick(event: MouseEvent): void {

@@ -7,6 +7,7 @@ import { GameGridComponent } from '@app/components/admin-game/games-grid/games-g
 import { ModalComponent } from '@app/components/admin-game/modal/modal.component';
 import { MapService } from '@app/services/edit-services/map.service';
 import { MapsForClientService } from '@app/services/maps-for-client.service';
+import { MapFormData } from '@common/mapForm';
 
 @Component({
     selector: 'app-admin-page',
@@ -16,19 +17,15 @@ import { MapsForClientService } from '@app/services/maps-for-client.service';
     standalone: true,
 })
 export class AdminPageComponent {
+    isCreateModalOpen = false;
+    mapForm: MapFormData;
+
     constructor(
         protected router: Router,
         protected mapService: MapService,
         protected mapsForClientService: MapsForClientService,
         readonly dialog: MatDialog,
     ) {}
-
-    isCreateModalOpen = false;
-    newMapForm = {
-        mapName: '',
-        mapMode: 'Classic' as 'Classic' | 'CTF',
-        mapSize: 'PETITE' as 'PETITE' | 'MOYENNE' | 'GRANDE',
-    };
 
     openCreateModal() {
         this.isCreateModalOpen = true;
@@ -38,15 +35,15 @@ export class AdminPageComponent {
         this.isCreateModalOpen = false;
     }
 
-    handleCreateMap(formData: any): boolean {
+    handleCreateMap(formData: MapFormData): boolean {
         if (!formData.mapName?.trim()) {
             alert('Map name cannot be empty');
             return false;
         }
-        
-        const existingMap = this.mapsForClientService.mapsSubject.getValue().find(
-            map => map.name.toLowerCase() === formData.mapName.trim().toLowerCase()
-        );
+
+        const existingMap = this.mapsForClientService.mapsSubject
+            .getValue()
+            .find((map) => map.name.toLowerCase() === formData.mapName.trim().toLowerCase());
 
         if (existingMap) {
             alert('Map name already exists');

@@ -18,7 +18,6 @@ export class MapsForClientService {
     constructor(private clientHttpRequest: ClientHttpRequestsService) {}
 
     loadMaps() {
-        // from server to client (for AdminPage)
         this.loading = true;
         this.error = null;
         this.clientHttpRequest.getMaps().subscribe({
@@ -26,27 +25,16 @@ export class MapsForClientService {
                 this.mapsSubject.next(maps);
                 this.loading = false;
             },
-            error: (error) => {
-                console.error('Error loading games:', error);
-                this.error = 'Failed to load games. Please try again.';
-                this.loading = false;
-            },
         });
     }
 
     loadMapsByVisibility() {
-        // from server to client (for create-match page)
         this.loading = true;
         this.error = null;
 
         this.clientHttpRequest.getAllMapsByVisibility().subscribe({
             next: (maps) => {
                 this.mapsSubject.next(maps);
-                this.loading = false;
-            },
-            error: (error) => {
-                console.error('Error loading games:', error);
-                this.error = 'Failed to load games';
                 this.loading = false;
             },
         });

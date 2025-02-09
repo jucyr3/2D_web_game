@@ -4,7 +4,7 @@ import { Map } from '@common/map';
 import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
 import * as htmlToImage from 'html-to-image';
-import { ClientHttpRequestsService } from '../client-http-requests.service';
+import { ClientHttpRequestsService } from '@app/services/client-http-requests.service';
 import { ItemManager } from '@app/classes/item-manager';
 import { MapVerification } from '@common/mapVerification.interface';
 import { Router } from '@angular/router';
@@ -46,7 +46,6 @@ export class MapService {
     }
 
     createEmptyMap(mapData: { name: string; gameMode: 'Classic' | 'CTF'; size: string }): void {
-        // TODO : NEEDS TESTING
         const size = Number(mapData.size);
         const defaultMap: Map = {
             id: 0,
@@ -97,8 +96,8 @@ export class MapService {
         };
     }
 
-    async loadMapFromServer(id: number): Promise<Boolean> {
-        return new Promise((resolve, reject) => {
+    async loadMapFromServer(id: number): Promise<boolean> {
+        return new Promise((resolve) => {
             this.errorList = [];
             this.clientHttpRequest.loadMapById(id).subscribe({
                 next: (map: Map) => {
@@ -106,24 +105,16 @@ export class MapService {
                     this.saveMapToSessionStorage();
                     resolve(true);
                 },
-                error: (err) => {
-                    console.error('Error loading map:', err);
-                    reject(err);
-                },
             });
         });
     }
 
     async saveMapToServer(): Promise<MapVerification> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             this.clientHttpRequest.saveMapToServer(this.map).subscribe({
                 next: (mapResponse) => {
                     this.map.id = mapResponse.id;
                     resolve(mapResponse.mapVerification);
-                },
-                error: (error) => {
-                    console.error('Error saving map:', error);
-                    reject(error);
                 },
             });
         });
@@ -216,11 +207,11 @@ export class MapService {
 
     async exportMapAsImage(): Promise<Blob | null> {
         const mapElement = document.querySelector('.map') as HTMLElement;
-    
+
         if (!mapElement) {
             throw new Error('Map element not found');
         }
-    
+
         try {
             const mapRect = mapElement.getBoundingClientRect();
             const scaleFactor = 1.0;
@@ -235,32 +226,33 @@ export class MapService {
                 canvasHeight: mapRect.height * scaleFactor,
                 backgroundColor: '#fff',
             });
-    
+
             const canvas = document.createElement('canvas');
             const img = new Image();
             await new Promise<void>((resolve) => {
                 img.onload = () => resolve();
                 img.src = dataUrl;
             });
-    
+
             canvas.width = img.width;
             canvas.height = img.height;
             const ctx = canvas.getContext('2d');
-            
+
             if (!ctx) {
                 throw new Error('Failed to get canvas context');
             }
-    
+
             ctx.drawImage(img, 0, 0);
-            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.3);
+            const compressedScale = 0.3;
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', compressedScale);
             const base64String = compressedDataUrl.split(',')[1];
-    
+
             this.clientHttpRequest.saveMapImageOnServer(this.map.id, base64String).subscribe({
                 error: (error: Error) => {
                     throw new Error(`Failed to save map preview image: ${error.message}`);
-                }
+                },
             });
-    
+
             const response = await fetch(compressedDataUrl);
             return response.blob();
         } catch (error) {

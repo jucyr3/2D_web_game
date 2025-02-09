@@ -27,9 +27,6 @@ export class GameActionsComponent {
             next: () => {
                 this.refresh.emit();
             },
-            error: (error) => {
-                console.error('Error updating game visibility:', error);
-            },
         });
     }
 
@@ -43,9 +40,6 @@ export class GameActionsComponent {
             this.clientHttpRequest.deleteMap(map.id).subscribe({
                 next: () => {
                     this.refresh.emit();
-                },
-                error: (error) => {
-                    console.error('Error deleting game:', error);
                 },
             });
         }

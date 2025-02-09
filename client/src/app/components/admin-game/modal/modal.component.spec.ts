@@ -21,9 +21,9 @@ describe('ModalComponent', () => {
     });
 
     it('should emit close event', () => {
-        spyOn(component.close, 'emit');
+        spyOn(component.modalClose, 'emit');
         component.closeModal();
-        expect(component.close.emit).toHaveBeenCalled();
+        expect(component.modalClose.emit).toHaveBeenCalled();
     });
 
     it('should emit create event with form data', () => {

@@ -1,13 +1,7 @@
-<div class="preview-container"
-     (mouseenter)="showDescription(map)"
-     (mouseleave)="hideDescription()">
-     
-     <img [src]="'data:image/jpeg;base64,' + map.previewImage" 
-     [alt]="map.name" 
-     class="preview-image"
-     *ngIf="map.previewImage">
-  
-  <div class="description-overlay" *ngIf="selectedMap === map">
-    {{ map.description }}
-  </div>
+<div class="preview-container" (mouseenter)="showDescription(map)" (mouseleave)="hideDescription()">
+    <img [src]="'data:image/jpeg;base64,' + map.previewImage" [alt]="map.name" class="preview-image" *ngIf="map.previewImage" />
+
+    <div class="description-overlay" *ngIf="selectedMap === map">
+        {{ map.description }}
+    </div>
 </div>

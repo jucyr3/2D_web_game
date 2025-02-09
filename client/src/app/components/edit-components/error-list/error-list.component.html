@@ -2,7 +2,6 @@
 <div class="error-box">
     <h4 class="title">Error list:</h4>
     <ul class="error-list">
-
         @for (error of this.mapService.errorList; track error) {
         <li>{{ this.errorDescriptions[error] }}</li>
         } @empty {

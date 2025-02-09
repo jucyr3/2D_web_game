@@ -11,7 +11,6 @@ describe('MapsGridComponent', () => {
     let fixture: ComponentFixture<MapsGridComponent>;
     let mapsService: jasmine.SpyObj<MapsForClientService>;
 
-    const mockTileMatrix: unknown[][] = Array(10).fill(Array(10).fill({}));
     const mockMaps: Map[] = [
         {
             id: 1,
@@ -20,7 +19,7 @@ describe('MapsGridComponent', () => {
             isVisible: true,
             description: 'Description 1',
             gameMode: 'Classic',
-            tileMatrix: mockTileMatrix,
+            tileMatrix: [],
             lastModified: new Date('2024-02-06'),
             previewImage: 'base64string1',
         },
@@ -31,7 +30,7 @@ describe('MapsGridComponent', () => {
             isVisible: true,
             description: 'Description 2',
             gameMode: 'CTF',
-            tileMatrix: mockTileMatrix,
+            tileMatrix: [],
             lastModified: new Date('2024-02-06'),
             previewImage: 'base64string2',
         },

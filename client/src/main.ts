@@ -29,8 +29,8 @@ const routes: Routes = [
     { path: 'character', component: CreateCharacterPageComponent },
     { path: 'match', component: CreateMatchPageComponent },
     { path: 'waitingRoom', component: WaitingRoomPageComponent },
-    { path: 'edit', component: EditPageComponent},
-    { path: 'edit/:id', component: EditPageComponent}
+    { path: 'edit', component: EditPageComponent },
+    { path: 'edit/:id', component: EditPageComponent },
 ];
 
 bootstrapApplication(AppComponent, {
@@ -45,6 +45,7 @@ bootstrapApplication(AppComponent, {
                 tooltip: tooltipVariation,
                 popper: popperVariation,
             },
-        }), provideAnimationsAsync(),
+        }),
+        provideAnimationsAsync(),
     ],
 });

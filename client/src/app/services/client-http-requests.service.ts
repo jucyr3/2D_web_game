@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Map } from '@common/map';
-import { Observable, map, catchError, throwError } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { MapResponse } from '@common/mapResponse';
 
@@ -17,7 +17,7 @@ export class ClientHttpRequestsService {
         return this.http.get<Map[]>(`${this.apiUrl}/maps`).pipe(
             map((response) => {
                 const maps = Array.isArray(response) ? response : [response];
-                return maps.map((map) => map);
+                return maps.map((mapFromServer) => mapFromServer);
             }),
         );
     }
@@ -30,20 +30,15 @@ export class ClientHttpRequestsService {
         );
     }
 
-    saveMapToServer(map: Map): Observable<MapResponse> {
-        return this.http.post<MapResponse>(`${this.apiUrl}/maps`, map).pipe(
-            catchError((error) => {
-                console.error('Error saving map:', error);
-                return throwError(() => error);
-            }),
-        );
+    saveMapToServer(currentMap: Map): Observable<MapResponse> {
+        return this.http.post<MapResponse>(`${this.apiUrl}/maps`, currentMap);
     }
 
     getAllMapsByVisibility(): Observable<Map[]> {
         return this.http.get<Map[]>(`${this.apiUrl}/maps/visibility/isVisible`).pipe(
             map((response) => {
                 const maps = Array.isArray(response) ? response : [response];
-                return maps.map((map) => map);
+                return maps.map((visibleMap) => visibleMap);
             }),
         );
     }

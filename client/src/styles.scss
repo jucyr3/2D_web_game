@@ -26,7 +26,6 @@ $indigo-pink-theme: mat.m2-define-light-theme(
 @include mat.all-component-themes($indigo-pink-theme);
 @include material-page.theme($indigo-pink-theme);
 
-
 .deeppurple-amber-theme {
     $deeppurple-amber-theme: mat.m2-define-light-theme(
         (
@@ -77,5 +76,11 @@ body {
     font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+    height: 100%;
+}
+body {
+    margin: 0;
+    font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
