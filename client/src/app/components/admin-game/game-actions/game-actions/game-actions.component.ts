@@ -17,8 +17,8 @@ export class GameActionsComponent {
     @Output() refresh = new EventEmitter<void>();
 
     constructor(
-        protected clientHttpRequest: ClientHttpRequestsService,
-        protected mapService: MapService,
+        private clientHttpRequest: ClientHttpRequestsService,
+        private mapService: MapService,
         private router: Router,
     ) {}
 

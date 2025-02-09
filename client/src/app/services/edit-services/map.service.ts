@@ -3,7 +3,7 @@ import { ItemObject } from '@common/ItemObject';
 import { Map } from '@common/map';
 import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
-import * as htmlToImage from 'html-to-image';
+import html2canvas from 'html2canvas';
 import { ClientHttpRequestsService } from '@app/services/client-http-requests.service';
 import { ItemManager } from '@app/classes/item-manager';
 import { MapVerification } from '@common/mapVerification.interface';
@@ -213,46 +213,22 @@ export class MapService {
         }
 
         try {
-            const mapRect = mapElement.getBoundingClientRect();
-            const scaleFactor = 1.0;
-            const dataUrl = await htmlToImage.toPng(mapElement, {
-                quality: 0.2,
-                width: mapRect.width * scaleFactor,
-                height: mapRect.height * scaleFactor,
-                pixelRatio: 0.5,
-                skipAutoScale: true,
-                style: { transform: 'none' },
-                canvasWidth: mapRect.width * scaleFactor,
-                canvasHeight: mapRect.height * scaleFactor,
+            // Use html2canvas to render the .map element to a canvas
+            const canvas = await html2canvas(mapElement, {
+                scale: 1,
+                useCORS: true,
+                logging: true,
                 backgroundColor: '#fff',
             });
 
-            const canvas = document.createElement('canvas');
-            const img = new Image();
-            await new Promise<void>((resolve) => {
-                img.onload = () => resolve();
-                img.src = dataUrl;
-            });
-
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext('2d');
-
-            if (!ctx) {
-                throw new Error('Failed to get canvas context');
-            }
-
-            ctx.drawImage(img, 0, 0);
             const compressedScale = 0.3;
             const compressedDataUrl = canvas.toDataURL('image/jpeg', compressedScale);
+
             const base64String = compressedDataUrl.split(',')[1];
 
-            this.clientHttpRequest.saveMapImageOnServer(this.map.id, base64String).subscribe({
-                error: (error: Error) => {
-                    throw new Error(`Failed to save map preview image: ${error.message}`);
-                },
-            });
+            this.clientHttpRequest.saveMapImageOnServer(this.map.id, base64String).subscribe({});
 
+            // Convert the base64 image to a Blob and return it
             const response = await fetch(compressedDataUrl);
             return response.blob();
         } catch (error) {

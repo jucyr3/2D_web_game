@@ -1,5 +1,5 @@
-import { ItemObject } from './ItemObject';
-import { TileTypes } from './tileType.constants';
+import { ItemObject } from '@common/ItemObject';
+import { TileTypes } from '@common/tileType.constants';
 export interface Tile {
     type: TileTypes;
     isOccupied: boolean;

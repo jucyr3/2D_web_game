@@ -69,7 +69,6 @@ describe('GameActionsComponent', () => {
     describe('editMap', () => {
         describe('editMap', () => {
             it('should load map and navigate to edit route on successful load', async () => {
-                // Change this line to resolve with true
                 mapServiceSpy.loadMapFromServer.and.returnValue(Promise.resolve(true));
                 routerSpy.navigate.and.returnValue(Promise.resolve(true));
 

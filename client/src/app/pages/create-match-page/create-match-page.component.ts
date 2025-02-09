@@ -3,8 +3,8 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MapsGridComponent } from '@app/components/create-match/maps-grid/maps-grid.component';
+import { ClientHttpRequestsService } from '@app/services/client-http-requests.service';
 import { MapsForClientService } from '@app/services/maps-for-client.service';
-import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'app-create-match-page',
@@ -17,24 +17,23 @@ export class CreateMatchPageComponent {
     constructor(
         protected router: Router,
         protected mapsForClient: MapsForClientService,
+        private clientHttpRequest: ClientHttpRequestsService,
     ) {}
 
     createGame() {
-        const timeOut = 500;
-        this.mapsForClient.loadMapsByVisibility();
-        this.mapsForClient.maps$
-            .pipe(map((maps) => maps.find((createMap) => createMap === this.mapsForClient.clickedMap)))
-            .subscribe((existedMap) => {
-                if (existedMap) {
-                    this.router.navigate(['/character']);
-                } else {
-                    this.router.navigate(['/match']).then(() => {
-                        setTimeout(() => {
-                            alert('La carte fut cachée ou effacée');
-                        }, timeOut);
-                    });
-                }
-            });
+        if (!this.mapsForClient.clickedMap) {
+            return;
+        }
+        this.clientHttpRequest.getAllMapsByVisibility().subscribe((visibleMaps) => {
+            const isMapVisible = visibleMaps.some((map) => map.id === this.mapsForClient.clickedMap?.id);
+            if (isMapVisible) {
+                this.router.navigate(['/character']);
+            } else {
+                alert('la map sélectionnée fut cachée ou effacée');
+                this.mapsForClient.loadMapsByVisibility();
+                this.mapsForClient.clickedMap = null;
+            }
+        });
     }
 
     onBodyClick(event: MouseEvent): void {
