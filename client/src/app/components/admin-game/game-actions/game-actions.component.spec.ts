@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ClientHttpRequestsService } from '@app/services/client-http-requests.service';
 import { MapService } from '@app/services/edit-services/map.service';
 import { Map } from '@common/map';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { GameActionsComponent } from './game-actions.component';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
@@ -107,6 +107,27 @@ describe('GameActionsComponent', () => {
 
                 expect(confirmSpy).toHaveBeenCalledWith('Êtes-vous sûr de vouloir supprimer ce jeu ?');
             });
+        });
+    });
+
+    describe('error handling', () => {
+        it('should show alert on visibility update error', () => {
+            const alertSpy = spyOn(window, 'alert');
+            clientHttpRequestSpy.updateMapVisibility.and.returnValue(throwError(() => new Error()));
+
+            component.toggleVisibility(mockMap);
+
+            expect(alertSpy).toHaveBeenCalledWith('Impossible de modifier la visibilité de la carte');
+        });
+
+        it('should show alert on delete error', () => {
+            confirmSpy.and.returnValue(true);
+            const alertSpy = spyOn(window, 'alert');
+            clientHttpRequestSpy.deleteMap.and.returnValue(throwError(() => new Error()));
+
+            component.deleteMap(mockMap);
+
+            expect(alertSpy).toHaveBeenCalledWith("Impossible d'enlever la carte");
         });
     });
 });

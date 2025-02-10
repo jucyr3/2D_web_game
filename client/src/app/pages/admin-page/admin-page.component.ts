@@ -8,7 +8,6 @@ import { MapCreationModalComponent } from '@app/components/admin-game/mapCreatio
 import { MapService } from '@app/services/edit-services/map.service';
 import { MapsForClientService } from '@app/services/maps-for-client.service';
 import { MapFormData } from '@app/interfaces/mapFormData';
-import { MapProperties } from '@common/map.constants';
 
 @Component({
     selector: 'app-admin-page',
@@ -37,12 +36,6 @@ export class AdminPageComponent {
     }
 
     handleCreateMap(formData: MapFormData): boolean {
-        const validSizes = [MapProperties.MAP_SIZE_SMALL, MapProperties.MAP_SIZE_MEDIUM, MapProperties.MAP_SIZE_LARGE];
-        if (!validSizes.includes(formData.size)) {
-            alert('Invalid map size');
-            return false;
-        }
-
         const mapData = {
             gameMode: formData.gameMode,
             size: formData.size,

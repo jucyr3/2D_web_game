@@ -9,6 +9,7 @@ import { ItemManager } from '@app/classes/item-manager';
 import { MapVerification } from '@common/mapVerification.interface';
 import { Router } from '@angular/router';
 import { MapFormData } from '@app/interfaces/mapFormData';
+import { MapProperties } from '@common/map.constants';
 
 @Injectable({
     providedIn: 'root',
@@ -30,7 +31,7 @@ export class MapService {
     }
 
     setDefaultMap(): void {
-        const mapSize = 15;
+        const mapSize = MapProperties.MAP_SIZE_MEDIUM;
         const defaultId = 0;
         this.map = {
             id: defaultId,
@@ -47,22 +48,24 @@ export class MapService {
     }
 
     createEmptyMap(mapData: MapFormData): void {
-        const size = Number(mapData.size);
         const defaultMap: Map = {
             id: 0,
             name: 'Untitled',
-            size,
+            size: mapData.size,
             isVisible: false,
             description: '',
             gameMode: mapData.gameMode,
-            tileMatrix: Array.from({ length: size }, () =>
-                Array.from({ length: size }, () => ({ type: TileTypes.GROUND_1, isOccupied: false, isObstacle: false, itemObject: null }) as Tile),
+            tileMatrix: Array.from({ length: mapData.size }, () =>
+                Array.from(
+                    { length: mapData.size },
+                    () => ({ type: TileTypes.GROUND_1, isOccupied: false, isObstacle: false, itemObject: null }) as Tile,
+                ),
             ),
             lastModified: new Date(),
             previewImage: '',
         };
         this.map = defaultMap;
-        this.itemManager = new ItemManager(size, mapData.gameMode);
+        this.itemManager = new ItemManager(mapData.size, mapData.gameMode);
     }
 
     parseTileMatrix(json: Map): Tile[][] {

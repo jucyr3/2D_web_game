@@ -45,7 +45,7 @@ describe('ModalComponent', () => {
     });
 
     it('should update map size', () => {
-        const radio = fixture.debugElement.nativeElement.querySelector('input[value="GRANDE"]');
+        const radio = fixture.debugElement.nativeElement.querySelector('input[ng-reflect-value="20"]');
         radio.checked = true;
         radio.dispatchEvent(new Event('change'));
         fixture.detectChanges();

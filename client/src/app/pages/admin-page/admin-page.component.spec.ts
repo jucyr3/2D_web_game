@@ -88,58 +88,23 @@ describe('AdminPageComponent', () => {
         });
     });
 
-    describe('Map Creation Validation', () => {
-        beforeEach(() => {
-            spyOn(window, 'alert');
-        });
-
-        it('should reject empty map names', () => {
-            const testCases = ['', '   ', null, undefined];
-
-            testCases.forEach((invalidName) => {
-                const result = component.handleCreateMap({
-                    mapName: invalidName as string,
-                    mapMode: 'Classic',
-                    mapSize: 'PETITE',
-                });
-                expect(result).toBeFalse();
-                expect(window.alert).toHaveBeenCalledWith('Map name cannot be empty');
-            });
-        });
-
-        it('should reject duplicate map names (case insensitive)', () => {
-            const duplicateNames = ['Test Map', 'test map', 'TEST MAP', ' Test Map '];
-
-            duplicateNames.forEach((dupName) => {
-                const result = component.handleCreateMap({
-                    mapName: dupName,
-                    mapMode: 'Classic',
-                    mapSize: 'PETITE',
-                });
-                expect(result).toBeFalse();
-                expect(window.alert).toHaveBeenCalledWith('Map name already exists');
-            });
-        });
-    });
-
     describe('Map Creation Success Scenarios', () => {
         it('should create maps with different sizes correctly', () => {
             const testCases = [
-                { size: 'PETITE', expectedValue: '10' },
-                { size: 'MOYENNE', expectedValue: '15' },
-                { size: 'GRANDE', expectedValue: '20' },
+                { size: 10, expectedValue: 10 },
+                { size: 15, expectedValue: 15 },
+                { size: 20, expectedValue: 20 },
             ];
 
             testCases.forEach(({ size, expectedValue }) => {
                 const result = component.handleCreateMap({
-                    mapName: `New Map ${size}`,
-                    mapMode: 'Classic',
-                    mapSize: size as 'PETITE' | 'MOYENNE' | 'GRANDE',
+                    gameMode: 'Classic',
+                    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+                    size: size as 10 | 15 | 20,
                 });
 
                 expect(result).toBeTrue();
                 expect(mapService.createEmptyMap).toHaveBeenCalledWith({
-                    name: `New Map ${size}`,
                     gameMode: 'Classic',
                     size: expectedValue,
                 });
@@ -153,18 +118,31 @@ describe('AdminPageComponent', () => {
 
             gameModes.forEach((mode) => {
                 const result = component.handleCreateMap({
-                    mapName: `New ${mode} Map`,
-                    mapMode: mode,
-                    mapSize: 'PETITE',
+                    gameMode: mode,
+                    size: 10,
                 });
 
                 expect(result).toBeTrue();
                 expect(mapService.createEmptyMap).toHaveBeenCalledWith({
-                    name: `New ${mode} Map`,
                     gameMode: mode,
-                    size: '10',
+                    size: 10,
                 });
             });
+        });
+    });
+    describe('error handling', () => {
+        it('should handle map creation error', () => {
+            const alertSpy = spyOn(window, 'alert');
+            mapService.createEmptyMap.and.throwError('Test error');
+
+            const result = component.handleCreateMap({
+                gameMode: 'Classic',
+                size: 10,
+            });
+
+            expect(alertSpy).toHaveBeenCalledWith('Failed to create map');
+            expect(result).toBeFalse();
+            expect(component.isCreateModalOpen).toBeFalse();
         });
     });
 });

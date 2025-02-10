@@ -90,6 +90,21 @@ describe('ClientHttpRequestsService', () => {
             expect(req.request.method).toBe('GET');
             req.flush(mockMap);
         });
+
+        it('should handle single map response when getting visible maps', () => {
+            const mockMap = createMockMap(1, 'Single Visible Map');
+
+            service.getAllMapsByVisibility().subscribe((maps) => {
+                expect(maps.length).toBe(1);
+                expect(maps[0].name).toBe('Single Visible Map');
+                expect(maps[0].gameMode).toBe('Classic');
+                expect(maps[0].isVisible).toBe(true);
+            });
+
+            const req = httpMock.expectOne(`${environment.serverUrl}/maps/visibility/isVisible`);
+            expect(req.request.method).toBe('GET');
+            req.flush(mockMap);
+        });
     });
 
     describe('loadMapById', () => {
