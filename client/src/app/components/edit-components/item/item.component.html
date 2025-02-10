@@ -11,16 +11,16 @@
         onselectstart="return false;"
     />
     @if (mapService.itemManager.itemAmounts[itemObject.name] > 1) {
-        <div class="item-amount">
-            {{ mapService.itemManager.itemAmounts[itemObject.name] }}
-        </div>
+    <div class="item-amount">
+        {{ mapService.itemManager.itemAmounts[itemObject.name] }}
+    </div>
     }
 </div>
 
 @if (draggingState.isDragging) {
-    <div class="drag-preview" [style.left.px]="draggingState.dragX" [style.top.px]="draggingState.dragY">
-        <img [src]="itemTexturePath + itemId + '.png'" [alt]="itemId" />
-    </div>
+<div class="drag-preview" [style.left.px]="draggingState.dragX" [style.top.px]="draggingState.dragY">
+    <img [src]="itemTexturePath + itemId + '.png'" [alt]="itemId" />
+</div>
 }
 
 <ng-template #ItemTooltipComponent let-tooltip="tooltip">

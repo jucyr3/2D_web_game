@@ -1,12 +1,13 @@
 import { Items } from '@common/ItemObject';
+import { MapProperties } from '@common/map.constants';
 
 export class ItemManager {
     itemAmounts: { [itemName: string]: number } = {};
 
     itemMap: { [key: string]: number } = {
-        size10: 2,
-        size15: 4,
-        size20: 6,
+        size10: MapProperties.SPAWN_COUNT_SMALL,
+        size15: MapProperties.SPAWN_COUNT_MEDIUM,
+        size20: MapProperties.SPAWN_COUNT_LARGE,
     };
 
     mapSize: number;

@@ -1,8 +1,48 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MapsGridComponent } from '@app/components/create-match/maps-grid/maps-grid.component';
+import { ClientHttpRequestsService } from '@app/services/client-http-requests.service';
+import { MapsForClientService } from '@app/services/maps-for-client.service';
 
 @Component({
     selector: 'app-create-match-page',
     templateUrl: './create-match-page.component.html',
-    styleUrl: './create-match-page.component.scss',
+    styleUrls: ['../admin-page/admin-page.component.scss'],
+    imports: [CommonModule, FormsModule, MapsGridComponent],
+    standalone: true,
 })
-export class CreateMatchPageComponent {}
+export class CreateMatchPageComponent {
+    constructor(
+        protected router: Router,
+        protected mapsForClient: MapsForClientService,
+        private clientHttpRequest: ClientHttpRequestsService,
+    ) {}
+
+    createGame() {
+        if (!this.mapsForClient.clickedMap) {
+            return;
+        }
+        this.clientHttpRequest.getAllMapsByVisibility().subscribe((visibleMaps) => {
+            const isMapVisible = visibleMaps.some((map) => map.id === this.mapsForClient.clickedMap?.id);
+            if (isMapVisible) {
+                this.router.navigate(['/character']);
+            } else {
+                alert('la map sélectionnée fut cachée ou effacée');
+                this.mapsForClient.loadMapsByVisibility();
+                this.mapsForClient.clickedMap = null;
+            }
+        });
+    }
+
+    onBodyClick(event: MouseEvent): void {
+        if (!(event.target as HTMLElement).closest('.game-card') && !(event.target as HTMLElement).closest('button')) {
+            this.mapsForClient.clickedMap = null;
+        }
+    }
+
+    openQuitDialog(): void {
+        this.router.navigate(['/home']);
+    }
+}

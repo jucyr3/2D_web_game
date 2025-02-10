@@ -1,4 +1,4 @@
-.main-div{
+.main-div {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -8,14 +8,13 @@
     height: 35px;
     background-color: azure;
     border-radius: 5px;
-    
-    *{
-        font-weight:bold;
+
+    * {
+        font-weight: bold;
     }
 
-    img{
+    img {
         object-fit: cover;
         height: 100%;
     }
-    
 }

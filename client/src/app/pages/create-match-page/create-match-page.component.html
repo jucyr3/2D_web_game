@@ -1,1 +1,13 @@
-<p>create-match-page works!</p>
+<body (click)="onBodyClick($event)">
+    <div class="admin-container">
+        <button mat-raised-button (click)="openQuitDialog()" class="quit-button">Page Accueil</button>
+        <div class="content-wrapper">
+            <header class="admin-header">
+                <h1 style="color: rgb(233, 231, 231)">CRÉER UNE PARTIE</h1>
+                <p *ngIf="!mapsForClient.clickedMap" style="color: rgb(233, 231, 231)">Sélectionner un jeu</p>
+                <button *ngIf="mapsForClient.clickedMap" class="button" (click)="createGame()">Créer une partie</button>
+            </header>
+            <app-maps-grid />
+        </div>
+    </div>
+</body>

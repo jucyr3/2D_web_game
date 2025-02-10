@@ -1,0 +1,113 @@
+// New Modal Styles
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #2c2c2c;
+    border-radius: 8px;
+    width: 400px;
+    color: white;
+    position: relative;
+}
+
+.modal-header {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #3d3d3d;
+
+    h2 {
+        margin: 0;
+        color: #b14bff;
+        font-size: 1.5em;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+    }
+}
+
+.modal-body {
+    padding: 20px;
+
+    .form-section {
+        margin-bottom: 20px;
+
+        h3 {
+            margin: 0 0 15px 0;
+            font-size: 1em;
+            font-weight: normal;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+
+            label {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                cursor: pointer;
+
+                input[type='radio'] {
+                    accent-color: #b14bff;
+                    width: 16px;
+                    height: 16px;
+                }
+            }
+        }
+
+        .game-name-input {
+            width: 85%;
+            padding: 8px 12px;
+            border: 1px solid #3d3d3d;
+            border-radius: 4px;
+            background-color: #1c1c1c;
+            color: white;
+            font-size: 14px;
+
+            &:focus {
+                outline: none;
+                border-color: #b14bff;
+            }
+
+            &::placeholder {
+                color: #666;
+            }
+        }
+    }
+
+    .create-btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+
+        &:hover {
+            background-color: #45a049;
+        }
+    }
+}

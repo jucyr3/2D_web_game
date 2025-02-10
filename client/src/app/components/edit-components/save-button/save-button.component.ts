@@ -7,9 +7,9 @@ import { MapService } from '@app/services/edit-services/map.service';
     styleUrl: './save-button.component.scss',
 })
 export class SaveButtonComponent {
-    constructor(private readonly mapService: MapService) {}
+    constructor(protected mapService: MapService) {}
 
-    save() {
-        this.mapService.saveMap();
+    async saveMap() {
+        await this.mapService.saveMap();
     }
 }

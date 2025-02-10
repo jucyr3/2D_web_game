@@ -5,6 +5,7 @@ import { DragAndDropService } from '@app/services/edit-services/drag-and-drop.se
 import { EditingToolService } from '@app/services/edit-services/editing-tool.service';
 import { MouseService } from '@app/services/edit-services/mouse.service';
 import { Renderer2 } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('TileGridComponent', () => {
     let component: TileGridComponent;
@@ -26,6 +27,7 @@ describe('TileGridComponent', () => {
                 { provide: Renderer2, useValue: mockRenderer },
                 { provide: DragAndDropService, useValue: mockDragAndDropService },
                 { provide: EditingToolService, useValue: mockEditingToolService },
+                provideHttpClient(),
             ],
         }).compileComponents();
 

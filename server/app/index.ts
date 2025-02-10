@@ -1,10 +1,15 @@
 import { AppModule } from '@app/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { json, urlencoded } from 'express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 const bootstrap = async () => {
     const app = await NestFactory.create(AppModule);
+
+    app.use(json({ limit: '2mb' }));
+    app.use(urlencoded({ limit: '2mb', extended: true }));
+
     app.setGlobalPrefix('api');
     app.useGlobalPipes(new ValidationPipe());
     app.enableCors();
@@ -18,7 +23,7 @@ const bootstrap = async () => {
     SwaggerModule.setup('api/docs', app, document);
     SwaggerModule.setup('', app, document);
 
-    await app.listen(process.env.PORT);
+    await app.listen(process.env.PORT); // 3000
 };
 
 bootstrap();
