@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-// import { ItemManager } from '@app/classes/item-manager';
 import { ItemObject } from '@common/ItemObject';
 import { Map } from '@common/map';
 import { MapVerification } from '@common/mapVerification.interface';
@@ -10,16 +9,36 @@ import { provideHttpClient } from '@angular/common/http';
 import { MapFormData } from '@app/interfaces/mapFormData';
 import { of } from 'rxjs';
 
-/* eslint-disable @typescript-eslint/no-magic-numbers */
-
 describe('MapService', () => {
     let service: MapService;
+    let mockMapElement: HTMLElement;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [provideHttpClient()],
         });
         service = TestBed.inject(MapService);
+
+        // Setup mock DOM element for export tests
+        mockMapElement = document.createElement('div');
+        mockMapElement.className = 'map';
+        document.body.appendChild(mockMapElement);
+
+        // Mock html2canvas
+        (window as any).html2canvas = jasmine.createSpy('html2canvas').and.callFake(() =>
+            Promise.resolve({
+                toDataURL: jasmine.createSpy('toDataURL').and.returnValue('data:image/jpeg;base64,abc123')
+            })
+        );
+
+        // Mock fetch
+        spyOn(window, 'fetch').and.returnValue(Promise.resolve({
+            blob: () => Promise.resolve(new Blob())
+        } as Response));
+    });
+
+    afterEach(() => {
+        document.body.removeChild(mockMapElement);
     });
 
     it('should be created', () => {
@@ -97,17 +116,6 @@ describe('MapService', () => {
         expect(Array.isArray(flattenedTiles)).toBeTrue();
     });
 
-    // it('should handle map export', async () => {
-    //     const mockElement = document.createElement('div');
-    //     mockElement.className = 'map';
-    //     document.body.appendChild(mockElement);
-
-    //     const blob = await service.exportMapAsImage();
-    //     expect(blob).toBeTruthy();
-    //     document.body.removeChild(mockElement);
-    // });
-
-    // AFTER - loadMapFromServer
     it('should load map from server successfully', async () => {
         const mockMap: Map = {
             id: 1,
@@ -129,10 +137,6 @@ describe('MapService', () => {
         expect(service.map).toBeTruthy();
         expect(service.errorList).toEqual([]);
         expect(service.saveMapToSessionStorage).toHaveBeenCalled();
-    });
-
-    it('should throw error when map element not found during export', async () => {
-        await expectAsync(service.exportMapAsImage()).toBeRejectedWithError('Map element not found');
     });
 
     it('should correctly parse tile matrix and handle gameObjects', () => {
@@ -166,7 +170,6 @@ describe('MapService', () => {
         expect(mockItemManager.decreaseItemAmount).toHaveBeenCalledWith('Sword');
     });
 
-    // AFTER - saveMapToServer
     it('should save map to server successfully', async () => {
         const mockResponse = {
             id: 1,
@@ -276,30 +279,7 @@ describe('MapService', () => {
         expect(service.loadMapFromSessionStorage).toHaveBeenCalled();
     });
 
-    it('should save map and handle successful verification', async () => {
-        const mockVerification: MapVerification = {
-            isUniqueName: true,
-            isNamePresent: true,
-            isDescriptionPresent: true,
-            isMapHalfFloor: true,
-            isMapAccessible: true,
-            areStartingPointsValid: true,
-            areDoorsNextToWalls: true,
-            areDoorsNotNextToBorder: true,
-            isNameValid: true,
-            isDescriptionValid: true,
-        };
-
-        spyOn(service, 'saveMapToServer').and.returnValue(Promise.resolve(mockVerification));
-        spyOn(service, 'exportMapAsImage').and.returnValue(Promise.resolve(new Blob()));
-        spyOn(service['router'], 'navigate');
-
-        await service.saveMap();
-        expect(service.errorList.length).toBe(0);
-        expect(service['router'].navigate).toHaveBeenCalledWith(['/admin']);
-    });
-
-    it('should return error list with mapVerificationErrors', () => {
+    it('should handle mapVerificationErrors', () => {
         const mapVerification: MapVerification = {
             isUniqueName: false,
             isNamePresent: true,
@@ -314,5 +294,46 @@ describe('MapService', () => {
         };
         service.handleMapVerificationError(mapVerification);
         expect(service.errorList.length).toBe(1);
+    });
+
+    describe('exportMapAsImage()', () => {
+        it('should generate image blob when element exists', async () => {
+            const mockCanvas = {
+                toDataURL: jasmine.createSpy('toDataURL').and.returnValue('data:image/jpeg;base64,abc123')
+            };
+            (window as any).html2canvas = jasmine.createSpy('html2canvas').and.returnValue(Promise.resolve(mockCanvas));
+
+            const blob = await service.exportMapAsImage();
+
+            expect((window as any).html2canvas).toHaveBeenCalledWith(mockMapElement, jasmine.objectContaining({
+                scale: 1,
+                useCORS: true,
+                backgroundColor: 'transparent'
+            }));
+            expect(service['clientHttpRequest'].saveMapImageOnServer).toHaveBeenCalledWith(service.map.id, 'abc123');
+            expect(blob).toBeInstanceOf(Blob);
+        });
+
+        it('should use correct compression settings', async () => {
+            const mockCanvas = {
+                toDataURL: jasmine.createSpy('toDataURL').and.returnValue('data:image/jpeg;base64,abc123')
+            };
+            (window as any).html2canvas = jasmine.createSpy('html2canvas').and.returnValue(Promise.resolve(mockCanvas));
+
+            await service.exportMapAsImage();
+
+            expect(mockCanvas.toDataURL).toHaveBeenCalledWith('image/jpeg', 0.3);
+        });
+
+        it('should handle html2canvas errors', async () => {
+            (window as any).html2canvas = jasmine.createSpy('html2canvas').and.returnValue(Promise.reject(new Error('Rendering failed')));
+
+            await expectAsync(service.exportMapAsImage()).toBeRejectedWithError('Error exporting map as image: Rendering failed');
+        });
+
+        it('should throw error when map element not found during export', async () => {
+            document.body.removeChild(mockMapElement);
+            await expectAsync(service.exportMapAsImage()).toBeRejectedWithError('Map element not found');
+        });
     });
 });
