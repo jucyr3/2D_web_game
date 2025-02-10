@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@ng-matero/extensions": "^19.1.0",
+    "html2canvas": "^1.4.1"
+  },
+  "devDependencies": {
+    "jasmine": "^5.5.0"
+  }
+}

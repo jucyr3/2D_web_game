@@ -1,11 +1,5 @@
-$primary-color: #a85cf9; // Couleur du titre
-$background-color: #333; // Couleur de fond de la page
-$button-color: #eee; // Couleur des boutons
-$button-hover-color: #ddd; // Couleur des boutons au survol
-$button-border-color: #aaa; // Couleur de la bordure des boutons
-$text-color: #fff; // Couleur principale du texte
-$footer-color: #aaa; // Couleur du texte dans le pied de page
-
+@import '../../../styles/button-styles.scss';
+@import '../../../styles/colors.scss';
 
 @mixin center-align {
     display: flex;
@@ -18,9 +12,9 @@ $footer-color: #aaa; // Couleur du texte dans le pied de page
     text-align: center;
     padding: 2rem;
     min-height: 100vh;
-    display: flex; 
-    flex-direction: column; 
-    justify-content: space-between; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     box-sizing: border-box;
 
     &__title {
@@ -40,22 +34,13 @@ $footer-color: #aaa; // Couleur du texte dans le pied de page
         flex-direction: column;
         gap: 1rem;
         margin-top: 2rem;
+    }
 
-        .button {
-            background-color: $button-color;
-            border: 2px solid $button-border-color;
-            border-radius: 5px;
-            padding: 0.8rem 2rem;
-            font-size: 1rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-
-            &:hover {
-                background-color: $button-hover-color;
-            }
-        }
+    button {
+        background-color: $hover-color;
+    }
+    button::before {
+        background: $clicked-color;
     }
 
     &__footer {
@@ -65,14 +50,14 @@ $footer-color: #aaa; // Couleur du texte dans le pied de page
 
         .team-name {
             font-size: 1.2rem;
-            color: $footer-color;
+            color: $light-pink;
         }
 
         p {
-            font-size: 1rem;
+            font-size: 1.1rem;
 
             span {
-                color: $footer-color;
+                color: $light-grey-color;
 
                 &:not(:last-child)::after {
                     content: ', ';
@@ -80,6 +65,4 @@ $footer-color: #aaa; // Couleur du texte dans le pied de page
             }
         }
     }
-
-    
 }

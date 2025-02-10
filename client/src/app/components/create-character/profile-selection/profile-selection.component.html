@@ -1,0 +1,15 @@
+<div class="container">
+    @for (path of imagesPath; track path.id){ @if(path.id !== itemSelected){
+    <app-profile-picture
+        [itemNumber]="path.id"
+        imagePath="{{ path.imagePath }}"
+        (selected)="clickItem($event)"
+        [isSelected]="false"
+        class="grid-item"
+    >
+    </app-profile-picture>
+    }@else {
+    <app-profile-picture [itemNumber]="path.id" imagePath="{{ path.imagePath }}" (selected)="clickItem($event)" [isSelected]="true" class="grid-item">
+    </app-profile-picture>
+    } }
+</div>
