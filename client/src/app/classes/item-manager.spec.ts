@@ -31,10 +31,17 @@ describe('ItemManager', () => {
         expect(itemManager.itemAmounts['attributeItem1']).toBe(initialAmount + 1);
     });
 
+    it('should increase the amount of an existing item', () => {
+        const initialAmount = itemManager.itemAmounts['attributeItem1'];
+        itemManager.increaseItemAmount('attributeItem1');
+        expect(itemManager.itemAmounts['attributeItem1']).toBe(initialAmount + 1);
+    });
+
     it('should decrease the amount of an existing item', () => {
-        const initialAmount = itemManager.itemAmounts['conditionItem1'];
-        itemManager.decreaseItemAmount('conditionItem1');
-        expect(itemManager.itemAmounts['conditionItem1']).toBe(initialAmount - 1);
+        itemManager.itemAmounts['testItem'] = 2;
+        const initialAmount = itemManager.itemAmounts['testItem'];
+        itemManager.decreaseItemAmount('testItem');
+        expect(itemManager.itemAmounts['testItem']).toBe(initialAmount - 1);
     });
 
     it('should return correct item amount for spawnpoint based on map size', () => {
@@ -92,5 +99,38 @@ describe('ItemManager', () => {
         itemManager.itemAmounts['attributeItem1'] = 0;
         itemManager.decreaseItemAmount('attributeItem1');
         expect(itemManager.itemAmounts['attributeItem1']).toBe(0);
+    });
+
+    it('should initialize itemCounter and maxItemCounter correctly', () => {
+        expect(itemManager.itemCounter).toBe(0);
+        expect(itemManager.maxItemCounter).toBe(2);
+
+        itemManager = new ItemManager(15, 'Classic');
+        expect(itemManager.itemCounter).toBe(0);
+        expect(itemManager.maxItemCounter).toBe(4);
+
+        itemManager = new ItemManager(20, 'Classic');
+        expect(itemManager.itemCounter).toBe(0);
+        expect(itemManager.maxItemCounter).toBe(6);
+    });
+
+    it('should decrease itemCounter when increasing item amount', () => {
+        itemManager.increaseItemAmount('attributeItem1');
+        expect(itemManager.itemCounter).toBe(-1);
+
+        itemManager.increaseItemAmount('conditionItem1');
+        expect(itemManager.itemCounter).toBe(-2);
+    });
+
+    it('should increase itemCounter when decreasing item amount', () => {
+        itemManager.increaseItemAmount('attributeItem1');
+        itemManager.increaseItemAmount('conditionItem1');
+        expect(itemManager.itemCounter).toBe(-2);
+
+        itemManager.decreaseItemAmount('attributeItem1');
+        expect(itemManager.itemCounter).toBe(-1);
+
+        itemManager.decreaseItemAmount('conditionItem1');
+        expect(itemManager.itemCounter).toBe(0);
     });
 });

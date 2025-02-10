@@ -1,7 +1,7 @@
 <div [tp]="ItemTooltipComponent" class="item-container" [tpDuration]="0" tpPlacement="right" tpMaxWidth="200px" [tpIsEnabled]="isTooltipEnabled">
     <img
         class="item"
-        [ngClass]="{ grayscale: this.mapService.itemManager.itemAmounts[this.itemObject.name] <= 0 }"
+        [ngClass]="{ grayscale: this.isGrayedOut() }"
         [src]="itemTexturePath + itemId + '.png'"
         [alt]="itemId"
         draggable="false"

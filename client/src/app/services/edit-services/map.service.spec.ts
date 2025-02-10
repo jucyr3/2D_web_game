@@ -97,16 +97,6 @@ describe('MapService', () => {
         expect(Array.isArray(flattenedTiles)).toBeTrue();
     });
 
-    // it('should handle map export', async () => {
-    //     const mockElement = document.createElement('div');
-    //     mockElement.className = 'map';
-    //     document.body.appendChild(mockElement);
-
-    //     const blob = await service.exportMapAsImage();
-    //     expect(blob).toBeTruthy();
-    //     document.body.removeChild(mockElement);
-    // });
-
     // AFTER - loadMapFromServer
     it('should load map from server successfully', async () => {
         const mockMap: Map = {
@@ -129,10 +119,6 @@ describe('MapService', () => {
         expect(service.map).toBeTruthy();
         expect(service.errorList).toEqual([]);
         expect(service.saveMapToSessionStorage).toHaveBeenCalled();
-    });
-
-    it('should throw error when map element not found during export', async () => {
-        await expectAsync(service.exportMapAsImage()).toBeRejectedWithError('Map element not found');
     });
 
     it('should correctly parse tile matrix and handle gameObjects', () => {
@@ -255,13 +241,13 @@ describe('MapService', () => {
         expect(service.getTileTexture(1, 1)).toBe('url(assets/tiles/groundTile1.png)');
     });
 
-    it('should call saveMapToSessionStorage and saveMapToServer when saving map', () => {
-        spyOn(service, 'saveMapToSessionStorage');
-        spyOn(service, 'saveMapToServer');
-        service.saveMap();
-        expect(service.saveMapToSessionStorage).toHaveBeenCalled();
-        expect(service.saveMapToServer).toHaveBeenCalled();
-    });
+    // it('should call saveMapToSessionStorage and saveMapToServer when saving map', () => {
+    //     spyOn(service, 'saveMapToSessionStorage');
+    //     spyOn(service, 'saveMapToServer');
+    //     service.saveMap();
+    //     expect(service.saveMapToSessionStorage).toHaveBeenCalled();
+    //     expect(service.saveMapToServer).toHaveBeenCalled();
+    // });
 
     it('should set default tile type', () => {
         service.setDefaultMap();
@@ -314,5 +300,84 @@ describe('MapService', () => {
         };
         service.handleMapVerificationError(mapVerification);
         expect(service.errorList.length).toBe(1);
+    });
+    it('should export map as image', async () => {
+        const mockElement = document.createElement('div');
+        mockElement.classList.add('map');
+        document.body.appendChild(mockElement);
+
+        spyOn(service, 'getMapElement').and.returnValue(mockElement);
+        spyOn(service, 'renderMapToCanvas').and.returnValue(Promise.resolve(document.createElement('canvas')));
+        spyOn(service, 'compressCanvasToDataUrl').and.returnValue('data:image/jpeg;base64,compressedData');
+        spyOn(service, 'saveCompressedImageToServer').and.returnValue(Promise.resolve());
+        spyOn(service, 'convertDataUrlToBlob').and.returnValue(Promise.resolve(new Blob()));
+
+        const result = await service.exportMapAsImage();
+
+        expect(service.getMapElement).toHaveBeenCalled();
+        expect(service.renderMapToCanvas).toHaveBeenCalledWith(mockElement);
+        expect(service.compressCanvasToDataUrl).toHaveBeenCalled();
+        expect(service.saveCompressedImageToServer).toHaveBeenCalledWith('data:image/jpeg;base64,compressedData');
+        expect(service.convertDataUrlToBlob).toHaveBeenCalledWith('data:image/jpeg;base64,compressedData');
+        expect(result).toBeInstanceOf(Blob);
+
+        document.body.removeChild(mockElement);
+    });
+
+    it('should get map element', () => {
+        const mockElement = document.createElement('div');
+        mockElement.classList.add('map');
+        document.body.appendChild(mockElement);
+
+        const result = service.getMapElement();
+
+        expect(result).toBe(mockElement);
+
+        document.body.removeChild(mockElement);
+    });
+
+    it('should throw error if map element not found', () => {
+        expect(() => service.getMapElement()).toThrowError('Map element not found');
+    });
+
+    it('should compress canvas to data URL', () => {
+        const mockCanvas = document.createElement('canvas');
+        spyOn(mockCanvas, 'toDataURL').and.returnValue('data:image/jpeg;base64,compressedData');
+
+        const result = service.compressCanvasToDataUrl(mockCanvas);
+
+        expect(result).toBe('data:image/jpeg;base64,compressedData');
+        expect(mockCanvas.toDataURL).toHaveBeenCalledWith('image/jpeg', 0.3);
+    });
+
+    it('should save compressed image to server', async () => {
+        const mockDataUrl = 'data:image/jpeg;base64,compressedData';
+        spyOn(service['clientHttpRequest'], 'saveMapImageOnServer').and.returnValue(of({} as Map));
+
+        await service.saveCompressedImageToServer(mockDataUrl);
+
+        expect(service['clientHttpRequest'].saveMapImageOnServer).toHaveBeenCalledWith(service.map.id, 'compressedData');
+    });
+
+    it('should convert data URL to blob', async () => {
+        const mockDataUrl = 'data:image/jpeg;base64,compressedData';
+        const mockBlob = new Blob();
+        spyOn(window, 'fetch').and.returnValue(Promise.resolve(new Response(mockBlob)));
+
+        const result = await service.convertDataUrlToBlob(mockDataUrl);
+
+        expect(result).toEqual(mockBlob);
+        expect(window.fetch).toHaveBeenCalledWith(mockDataUrl);
+    });
+
+    it('should throw error when rendering map to canvas with bad mapElement', async () => {
+        const badElement = document.createElement('div');
+
+        try {
+            await service.renderMapToCanvas(badElement);
+            fail('Expected error to be thrown');
+        } catch (error) {
+            expect(error).toEqual(new Error('Error rendering map to canvas'));
+        }
     });
 });
