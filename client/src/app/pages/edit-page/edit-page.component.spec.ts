@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { DragAndDropService } from '@app/services/edit-services/drag-and-drop.service';
 import { MouseService } from '@app/services/edit-services/mouse.service';
 import { of } from 'rxjs';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('EditPageComponent', () => {
     let component: EditPageComponent;
@@ -50,6 +51,7 @@ describe('EditPageComponent', () => {
                 { provide: Router, useValue: mockRouter },
                 { provide: DragAndDropService, useValue: mockDragAndDropService },
                 { provide: MouseService, useValue: mockMouseService },
+                provideHttpClient(),
             ],
         }).compileComponents();
 
@@ -110,7 +112,7 @@ describe('EditPageComponent', () => {
         component.openQuitDialog();
 
         expect(mockDialog.open).toHaveBeenCalled();
-        expect(mockRouter.navigate).toHaveBeenCalledWith(['/home']);
+        expect(mockRouter.navigate).toHaveBeenCalledWith(['/admin']);
     });
 
     it('should call onMouseMove of dragAndDropService if an item is dragged', () => {

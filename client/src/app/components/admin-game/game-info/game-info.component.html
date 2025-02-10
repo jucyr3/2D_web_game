@@ -1,0 +1,6 @@
+<div class="game-info">
+    <h2>{{ name }}</h2>
+    <p>Taille: {{ size }} x {{ size }}</p>
+    <p>Mode: {{ mode === 'Classic' ? 'Classique' : 'Capture the flag' }}</p>
+    <p>Dernière modification: {{ lastModified | date: 'yyyy-MM-dd | HH:mm' }}</p>
+</div>

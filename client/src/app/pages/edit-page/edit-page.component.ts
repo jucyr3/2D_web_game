@@ -11,7 +11,6 @@ import { DragAndDropService } from '@app/services/edit-services/drag-and-drop.se
 import { EditingToolService } from '@app/services/edit-services/editing-tool.service';
 import { MapService } from '@app/services/edit-services/map.service';
 import { MouseService, MouseButton } from '@app/services/edit-services/mouse.service';
-
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -106,7 +105,7 @@ export class EditPageComponent implements OnInit {
         dialogRef.componentInstance.confirmed.subscribe((result: boolean) => {
             if (result) {
                 dialogRef.close();
-                this.router.navigate(['/home']);
+                this.router.navigate(['/admin']);
             }
         });
     }

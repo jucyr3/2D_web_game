@@ -5,19 +5,26 @@ import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
 
 export class MapVerificationService {
-    // temporary storage for game name
-    private gameNames: Set<string> = new Set(['test']);
+    private gameNames: Set<string> = new Set(['test']); // TODO : REPRENDRE TOUS LES NOMS DES MAPS DANS LA DB
 
     setGameNames(gameNames: { name: string }[]): void {
         this.gameNames = new Set(gameNames.map((game) => game.name));
+    }
+
+    setAllMapsNames(maps: Map[]): void {
+        this.gameNames = new Set(maps.map((map) => map.name));
     }
 
     isUniqueName(name: string): boolean {
         return !this.gameNames.has(name);
     }
 
+    removeMapName(name: string): void {
+        this.gameNames.delete(name);
+    }
+
     isNameValid(map: Map): boolean {
-        return map.name.length <= MapProperties.MAX_MAP_NAME;
+        return map.name.length > 0 && map.name.length <= MapProperties.MAX_MAP_NAME;
     }
 
     isDescriptionValid(map: Map): boolean {
@@ -185,7 +192,7 @@ export class MapVerificationService {
     validateGame(map: Map): MapVerification {
         const verification: MapVerification = {
             isUniqueName: this.isUniqueName(map.name),
-            isNamePresent: !!map.name,
+            isNamePresent: this.isNameValid(map),
             isDescriptionPresent: !!map.description,
             isMapHalfFloor: this.isMapHalfFloor(map),
             isMapAccessible: this.isMapAccessible(map),
@@ -195,7 +202,6 @@ export class MapVerificationService {
             isNameValid: this.isNameValid(map),
             isDescriptionValid: this.isDescriptionValid(map),
         };
-
         return verification;
     }
 }

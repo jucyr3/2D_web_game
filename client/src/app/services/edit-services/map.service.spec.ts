@@ -1,11 +1,14 @@
 import { TestBed } from '@angular/core/testing';
-import { ItemManager } from '@app/classes/item-manager';
+// import { ItemManager } from '@app/classes/item-manager';
 import { ItemObject } from '@common/ItemObject';
 import { Map } from '@common/map';
 import { MapVerification } from '@common/mapVerification.interface';
 import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
 import { MapService } from './map.service';
+import { provideHttpClient } from '@angular/common/http';
+import { MapFormData } from '@app/interfaces/mapFormData';
+import { of } from 'rxjs';
 
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 
@@ -13,7 +16,9 @@ describe('MapService', () => {
     let service: MapService;
 
     beforeEach(() => {
-        TestBed.configureTestingModule({});
+        TestBed.configureTestingModule({
+            providers: [provideHttpClient()],
+        });
         service = TestBed.inject(MapService);
     });
 
@@ -76,8 +81,58 @@ describe('MapService', () => {
         expect(service.getItemObject(3, 3)).toEqual(item);
     });
 
-    it('should return false when loading map from server', () => {
-        expect(service.loadMapFromServer()).toBeFalse();
+    it('should create an empty map with specified data', () => {
+        const mapData: MapFormData = { size: 20, gameMode: 'Classic' };
+        service.createEmptyMap(mapData);
+        expect(service.map.size).toBe(20);
+        expect(service.map.gameMode).toBe('Classic');
+        expect(service.map.tileMatrix.length).toBe(20);
+        expect(service.itemManager).toBeTruthy();
+    });
+
+    it('should flatten tile matrix correctly', () => {
+        service.setDefaultMap();
+        const flattenedTiles = service.flattenedTileMatrix();
+        expect(flattenedTiles.length).toBe(service.map.size * service.map.size);
+        expect(Array.isArray(flattenedTiles)).toBeTrue();
+    });
+
+    // it('should handle map export', async () => {
+    //     const mockElement = document.createElement('div');
+    //     mockElement.className = 'map';
+    //     document.body.appendChild(mockElement);
+
+    //     const blob = await service.exportMapAsImage();
+    //     expect(blob).toBeTruthy();
+    //     document.body.removeChild(mockElement);
+    // });
+
+    // AFTER - loadMapFromServer
+    it('should load map from server successfully', async () => {
+        const mockMap: Map = {
+            id: 1,
+            name: 'Test',
+            size: 15,
+            isVisible: true,
+            description: 'Test',
+            gameMode: 'Classic',
+            tileMatrix: [],
+            lastModified: new Date(),
+        };
+
+        spyOn(service['clientHttpRequest'], 'loadMapById').and.returnValue(of(mockMap));
+        spyOn(service, 'saveMapToSessionStorage');
+
+        const result = await service.loadMapFromServer(1);
+
+        expect(result).toBeTrue();
+        expect(service.map).toBeTruthy();
+        expect(service.errorList).toEqual([]);
+        expect(service.saveMapToSessionStorage).toHaveBeenCalled();
+    });
+
+    it('should throw error when map element not found during export', async () => {
+        await expectAsync(service.exportMapAsImage()).toBeRejectedWithError('Map element not found');
     });
 
     it('should correctly parse tile matrix and handle gameObjects', () => {
@@ -109,6 +164,71 @@ describe('MapService', () => {
         expect(tileMatrix.length).toBe(2);
         expect(tileMatrix[0][1].itemObject?.name).toBe('Sword');
         expect(mockItemManager.decreaseItemAmount).toHaveBeenCalledWith('Sword');
+    });
+
+    // AFTER - saveMapToServer
+    it('should save map to server successfully', async () => {
+        const mockResponse = {
+            id: 1,
+            mapVerification: {
+                isUniqueName: true,
+                isNamePresent: true,
+                isDescriptionPresent: true,
+                isMapHalfFloor: true,
+                isMapAccessible: true,
+                areStartingPointsValid: true,
+                areDoorsNextToWalls: true,
+                areDoorsNotNextToBorder: true,
+                isNameValid: true,
+                isDescriptionValid: true,
+            },
+        };
+
+        spyOn(service['clientHttpRequest'], 'saveMapToServer').and.returnValue(of(mockResponse));
+        service.map = { id: 0 } as Map;
+
+        const result = await service.saveMapToServer();
+
+        expect(result).toEqual(mockResponse.mapVerification);
+        expect(service.map.id).toBe(mockResponse.id);
+    });
+
+    it('should initialize with default map when session storage is empty', () => {
+        const mockClientHttpRequest = jasmine.createSpyObj('ClientHttpRequestsService', ['someMethod']);
+        const mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+
+        spyOn(MapService.prototype, 'loadMapFromSessionStorage').and.returnValue(false);
+        spyOn(MapService.prototype, 'setDefaultMap').and.callThrough();
+        spyOn(MapService.prototype, 'saveMapToSessionStorage').and.callThrough();
+
+        service = new MapService(mockClientHttpRequest, mockRouter);
+
+        expect(service.setDefaultMap).toHaveBeenCalled();
+        expect(service.saveMapToSessionStorage).toHaveBeenCalled();
+        expect(service.itemManager).toBeTruthy();
+    });
+
+    it('should save map and handle successful verification', async () => {
+        const mockVerification: MapVerification = {
+            isUniqueName: true,
+            isNamePresent: true,
+            isDescriptionPresent: true,
+            isMapHalfFloor: true,
+            isMapAccessible: true,
+            areStartingPointsValid: true,
+            areDoorsNextToWalls: true,
+            areDoorsNotNextToBorder: true,
+            isNameValid: true,
+            isDescriptionValid: true,
+        };
+
+        spyOn(service, 'saveMapToServer').and.returnValue(Promise.resolve(mockVerification));
+        spyOn(service, 'exportMapAsImage').and.returnValue(Promise.resolve(new Blob()));
+        spyOn(service['router'], 'navigate');
+
+        await service.saveMap();
+        expect(service.errorList.length).toBe(0);
+        expect(service['router'].navigate).toHaveBeenCalledWith(['/admin']);
     });
 
     it('should create a map from JSON', () => {
@@ -156,28 +276,27 @@ describe('MapService', () => {
         expect(service.loadMapFromSessionStorage).toHaveBeenCalled();
     });
 
-    it('should set default map and initialize itemManager if both loadMapFromSessionStorage and loadMapFromServer fail', () => {
-        spyOn(MapService.prototype, 'loadMapFromSessionStorage').and.returnValue(false);
-        spyOn(MapService.prototype, 'loadMapFromServer').and.returnValue(false);
-        spyOn(MapService.prototype, 'setDefaultMap').and.callThrough();
-        spyOn(MapService.prototype, 'saveMapToSessionStorage').and.callThrough();
+    it('should save map and handle successful verification', async () => {
+        const mockVerification: MapVerification = {
+            isUniqueName: true,
+            isNamePresent: true,
+            isDescriptionPresent: true,
+            isMapHalfFloor: true,
+            isMapAccessible: true,
+            areStartingPointsValid: true,
+            areDoorsNextToWalls: true,
+            areDoorsNotNextToBorder: true,
+            isNameValid: true,
+            isDescriptionValid: true,
+        };
 
-        service = new MapService();
+        spyOn(service, 'saveMapToServer').and.returnValue(Promise.resolve(mockVerification));
+        spyOn(service, 'exportMapAsImage').and.returnValue(Promise.resolve(new Blob()));
+        spyOn(service['router'], 'navigate');
 
-        expect(service.loadMapFromSessionStorage).toHaveBeenCalled();
-        expect(service.loadMapFromServer).toHaveBeenCalled();
-        expect(service.setDefaultMap).toHaveBeenCalled();
-        expect(service.saveMapToSessionStorage).toHaveBeenCalled();
-        expect(service.itemManager).toBeDefined();
-        expect(service.itemManager).toBeInstanceOf(ItemManager);
-        expect(service.map).toBeDefined();
-        expect(service.map.size).toBe(15);
-    });
-
-    it('should call handleMapVerificationError when calling saveMapToServer', () => {
-        spyOn(service, 'handleMapVerificationError');
-        service.saveMap();
-        expect(service.handleMapVerificationError).toHaveBeenCalled();
+        await service.saveMap();
+        expect(service.errorList.length).toBe(0);
+        expect(service['router'].navigate).toHaveBeenCalledWith(['/admin']);
     });
 
     it('should return error list with mapVerificationErrors', () => {

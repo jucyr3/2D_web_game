@@ -1,0 +1,41 @@
+<div class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>CRÉER LE JEU</h2>
+            <button class="close-btn" (click)="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-section">
+                <h3>MODE DE JEU:</h3>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" [(ngModel)]="newMapForm.gameMode" name="gameMode" value="Classic" />
+                        CLASSIQUE
+                    </label>
+                    <label>
+                        <input type="radio" [(ngModel)]="newMapForm.gameMode" name="gameMode" value="CTF" />
+                        CAPTURE THE FLAG
+                    </label>
+                </div>
+            </div>
+            <div class="form-section">
+                <h3>TAILLE DU JEU:</h3>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" [(ngModel)]="newMapForm.size" name="gameSize" [value]="10" />
+                        PETITE (10X10)
+                    </label>
+                    <label>
+                        <input type="radio" [(ngModel)]="newMapForm.size" name="gameSize" [value]="15" />
+                        MOYENNE (15X15)
+                    </label>
+                    <label>
+                        <input type="radio" [(ngModel)]="newMapForm.size" name="gameSize" [value]="20" />
+                        GRANDE (20X20)
+                    </label>
+                </div>
+            </div>
+            <button class="create-btn" (click)="createMap()">CRÉER LE JEU</button>
+        </div>
+    </div>
+</div>

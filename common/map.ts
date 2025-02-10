@@ -1,4 +1,4 @@
-import { Tile } from './tile';
+import { Tile } from '@common/tile';
 
 export interface Map {
     id: number;

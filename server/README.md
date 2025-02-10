@@ -55,9 +55,9 @@ Si vous avez décidé de garder le serveur NodeJS de base, vous n'avez qu'à sup
 
 Si vous avez décidé de prendre le serveur NestJS, vous devez :
 
-- Supprimer le répertoire `/server` et renommer `/server-nestjs` à `/server`.
-- Modifier la valeur du champ `entryFile` pour `server/app/index` dans le fichier `nest-cli.json`.
-- Modifier la valeur du champ `@app` à `out/server/app` dans le fichier `/server/package.json`.
+-   Supprimer le répertoire `/server` et renommer `/server-nestjs` à `/server`.
+-   Modifier la valeur du champ `entryFile` pour `server/app/index` dans le fichier `nest-cli.json`.
+-   Modifier la valeur du champ `@app` à `out/server/app` dans le fichier `/server/package.json`.
 
 N'oubliez pas de pousser vos changements sur Git.
 
@@ -69,9 +69,7 @@ Si vous voulez débuter avec le serveur NestJS sans une connexion à une instanc
 
 ```ts
 @Module({
-    imports: [
-        ConfigModule.forRoot({ isGlobal: true })
-    ],
+    imports: [ConfigModule.forRoot({ isGlobal: true })],
     controllers: [DateController, ExampleController],
     providers: [ChatGateway, DateService, ExampleService, Logger],
 })

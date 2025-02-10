@@ -3,9 +3,13 @@ import { ItemObject } from '@common/ItemObject';
 import { Map } from '@common/map';
 import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
-
+import html2canvas from 'html2canvas';
+import { ClientHttpRequestsService } from '@app/services/client-http-requests.service';
 import { ItemManager } from '@app/classes/item-manager';
 import { MapVerification } from '@common/mapVerification.interface';
+import { Router } from '@angular/router';
+import { MapFormData } from '@app/interfaces/mapFormData';
+import { MapProperties } from '@common/map.constants';
 
 @Injectable({
     providedIn: 'root',
@@ -15,18 +19,19 @@ export class MapService {
     itemManager: ItemManager;
     errorList: string[] = [];
 
-    constructor() {
+    constructor(
+        protected clientHttpRequest: ClientHttpRequestsService,
+        private router: Router,
+    ) {
         if (!this.loadMapFromSessionStorage()) {
-            if (!this.loadMapFromServer()) {
-                this.setDefaultMap();
-                this.saveMapToSessionStorage();
-                this.itemManager = new ItemManager(this.map.size, this.map.gameMode);
-            }
+            this.setDefaultMap();
+            this.saveMapToSessionStorage();
+            this.itemManager = new ItemManager(this.map.size, this.map.gameMode);
         }
     }
 
     setDefaultMap(): void {
-        const mapSize = 15;
+        const mapSize = MapProperties.MAP_SIZE_MEDIUM;
         const defaultId = 0;
         this.map = {
             id: defaultId,
@@ -40,6 +45,27 @@ export class MapService {
             ),
             lastModified: new Date(),
         };
+    }
+
+    createEmptyMap(mapData: MapFormData): void {
+        const defaultMap: Map = {
+            id: 0,
+            name: 'Untitled',
+            size: mapData.size,
+            isVisible: false,
+            description: '',
+            gameMode: mapData.gameMode,
+            tileMatrix: Array.from({ length: mapData.size }, () =>
+                Array.from(
+                    { length: mapData.size },
+                    () => ({ type: TileTypes.GROUND_1, isOccupied: false, isObstacle: false, itemObject: null }) as Tile,
+                ),
+            ),
+            lastModified: new Date(),
+            previewImage: '',
+        };
+        this.map = defaultMap;
+        this.itemManager = new ItemManager(mapData.size, mapData.gameMode);
     }
 
     parseTileMatrix(json: Map): Tile[][] {
@@ -74,30 +100,28 @@ export class MapService {
         };
     }
 
-    loadMapFromServer(): boolean {
-        // TODO: for the server implementation
-        // call the proper service to get the map from the server
-
-        // TODO: this.createMapFromJSON(mapDuServeur);
-        return false;
+    async loadMapFromServer(id: number): Promise<boolean> {
+        return new Promise((resolve) => {
+            this.errorList = [];
+            this.clientHttpRequest.loadMapById(id).subscribe({
+                next: (map: Map) => {
+                    this.map = this.createMapFromJSON(map);
+                    this.saveMapToSessionStorage();
+                    resolve(true);
+                },
+            });
+        });
     }
 
-    saveMapToServer(): void {
-        // TODO: for the server implementation
-        // temp object
-        const mapVerification: MapVerification = {
-            isUniqueName: false,
-            isNamePresent: true,
-            isDescriptionPresent: true,
-            isMapHalfFloor: true,
-            isMapAccessible: false,
-            areStartingPointsValid: true,
-            areDoorsNextToWalls: true,
-            areDoorsNotNextToBorder: true,
-            isNameValid: true,
-            isDescriptionValid: true,
-        };
-        this.handleMapVerificationError(mapVerification);
+    async saveMapToServer(): Promise<MapVerification> {
+        return new Promise((resolve) => {
+            this.clientHttpRequest.saveMapToServer(this.map).subscribe({
+                next: (mapResponse) => {
+                    this.map.id = mapResponse.id;
+                    resolve(mapResponse.mapVerification);
+                },
+            });
+        });
     }
 
     handleMapVerificationError(mapVerification: MapVerification): void {
@@ -109,13 +133,16 @@ export class MapService {
         }
     }
 
-    flattenedTileMatrix(): Tile[] {
-        return this.map.tileMatrix.reduce((acc, row) => [...acc, ...row], []);
-    }
-
-    saveMap(): void {
+    async saveMap(): Promise<void> {
         this.saveMapToSessionStorage();
-        this.saveMapToServer();
+        const mapVerification = await this.saveMapToServer();
+        this.handleMapVerificationError(mapVerification);
+
+        if (this.errorList.length === 0) {
+            await this.exportMapAsImage();
+            this.errorList = [];
+            this.router.navigate(['/admin']);
+        }
     }
 
     resetMap(): void {
@@ -131,7 +158,6 @@ export class MapService {
         if (!mapJson) {
             return false;
         }
-
         this.map = this.createMapFromJSON(JSON.parse(mapJson));
 
         return true;
@@ -181,5 +207,40 @@ export class MapService {
 
     resetItemToStartPosition(row: number, column: number, draggedItem: ItemObject): void {
         this.map.tileMatrix[row][column].itemObject = draggedItem;
+    }
+
+    async exportMapAsImage(): Promise<Blob | null> {
+        const mapElement = document.querySelector('.map') as HTMLElement;
+
+        if (!mapElement) {
+            throw new Error('Map element not found');
+        }
+
+        try {
+            // Use html2canvas to render the .map element to a canvas
+            const canvas = await html2canvas(mapElement, {
+                scale: 1,
+                useCORS: true,
+                backgroundColor: 'transparent',
+            });
+
+            const compressedScale = 0.3;
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', compressedScale);
+
+            const base64String = compressedDataUrl.split(',')[1];
+
+            this.clientHttpRequest.saveMapImageOnServer(this.map.id, base64String).subscribe({});
+
+            // Convert the base64 image to a Blob and return it
+            const response = await fetch(compressedDataUrl);
+            return response.blob();
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            throw new Error(`Error exporting map as image: ${errorMessage}`);
+        }
+    }
+
+    flattenedTileMatrix(): Tile[] {
+        return this.map.tileMatrix.reduce((acc, row) => [...acc, ...row], []);
     }
 }
