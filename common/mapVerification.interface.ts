@@ -6,6 +6,7 @@ export interface MapVerification {
     isMapHalfFloor: boolean;
     isMapAccessible: boolean;
     areStartingPointsValid: boolean;
+    // areItemsValid: boolean;
     areDoorsNextToWalls: boolean;
     areDoorsNotNextToBorder: boolean;
     isNameValid: boolean;

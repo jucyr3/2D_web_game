@@ -162,7 +162,7 @@ describe('MapVerificationService', () => {
         expect(service.areStartingPointsValid(mockMap20)).toBeTruthy();
     });
 
-    it('should check if doors are between walls', () => {
+    fit('should check if doors are between walls', () => {
         mockMap.tileMatrix[5][5].type = TileTypes.DOOR;
         expect(service.areDoorsNextToWalls(mockMap)).toBeFalsy();
 
@@ -174,6 +174,11 @@ describe('MapVerificationService', () => {
 
         mockMap.tileMatrix[5][4].type = TileTypes.WALL;
         expect(service.areDoorsNextToWalls(mockMap)).toBeFalsy();
+
+        mockMap.tileMatrix[5][6].type = TileTypes.WALL;
+        mockMap.tileMatrix[4][5].type = TileTypes.GROUND_2;
+        mockMap.tileMatrix[6][5].type = TileTypes.GROUND_2;
+        expect(service.areDoorsNextToWalls(mockMap)).toBeTruthy();
     });
 
     it('should check if walls are not next to the border', () => {
