@@ -46,7 +46,6 @@ export class MapVerificationService {
                     tilesCount++;
                     if (tilesCount > totalTiles / 2) {
                         return true;
-                        return false;
                     }
                 }
             }
@@ -138,7 +137,7 @@ export class MapVerificationService {
         }
     }
 
-    areItemsValid(map: Map): boolean {
+    areItemObjectsValid(map: Map): boolean {
         const tileMatrix = map.tileMatrix;
         let itemsCount = 0;
 
@@ -146,9 +145,13 @@ export class MapVerificationService {
             for (let j = 0; j < map.size; j++) {
                 if (
                     tileMatrix[i][j].itemObject !== null &&
-                    ['conditionItem1', 'gameplayItem1', 'attributeItem2', 'conditionItem2', 'gameplayItem2', 'randomItem'].includes(
-                        tileMatrix[i][j].itemObject.name,
-                    )
+                    (tileMatrix[i][j].itemObject.name === 'randomItem' ||
+                        tileMatrix[i][j].itemObject.name === 'attributeItem1' ||
+                        tileMatrix[i][j].itemObject.name === 'conditionItem1' ||
+                        tileMatrix[i][j].itemObject.name === 'gameplayItem1' ||
+                        tileMatrix[i][j].itemObject.name === 'attributeItem2' ||
+                        tileMatrix[i][j].itemObject.name === 'conditionItem2' ||
+                        tileMatrix[i][j].itemObject.name === 'gameplayItem2')
                 ) {
                     itemsCount++;
                 }
@@ -240,12 +243,16 @@ export class MapVerificationService {
             isMapHalfFloor: this.isMapHalfFloor(map),
             isMapAccessible: this.isMapAccessible(map),
             areStartingPointsValid: this.areStartingPointsValid(map),
-            // areItemsValid: this.areItemsValid(map),
+            areItemsValid: this.areItemObjectsValid(map),
             areDoorsNextToWalls: this.areDoorsNextToWalls(map),
             areDoorsNotNextToBorder: this.areDoorsNotNextToBorder(map),
             isNameValid: this.isNameValid(map),
             isDescriptionValid: this.isDescriptionValid(map),
         };
+
+        if (map.gameMode === 'CTF') {
+            verification.isFlagPresent = this.isFlagPresent(map);
+        }
         return verification;
     }
 }
