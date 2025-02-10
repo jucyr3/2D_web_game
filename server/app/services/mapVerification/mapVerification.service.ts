@@ -141,22 +141,24 @@ export class MapVerificationService {
         const tileMatrix = map.tileMatrix;
         let itemsCount = 0;
 
+        const validItemNames = new Set([
+            'randomItem',
+            'attributeItem1',
+            'conditionItem1',
+            'gameplayItem1',
+            'attributeItem2',
+            'conditionItem2',
+            'gameplayItem2',
+        ]);
+
         for (let i = 0; i < map.size; i++) {
             for (let j = 0; j < map.size; j++) {
-                if (
-                    tileMatrix[i][j].itemObject !== null &&
-                    (tileMatrix[i][j].itemObject.name === 'randomItem' ||
-                        tileMatrix[i][j].itemObject.name === 'attributeItem1' ||
-                        tileMatrix[i][j].itemObject.name === 'conditionItem1' ||
-                        tileMatrix[i][j].itemObject.name === 'gameplayItem1' ||
-                        tileMatrix[i][j].itemObject.name === 'attributeItem2' ||
-                        tileMatrix[i][j].itemObject.name === 'conditionItem2' ||
-                        tileMatrix[i][j].itemObject.name === 'gameplayItem2')
-                ) {
+                if (tileMatrix[i][j].itemObject !== null && validItemNames.has(tileMatrix[i][j].itemObject.name)) {
                     itemsCount++;
                 }
             }
         }
+
         switch (map.size) {
             case MapProperties.MAP_SIZE_SMALL:
                 return itemsCount === MapProperties.SPAWN_COUNT_SMALL;
