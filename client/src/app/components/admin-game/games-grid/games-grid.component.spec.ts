@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GameGridComponent } from './games-grid.component';
 import { MapsForClientService } from '@app/services/maps-for-client.service';
-import { PreviewContainerComponent } from '@app/components/admin-game/preview-container/preview-container/preview-container.component';
+import { PreviewContainerComponent } from '@app/components/admin-game/preview-container/preview-container.component';
 import { GameInfoComponent } from '@app/components/admin-game/game-info/game-info.component';
-import { GameActionsComponent } from '@app/components/admin-game/game-actions/game-actions/game-actions.component';
+import { GameActionsComponent } from '@app/components/admin-game/game-actions/game-actions.component';
 import { CommonModule } from '@angular/common';
 
 describe('GameGridComponent', () => {

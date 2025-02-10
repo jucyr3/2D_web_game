@@ -24,14 +24,14 @@ describe('GameInfoComponent', () => {
         const testDate = new Date('2024-02-06T15:30:00');
 
         component.name = 'Test Game';
-        component.size = 8;
+        component.size = 10;
         component.mode = 'Classic';
         component.lastModified = testDate;
 
         fixture.detectChanges();
 
         expect(element.querySelector('h2')?.textContent).toBe('Test Game');
-        expect(element.querySelectorAll('p')[0].textContent).toBe('Taille: 8 x 8');
+        expect(element.querySelectorAll('p')[0].textContent).toBe('Taille: 10 x 10');
         expect(element.querySelectorAll('p')[1].textContent).toBe('Mode: Classique');
         expect(element.querySelectorAll('p')[2].textContent).toContain('2024-02-06 | 15:30');
     });

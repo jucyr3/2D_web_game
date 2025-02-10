@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { GameInfoComponent } from '@app/components/admin-game/game-info/game-info.component';
-import { PreviewContainerComponent } from '@app/components/admin-game/preview-container/preview-container/preview-container.component';
+import { PreviewContainerComponent } from '@app/components/admin-game/preview-container/preview-container.component';
 import { MapsForClientService } from '@app/services/maps-for-client.service';
 
 @Component({

@@ -7,8 +7,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 const bootstrap = async () => {
     const app = await NestFactory.create(AppModule);
 
-    app.use(json({ limit: '50mb' }));
-    app.use(urlencoded({ limit: '50mb', extended: true }));
+    app.use(json({ limit: '2mb' }));
+    app.use(urlencoded({ limit: '2mb', extended: true }));
 
     app.setGlobalPrefix('api');
     app.useGlobalPipes(new ValidationPipe());
