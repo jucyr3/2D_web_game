@@ -93,6 +93,7 @@ export class MapService {
             } else {
                 map.mapId = this.generateRandomId();
                 await this.mapDbService.addMap(map);
+                await this.mapDbService.saveImage(map.mapId, map.previewImage);
                 return {
                     id: map.mapId,
                     mapVerification: verification,
