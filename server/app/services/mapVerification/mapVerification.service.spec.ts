@@ -247,6 +247,7 @@ describe('MapVerificationService', () => {
             areDoorsNotNextToBorder: true,
             isNameValid: true,
             isDescriptionValid: true,
+            isFlagPresent: true,
         };
         expect(listOfErrors).toEqual(comparison);
 

@@ -11,5 +11,5 @@ export interface MapVerification {
     areDoorsNotNextToBorder: boolean;
     isNameValid: boolean;
     isDescriptionValid: boolean;
-    isFlagPresent?: boolean
+    isFlagPresent: boolean
 }

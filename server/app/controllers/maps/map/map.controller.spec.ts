@@ -1,10 +1,10 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { MapController } from './map.controller';
 import { MapService } from '@app/services/maps/map/map.service';
 import { Map } from '@common/map';
 import { MapResponse } from '@common/mapResponse';
-import { HttpException, NotFoundException, Logger } from '@nestjs/common';
 import { TileTypes } from '@common/tileType.constants';
+import { HttpException, Logger, NotFoundException } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
+import { MapController } from './map.controller';
 
 describe('MapController', () => {
     const INVALID_MAP_ID = 999;
@@ -42,10 +42,12 @@ describe('MapController', () => {
         isMapHalfFloor: true,
         isMapAccessible: true,
         areStartingPointsValid: true,
+        areItemsValid: true,
         areDoorsNextToWalls: true,
         areDoorsNotNextToBorder: true,
         isNameValid: true,
         isDescriptionValid: true,
+        isFlagPresent: true,
     };
 
     const mockMapResponse: MapResponse = {

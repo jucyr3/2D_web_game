@@ -233,6 +233,7 @@ export class MapVerificationService {
             }
             return false;
         }
+        return true;
     }
 
     validateGame(map: Map): MapVerification {
@@ -248,11 +249,9 @@ export class MapVerificationService {
             areDoorsNotNextToBorder: this.areDoorsNotNextToBorder(map),
             isNameValid: this.isNameValid(map),
             isDescriptionValid: this.isDescriptionValid(map),
+            isFlagPresent: this.isFlagPresent(map),
         };
 
-        if (map.gameMode === 'CTF') {
-            verification.isFlagPresent = this.isFlagPresent(map);
-        }
         return verification;
     }
 }
