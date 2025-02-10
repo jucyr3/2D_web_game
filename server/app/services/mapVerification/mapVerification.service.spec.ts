@@ -36,6 +36,18 @@ describe('MapVerificationService', () => {
         name: 'spawnpoint',
     };
 
+    const gameplayItem1: ItemObject = {
+        name: 'gameplayItem1',
+    };
+
+    const randomItem: ItemObject = {
+        name: 'randomItem',
+    };
+
+    const conditionItem1: ItemObject = {
+        name: 'conditionItem1',
+    };
+
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [MapVerificationService],
@@ -162,6 +174,36 @@ describe('MapVerificationService', () => {
         expect(service.areStartingPointsValid(mockMap20)).toBeTruthy();
     });
 
+    it('should validate item Objects placement correctly', () => {
+        expect(service.areItemObjectsValid(mockMap)).toBeFalsy();
+        mockMap.tileMatrix[0][0].itemObject = { ...gameplayItem1 };
+        mockMap.tileMatrix[0][1].itemObject = { ...randomItem };
+        expect(service.areItemObjectsValid(mockMap)).toBeTruthy();
+
+        // MAP_SIZE_MEDIUM map
+        const mockMap15: Map = createMockMap(2, MapProperties.MAP_SIZE_MEDIUM);
+
+        expect(service.areItemObjectsValid(mockMap15)).toBeFalsy();
+        mockMap15.tileMatrix[0][0].itemObject = { ...gameplayItem1 };
+        mockMap15.tileMatrix[0][1].itemObject = { ...randomItem };
+        expect(service.areItemObjectsValid(mockMap15)).toBeFalsy();
+        mockMap15.tileMatrix[0][2].itemObject = { ...conditionItem1 };
+        mockMap15.tileMatrix[0][3].itemObject = { ...conditionItem1 };
+        expect(service.areItemObjectsValid(mockMap15)).toBeTruthy();
+
+        // MAP_SIZE_LARGE map
+        const mockMap20: Map = createMockMap(2, MapProperties.MAP_SIZE_LARGE);
+
+        mockMap20.tileMatrix[0][0].itemObject = { ...gameplayItem1 };
+        mockMap20.tileMatrix[0][1].itemObject = { ...gameplayItem1 };
+        mockMap20.tileMatrix[0][2].itemObject = { ...randomItem };
+        mockMap20.tileMatrix[0][3].itemObject = { ...randomItem };
+        mockMap20.tileMatrix[0][4].itemObject = { ...conditionItem1 };
+        expect(service.areItemObjectsValid(mockMap20)).toBeFalsy();
+        mockMap20.tileMatrix[0][5].itemObject = { ...conditionItem1 };
+        expect(service.areItemObjectsValid(mockMap20)).toBeTruthy();
+    });
+
     it('should check if doors are between walls', () => {
         mockMap.tileMatrix[5][5].type = TileTypes.DOOR;
         expect(service.areDoorsNextToWalls(mockMap)).toBeFalsy();
@@ -200,10 +242,12 @@ describe('MapVerificationService', () => {
             isMapHalfFloor: true,
             isMapAccessible: true,
             areStartingPointsValid: false,
+            areItemsValid: false,
             areDoorsNextToWalls: true,
             areDoorsNotNextToBorder: true,
             isNameValid: true,
             isDescriptionValid: true,
+            isFlagPresent: true,
         };
         expect(listOfErrors).toEqual(comparison);
 

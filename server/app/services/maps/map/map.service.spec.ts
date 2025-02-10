@@ -1,11 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { MapService } from './map.service';
 import { MapVerificationService } from '@app/services/mapVerification/mapVerification.service';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Map } from '@common/map';
-import { TileTypes } from '@common/tileType.constants';
 import { Tile } from '@common/tile';
+import { TileTypes } from '@common/tileType.constants';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import * as fs from 'fs/promises';
+import { MapService } from './map.service';
 
 jest.mock('fs/promises');
 
@@ -40,10 +40,12 @@ describe('MapService', () => {
         isMapHalfFloor: true,
         isMapAccessible: true,
         areStartingPointsValid: true,
+        areItemsValid: true,
         areDoorsNextToWalls: true,
         areDoorsNotNextToBorder: true,
         isNameValid: true,
         isDescriptionValid: true,
+        isFlagPresent: true,
     };
 
     beforeEach(async () => {

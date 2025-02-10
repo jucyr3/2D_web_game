@@ -1,14 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 // import { ItemManager } from '@app/classes/item-manager';
+import { provideHttpClient } from '@angular/common/http';
+import { MapFormData } from '@app/interfaces/mapFormData';
 import { ItemObject } from '@common/ItemObject';
 import { Map } from '@common/map';
 import { MapVerification } from '@common/mapVerification.interface';
 import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
-import { MapService } from './map.service';
-import { provideHttpClient } from '@angular/common/http';
-import { MapFormData } from '@app/interfaces/mapFormData';
 import { of } from 'rxjs';
+import { MapService } from './map.service';
 
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 
@@ -163,10 +163,12 @@ describe('MapService', () => {
                 isMapHalfFloor: true,
                 isMapAccessible: true,
                 areStartingPointsValid: true,
+                areItemsValid: true,
                 areDoorsNextToWalls: true,
                 areDoorsNotNextToBorder: true,
                 isNameValid: true,
                 isDescriptionValid: true,
+                isFlagPresent: true,
             },
         };
 
@@ -202,10 +204,12 @@ describe('MapService', () => {
             isMapHalfFloor: true,
             isMapAccessible: true,
             areStartingPointsValid: true,
+            areItemsValid: true,
             areDoorsNextToWalls: true,
             areDoorsNotNextToBorder: true,
             isNameValid: true,
             isDescriptionValid: true,
+            isFlagPresent: true,
         };
 
         spyOn(service, 'saveMapToServer').and.returnValue(Promise.resolve(mockVerification));
@@ -270,10 +274,12 @@ describe('MapService', () => {
             isMapHalfFloor: true,
             isMapAccessible: true,
             areStartingPointsValid: true,
+            areItemsValid: true,
             areDoorsNextToWalls: true,
             areDoorsNotNextToBorder: true,
             isNameValid: true,
             isDescriptionValid: true,
+            isFlagPresent: true,
         };
 
         spyOn(service, 'saveMapToServer').and.returnValue(Promise.resolve(mockVerification));
@@ -293,10 +299,12 @@ describe('MapService', () => {
             isMapHalfFloor: true,
             isMapAccessible: true,
             areStartingPointsValid: true,
+            areItemsValid: true,
             areDoorsNextToWalls: true,
             areDoorsNotNextToBorder: true,
             isNameValid: true,
             isDescriptionValid: true,
+            isFlagPresent: true,
         };
         service.handleMapVerificationError(mapVerification);
         expect(service.errorList.length).toBe(1);
