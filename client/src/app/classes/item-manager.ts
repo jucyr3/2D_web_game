@@ -5,9 +5,9 @@ export class ItemManager {
     itemAmounts: { [itemName: string]: number } = {};
 
     itemMap: { [key: string]: number } = {
-        size10: MapProperties.MAP_SIZE_SMALL,
-        size15: MapProperties.MAP_SIZE_MEDIUM,
-        size20: MapProperties.MAP_SIZE_LARGE,
+        size10: MapProperties.SPAWN_COUNT_SMALL,
+        size15: MapProperties.SPAWN_COUNT_MEDIUM,
+        size20: MapProperties.SPAWN_COUNT_LARGE,
     };
 
     items = new Set(['attributeItem1', 'conditionItem1', 'gameplayItem1', 'attributeItem2', 'conditionItem2', 'gameplayItem2', 'randomItem']);
