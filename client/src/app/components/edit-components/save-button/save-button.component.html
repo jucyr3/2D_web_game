@@ -1,1 +1,4 @@
 <button class="save-button" (click)="saveMap()">Sauvegarder</button>
+@if (this.loadingModalService.isLoading) {
+    <app-loading-modal></app-loading-modal>
+}
