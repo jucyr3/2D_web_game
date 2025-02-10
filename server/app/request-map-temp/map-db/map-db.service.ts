@@ -13,7 +13,7 @@ export class MapDbService {
         return response;
     }
 
-    async getAllMap() {
+    async getAllMaps() {
         const response = await this.mapModel.find();
         return response;
     }
@@ -35,12 +35,13 @@ export class MapDbService {
         return response ?? [];
     }
 
+    async remove(id: string) {
+        return await this.mapModel.deleteOne({ _id: id });
+    }
+
     async changeMap(id: string, map: Map) {
         const themap = await this.mapModel.updateOne({ _id: id }, { $set: { ...map } });
         return themap;
-    }
-    async remove(id: string) {
-        return await this.mapModel.deleteOne({ _id: id });
     }
     async saveImage(id: string, image: string) {
         const themap = await this.mapModel.updateOne({ _id: id }, { $set: { previewImage: image } });

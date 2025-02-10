@@ -1,20 +1,20 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { getModelToken,getConnectionToken,MongooseModule } from '@nestjs/mongoose';
-import { Model,Connection } from 'mongoose';
+import { getConnectionToken, getModelToken, MongooseModule } from '@nestjs/mongoose';
+import { Test } from '@nestjs/testing';
+import { Connection, Model } from 'mongoose';
 import { MapDbService } from './map-db.service';
 import { MapDocument } from './map.interface';
 import { mapSchema } from './map.schema';
 
-import { Logger, NotFoundException } from '@nestjs/common';
 import { Map } from '@common/map';
+import { Logger, NotFoundException } from '@nestjs/common';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
 describe('MapDbService', () => {
+    const MAP_SIZE = 10;
     let service: MapDbService;
     let mapModel: Model<MapDocument>;
     let mongoServer: MongoMemoryServer;
     let connection: Connection;
-
 
     beforeAll(async () => {
         mongoServer = await MongoMemoryServer.create();
@@ -31,8 +31,7 @@ describe('MapDbService', () => {
             ],
             providers: [MapDbService, Logger],
         }).compile();
-        
-        
+
         service = module.get<MapDbService>(MapDbService);
 
         mapModel = module.get<Model<MapDocument>>(getModelToken('Map'));
@@ -47,17 +46,14 @@ describe('MapDbService', () => {
         await mongoServer.stop({ doCleanup: true });
     });
 
-
-
     it('should be defined', () => {
         expect(service).toBeDefined();
         expect(mapModel).toBeDefined();
     });
 
-
     it('should add a map', async () => {
-        const map: Map = new Map('New Map', 10, true, 'Description', 'CTF');
-        const createStub = jest.spyOn(mapModel, 'create').mockResolvedValueOnce(map as any);
+        const map: Map = new Map('New Map', MAP_SIZE, true, 'Description', 'CTF');
+        const createStub = jest.spyOn(mapModel, 'create').mockResolvedValueOnce(map as unknown);
         const result = await service.addMap(map);
         expect(createStub).toHaveBeenCalled();
         expect(result).toEqual(map);
@@ -65,14 +61,14 @@ describe('MapDbService', () => {
 
     it('should get all maps', async () => {
         const maps = [{ name: 'Test Map', isVisible: true, previewImage: '' }];
-        const findSpy =jest.spyOn(mapModel, 'find').mockResolvedValueOnce(maps);
-        const result = await service.getAllMap();
+        const findSpy = jest.spyOn(mapModel, 'find').mockResolvedValueOnce(maps);
+        const result = await service.getAllMaps();
         expect(findSpy).toHaveBeenCalled();
         expect(result).toEqual(maps);
     });
 
     it('should get a map by id', async () => {
-        const map = new Map('Test Map', 10, true, 'Description', 'CTF');
+        const map = new Map('Test Map', MAP_SIZE, true, 'Description', 'CTF');
         const findByIdSpy = jest.spyOn(mapModel, 'findById').mockResolvedValueOnce(map);
         const result = await service.getMap('1');
         expect(findByIdSpy).toHaveBeenCalled();
@@ -83,7 +79,7 @@ describe('MapDbService', () => {
         const findByIdStub = jest.spyOn(mapModel, 'findById');
         findByIdStub.mockImplementation(() => {
             throw new Error('error');
-          });
+        });
         await expect(service.getMap('1')).rejects.toThrow('Map not found');
     });
 
@@ -107,22 +103,22 @@ describe('MapDbService', () => {
     });
 
     it('should change a map', async () => {
-        const map: Map = new Map('Updated Map',10, true,'Description',"CTF");
-        const updateOneStub = jest.spyOn(mapModel, 'updateOne').mockResolvedValueOnce({ nModified: 1 } as any);
+        const map: Map = new Map('Updated Map', MAP_SIZE, true, 'Description', 'CTF');
+        const updateOneStub = jest.spyOn(mapModel, 'updateOne').mockResolvedValueOnce({ nModified: 1 } as unknown);
         const result = await service.changeMap('1', map);
         expect(updateOneStub).toHaveBeenCalled();
         expect(result).toEqual({ nModified: 1 });
     });
 
     it('should remove a map', async () => {
-        const deleteOneStub = jest.spyOn(mapModel, 'deleteOne').mockResolvedValueOnce({ deletedCount: 1 } as any);
+        const deleteOneStub = jest.spyOn(mapModel, 'deleteOne').mockResolvedValueOnce({ deletedCount: 1 } as unknown);
         const result = await service.remove('1');
         expect(deleteOneStub).toHaveBeenCalled();
         expect(result).toEqual({ deletedCount: 1 });
     });
 
     it('should save an image', async () => {
-        const updateOneStub = jest.spyOn(mapModel, 'updateOne').mockResolvedValueOnce({ nModified: 1 } as any);
+        const updateOneStub = jest.spyOn(mapModel, 'updateOne').mockResolvedValueOnce({ nModified: 1 } as unknown);
         const result = await service.saveImage('1', 'image-data');
         expect(updateOneStub).toHaveBeenCalled();
         expect(result).toEqual({ nModified: 1 });

@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-export interface GameObject extends Document {
+export interface ItemObject extends Document {
     id: string;
     type: string;
 }
@@ -9,7 +9,7 @@ export interface TileDocument extends Document {
     type: string;
     isOccupied: boolean;
     isObstacle: boolean;
-    gameObject?: GameObject;
+    gameObject?: ItemObject;
 }
 
 export interface MapDocument extends Document {
