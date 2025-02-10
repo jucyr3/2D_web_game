@@ -36,7 +36,6 @@ export class AdminPageComponent {
         this.isCreateModalOpen = false;
     }
 
-
     handleCreateMap(formData: MapFormData): boolean {
         const validSizes = [MapProperties.MAP_SIZE_SMALL, MapProperties.MAP_SIZE_MEDIUM, MapProperties.MAP_SIZE_LARGE];
         if (!validSizes.includes(formData.size)) {

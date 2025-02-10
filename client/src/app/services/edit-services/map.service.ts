@@ -50,7 +50,7 @@ export class MapService {
         const size = Number(mapData.size);
         const defaultMap: Map = {
             id: 0,
-            name: "Untitled",
+            name: 'Untitled',
             size,
             isVisible: false,
             description: '',

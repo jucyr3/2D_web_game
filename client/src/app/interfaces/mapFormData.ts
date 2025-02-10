@@ -1,4 +1,4 @@
-import { MapProperties } from "@common/map.constants";
+import { MapProperties } from '@common/map.constants';
 
 export interface MapFormData {
     gameMode: 'Classic' | 'CTF';

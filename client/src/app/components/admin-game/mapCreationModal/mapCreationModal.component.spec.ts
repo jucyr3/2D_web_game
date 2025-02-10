@@ -49,6 +49,7 @@ describe('ModalComponent', () => {
         radio.checked = true;
         radio.dispatchEvent(new Event('change'));
         fixture.detectChanges();
-        expect(component.newMapForm.size).toBe(20);
+        const mapSize = 20;
+        expect(component.newMapForm.size).toBe(mapSize);
     });
 });
