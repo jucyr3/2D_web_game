@@ -97,16 +97,6 @@ describe('MapService', () => {
         expect(Array.isArray(flattenedTiles)).toBeTrue();
     });
 
-    // it('should handle map export', async () => {
-    //     const mockElement = document.createElement('div');
-    //     mockElement.className = 'map';
-    //     document.body.appendChild(mockElement);
-
-    //     const blob = await service.exportMapAsImage();
-    //     expect(blob).toBeTruthy();
-    //     document.body.removeChild(mockElement);
-    // });
-
     // AFTER - loadMapFromServer
     it('should load map from server successfully', async () => {
         const mockMap: Map = {
