@@ -99,12 +99,8 @@ export class MapController {
     })
     async saveMap(@Body() map: Map): Promise<MapResponse> {
         try {
-            const savedMap = await this.mapService.saveMap(map);
-            const response: MapResponse = {
-                id: savedMap.id,
-                mapVerification: savedMap.mapVerification,
-            };
-            return response;
+            const savedMap: MapResponse = await this.mapService.saveMap(map);
+            return savedMap;
         } catch (error) {
             this.logger.error(`Failed to create map: ${error.message}`, error.stack);
             throw new HttpException('Failed to create map', HttpStatus.INTERNAL_SERVER_ERROR);

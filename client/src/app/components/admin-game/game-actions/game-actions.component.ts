@@ -27,6 +27,9 @@ export class GameActionsComponent {
             next: () => {
                 this.refresh.emit();
             },
+            error: (error) => {
+                alert("Impossible de modifier la visibilité de la carte");
+            }
         });
     }
 
@@ -41,6 +44,9 @@ export class GameActionsComponent {
                 next: () => {
                     this.refresh.emit();
                 },
+                error: (error) => {
+                    alert("Impossible d'enlever la carte");
+                }
             });
         }
     }

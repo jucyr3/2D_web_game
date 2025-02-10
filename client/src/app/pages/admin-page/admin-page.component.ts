@@ -4,16 +4,17 @@ import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GameGridComponent } from '@app/components/admin-game/games-grid/games-grid.component';
-import { ModalComponent } from '@app/components/admin-game/modal/modal.component';
+import { MapCreationModalComponent } from '@app/components/admin-game/mapCreationModal/mapCreationModal.component';
 import { MapService } from '@app/services/edit-services/map.service';
 import { MapsForClientService } from '@app/services/maps-for-client.service';
-import { MapFormData } from '@common/mapForm';
+import { MapFormData } from '@app/interfaces/mapFormData';
+import { MapProperties } from '@common/map.constants';
 
 @Component({
     selector: 'app-admin-page',
     templateUrl: './admin-page.component.html',
     styleUrls: ['./admin-page.component.scss'],
-    imports: [CommonModule, FormsModule, GameGridComponent, ModalComponent],
+    imports: [CommonModule, FormsModule, GameGridComponent, MapCreationModalComponent],
     standalone: true,
 })
 export class AdminPageComponent {
@@ -35,31 +36,17 @@ export class AdminPageComponent {
         this.isCreateModalOpen = false;
     }
 
+
     handleCreateMap(formData: MapFormData): boolean {
-        if (!formData.mapName?.trim()) {
-            alert('Map name cannot be empty');
-            return false;
-        }
-
-        const existingMap = this.mapsForClientService.mapsSubject
-            .getValue()
-            .find((map) => map.name.toLowerCase() === formData.mapName.trim().toLowerCase());
-
-        if (existingMap) {
-            alert('Map name already exists');
-            return false;
-        }
-
-        const validSizes = ['PETITE', 'MOYENNE', 'GRANDE'];
-        if (!validSizes.includes(formData.mapSize)) {
+        const validSizes = [MapProperties.MAP_SIZE_SMALL, MapProperties.MAP_SIZE_MEDIUM, MapProperties.MAP_SIZE_LARGE];
+        if (!validSizes.includes(formData.size)) {
             alert('Invalid map size');
             return false;
         }
 
         const mapData = {
-            name: formData.mapName.trim(),
-            gameMode: formData.mapMode,
-            size: formData.mapSize === 'PETITE' ? '10' : formData.mapSize === 'MOYENNE' ? '15' : '20',
+            gameMode: formData.gameMode,
+            size: formData.size,
         };
 
         try {

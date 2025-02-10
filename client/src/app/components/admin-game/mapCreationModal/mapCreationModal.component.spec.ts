@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { ModalComponent } from './modal.component';
+import { MapCreationModalComponent } from './mapCreationModal.component';
 
 describe('ModalComponent', () => {
-    let component: ModalComponent;
-    let fixture: ComponentFixture<ModalComponent>;
+    let component: MapCreationModalComponent;
+    let fixture: ComponentFixture<MapCreationModalComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [FormsModule, ModalComponent],
+            imports: [FormsModule, MapCreationModalComponent],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(ModalComponent);
+        fixture = TestBed.createComponent(MapCreationModalComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
@@ -29,20 +29,11 @@ describe('ModalComponent', () => {
     it('should emit create event with form data', () => {
         spyOn(component.create, 'emit');
         component.newMapForm = {
-            mapName: 'Test Map',
-            mapMode: 'Classic',
-            mapSize: 'PETITE',
+            gameMode: 'Classic',
+            size: 10,
         };
         component.createMap();
         expect(component.create.emit).toHaveBeenCalledWith(component.newMapForm);
-    });
-
-    it('should update map name', () => {
-        const input = fixture.debugElement.nativeElement.querySelector('input[name="gameName"]');
-        input.value = 'New Map';
-        input.dispatchEvent(new Event('input'));
-        fixture.detectChanges();
-        expect(component.newMapForm.mapName).toBe('New Map');
     });
 
     it('should update game mode', () => {
@@ -50,7 +41,7 @@ describe('ModalComponent', () => {
         radio.checked = true;
         radio.dispatchEvent(new Event('change'));
         fixture.detectChanges();
-        expect(component.newMapForm.mapMode).toBe('CTF');
+        expect(component.newMapForm.gameMode).toBe('CTF');
     });
 
     it('should update map size', () => {
@@ -58,6 +49,6 @@ describe('ModalComponent', () => {
         radio.checked = true;
         radio.dispatchEvent(new Event('change'));
         fixture.detectChanges();
-        expect(component.newMapForm.mapSize).toBe('GRANDE');
+        expect(component.newMapForm.size).toBe(20);
     });
 });

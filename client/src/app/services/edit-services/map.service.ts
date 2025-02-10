@@ -8,6 +8,7 @@ import { ClientHttpRequestsService } from '@app/services/client-http-requests.se
 import { ItemManager } from '@app/classes/item-manager';
 import { MapVerification } from '@common/mapVerification.interface';
 import { Router } from '@angular/router';
+import { MapFormData } from '@app/interfaces/mapFormData';
 
 @Injectable({
     providedIn: 'root',
@@ -45,11 +46,11 @@ export class MapService {
         };
     }
 
-    createEmptyMap(mapData: { name: string; gameMode: 'Classic' | 'CTF'; size: string }): void {
+    createEmptyMap(mapData: MapFormData): void {
         const size = Number(mapData.size);
         const defaultMap: Map = {
             id: 0,
-            name: mapData.name,
+            name: "Untitled",
             size,
             isVisible: false,
             description: '',
@@ -217,8 +218,7 @@ export class MapService {
             const canvas = await html2canvas(mapElement, {
                 scale: 1,
                 useCORS: true,
-                logging: true,
-                backgroundColor: '#fff',
+                backgroundColor: 'transparent',
             });
 
             const compressedScale = 0.3;
