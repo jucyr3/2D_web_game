@@ -125,10 +125,6 @@ export class MapService {
     }
 
     handleMapVerificationError(mapVerification: MapVerification): void {
-        if (!mapVerification) {
-            this.errorList.push('Map verification data is missing');
-            return;
-        }
         this.errorList = [];
         for (const [key, value] of Object.entries(mapVerification)) {
             if (!value) {

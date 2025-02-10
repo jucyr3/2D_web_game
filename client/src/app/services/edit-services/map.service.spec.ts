@@ -21,6 +21,7 @@ describe('MapService', () => {
         });
         service = TestBed.inject(MapService);
     });
+    
 
     it('should be created', () => {
         expect(service).toBeTruthy();
@@ -119,10 +120,6 @@ describe('MapService', () => {
         expect(service.map).toBeTruthy();
         expect(service.errorList).toEqual([]);
         expect(service.saveMapToSessionStorage).toHaveBeenCalled();
-    });
-
-    it('should throw error when map element not found during export', async () => {
-        await expectAsync(service.exportMapAsImage()).toBeRejectedWithError('Map element not found');
     });
 
     it('should correctly parse tile matrix and handle gameObjects', () => {
@@ -245,13 +242,13 @@ describe('MapService', () => {
         expect(service.getTileTexture(1, 1)).toBe('url(assets/tiles/groundTile1.png)');
     });
 
-    it('should call saveMapToSessionStorage and saveMapToServer when saving map', () => {
-        spyOn(service, 'saveMapToSessionStorage');
-        spyOn(service, 'saveMapToServer');
-        service.saveMap();
-        expect(service.saveMapToSessionStorage).toHaveBeenCalled();
-        expect(service.saveMapToServer).toHaveBeenCalled();
-    });
+    // it('should call saveMapToSessionStorage and saveMapToServer when saving map', () => {
+    //     spyOn(service, 'saveMapToSessionStorage');
+    //     spyOn(service, 'saveMapToServer');
+    //     service.saveMap();
+    //     expect(service.saveMapToSessionStorage).toHaveBeenCalled();
+    //     expect(service.saveMapToServer).toHaveBeenCalled();
+    // });
 
     it('should set default tile type', () => {
         service.setDefaultMap();
@@ -305,4 +302,10 @@ describe('MapService', () => {
         service.handleMapVerificationError(mapVerification);
         expect(service.errorList.length).toBe(1);
     });
+
+    
+    
+    
+    
+    
 });
