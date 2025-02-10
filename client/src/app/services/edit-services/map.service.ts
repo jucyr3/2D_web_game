@@ -138,7 +138,6 @@ export class MapService {
     }
 
     async saveMap(): Promise<void> {
-        this.saveMapToSessionStorage();
         const mapVerification = await this.saveMapToServer();
         this.handleMapVerificationError(mapVerification);
 
