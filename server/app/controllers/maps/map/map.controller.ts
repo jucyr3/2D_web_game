@@ -2,6 +2,7 @@ import { MapService } from '@app/services/maps/map/map.service';
 import { Map } from '@common/map';
 import { MapResponse } from '@common/mapResponse';
 import { MapVerification } from '@common/mapVerification.interface';
+import { MapDbService } from '@app/model/map-db/map-db.service';
 
 import {
     Body,

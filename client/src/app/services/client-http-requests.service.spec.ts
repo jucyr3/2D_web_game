@@ -27,8 +27,8 @@ describe('ClientHttpRequestsService', () => {
     });
 
     // Helper function to create a mock map
-    const createMockMap = (id: number, name: string): Map => ({
-        id,
+    const createMockMap = (mapId: number, name: string): Map => ({
+        mapId,
         name,
         size: 10, // Example size
         isVisible: true,
@@ -113,7 +113,7 @@ describe('ClientHttpRequestsService', () => {
             const mapSize = 10;
 
             service.loadMapById(1).subscribe((map) => {
-                expect(map.id).toBe(1);
+                expect(map.mapId).toBe(1);
                 expect(map.name).toBe('Specific Map');
                 expect(map.size).toBe(mapSize);
                 expect(map.gameMode).toBe('Classic');
@@ -197,7 +197,7 @@ describe('ClientHttpRequestsService', () => {
             mockMap.isVisible = false;
 
             service.updateMapVisibility(1, false).subscribe((map) => {
-                expect(map.id).toBe(1);
+                expect(map.mapId).toBe(1);
                 expect(map.isVisible).toBeFalse();
             });
 
@@ -215,7 +215,7 @@ describe('ClientHttpRequestsService', () => {
             mockMap.previewImage = base64Image;
 
             service.saveMapImageOnServer(1, base64Image).subscribe((map) => {
-                expect(map.id).toBe(1);
+                expect(map.mapId).toBe(1);
                 expect(map.previewImage).toBe(base64Image);
             });
 

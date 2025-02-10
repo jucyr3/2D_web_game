@@ -25,7 +25,7 @@ export class CreateMatchPageComponent {
             return;
         }
         this.clientHttpRequest.getAllMapsByVisibility().subscribe((visibleMaps) => {
-            const isMapVisible = visibleMaps.some((map) => map.id === this.mapsForClient.clickedMap?.id);
+            const isMapVisible = visibleMaps.some((map) => map.mapId === this.mapsForClient.clickedMap?.mapId);
             if (isMapVisible) {
                 this.router.navigate(['/character']);
             } else {

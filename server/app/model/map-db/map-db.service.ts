@@ -18,10 +18,10 @@ export class MapDbService {
         return response;
     }
 
-    async getMap(id: string) {
+    async getMap(id: number) {
         let response;
         try {
-            response = await this.mapModel.findById(id);
+            response = await this.mapModel.findOne({ mapId: id });
         } catch (error) {
             throw new NotFoundException('Map not found');
         }
@@ -30,25 +30,32 @@ export class MapDbService {
         }
         return response;
     }
+
     async getVisible() {
         const response = await this.mapModel.find({ isVisible: true });
         return response ?? [];
     }
 
-    async remove(id: string) {
-        return await this.mapModel.deleteOne({ _id: id });
+    async remove(id: number) {
+        return await this.mapModel.deleteOne({ mapId: id });
     }
 
-    async changeMap(id: string, map: Map) {
-        const themap = await this.mapModel.updateOne({ _id: id }, { $set: { ...map } });
+    async changeMap(id: number, map: Map) {
+        const themap = await this.mapModel.updateOne({ mapId: id }, { $set: { ...map } });
         return themap;
     }
-    async saveImage(id: string, image: string) {
-        const themap = await this.mapModel.updateOne({ _id: id }, { $set: { previewImage: image } });
+    async saveImage(id: number, image: string) {
+        const themap = await this.mapModel.updateOne({ mapId: id }, { $set: { previewImage: image } });
         return themap;
     }
-    async getImage(id: string) {
+    async getImage(id: number) {
         const theImage = await this.mapModel.findById(id, { previewImage: 1, _id: 0 });
         return theImage.previewImage;
+    }
+
+    async changeMapVisibility(id: number, visible: boolean) {
+        // TODO : TEST THIS THING
+        const themap = await this.mapModel.updateOne({ mapId: id }, { $set: { isVisible: visible } });
+        return themap;
     }
 }

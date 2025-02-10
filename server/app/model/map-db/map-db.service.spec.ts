@@ -9,7 +9,7 @@ import { Map } from '@common/map';
 import { Logger, NotFoundException } from '@nestjs/common';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
-describe('MapDbService', () => {
+fdescribe('MapDbService', () => {
     const MAP_SIZE = 10;
     let service: MapDbService;
     let mapModel: Model<MapDocument>;
@@ -52,8 +52,18 @@ describe('MapDbService', () => {
     });
 
     it('should add a map', async () => {
-        const map: Map = new Map('New Map', MAP_SIZE, true, 'Description', 'CTF');
-        const createStub = jest.spyOn(mapModel, 'create').mockResolvedValueOnce(map as unknown);
+        const map: Map = {
+            mapId: 1,
+            name: 'Test Map',
+            size: MAP_SIZE,
+            isVisible: true,
+            description: 'Description',
+            gameMode: 'CTF',
+            tileMatrix: [],
+            lastModified: new Date(),
+            previewImage: 'test-preview.png',
+        };
+        const createStub = jest.spyOn(mapModel, 'create').mockResolvedValueOnce(map);
         const result = await service.addMap(map);
         expect(createStub).toHaveBeenCalled();
         expect(result).toEqual(map);
@@ -68,9 +78,19 @@ describe('MapDbService', () => {
     });
 
     it('should get a map by id', async () => {
-        const map = new Map('Test Map', MAP_SIZE, true, 'Description', 'CTF');
+        const map: Map = {
+            mapId: 1,
+            name: 'Updated Map',
+            size: MAP_SIZE,
+            isVisible: true,
+            description: 'Updated description',
+            gameMode: 'Classic',
+            tileMatrix: [[]],
+            lastModified: new Date(),
+            previewImage: '',
+        };
         const findByIdSpy = jest.spyOn(mapModel, 'findById').mockResolvedValueOnce(map);
-        const result = await service.getMap('1');
+        const result = await service.getMap(1);
         expect(findByIdSpy).toHaveBeenCalled();
         expect(result).toEqual(map);
     });
@@ -103,23 +123,33 @@ describe('MapDbService', () => {
     });
 
     it('should change a map', async () => {
-        const map: Map = new Map('Updated Map', MAP_SIZE, true, 'Description', 'CTF');
+        const map: Map = {
+            mapId: 1,
+            name: 'Updated Map',
+            size: MAP_SIZE,
+            isVisible: true,
+            description: 'Updated description',
+            gameMode: 'Classic',
+            tileMatrix: [[]],
+            lastModified: new Date(),
+            previewImage: '',
+        };
         const updateOneStub = jest.spyOn(mapModel, 'updateOne').mockResolvedValueOnce({ nModified: 1 } as unknown);
-        const result = await service.changeMap('1', map);
+        const result = await service.changeMap(1, map);
         expect(updateOneStub).toHaveBeenCalled();
         expect(result).toEqual({ nModified: 1 });
     });
 
     it('should remove a map', async () => {
         const deleteOneStub = jest.spyOn(mapModel, 'deleteOne').mockResolvedValueOnce({ deletedCount: 1 } as unknown);
-        const result = await service.remove('1');
+        const result = await service.remove(1);
         expect(deleteOneStub).toHaveBeenCalled();
         expect(result).toEqual({ deletedCount: 1 });
     });
 
     it('should save an image', async () => {
         const updateOneStub = jest.spyOn(mapModel, 'updateOne').mockResolvedValueOnce({ nModified: 1 } as unknown);
-        const result = await service.saveImage('1', 'image-data');
+        const result = await service.saveImage(1, 'image-data');
         expect(updateOneStub).toHaveBeenCalled();
         expect(result).toEqual({ nModified: 1 });
     });
@@ -127,7 +157,7 @@ describe('MapDbService', () => {
     it('should get an image by id', async () => {
         const image = { previewImage: 'image-data' };
         const findByIdStub = jest.spyOn(mapModel, 'findById').mockResolvedValueOnce(image);
-        const result = await service.getImage('1');
+        const result = await service.getImage(1);
         expect(findByIdStub).toHaveBeenCalled();
         expect(result).toEqual('image-data');
     });

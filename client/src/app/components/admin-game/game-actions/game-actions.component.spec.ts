@@ -17,7 +17,7 @@ describe('GameActionsComponent', () => {
     let confirmSpy: jasmine.Spy;
 
     const mockMap: Map = {
-        id: 123,
+        mapId: 123,
         name: 'Test Map',
         size: 10,
         isVisible: true,
@@ -61,7 +61,7 @@ describe('GameActionsComponent', () => {
 
             component.toggleVisibility(mockMap);
 
-            expect(clientHttpRequestSpy.updateMapVisibility).toHaveBeenCalledWith(mockMap.id, !mockMap.isVisible);
+            expect(clientHttpRequestSpy.updateMapVisibility).toHaveBeenCalledWith(mockMap.mapId, !mockMap.isVisible);
             expect(component.refresh.emit).toHaveBeenCalled();
         });
     });
@@ -74,8 +74,8 @@ describe('GameActionsComponent', () => {
 
                 await component.editMap(mockMap);
 
-                expect(mapServiceSpy.loadMapFromServer).toHaveBeenCalledWith(mockMap.id);
-                expect(routerSpy.navigate).toHaveBeenCalledWith(['edit', mockMap.id]);
+                expect(mapServiceSpy.loadMapFromServer).toHaveBeenCalledWith(mockMap.mapId);
+                expect(routerSpy.navigate).toHaveBeenCalledWith(['edit', mockMap.mapId]);
             });
         });
 
@@ -87,7 +87,7 @@ describe('GameActionsComponent', () => {
 
                 component.deleteMap(mockMap);
 
-                expect(clientHttpRequestSpy.deleteMap).toHaveBeenCalledWith(mockMap.id);
+                expect(clientHttpRequestSpy.deleteMap).toHaveBeenCalledWith(mockMap.mapId);
                 expect(component.refresh.emit).toHaveBeenCalled();
             });
 

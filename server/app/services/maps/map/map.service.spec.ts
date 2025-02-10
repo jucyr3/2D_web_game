@@ -1,11 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { MapService } from './map.service';
 import { MapVerificationService } from '@app/services/mapVerification/mapVerification.service';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Map } from '@common/map';
-import { TileTypes } from '@common/tileType.constants';
 import { Tile } from '@common/tile';
+import { TileTypes } from '@common/tileType.constants';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import * as fs from 'fs/promises';
+import { MapService } from './map.service';
 
 jest.mock('fs/promises');
 
@@ -22,7 +22,7 @@ describe('MapService', () => {
     };
 
     const mockMap: Map = {
-        id: 1,
+        mapId: 1,
         name: 'Test Map',
         size: 10,
         isVisible: true,
@@ -156,7 +156,7 @@ describe('MapService', () => {
             const updatedMap = { ...mockMap, description: 'Updated' };
             const result = await service.saveMap(updatedMap);
             expect(result).toEqual({
-                id: mockMap.id,
+                id: mockMap.mapId,
                 mapVerification: mockVerification,
             });
             expect(mapVerificationService.removeMapName).toHaveBeenCalledWith(mockMap.name);
@@ -179,7 +179,7 @@ describe('MapService', () => {
         it('should handle validation failure for new map', async () => {
             const failedVerification = { ...mockVerification, isUniqueName: false };
             mapVerificationService.validateGame.mockReturnValueOnce(failedVerification);
-            const result = await service.saveMap({ ...mockMap, id: undefined } as Map);
+            const result = await service.saveMap({ ...mockMap, mapId: undefined } as Map);
             expect(result).toEqual({
                 id: 0,
                 mapVerification: failedVerification,
@@ -191,7 +191,7 @@ describe('MapService', () => {
             mapVerificationService.validateGame.mockReturnValueOnce(failedVerification);
             const result = await service.saveMap(mockMap);
             expect(result).toEqual({
-                id: mockMap.id,
+                id: mockMap.mapId,
                 mapVerification: failedVerification,
             });
         });

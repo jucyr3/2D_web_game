@@ -1,7 +1,7 @@
 import { Tile } from '@common/tile';
 
 export interface Map {
-    id: number;
+    mapId: number;
     name: string;
     readonly size: number;
     isVisible: boolean;

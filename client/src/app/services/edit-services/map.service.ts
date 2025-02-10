@@ -34,7 +34,7 @@ export class MapService {
         const mapSize = MapProperties.MAP_SIZE_MEDIUM;
         const defaultId = 0;
         this.map = {
-            id: defaultId,
+            mapId: defaultId,
             name: 'Untitled',
             size: mapSize,
             isVisible: false,
@@ -49,7 +49,7 @@ export class MapService {
 
     createEmptyMap(mapData: MapFormData): void {
         const defaultMap: Map = {
-            id: 0,
+            mapId: 0,
             name: 'Untitled',
             size: mapData.size,
             isVisible: false,
@@ -89,7 +89,7 @@ export class MapService {
         this.itemManager = new ItemManager(json.size, json.gameMode);
         const tileMatrix = this.parseTileMatrix(json);
         return {
-            id: json.id,
+            mapId: json.mapId,
             name: json.name,
             size: json.size,
             isVisible: json.isVisible,
@@ -117,7 +117,7 @@ export class MapService {
         return new Promise((resolve) => {
             this.clientHttpRequest.saveMapToServer(this.map).subscribe({
                 next: (mapResponse) => {
-                    this.map.id = mapResponse.id;
+                    this.map.mapId = mapResponse.id;
                     resolve(mapResponse.mapVerification);
                 },
             });
@@ -229,7 +229,7 @@ export class MapService {
 
             const base64String = compressedDataUrl.split(',')[1];
 
-            this.clientHttpRequest.saveMapImageOnServer(this.map.id, base64String).subscribe({});
+            this.clientHttpRequest.saveMapImageOnServer(this.map.mapId, base64String).subscribe({});
 
             // Convert the base64 image to a Blob and return it
             const response = await fetch(compressedDataUrl);

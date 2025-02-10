@@ -12,7 +12,7 @@ describe('MapVerificationService', () => {
 
     function createMockMap(id: number, size: number): Map {
         return {
-            id,
+            mapId: id,
             name: `Untitled${id}`,
             size,
             isVisible: true,
