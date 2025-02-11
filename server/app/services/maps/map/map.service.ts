@@ -141,8 +141,8 @@ export class MapService {
         existingMap.tileMatrix = map.tileMatrix;
         existingMap.previewImage = map.previewImage;
         existingMap.lastModified = new Date();
+        existingMap.mapId = map.mapId;
 
-        await this.mapDbService.saveImage(existingMap.mapId, existingMap.previewImage);
         await this.mapDbService.changeMap(existingMap.mapId, existingMap);
 
         return {
@@ -153,7 +153,6 @@ export class MapService {
 
     private async createNewMap(map: Map, verification: MapVerification): Promise<MapResponse> {
         map.mapId = this.generateRandomId();
-        await this.mapDbService.saveImage(map.mapId, map.previewImage);
         await this.mapDbService.addMap(map);
 
         return {
