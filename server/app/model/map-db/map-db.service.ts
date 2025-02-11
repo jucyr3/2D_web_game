@@ -49,7 +49,7 @@ export class MapDbService {
         return themap;
     }
     async getImage(id: number) {
-        const theImage = await this.mapModel.findById(id, { previewImage: 1, _id: 0 });
+        const theImage = await this.mapModel.findOne({ mapId: id }, { previewImage: 1, _id: 0 });
         return theImage.previewImage;
     }
 
