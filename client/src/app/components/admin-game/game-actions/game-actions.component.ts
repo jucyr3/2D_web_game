@@ -23,7 +23,8 @@ export class GameActionsComponent {
     ) {}
 
     toggleVisibility(map: Map) {
-        this.clientHttpRequest.updateMapVisibility(map.mapId, !map.isVisible).subscribe({
+        map.isVisible = !map.isVisible;
+        this.clientHttpRequest.updateMapVisibility(map.mapId, map.isVisible).subscribe({
             next: () => {
                 this.refresh.emit();
             },
