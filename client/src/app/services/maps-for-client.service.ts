@@ -31,7 +31,6 @@ export class MapsForClientService {
     loadMapsByVisibility() {
         this.loading = true;
         this.error = null;
-
         this.clientHttpRequest.getAllMapsByVisibility().subscribe({
             next: (maps) => {
                 this.mapsSubject.next(maps);

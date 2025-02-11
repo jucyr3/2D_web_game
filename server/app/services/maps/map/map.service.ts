@@ -78,6 +78,7 @@ export class MapService {
                 existingMapById.tileMatrix = map.tileMatrix;
                 existingMapById.previewImage = map.previewImage;
                 existingMapById.lastModified = new Date();
+                await this.mapDbService.saveImage(existingMapById.mapId, existingMapById.previewImage);
                 await this.mapDbService.changeMap(existingMapById.mapId, existingMapById);
                 return {
                     id: map.mapId,
@@ -85,8 +86,8 @@ export class MapService {
                 } as MapResponse;
             } else {
                 map.mapId = this.generateRandomId();
-                await this.mapDbService.addMap(map);
                 await this.mapDbService.saveImage(map.mapId, map.previewImage);
+                await this.mapDbService.addMap(map);
                 return {
                     id: map.mapId,
                     mapVerification: verification,

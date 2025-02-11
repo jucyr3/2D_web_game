@@ -54,7 +54,6 @@ export class MapDbService {
     }
 
     async changeMapVisibility(id: number, visible: boolean) {
-        // TODO : TEST THIS THING
         const themap = await this.mapModel.updateOne({ mapId: id }, { $set: { isVisible: visible } });
         return themap;
     }
