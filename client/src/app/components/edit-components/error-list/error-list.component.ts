@@ -8,14 +8,18 @@ import { MapService } from '@app/services/edit-services/map.service';
 })
 export class ErrorListComponent {
     errorDescriptions: { [key: string]: string } = {
-        isUniqueName: 'Le nom de la carte est deja utilise',
+        isUniqueName: 'Le nom de la carte est déjà utilisé',
         isNamePresent: 'Le nom de la carte est manquant',
         isDescriptionPresent: 'La carte doit contenir une description',
-        isMapHalfFloor: 'La moite de la carte doit etre un plancher',
-        isMapAccessible: 'La carte doit etre accessible',
-        areStartingPointsValid: 'Les points de depart doivent etre valides',
-        areDoorsNextToWalls: 'Les portes doivent etre a cote de deux murs',
-        areDoorsNotNextToBorder: 'Les portes ne doivent pas etre a cote du bord de la carte',
+        isMapHalfFloor: 'La moitié de la carte doit être un plancher',
+        isMapAccessible: 'La carte doit être accessible',
+        areStartingPointsValid: 'Les points de départ doivent être valides',
+        areItemsValid: "Le nombre maximum d'objets doit etre place",
+        areDoorsNextToWalls: 'Les portes doivent être à côté de deux murs',
+        areDoorsNotNextToBorder: 'Les portes ne doivent pas être à côté du bord de la carte',
+        isNameValid: 'Le nom de la carte doit être valide',
+        isDescriptionValid: 'La description de la carte doit être valide',
+        isFlagPresent: 'Le drapeau doit être présent',
     };
 
     constructor(protected mapService: MapService) {}
