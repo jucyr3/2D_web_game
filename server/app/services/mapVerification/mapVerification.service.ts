@@ -246,7 +246,7 @@ export class MapVerificationService {
             isMapHalfFloor: this.isMapHalfFloor(map),
             isMapAccessible: this.isMapAccessible(map),
             areStartingPointsValid: this.areStartingPointsValid(map),
-            areItemsValid: this.areItemObjectsValid(map),
+            areItemsValid: this.areItemObjectsValid(map), // TODO : SEND NEW ERROR TO LIST
             areDoorsNextToWalls: this.areDoorsNextToWalls(map),
             areDoorsNotNextToBorder: this.areDoorsNotNextToBorder(map),
             isNameValid: this.isNameValid(map),

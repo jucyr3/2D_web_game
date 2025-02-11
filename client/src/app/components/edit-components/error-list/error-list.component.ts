@@ -14,8 +14,12 @@ export class ErrorListComponent {
         isMapHalfFloor: 'La moite de la carte doit etre un plancher',
         isMapAccessible: 'La carte doit etre accessible',
         areStartingPointsValid: 'Les points de depart doivent etre valides',
+        areItemsValid: 'le nombre d items est invalide',
         areDoorsNextToWalls: 'Les portes doivent etre a cote de deux murs',
         areDoorsNotNextToBorder: 'Les portes ne doivent pas etre a cote du bord de la carte',
+        isNameValid: 'le nom de la carte est invalide',
+        isDescriptionValid: 'la description est invalide',
+        isFlagPresent: 'le drapeau n est pas present',
     };
 
     constructor(protected mapService: MapService) {}
