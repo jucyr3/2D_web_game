@@ -42,10 +42,12 @@ describe('MapController', () => {
         isMapHalfFloor: true,
         isMapAccessible: true,
         areStartingPointsValid: true,
+        areItemsValid: true,
         areDoorsNextToWalls: true,
         areDoorsNotNextToBorder: true,
         isNameValid: true,
         isDescriptionValid: true,
+        isFlagPresent: true,
     };
 
     const mockMapResponse: MapResponse = {

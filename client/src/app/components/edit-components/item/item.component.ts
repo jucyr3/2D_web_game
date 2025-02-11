@@ -48,7 +48,7 @@ export class ItemComponent implements OnDestroy, OnInit {
     }
 
     onMouseDown(event: MouseEvent): void {
-        if (this.mapService.itemManager.itemAmounts[this.itemObject.name] <= 0 || event.button !== MouseButton.Left) {
+        if (this.mapService.itemManager.itemAmounts[this.itemObject.name] <= 0 || event.button !== MouseButton.Left || this.isGrayedOut()) {
             return;
         }
         this.mapService.itemManager.decreaseItemAmount(this.itemObject.name);
@@ -65,6 +65,16 @@ export class ItemComponent implements OnDestroy, OnInit {
             this.dragAndDropService.onMouseUp(this.itemObject.name);
             this.editingToolService.setActiveTool(EditToolTypes.TileBrush);
         }
+    }
+
+    isGrayedOut(): boolean {
+        const isNormalItem: boolean = this.mapService.itemManager.items.has(this.itemObject.name);
+        const isItemCounterMaxed: boolean = this.mapService.itemManager.itemCounter >= this.mapService.itemManager.maxItemCounter;
+        const isItemAmountZero: boolean = this.mapService.itemManager.itemAmounts[this.itemObject.name] <= 0;
+        if ((isNormalItem && isItemCounterMaxed) || isItemAmountZero) {
+            return true;
+        }
+        return false;
     }
 
     ngOnDestroy(): void {

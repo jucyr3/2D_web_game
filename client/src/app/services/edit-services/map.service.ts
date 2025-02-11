@@ -3,7 +3,7 @@ import { ItemObject } from '@common/ItemObject';
 import { Map } from '@common/map';
 import { Tile } from '@common/tile';
 import { TileTypes } from '@common/tileType.constants';
-import html2canvas from 'html2canvas';
+import * as html2canvas from 'html2canvas';
 import { ClientHttpRequestsService } from '@app/services/client-http-requests.service';
 import { ItemManager } from '@app/classes/item-manager';
 import { MapVerification } from '@common/mapVerification.interface';
@@ -134,7 +134,6 @@ export class MapService {
     }
 
     async saveMap(): Promise<void> {
-        this.saveMapToSessionStorage();
         const mapVerification = await this.saveMapToServer();
         this.handleMapVerificationError(mapVerification);
 
@@ -210,34 +209,46 @@ export class MapService {
     }
 
     async exportMapAsImage(): Promise<Blob | null> {
-        const mapElement = document.querySelector('.map') as HTMLElement;
+        const mapElement = this.getMapElement();
+        const canvas = await this.renderMapToCanvas(mapElement);
+        const compressedDataUrl = this.compressCanvasToDataUrl(canvas);
+        await this.saveCompressedImageToServer(compressedDataUrl);
+        return this.convertDataUrlToBlob(compressedDataUrl);
+    }
 
+    getMapElement(): HTMLElement {
+        const mapElement = document.querySelector('.map') as HTMLElement;
         if (!mapElement) {
             throw new Error('Map element not found');
         }
+        return mapElement;
+    }
 
+    async renderMapToCanvas(mapElement: HTMLElement): Promise<HTMLCanvasElement> {
         try {
-            // Use html2canvas to render the .map element to a canvas
-            const canvas = await html2canvas(mapElement, {
+            return await html2canvas.default(mapElement, {
                 scale: 1,
                 useCORS: true,
                 backgroundColor: 'transparent',
             });
-
-            const compressedScale = 0.3;
-            const compressedDataUrl = canvas.toDataURL('image/jpeg', compressedScale);
-
-            const base64String = compressedDataUrl.split(',')[1];
-
-            this.clientHttpRequest.saveMapImageOnServer(this.map.mapId, base64String).subscribe({});
-
-            // Convert the base64 image to a Blob and return it
-            const response = await fetch(compressedDataUrl);
-            return response.blob();
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            throw new Error(`Error exporting map as image: ${errorMessage}`);
+            throw new Error('Error rendering map to canvas');
         }
+    }
+
+    compressCanvasToDataUrl(canvas: HTMLCanvasElement): string {
+        const compressedScale = 0.3;
+        return canvas.toDataURL('image/jpeg', compressedScale);
+    }
+
+    async saveCompressedImageToServer(compressedDataUrl: string): Promise<void> {
+        const base64String = compressedDataUrl.split(',')[1];
+        this.clientHttpRequest.saveMapImageOnServer(this.map.mapId, base64String).subscribe();
+    }
+
+    async convertDataUrlToBlob(dataUrl: string): Promise<Blob> {
+        const response = await fetch(dataUrl);
+        return response.blob();
     }
 
     flattenedTileMatrix(): Tile[] {

@@ -10,17 +10,30 @@ export class ItemManager {
         size20: MapProperties.SPAWN_COUNT_LARGE,
     };
 
+    items = new Set(['attributeItem1', 'conditionItem1', 'gameplayItem1', 'attributeItem2', 'conditionItem2', 'gameplayItem2', 'randomItem']);
+    requiredObjects = new Set(['spawnpoint', 'flag']);
+
     mapSize: number;
     gameMode: 'CTF' | 'Classic';
+    itemCounter: number;
+    maxItemCounter: number;
 
     constructor(mapSize: number, gameMode: 'CTF' | 'Classic') {
         this.gameMode = gameMode;
         this.mapSize = mapSize;
         this.setDefaultItemAmounts();
+        this.maxItemCounter = this.itemMap['size' + mapSize];
+        this.itemCounter = 0;
     }
 
     increaseItemAmount(itemName: string): void {
         this.itemAmounts[itemName]++;
+        if (this.items.has(itemName)) {
+            if (itemName !== 'randomItem') {
+                this.itemAmounts['randomItem']++;
+            }
+            this.itemCounter--;
+        }
     }
 
     decreaseItemAmount(itemName: string): void {
@@ -28,6 +41,12 @@ export class ItemManager {
             return;
         }
         this.itemAmounts[itemName]--;
+        if (this.items.has(itemName)) {
+            if (itemName !== 'randomItem') {
+                this.itemAmounts['randomItem']--;
+            }
+            this.itemCounter++;
+        }
     }
 
     setDefaultItemAmounts(): void {

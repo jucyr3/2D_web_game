@@ -16,6 +16,9 @@ class MockItemManager {
     increaseItemAmount = jasmine.createSpy('increaseItemAmount');
     decreaseItemAmount = jasmine.createSpy('decreaseItemAmount');
     itemAmounts: { [itemId: string]: number } = {};
+    items = new Map<string, boolean>();
+    itemCounter = 0;
+    maxItemCounter = 10;
 }
 
 class MockMapService {
@@ -106,10 +109,12 @@ describe('ItemComponent', () => {
         expect(component.itemObject.name).toEqual('123');
     });
 
-    it('should call decreaseItemAmount and startDragging on mouse down when item amount > 0', () => {
+    it('should call decreaseItemAmount and startDragging on mouse down when item amount > 0 and not grayed out', () => {
         component.itemId = 'testItem';
         fixture.detectChanges();
         const mockEvent = { clientX: 100, clientY: 200, button: 0 } as MouseEvent;
+
+        spyOn(component, 'isGrayedOut').and.returnValue(false);
 
         component.onMouseDown(mockEvent);
 
@@ -123,11 +128,13 @@ describe('ItemComponent', () => {
         );
     });
 
-    it('should not call decreaseItemAmount or startDragging if item amount is zero', () => {
+    it('should not call decreaseItemAmount or startDragging if item amount is zero or grayed out', () => {
         component.itemId = 'testItem';
         mockMapService.itemManager.itemAmounts = { testItem: 0 };
         fixture.detectChanges();
         const mockEvent = { clientX: 100, clientY: 200 } as MouseEvent;
+
+        spyOn(component, 'isGrayedOut').and.returnValue(true);
 
         component.onMouseDown(mockEvent);
 

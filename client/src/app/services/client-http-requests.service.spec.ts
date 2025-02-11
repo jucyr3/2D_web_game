@@ -1,11 +1,11 @@
-import { TestBed } from '@angular/core/testing';
-import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
-import { ClientHttpRequestsService } from './client-http-requests.service';
-import { environment } from 'src/environments/environment';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import { Map } from '@common/map';
 import { MapResponse } from '@common/mapResponse';
 import { MapVerification } from '@common/mapVerification.interface';
+import { environment } from 'src/environments/environment';
+import { ClientHttpRequestsService } from './client-http-requests.service';
 
 describe('ClientHttpRequestsService', () => {
     let service: ClientHttpRequestsService;
@@ -19,10 +19,12 @@ describe('ClientHttpRequestsService', () => {
         isMapHalfFloor: true,
         isMapAccessible: true,
         areStartingPointsValid: true,
+        areItemsValid: true,
         areDoorsNextToWalls: true,
         areDoorsNotNextToBorder: true,
         isNameValid: true,
         isDescriptionValid: true,
+        isFlagPresent: true,
         ...overrides,
     });
 
@@ -142,10 +144,12 @@ describe('ClientHttpRequestsService', () => {
                 expect(response.mapVerification.isMapHalfFloor).toBeTrue();
                 expect(response.mapVerification.isMapAccessible).toBeTrue();
                 expect(response.mapVerification.areStartingPointsValid).toBeTrue();
+                expect(response.mapVerification.areItemsValid).toBeTrue();
                 expect(response.mapVerification.areDoorsNextToWalls).toBeTrue();
                 expect(response.mapVerification.areDoorsNotNextToBorder).toBeTrue();
                 expect(response.mapVerification.isNameValid).toBeTrue();
                 expect(response.mapVerification.isDescriptionValid).toBeTrue();
+                expect(response.mapVerification.isFlagPresent).toBeTrue();
             });
 
             const req = httpMock.expectOne(`${environment.serverUrl}/maps`);
