@@ -1,15 +1,27 @@
 .error-box {
     max-width: 300px;
-    border: 3px solid rgb(255, 255, 255);
-    background-color: rgb(23, 27, 73);
+    border: 3px solid #ffffff;
+    background-color: #1e2a38;
     border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .title {
-    margin-left: 10px;
-    color: white;
+    margin-left: 5px;
+    color: #ffcc00;
+    font-size: 1.5em;
+    font-weight: bold;
 }
 
 .error-list {
-    color: white;
+    color: #ffffff;
+    font-size: 1em;
+    margin-top: 10px;
+    margin-right: 5px;
+    margin-left: -15px;
+}
+
+.error-list li {
+    margin-bottom: 15px; /* Increased from 5px to 15px */
 }
