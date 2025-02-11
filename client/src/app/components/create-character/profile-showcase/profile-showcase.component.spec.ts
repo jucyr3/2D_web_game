@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { characterConstants } from '@app/constants/characterConstants';
-import { StatsService } from '@app/services/stats.service';
+import { StatsService } from '@app/services/create-character/stats.service';
 import { ProfileShowcaseComponent } from './profile-showcase.component';
 
 describe('ProfileShowcaseComponent', () => {

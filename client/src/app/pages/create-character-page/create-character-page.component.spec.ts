@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { ProfileService } from '@app/services/profile.service';
+import { ProfileService } from '@app/services/create-character/profile.service';
 import { CreateCharacterPageComponent } from './create-character-page.component';
 
 describe('CreateCharacterPageComponent', () => {
