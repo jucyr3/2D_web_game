@@ -2,7 +2,6 @@ import { MapService } from '@app/services/maps/map/map.service';
 import { Map } from '@common/map';
 import { MapResponse } from '@common/mapResponse';
 import { MapVerification } from '@common/mapVerification.interface';
-import { MapDbService } from '@app/model/map-db/map-db.service';
 
 import {
     Body,
@@ -114,15 +113,11 @@ export class MapController {
     @ApiResponse({
         status: HttpStatus.OK,
         description: 'Map visibility updated',
-        type: Map,
+        
     })
-    async updateMapVisibility(@Param('id', ParseIntPipe) id: number, @Body('isVisible') isVisible: boolean): Promise<Map> {
+    async updateMapVisibility(@Param('id', ParseIntPipe) id: number, @Body('isVisible') isVisible: boolean): Promise<void> {
         try {
-            const map = await this.mapService.updateMapVisibility(id, isVisible);
-            if (!map) {
-                throw new NotFoundException(`Map with ID ${id} not found`);
-            }
-            return map;
+            await this.mapService.updateMapVisibility(id, isVisible);
         } catch (error) {
             this.logger.error(`Failed to update map ${id} visibility: ${error.message}`);
             throw error;

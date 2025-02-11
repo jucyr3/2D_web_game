@@ -1,10 +1,7 @@
 import { MapDbService } from '@app/model/map-db/map-db.service';
 import { MapVerificationService } from '@app/services/mapVerification/mapVerification.service';
-import { ItemObject } from '@common/ItemObject';
 import { Map } from '@common/map';
 import { MapResponse } from '@common/mapResponse';
-import { Tile } from '@common/tile';
-import { TileTypes } from '@common/tileType.constants';
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 
 @Injectable()
@@ -42,11 +39,10 @@ export class MapService {
     async getMapById(id: number): Promise<Map> {
         try {
             const foundMap = await this.mapDbService.getMap(id);
-            const parsedFoundMap = this.transformToMap(foundMap);
-            if (!parsedFoundMap) {
+            if (!foundMap) {
                 throw new NotFoundException(`Map with ID ${id} not found`);
             }
-            return parsedFoundMap;
+            return this.transformToMap(foundMap);
         } catch (error) {
             if (error instanceof NotFoundException) {
                 throw error;
@@ -58,9 +54,9 @@ export class MapService {
 
     async saveMap(map: Map): Promise<MapResponse> {
         try {
-            const maps = await this.mapDbService.getAllMaps();
-            const parsedMaps = maps.map((existingMaps) => this.transformToMap(existingMaps));
-            const existingMapById = parsedMaps.find((m) => m.mapId === map.mapId); // si map Existe deja
+            const existinMaps = await this.mapDbService.getAllMaps();
+            const parsedMaps = existinMaps.map((existingMaps) => this.transformToMap(existingMaps));
+            const existingMapById = parsedMaps.find((m) => m.mapId === map.mapId);
             if (existingMapById) {
                 this.mapVerificationService.removeMapName(existingMapById.name);
             }
@@ -146,33 +142,6 @@ export class MapService {
             this.logger.error(`Failed to delete map: ${error.message}`, error.stack);
             throw new Error(`Failed to delete map: ${error.message}`);
         }
-    }
-
-    parseTileMatrix(json: Map): Tile[][] {
-        return json.tileMatrix.map((row) =>
-            row.map((tileData) => {
-                const type = tileData.type as TileTypes;
-                const isOccupied = tileData.isOccupied;
-                const isObstacle = tileData.isObstacle;
-                const itemObject: ItemObject | null = tileData.itemObject ? { name: tileData.itemObject.name } : null;
-                return { type, isOccupied, isObstacle, itemObject } as Tile;
-            }),
-        );
-    }
-
-    loadMapFromJSON(json: Map): Map {
-        const tileMatrix = this.parseTileMatrix(json);
-        return {
-            mapId: json.mapId,
-            name: json.name,
-            size: json.size,
-            isVisible: json.isVisible,
-            description: json.description,
-            gameMode: json.gameMode,
-            tileMatrix,
-            lastModified: json.lastModified || new Date(),
-            previewImage: json.previewImage,
-        };
     }
 
     private generateRandomId(): number {
