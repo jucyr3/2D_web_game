@@ -113,7 +113,6 @@ export class MapController {
     @ApiResponse({
         status: HttpStatus.OK,
         description: 'Map visibility updated',
-        
     })
     async updateMapVisibility(@Param('id', ParseIntPipe) id: number, @Body('isVisible') isVisible: boolean): Promise<void> {
         try {

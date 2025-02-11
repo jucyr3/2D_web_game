@@ -20,7 +20,6 @@ export class MapService {
             this.mapVerificationService.setAllMapsNames(mapsParsed);
             return mapsParsed;
         } catch (error) {
-            this.logger.error(`Failed to read maps: ${error.message}`, error.stack);
             throw new Error(`Failed to retrieve maps: ${error.message}`);
         }
     }
@@ -31,7 +30,6 @@ export class MapService {
             const parsedVisibleMaps = visibleMaps.map((map) => this.transformToMap(map));
             return parsedVisibleMaps;
         } catch (error) {
-            this.logger.error(`Failed to get maps by visibility: ${error.message}`, error.stack);
             throw new Error(`Failed to retrieve maps by visibility: ${error.message}`);
         }
     }
@@ -47,7 +45,6 @@ export class MapService {
             if (error instanceof NotFoundException) {
                 throw error;
             }
-            this.logger.error(`Failed to find map: ${error.message}`, error.stack);
             throw new Error(`Failed to retrieve map: ${error.message}`);
         }
     }
@@ -99,21 +96,19 @@ export class MapService {
             if (error instanceof BadRequestException) {
                 throw error;
             }
-            this.logger.error(`Failed to create map: ${error.message}`, error.stack);
             throw new Error(`Failed to create map: ${error.message}`);
         }
     }
 
     async updateMapVisibility(id: number, isVisible: boolean): Promise<Map> {
         try {
-            this.mapDbService.changeMapVisibility(id, isVisible);
+            await this.mapDbService.changeMapVisibility(id, isVisible);
             const mapChanged = await this.getMapById(id);
             return this.transformToMap(mapChanged);
         } catch (error) {
             if (error instanceof NotFoundException) {
                 throw error;
             }
-            this.logger.error(`Failed to update map visibility: ${error.message}`, error.stack);
             throw new Error(`Failed to update map visibility: ${error.message}`);
         }
     }
@@ -127,19 +122,17 @@ export class MapService {
             if (error instanceof NotFoundException) {
                 throw error;
             }
-            this.logger.error(`Failed to update map image: ${error.message}`, error.stack);
             throw new Error(`Failed to update map image: ${error.message}`);
         }
     }
 
     async deleteMap(id: number): Promise<void> {
         try {
-            this.mapDbService.remove(id);
+            await this.mapDbService.remove(id);
         } catch (error) {
             if (error instanceof NotFoundException) {
                 throw error;
             }
-            this.logger.error(`Failed to delete map: ${error.message}`, error.stack);
             throw new Error(`Failed to delete map: ${error.message}`);
         }
     }
@@ -159,7 +152,7 @@ export class MapService {
             isVisible: doc.isVisible,
             description: doc.description,
             gameMode: doc.gameMode,
-            tileMatrix: doc.tileMatrix || [[]],
+            tileMatrix: doc.tileMatrix,
             lastModified: doc.lastModified,
             previewImage: doc.previewImage,
         };

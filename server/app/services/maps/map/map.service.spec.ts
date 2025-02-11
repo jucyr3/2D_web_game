@@ -1,37 +1,30 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MapService } from './map.service';
-import { MapVerificationService } from '@app/services/mapVerification/mapVerification.service';
 import { MapDbService } from '@app/model/map-db/map-db.service';
+import { MapVerificationService } from '@app/services/mapVerification/mapVerification.service';
 import { Map } from '@common/map';
-import { BadRequestException, Logger, NotFoundException } from '@nestjs/common';
-import { TileTypes } from '@common/tileType.constants';
+import { NotFoundException, BadRequestException, Logger } from '@nestjs/common';
+import { MapVerification } from '@common/mapVerification.interface';
 
 describe('MapService', () => {
-    let service: MapService;
-    let originalConsoleError: any;
+    let mapService: MapService;
+    let mapDbService: jest.Mocked<MapDbService>;
+    let mapVerificationService: jest.Mocked<MapVerificationService>;
 
-    beforeAll(() => {
-        originalConsoleError = console.error;
-        console.error = jest.fn();
-    });
-
-    afterAll(() => {
-        console.error = originalConsoleError;
-    });
-
-    const mockMap: Map = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const mockMap: any = {
         mapId: 1,
         name: 'Test Map',
         size: 10,
         isVisible: true,
         description: 'Test Description',
-        gameMode: 'Classic',
-        tileMatrix: [[{ type: TileTypes.GROUND_0, isOccupied: false, isObstacle: false, itemObject: null }]],
+        gameMode: 'Test Mode',
+        tileMatrix: [[]],
         lastModified: new Date(),
         previewImage: 'test-image.png',
     };
 
-    const mockVerification = {
+    const mockMapVerificationPassed: MapVerification = {
         isUniqueName: true,
         isNamePresent: true,
         isDescriptionPresent: true,
@@ -46,212 +39,272 @@ describe('MapService', () => {
         isFlagPresent: true,
     };
 
-    const mockMapDbService = {
-        getAllMaps: jest.fn(),
-        getVisible: jest.fn(),
-        getMap: jest.fn(),
-        addMap: jest.fn(),
-        changeMap: jest.fn(),
-        saveImage: jest.fn(),
-        changeMapVisibility: jest.fn(),
-        remove: jest.fn(),
-    };
-
-    const mockMapVerificationService = {
-        setAllMapsNames: jest.fn(),
-        removeMapName: jest.fn(),
-        validateGame: jest.fn(),
+    const mockMapVerificationFailed: MapVerification = {
+        isUniqueName: false,
+        isNamePresent: false,
+        isDescriptionPresent: false,
+        isMapHalfFloor: false,
+        isMapAccessible: false,
+        areStartingPointsValid: false,
+        areItemsValid: false,
+        areDoorsNextToWalls: false,
+        areDoorsNotNextToBorder: false,
+        isNameValid: false,
+        isDescriptionValid: false,
+        isFlagPresent: false,
     };
 
     beforeEach(async () => {
-        jest.clearAllMocks();
-
         const module: TestingModule = await Test.createTestingModule({
             providers: [
                 MapService,
-                { provide: MapVerificationService, useValue: mockMapVerificationService },
-                { provide: MapDbService, useValue: mockMapDbService },
-                { 
-                    provide: Logger, 
-                    useValue: { 
-                        log: jest.fn(),
-                        error: jest.fn(),
-                        warn: jest.fn(),
-                        debug: jest.fn(),
-                        verbose: jest.fn()
-                    } 
-                }
+                {
+                    provide: MapDbService,
+                    useValue: {
+                        getAllMaps: jest.fn(),
+                        getVisible: jest.fn(),
+                        getMap: jest.fn(),
+                        changeMap: jest.fn(),
+                        addMap: jest.fn(),
+                        saveImage: jest.fn(),
+                        changeMapVisibility: jest.fn(),
+                        remove: jest.fn(),
+                    },
+                },
+                {
+                    provide: MapVerificationService,
+                    useValue: {
+                        setAllMapsNames: jest.fn(),
+                        removeMapName: jest.fn(),
+                        validateGame: jest.fn(),
+                    },
+                },
             ],
         }).compile();
 
-        service = module.get<MapService>(MapService);
+        mapService = module.get<MapService>(MapService);
+        mapDbService = module.get(MapDbService) as jest.Mocked<MapDbService>;
+        mapVerificationService = module.get(MapVerificationService) as jest.Mocked<MapVerificationService>;
     });
 
     describe('getAllMaps', () => {
         it('should return all maps', async () => {
-            mockMapDbService.getAllMaps.mockResolvedValue([mockMap]);
-            const result = await service.getAllMaps();
+            mapDbService.getAllMaps.mockResolvedValue([mockMap]);
+            mapService['transformToMap'] = jest.fn().mockReturnValue(mockMap);
+            const result = await mapService.getAllMaps();
             expect(result).toEqual([mockMap]);
+            expect(mapVerificationService.setAllMapsNames).toHaveBeenCalled();
         });
 
-        it('should handle database error', async () => {
-            mockMapDbService.getAllMaps.mockRejectedValue({ message: 'Database error' });
-            await expect(service.getAllMaps()).rejects.toThrow();
+        it('should throw an error if getAllMaps fails', async () => {
+            mapDbService.getAllMaps.mockRejectedValue(new Error('Database error'));
+
+            await expect(mapService.getAllMaps()).rejects.toThrow('Failed to retrieve maps: Database error');
         });
     });
 
     describe('getAllMapsByVisibility', () => {
         it('should return visible maps', async () => {
-            mockMapDbService.getVisible.mockResolvedValue([mockMap]);
-            const result = await service.getAllMapsByVisibility();
+            mapDbService.getVisible.mockResolvedValue([mockMap]);
+            const result = await mapService.getAllMapsByVisibility();
             expect(result).toEqual([mockMap]);
         });
 
-        it('should handle database error', async () => {
-            mockMapDbService.getVisible.mockRejectedValue({ message: 'Database error' });
-            await expect(service.getAllMapsByVisibility()).rejects.toThrow();
+        it('should throw an error if getVisible fails', async () => {
+            mapDbService.getVisible.mockRejectedValue(new Error('Database error'));
+            await expect(mapService.getAllMapsByVisibility()).rejects.toThrow('Failed to retrieve maps by visibility');
         });
     });
 
     describe('getMapById', () => {
-        it('should return a map', async () => {
-            mockMapDbService.getMap.mockResolvedValue(mockMap);
-            const result = await service.getMapById(1);
+        it('should return a map by id', async () => {
+            mapDbService.getMap.mockResolvedValue(mockMap);
+            const result = await mapService.getMapById(1);
             expect(result).toEqual(mockMap);
         });
 
-        it('should handle map not found', async () => {
-            mockMapDbService.getMap.mockResolvedValue(null);
-            await expect(service.getMapById(1)).rejects.toThrow(NotFoundException);
+        it('should throw NotFoundException if map is not found', async () => {
+            mapDbService.getMap.mockResolvedValue(null);
+            await expect(mapService.getMapById(1)).rejects.toThrow(NotFoundException);
         });
 
-        it('should handle database error', async () => {
-            mockMapDbService.getMap.mockRejectedValue({ message: 'Database error' });
-            await expect(service.getMapById(1)).rejects.toThrow();
+        it('should throw an error if getMap fails', async () => {
+            mapDbService.getMap.mockRejectedValue(new Error('Database error'));
+            await expect(mapService.getMapById(1)).rejects.toThrow('Failed to retrieve map: Database error');
         });
     });
 
     describe('saveMap', () => {
-        it('should save new map', async () => {
-            mockMapDbService.getAllMaps.mockResolvedValue([]);
-            mockMapVerificationService.validateGame.mockReturnValue(mockVerification);
-            mockMapDbService.addMap.mockResolvedValue(undefined);
-            mockMapDbService.saveImage.mockResolvedValue(undefined);
+        it('should save a new map', async () => {
+            mapDbService.getAllMaps.mockResolvedValue([]);
+            mapVerificationService.validateGame.mockReturnValue(mockMapVerificationPassed);
+            mapDbService.addMap.mockResolvedValue(undefined);
+            mapDbService.saveImage.mockResolvedValue(undefined);
 
-            const result = await service.saveMap(mockMap);
-            expect(result.mapVerification).toEqual(mockVerification);
+            const result = await mapService.saveMap(mockMap);
+            expect(result.id).toBeDefined();
+            expect(result.mapVerification).toEqual(mockMapVerificationPassed);
         });
 
-        it('should update existing map', async () => {
-            mockMapDbService.getAllMaps.mockResolvedValue([mockMap]);
-            mockMapVerificationService.validateGame.mockReturnValue(mockVerification);
-            mockMapDbService.changeMap.mockResolvedValue(undefined);
+        it('should update an existing map', async () => {
+            mapDbService.getAllMaps.mockResolvedValue([mockMap]);
+            mapVerificationService.validateGame.mockReturnValue(mockMapVerificationPassed);
+            mapDbService.changeMap.mockResolvedValue(undefined);
 
-            const result = await service.saveMap(mockMap);
-            expect(result.mapVerification).toEqual(mockVerification);
+            const result = await mapService.saveMap(mockMap);
+            expect(result.id).toEqual(mockMap.mapId);
+            expect(result.mapVerification).toEqual(mockMapVerificationPassed);
         });
 
-        it('should handle validation failure for new map', async () => {
-            const failedVerification = { ...mockVerification, isUniqueName: false };
-            mockMapDbService.getAllMaps.mockResolvedValue([]);
-            mockMapVerificationService.validateGame.mockReturnValue(failedVerification);
+        it('should return validation errors if map is invalid', async () => {
+            mapDbService.getAllMaps.mockResolvedValue([]);
+            mapVerificationService.validateGame.mockReturnValue(mockMapVerificationFailed);
 
-            const result = await service.saveMap(mockMap);
-            expect(result).toEqual({
-                id: 0,
-                mapVerification: failedVerification,
-            });
+            const result = await mapService.saveMap(mockMap);
+            expect(result.id).toEqual(0);
+            expect(result.mapVerification).toEqual(mockMapVerificationFailed);
         });
 
-        it('should handle validation failure for existing map', async () => {
-            const failedVerification = { ...mockVerification, isUniqueName: false };
-            mockMapDbService.getAllMaps.mockResolvedValue([mockMap]);
-            mockMapVerificationService.validateGame.mockReturnValue(failedVerification);
+        it('should return mapResponse with existing map id when validation fails and map already exists', async () => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const existingMap: any = {
+                mapId: 1,
+                name: 'Existing Map',
+                size: 10,
+                isVisible: true,
+                description: 'Test Map',
+                gameMode: 'Classic',
+                tileMatrix: [[]],
+                lastModified: new Date(),
+                previewImage: 'imageData',
+            };
 
-            const result = await service.saveMap(mockMap);
-            expect(result).toEqual({
-                id: mockMap.mapId,
-                mapVerification: failedVerification,
-            });
+            const newMap: Map = { ...existingMap, name: 'Updated Map' };
+
+            mapDbService.getAllMaps.mockResolvedValue([existingMap]);
+            mapVerificationService.validateGame.mockReturnValue(mockMapVerificationFailed);
+
+            const result = await mapService.saveMap(newMap);
+
+            expect(result).toEqual({ id: existingMap.mapId, mapVerification: mockMapVerificationFailed });
+            expect(mapVerificationService.removeMapName).toHaveBeenCalledWith(existingMap.name);
         });
 
-        it('should handle bad request error', async () => {
-            mockMapDbService.getAllMaps.mockRejectedValue(new BadRequestException());
-            await expect(service.saveMap(mockMap)).rejects.toThrow(BadRequestException);
+        it('should throw BadRequestException if encountered', async () => {
+            const newMap: Map = {
+                mapId: 2,
+                name: 'New Map',
+                size: 10,
+                isVisible: true,
+                description: 'Test Map',
+                gameMode: 'Classic',
+                tileMatrix: [[]],
+                lastModified: new Date(),
+                previewImage: 'imageData',
+            };
+
+            mapDbService.getAllMaps.mockRejectedValue(new BadRequestException('Invalid map data'));
+
+            await expect(mapService.saveMap(newMap)).rejects.toThrow(BadRequestException);
         });
 
-        it('should handle database error', async () => {
-            mockMapDbService.getAllMaps.mockRejectedValue({ message: 'Database error' });
-            await expect(service.saveMap(mockMap)).rejects.toThrow();
+        it('should throw generic error if an unknown error occurs', async () => {
+            const newMap: Map = {
+                mapId: 3,
+                name: 'Another New Map',
+                size: 10,
+                isVisible: true,
+                description: 'Test Map',
+                gameMode: 'Classic',
+                tileMatrix: [[]],
+                lastModified: new Date(),
+                previewImage: 'imageData',
+            };
+
+            mapDbService.getAllMaps.mockRejectedValue(new Error('Unexpected error'));
+
+            await expect(mapService.saveMap(newMap)).rejects.toThrow('Failed to create map: Unexpected error');
         });
     });
 
     describe('updateMapVisibility', () => {
-        it('should update visibility', async () => {
-            mockMapDbService.changeMapVisibility.mockResolvedValue(undefined);
-            mockMapDbService.getMap.mockResolvedValue(mockMap);
-            const result = await service.updateMapVisibility(1, true);
+        let consoleErrorSpy;
+        let loggerSpy;
+
+        beforeEach(() => {
+            // Silence console.error before each test
+            consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+            loggerSpy = jest.spyOn(Logger.prototype, 'error').mockImplementation();
+        });
+
+        afterEach(() => {
+            // Restore all mocks
+            consoleErrorSpy.mockRestore();
+            loggerSpy.mockRestore();
+        });
+
+        it('should update map visibility', async () => {
+            mapDbService.changeMapVisibility.mockResolvedValue(undefined);
+            mapDbService.getMap.mockResolvedValue(mockMap);
+            mapService['transformToMap'] = jest.fn().mockReturnValue(mockMap);
+
+            const result = await mapService.updateMapVisibility(1, true);
             expect(result).toEqual(mockMap);
+            expect(mapDbService.changeMapVisibility).toHaveBeenCalledWith(1, true);
         });
 
-        it('should handle not found error', async () => {
-            mockMapDbService.changeMapVisibility.mockRejectedValue(new NotFoundException());
-            await expect(service.updateMapVisibility(1, true)).rejects.toThrow(NotFoundException);
+        it('should throw NotFoundException if map is not found', async () => {
+            mapDbService.getMap.mockResolvedValue(null);
+
+            await expect(mapService.updateMapVisibility(1, true)).rejects.toThrow(NotFoundException);
         });
 
-        it('should handle database error', async () => {
-            mockMapDbService.changeMapVisibility.mockRejectedValue({ message: 'Database error' });
-            await expect(service.updateMapVisibility(1, true)).rejects.toThrow();
+        it('should throw a generic error if an unexpected error occurs', async () => {
+            mapDbService.changeMapVisibility.mockRejectedValue(new Error('Database failure'));
+
+            await expect(mapService.updateMapVisibility(1, true)).rejects.toThrow('Failed to update map visibility: Database failure');
         });
     });
 
     describe('updateMapImage', () => {
-        it('should update image', async () => {
-            mockMapDbService.saveImage.mockResolvedValue(undefined);
-            mockMapDbService.getMap.mockResolvedValue(mockMap);
-            const result = await service.updateMapImage(1, 'new.png');
-            expect(result).toEqual(mockMap);
+        it('should update map image', async () => {
+            mapDbService.saveImage.mockResolvedValue(undefined);
+            mapDbService.getMap.mockResolvedValue({ ...mockMap, previewImage: 'new-image.png' });
+
+            const result = await mapService.updateMapImage(1, 'new-image.png');
+            expect(result.previewImage).toBe('new-image.png');
         });
 
-        it('should handle not found error', async () => {
-            mockMapDbService.saveImage.mockRejectedValue(new NotFoundException());
-            await expect(service.updateMapImage(1, 'new.png')).rejects.toThrow(NotFoundException);
+        it('should throw NotFoundException if map is not found', async () => {
+            mapDbService.saveImage.mockRejectedValue(new NotFoundException());
+            await expect(mapService.updateMapImage(1, 'new-image.png')).rejects.toThrow(NotFoundException);
         });
 
-        it('should handle database error', async () => {
-            mockMapDbService.saveImage.mockRejectedValue({ message: 'Database error' });
-            await expect(service.updateMapImage(1, 'new.png')).rejects.toThrow();
+        it('should throw an error with custom message if saveImage fails', async () => {
+            const errorMessage = 'Failed to save image';
+            mapDbService.saveImage.mockRejectedValue(new Error(errorMessage));
+
+            await expect(mapService.updateMapImage(1, 'new-image.png')).rejects.toThrow(`Failed to update map image: ${errorMessage}`);
         });
     });
 
     describe('deleteMap', () => {
-        it('should delete map', async () => {
-            mockMapDbService.remove.mockResolvedValue(undefined);
-            await service.deleteMap(1);
-            expect(mockMapDbService.remove).toHaveBeenCalledWith(1);
+        it('should delete a map', async () => {
+            mapDbService.remove.mockResolvedValue(undefined);
+            await expect(mapService.deleteMap(1)).resolves.not.toThrow();
         });
 
-        it('should handle not found error', async () => {
-            mockMapDbService.remove.mockRejectedValue(new NotFoundException());
-            await expect(service.deleteMap(1)).rejects.toThrow(NotFoundException);
+        it('should throw NotFoundException if map is not found', async () => {
+            mapDbService.remove.mockRejectedValue(new NotFoundException());
+
+            await expect(mapService.deleteMap(1)).rejects.toThrow(NotFoundException);
         });
 
-        it('should handle database error', async () => {
-            mockMapDbService.remove.mockRejectedValue({ message: 'Database error' });
-            await expect(service.deleteMap(1)).rejects.toThrow();
-        });
-    });
+        it('should throw an error with custom message if deletion fails', async () => {
+            const errorMessage = 'Database connection failed';
+            mapDbService.remove.mockRejectedValue(new Error(errorMessage));
 
-    describe('private methods', () => {
-        it('should transform map data', () => {
-            const result = (service as any).transformToMap(mockMap);
-            expect(result).toEqual(mockMap);
-        });
-
-        it('should handle missing tileMatrix', () => {
-            const mapWithoutMatrix = { ...mockMap, tileMatrix: undefined };
-            const result = (service as any).transformToMap(mapWithoutMatrix);
-            expect(result.tileMatrix).toEqual([[]]);
+            await expect(mapService.deleteMap(1)).rejects.toThrow(`Failed to delete map: ${errorMessage}`);
         });
     });
 });

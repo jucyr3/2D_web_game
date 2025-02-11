@@ -8,7 +8,6 @@ import { TileTypes } from '@common/tileType.constants';
 
 describe('MapController', () => {
     let controller: MapController;
-    let service: MapService;
     let mockLogger: { error: jest.Mock };
 
     beforeAll(() => {
@@ -81,7 +80,6 @@ describe('MapController', () => {
         }).compile();
 
         controller = module.get<MapController>(MapController);
-        service = module.get<MapService>(MapService);
     });
 
     describe('getAllMaps', () => {
@@ -96,11 +94,8 @@ describe('MapController', () => {
         it('should handle and log database errors', async () => {
             const error = new Error('Database error');
             mockService.getAllMaps.mockRejectedValue(error);
-            
             await expect(controller.getAllMaps()).rejects.toThrow(error);
-            expect(mockLogger.error).toHaveBeenCalledWith(
-                'Failed to get all maps: Database error'
-            );
+            expect(mockLogger.error).toHaveBeenCalledWith('Failed to get all maps: Database error');
         });
     });
 
@@ -115,21 +110,17 @@ describe('MapController', () => {
 
         it('should throw NotFoundException when map is not found', async () => {
             mockService.getMapById.mockResolvedValue(null);
-            
+
             await expect(controller.getMapById(1)).rejects.toThrow(NotFoundException);
-            expect(mockLogger.error).toHaveBeenCalledWith(
-                'Failed to get map 1: Map with ID 1 not found'
-            );
+            expect(mockLogger.error).toHaveBeenCalledWith('Failed to get map 1: Map with ID 1 not found');
         });
 
         it('should handle and log database errors', async () => {
             const error = new Error('Database error');
             mockService.getMapById.mockRejectedValue(error);
-            
+
             await expect(controller.getMapById(1)).rejects.toThrow(error);
-            expect(mockLogger.error).toHaveBeenCalledWith(
-                'Failed to get map 1: Database error'
-            );
+            expect(mockLogger.error).toHaveBeenCalledWith('Failed to get map 1: Database error');
         });
     });
 
@@ -145,11 +136,9 @@ describe('MapController', () => {
         it('should handle and log database errors', async () => {
             const error = new Error('Database error');
             mockService.getAllMapsByVisibility.mockRejectedValue(error);
-            
+
             await expect(controller.getMapsByVisibility()).rejects.toThrow(error);
-            expect(mockLogger.error).toHaveBeenCalledWith(
-                'Failed to get maps by visibility : Database error'
-            );
+            expect(mockLogger.error).toHaveBeenCalledWith('Failed to get maps by visibility : Database error');
         });
     });
 
@@ -165,12 +154,9 @@ describe('MapController', () => {
         it('should handle and log save errors', async () => {
             const error = new Error('Database error');
             mockService.saveMap.mockRejectedValue(error);
-            
+
             await expect(controller.saveMap(mockMap)).rejects.toThrow(HttpException);
-            expect(mockLogger.error).toHaveBeenCalledWith(
-                'Failed to create map: Database error',
-                error.stack
-            );
+            expect(mockLogger.error).toHaveBeenCalledWith('Failed to create map: Database error', error.stack);
         });
     });
 
@@ -185,11 +171,9 @@ describe('MapController', () => {
         it('should handle and log visibility update errors', async () => {
             const error = new Error('Database error');
             mockService.updateMapVisibility.mockRejectedValue(error);
-            
+
             await expect(controller.updateMapVisibility(1, true)).rejects.toThrow(error);
-            expect(mockLogger.error).toHaveBeenCalledWith(
-                'Failed to update map 1 visibility: Database error'
-            );
+            expect(mockLogger.error).toHaveBeenCalledWith('Failed to update map 1 visibility: Database error');
         });
     });
 
@@ -204,21 +188,17 @@ describe('MapController', () => {
 
         it('should throw NotFoundException when map is not found', async () => {
             mockService.updateMapImage.mockResolvedValue(null);
-            
+
             await expect(controller.updatePreviewImage(1, 'new-image.png')).rejects.toThrow(NotFoundException);
-            expect(mockLogger.error).toHaveBeenCalledWith(
-                'Failed to update map 1 image: Map with ID 1 not found'
-            );
+            expect(mockLogger.error).toHaveBeenCalledWith('Failed to update map 1 image: Map with ID 1 not found');
         });
 
         it('should handle and log image update errors', async () => {
             const error = new Error('Database error');
             mockService.updateMapImage.mockRejectedValue(error);
-            
+
             await expect(controller.updatePreviewImage(1, 'new-image.png')).rejects.toThrow(error);
-            expect(mockLogger.error).toHaveBeenCalledWith(
-                'Failed to update map 1 image: Database error'
-            );
+            expect(mockLogger.error).toHaveBeenCalledWith('Failed to update map 1 image: Database error');
         });
     });
 
@@ -233,11 +213,9 @@ describe('MapController', () => {
         it('should handle and log deletion errors', async () => {
             const error = new Error('Database error');
             mockService.deleteMap.mockRejectedValue(error);
-            
+
             await expect(controller.deleteMap(1)).rejects.toThrow(error);
-            expect(mockLogger.error).toHaveBeenCalledWith(
-                'Failed to delete map 1: Database error'
-            );
+            expect(mockLogger.error).toHaveBeenCalledWith('Failed to delete map 1: Database error');
         });
     });
 });

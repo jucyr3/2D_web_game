@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ProfilePictureComponent } from '@app/components/create-character/profile-picture/profile-picture.component';
-import { ProfileService } from '@app/services/profile.service';
+import { ProfileService } from '@app/services/create-character/profile.service';
 
 @Component({
     selector: 'app-profile-selection',

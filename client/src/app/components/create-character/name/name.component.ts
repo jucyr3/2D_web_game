@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { ProfileService } from '@app/services/profile.service';
+import { ProfileService } from '@app/services/create-character/profile.service';
 
 @Component({
     selector: 'app-name',

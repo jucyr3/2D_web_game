@@ -63,6 +63,7 @@ describe('MapDbService', () => {
             previewImage: 'test-preview.png',
         };
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const createStub = jest.spyOn(mapModel, 'create').mockResolvedValueOnce(map as any);
         const result = await service.addMap(map);
         expect(createStub).toHaveBeenCalled();
@@ -163,5 +164,30 @@ describe('MapDbService', () => {
         const result = await service.getImage(1);
         expect(findByIdStub).toHaveBeenCalled();
         expect(result).toEqual('image-data');
+    });
+
+    it('should change map visibility', async () => {
+        const updateResult = { acknowledged: true, modifiedCount: 1, upsertedId: null, upsertedCount: 0, matchedCount: 1 };
+        const updateOneStub = jest.spyOn(mapModel, 'updateOne').mockResolvedValueOnce(updateResult);
+        const result = await service.changeMapVisibility(1, true);
+        expect(updateOneStub).toHaveBeenCalledWith({ mapId: 1 }, { $set: { isVisible: true } });
+        expect(result).toEqual(updateResult);
+    });
+
+    it('should handle error when changing map visibility', async () => {
+        jest.spyOn(mapModel, 'updateOne').mockImplementationOnce(() => {
+            throw new Error('error');
+        });
+        await expect(service.changeMapVisibility(1, true)).rejects.toThrow('error');
+    });
+
+    it('should throw NotFoundException if map is not found (null response)', async () => {
+        const mockId = 1;
+
+        // Mock the findOne method to return null (map not found)
+        jest.spyOn(mapModel, 'findOne').mockResolvedValue(null);
+
+        // Call getMap and expect NotFoundException to be thrown
+        await expect(service.getMap(mockId)).rejects.toThrowError(new NotFoundException('No map found'));
     });
 });

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProfileSelectionComponent } from '@app/components/create-character/profile-selection/profile-selection.component';
 import { ProfileShowcaseComponent } from '@app/components/create-character/profile-showcase/profile-showcase.component';
-import { ProfileService } from '@app/services/profile.service';
+import { ProfileService } from '@app/services/create-character/profile.service';
 
 @Component({
     selector: 'app-create-character-page',

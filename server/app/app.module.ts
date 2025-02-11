@@ -1,11 +1,11 @@
 import { Logger, Module } from '@nestjs/common';
-import { mapSchema } from './model/map-db/map.schema';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
 import { MapController } from './controllers/maps/map/map.controller';
 import { MapDbService } from './model/map-db/map-db.service';
 import { MapService } from './services/maps/map/map.service';
+import { MongooseModule } from '@nestjs/mongoose';
 import { MapVerificationService } from './services/mapVerification/mapVerification.service';
+import { mapSchema } from './model/map-db/map.schema';
 
 @Module({
     imports: [
