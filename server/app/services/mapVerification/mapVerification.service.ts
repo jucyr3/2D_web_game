@@ -7,12 +7,7 @@ import { TileTypes } from '@common/tileType.constants';
 export class MapVerificationService {
     private gameNames: Set<string> = new Set(['test']); // TODO : REPRENDRE TOUS LES NOMS DES MAPS DANS LA DB
 
-    // setGameNames(gameNames: { name: string }[]): void {
-    //     this.gameNames = new Set(gameNames.map((game) => game.name));
-    // }
-
     setAllMapsNames(maps: Map[]): void {
-        //
         this.gameNames = new Set(maps.map((map) => map.name));
     }
 
@@ -148,14 +143,7 @@ export class MapVerificationService {
             }
         }
 
-        switch (map.size) {
-            case MapProperties.MAP_SIZE_SMALL:
-                return itemsCount === MapProperties.SPAWN_COUNT_SMALL;
-            case MapProperties.MAP_SIZE_MEDIUM:
-                return itemsCount === MapProperties.SPAWN_COUNT_MEDIUM;
-            case MapProperties.MAP_SIZE_LARGE:
-                return itemsCount === MapProperties.SPAWN_COUNT_LARGE;
-        }
+        return this.isAmountValid(map.size, itemsCount);
     }
 
     areDoorsNextToWalls(map: Map): boolean {
