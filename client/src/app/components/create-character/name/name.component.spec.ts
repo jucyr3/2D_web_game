@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { ProfileService } from '@app/services/profile.service';
+import { ProfileService } from '@app/services/create-character/profile.service';
 import { NameComponent } from './name.component';
 
 describe('NameComponent', () => {

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NameComponent } from '@app/components/create-character/name/name.component';
 import { SingleStatComponent } from '@app/components/create-character/single-stat/single-stat.component';
-import { ProfileService } from '@app/services/profile.service';
-import { StatsService } from '@app/services/stats.service';
+import { ProfileService } from '@app/services/create-character/profile.service';
+import { StatsService } from '@app/services/create-character/stats.service';
 import { CombinedStats } from '@common/stats';
 
 @Component({
