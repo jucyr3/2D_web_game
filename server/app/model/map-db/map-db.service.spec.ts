@@ -63,7 +63,7 @@ describe('MapDbService', () => {
             previewImage: 'test-preview.png',
         };
 
-        const createStub = jest.spyOn(mapModel, 'create').mockResolvedValueOnce(map as ay);
+        const createStub = jest.spyOn(mapModel, 'create').mockResolvedValueOnce(map as any);
         const result = await service.addMap(map);
         expect(createStub).toHaveBeenCalled();
         expect(result).toEqual(map);
