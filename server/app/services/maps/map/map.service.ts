@@ -2,6 +2,7 @@ import { MapDbService } from '@app/model/map-db/map-db.service';
 import { MapVerificationService } from '@app/services/mapVerification/mapVerification.service';
 import { Map } from '@common/map';
 import { MapResponse } from '@common/mapResponse';
+import { MapVerification } from '@common/mapVerification.interface';
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 
 @Injectable()
@@ -51,47 +52,25 @@ export class MapService {
 
     async saveMap(map: Map): Promise<MapResponse> {
         try {
-            const existinMaps = await this.mapDbService.getAllMaps();
-            const parsedMaps = existinMaps.map((existingMaps) => this.transformToMap(existingMaps));
+            const existingMaps = await this.mapDbService.getAllMaps();
+            const parsedMaps = existingMaps.map((existingMap) => this.transformToMap(existingMap));
             const existingMapById = parsedMaps.find((m) => m.mapId === map.mapId);
+
             if (existingMapById) {
                 this.mapVerificationService.removeMapName(existingMapById.name);
             }
+
             const verification = this.mapVerificationService.validateGame(map);
-            for (const [, value] of Object.entries(verification)) {
-                if (!value && !existingMapById) {
-                    return {
-                        id: 0,
-                        mapVerification: verification,
-                    } as MapResponse;
-                }
-                if (!value && existingMapById) {
-                    return {
-                        id: map.mapId,
-                        mapVerification: verification,
-                    } as MapResponse;
-                }
+            const verificationResult = this.checkVerification(verification, existingMapById, map.mapId);
+
+            if (verificationResult) {
+                return verificationResult;
             }
+
             if (existingMapById) {
-                existingMapById.name = map.name;
-                existingMapById.description = map.description;
-                existingMapById.tileMatrix = map.tileMatrix;
-                existingMapById.previewImage = map.previewImage;
-                existingMapById.lastModified = new Date();
-                await this.mapDbService.saveImage(existingMapById.mapId, existingMapById.previewImage);
-                await this.mapDbService.changeMap(existingMapById.mapId, existingMapById);
-                return {
-                    id: map.mapId,
-                    mapVerification: verification,
-                } as MapResponse;
+                return await this.updateExistingMap(existingMapById, map, verification);
             } else {
-                map.mapId = this.generateRandomId();
-                await this.mapDbService.saveImage(map.mapId, map.previewImage);
-                await this.mapDbService.addMap(map);
-                return {
-                    id: map.mapId,
-                    mapVerification: verification,
-                } as MapResponse;
+                return await this.createNewMap(map, verification);
             }
         } catch (error) {
             if (error instanceof BadRequestException) {
@@ -136,6 +115,51 @@ export class MapService {
             }
             throw new Error(`Failed to delete map: ${error.message}`);
         }
+    }
+
+    private checkVerification(verification: MapVerification, existingMapById: Map | undefined, mapId: number): MapResponse | null {
+        for (const [, value] of Object.entries(verification)) {
+            if (!value && !existingMapById) {
+                return {
+                    id: 0,
+                    mapVerification: verification,
+                } as MapResponse;
+            }
+            if (!value && existingMapById) {
+                return {
+                    id: mapId,
+                    mapVerification: verification,
+                } as MapResponse;
+            }
+        }
+        return null;
+    }
+
+    private async updateExistingMap(existingMap: Map, map: Map, verification: MapVerification): Promise<MapResponse> {
+        existingMap.name = map.name;
+        existingMap.description = map.description;
+        existingMap.tileMatrix = map.tileMatrix;
+        existingMap.previewImage = map.previewImage;
+        existingMap.lastModified = new Date();
+
+        await this.mapDbService.saveImage(existingMap.mapId, existingMap.previewImage);
+        await this.mapDbService.changeMap(existingMap.mapId, existingMap);
+
+        return {
+            id: map.mapId,
+            mapVerification: verification,
+        } as MapResponse;
+    }
+
+    private async createNewMap(map: Map, verification: MapVerification): Promise<MapResponse> {
+        map.mapId = this.generateRandomId();
+        await this.mapDbService.saveImage(map.mapId, map.previewImage);
+        await this.mapDbService.addMap(map);
+
+        return {
+            id: map.mapId,
+            mapVerification: verification,
+        } as MapResponse;
     }
 
     private generateRandomId(): number {
