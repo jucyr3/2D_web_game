@@ -7,10 +7,6 @@ import { TileTypes } from '@common/tileType.constants';
 export class MapVerificationService {
     private gameNames: Set<string> = new Set(['test']); // TODO : REPRENDRE TOUS LES NOMS DES MAPS DANS LA DB
 
-    setGameNames(gameNames: { name: string }[]): void {
-        this.gameNames = new Set(gameNames.map((game) => game.name));
-    }
-
     setAllMapsNames(maps: Map[]): void {
         this.gameNames = new Set(maps.map((map) => map.name));
     }
@@ -65,9 +61,6 @@ export class MapVerificationService {
         const stack = [[x, y]];
         while (stack.length > 0) {
             const popped = stack.pop();
-            if (popped === undefined) {
-                return;
-            }
             const [tempx, tempy] = popped;
             for (const [dirx, diry] of directions) {
                 const resx = tempx + dirx;
@@ -125,16 +118,7 @@ export class MapVerificationService {
             }
         }
 
-        switch (map.size) {
-            case MapProperties.MAP_SIZE_SMALL:
-                return startCount === MapProperties.SPAWN_COUNT_SMALL;
-            case MapProperties.MAP_SIZE_MEDIUM:
-                return startCount === MapProperties.SPAWN_COUNT_MEDIUM;
-            case MapProperties.MAP_SIZE_LARGE:
-                return startCount === MapProperties.SPAWN_COUNT_LARGE;
-            default:
-                return false;
-        }
+        return this.isAmountValid(map.size, startCount);
     }
 
     areItemObjectsValid(map: Map): boolean {
@@ -159,16 +143,7 @@ export class MapVerificationService {
             }
         }
 
-        switch (map.size) {
-            case MapProperties.MAP_SIZE_SMALL:
-                return itemsCount === MapProperties.SPAWN_COUNT_SMALL;
-            case MapProperties.MAP_SIZE_MEDIUM:
-                return itemsCount === MapProperties.SPAWN_COUNT_MEDIUM;
-            case MapProperties.MAP_SIZE_LARGE:
-                return itemsCount === MapProperties.SPAWN_COUNT_LARGE;
-            default:
-                return false;
-        }
+        return this.isAmountValid(map.size, itemsCount);
     }
 
     areDoorsNextToWalls(map: Map): boolean {
@@ -177,9 +152,6 @@ export class MapVerificationService {
         const cols = tileMatrix[0].length;
 
         function isGround(i: number, j: number): boolean {
-            if (i < 0 || i >= rows || j < 0 || j >= cols) {
-                return false;
-            }
             return (
                 tileMatrix[i][j].type === TileTypes.GROUND_0 ||
                 tileMatrix[i][j].type === TileTypes.GROUND_1 ||
@@ -255,5 +227,16 @@ export class MapVerificationService {
         };
 
         return verification;
+    }
+
+    private isAmountValid(mapSize: number, itemCount: number): boolean {
+        switch (mapSize) {
+            case MapProperties.MAP_SIZE_SMALL:
+                return itemCount === MapProperties.SPAWN_COUNT_SMALL;
+            case MapProperties.MAP_SIZE_MEDIUM:
+                return itemCount === MapProperties.SPAWN_COUNT_MEDIUM;
+            case MapProperties.MAP_SIZE_LARGE:
+                return itemCount === MapProperties.SPAWN_COUNT_LARGE;
+        }
     }
 }

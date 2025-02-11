@@ -1,215 +1,164 @@
+import { MapDbService } from '@app/model/map-db/map-db.service';
 import { MapVerificationService } from '@app/services/mapVerification/mapVerification.service';
-import { ItemObject } from '@common/ItemObject';
 import { Map } from '@common/map';
 import { MapResponse } from '@common/mapResponse';
-import { Tile } from '@common/tile';
-import { TileTypes } from '@common/tileType.constants';
+import { MapVerification } from '@common/mapVerification.interface';
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
-import * as fs from 'fs/promises';
 
 @Injectable()
 export class MapService {
     private readonly logger = new Logger(MapService.name);
-    private mapsFilePath = 'assets/maps.json';
-    private maps: Map[] | null = null;
 
-    constructor(private mapVerificationService: MapVerificationService) {}
+    constructor(
+        private mapVerificationService: MapVerificationService,
+        private mapDbService: MapDbService,
+    ) {}
 
     async getAllMaps(): Promise<Map[]> {
         try {
-            if (this.maps) {
-                return this.maps;
-            }
-            const data = await fs.readFile(this.mapsFilePath, 'utf8');
-            const mapsData = JSON.parse(data).maps;
-            this.maps = mapsData.map((map) => this.loadMapFromJSON(map));
-            this.mapVerificationService.setAllMapsNames(this.maps);
-            return this.maps;
+            const maps = await this.mapDbService.getAllMaps();
+            const mapsParsed = maps.map((map) => this.transformToMap(map as Map));
+            this.mapVerificationService.setAllMapsNames(mapsParsed);
+            return mapsParsed;
         } catch (error) {
-            this.logger.error(`Failed to read maps: ${error.message}`, error.stack);
             throw new Error(`Failed to retrieve maps: ${error.message}`);
         }
     }
 
     async getAllMapsByVisibility(): Promise<Map[]> {
         try {
-            const data = await fs.readFile(this.mapsFilePath, 'utf8');
-            const mapsData = JSON.parse(data).maps;
-            this.maps = mapsData.map((map) => this.loadMapFromJSON(map));
-            return this.maps.filter((map) => map.isVisible === true);
+            const visibleMaps = await this.mapDbService.getVisible();
+            const parsedVisibleMaps = visibleMaps.map((map) => this.transformToMap(map));
+            return parsedVisibleMaps;
         } catch (error) {
-            this.logger.error(`Failed to get maps by visibility: ${error.message}`, error.stack);
             throw new Error(`Failed to retrieve maps by visibility: ${error.message}`);
         }
     }
 
     async getMapById(id: number): Promise<Map> {
         try {
-            const maps = await this.getAllMaps();
-            const foundMap = maps.find((currentMap) => currentMap.id === id);
+            const foundMap = await this.mapDbService.getMap(id);
             if (!foundMap) {
                 throw new NotFoundException(`Map with ID ${id} not found`);
             }
-            return foundMap;
+            return this.transformToMap(foundMap);
         } catch (error) {
             if (error instanceof NotFoundException) {
                 throw error;
             }
-            this.logger.error(`Failed to find map: ${error.message}`, error.stack);
             throw new Error(`Failed to retrieve map: ${error.message}`);
         }
     }
 
     async saveMap(map: Map): Promise<MapResponse> {
         try {
-            const existingMapById = this.maps.find((m) => m.id === map.id); // si map Existe deja
+            const existingMaps = await this.mapDbService.getAllMaps();
+            const parsedMaps = existingMaps.map((existingMap) => this.transformToMap(existingMap));
+            const existingMapById = parsedMaps.find((m) => m.mapId === map.mapId);
 
             if (existingMapById) {
                 this.mapVerificationService.removeMapName(existingMapById.name);
             }
 
             const verification = this.mapVerificationService.validateGame(map);
+            const verificationResult = this.checkVerification(verification, existingMapById, map.mapId);
 
-            for (const [, value] of Object.entries(verification)) {
-                if (!value && !existingMapById) {
-                    return {
-                        id: 0,
-                        mapVerification: verification,
-                    } as MapResponse;
-                }
-                if (!value && existingMapById) {
-                    return {
-                        id: map.id,
-                        mapVerification: verification,
-                    } as MapResponse;
-                }
+            if (verificationResult) {
+                return verificationResult;
             }
 
             if (existingMapById) {
-                existingMapById.name = map.name;
-                existingMapById.description = map.description;
-                existingMapById.tileMatrix = map.tileMatrix;
-                existingMapById.previewImage = map.previewImage;
-                existingMapById.lastModified = new Date();
-                await this.saveMaps(this.maps);
-                return {
-                    id: map.id,
-                    mapVerification: verification,
-                } as MapResponse;
+                return await this.updateExistingMap(existingMapById, map, verification);
             } else {
-                // sinon, on créé une nouvelle map
-                map.id = this.generateRandomId();
-                this.maps.push(map);
-                await this.saveMaps(this.maps); // Save
-                return {
-                    id: map.id,
-                    mapVerification: verification,
-                } as MapResponse;
+                return await this.createNewMap(map, verification);
             }
         } catch (error) {
             if (error instanceof BadRequestException) {
                 throw error;
             }
-            this.logger.error(`Failed to create map: ${error.message}`, error.stack);
             throw new Error(`Failed to create map: ${error.message}`);
         }
     }
 
     async updateMapVisibility(id: number, isVisible: boolean): Promise<Map> {
         try {
-            const maps = await this.getAllMaps();
-            const mapIndex = maps.findIndex((map) => map.id === id);
-
-            if (mapIndex === -1) {
-                throw new NotFoundException(`Map with ID ${id} not found`);
-            }
-            maps[mapIndex].isVisible = isVisible;
-            await this.saveMaps(maps);
-            return maps[mapIndex];
+            await this.mapDbService.changeMapVisibility(id, isVisible);
+            const mapChanged = await this.getMapById(id);
+            return this.transformToMap(mapChanged);
         } catch (error) {
             if (error instanceof NotFoundException) {
                 throw error;
             }
-            this.logger.error(`Failed to update map visibility: ${error.message}`, error.stack);
             throw new Error(`Failed to update map visibility: ${error.message}`);
         }
     }
 
     async updateMapImage(id: number, previewImage: string): Promise<Map> {
         try {
-            const maps = await this.getAllMaps();
-            const mapIndex = maps.findIndex((map) => map.id === id);
-
-            if (mapIndex === -1) {
-                throw new NotFoundException(`Map with ID ${id} not found`);
-            }
-            maps[mapIndex].previewImage = previewImage; // change previewImage
-            await this.saveMaps(maps);
-            return maps[mapIndex];
+            await this.mapDbService.saveImage(id, previewImage);
+            const mapUpdated = await this.mapDbService.getMap(id);
+            return this.transformToMap(mapUpdated);
         } catch (error) {
             if (error instanceof NotFoundException) {
                 throw error;
             }
-            this.logger.error(`Failed to update map image: ${error.message}`, error.stack);
             throw new Error(`Failed to update map image: ${error.message}`);
         }
     }
 
     async deleteMap(id: number): Promise<void> {
         try {
-            const maps = await this.getAllMaps();
-            const mapIndex = maps.findIndex((map) => map.id === id);
-
-            if (mapIndex === -1) {
-                throw new NotFoundException(`Map with ID ${id} not found`);
-            }
-            maps.splice(mapIndex, 1);
-            await this.saveMaps(maps);
+            await this.mapDbService.remove(id);
         } catch (error) {
             if (error instanceof NotFoundException) {
                 throw error;
             }
-            this.logger.error(`Failed to delete map: ${error.message}`, error.stack);
             throw new Error(`Failed to delete map: ${error.message}`);
         }
     }
 
-    parseTileMatrix(json: Map): Tile[][] {
-        return json.tileMatrix.map((row) =>
-            row.map((tileData) => {
-                const type = tileData.type as TileTypes;
-                const isOccupied = tileData.isOccupied;
-                const isObstacle = tileData.isObstacle;
-                const itemObject: ItemObject | null = tileData.itemObject ? { name: tileData.itemObject.name } : null;
-                return { type, isOccupied, isObstacle, itemObject } as Tile;
-            }),
-        );
-    }
-
-    loadMapFromJSON(json: Map): Map {
-        const tileMatrix = this.parseTileMatrix(json);
-        return {
-            id: json.id,
-            name: json.name,
-            size: json.size,
-            isVisible: json.isVisible,
-            description: json.description,
-            gameMode: json.gameMode,
-            tileMatrix,
-            lastModified: json.lastModified || new Date(),
-            previewImage: json.previewImage,
-        };
-    }
-
-    private async saveMaps(maps: Map[]): Promise<void> {
-        try {
-            await fs.writeFile(this.mapsFilePath, JSON.stringify({ maps }, null, 2), 'utf8');
-            this.maps = maps;
-            this.mapVerificationService.setAllMapsNames(this.maps);
-        } catch (error) {
-            this.logger.error(`Failed to save games: ${error.message}`, error.stack);
-            throw new Error(`Failed to save games to file: ${error.message}`);
+    private checkVerification(verification: MapVerification, existingMapById: Map | undefined, mapId: number): MapResponse | null {
+        for (const [, value] of Object.entries(verification)) {
+            if (!value && !existingMapById) {
+                return {
+                    id: 0,
+                    mapVerification: verification,
+                } as MapResponse;
+            }
+            if (!value && existingMapById) {
+                return {
+                    id: mapId,
+                    mapVerification: verification,
+                } as MapResponse;
+            }
         }
+        return null;
+    }
+
+    private async updateExistingMap(existingMap: Map, map: Map, verification: MapVerification): Promise<MapResponse> {
+        existingMap.name = map.name;
+        existingMap.description = map.description;
+        existingMap.tileMatrix = map.tileMatrix;
+        existingMap.previewImage = map.previewImage;
+        existingMap.lastModified = new Date();
+        existingMap.mapId = map.mapId;
+
+        await this.mapDbService.changeMap(existingMap.mapId, existingMap);
+
+        return {
+            id: map.mapId,
+            mapVerification: verification,
+        } as MapResponse;
+    }
+
+    private async createNewMap(map: Map, verification: MapVerification): Promise<MapResponse> {
+        map.mapId = this.generateRandomId();
+        await this.mapDbService.addMap(map);
+
+        return {
+            id: map.mapId,
+            mapVerification: verification,
+        } as MapResponse;
     }
 
     private generateRandomId(): number {
@@ -217,5 +166,19 @@ export class MapService {
         const timestamp = Date.now();
         const random = Math.floor(Math.random() * MAX_RANDOM_VALUE);
         return parseInt(`${timestamp}${random}`, 10);
+    }
+
+    private transformToMap(doc: Map): Map {
+        return {
+            mapId: doc.mapId,
+            name: doc.name,
+            size: doc.size,
+            isVisible: doc.isVisible,
+            description: doc.description,
+            gameMode: doc.gameMode,
+            tileMatrix: doc.tileMatrix,
+            lastModified: doc.lastModified,
+            previewImage: doc.previewImage,
+        };
     }
 }

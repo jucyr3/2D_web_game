@@ -1,10 +1,11 @@
 import { Logger, Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ChatGateway } from '@app/gateways/chat/chat.gateway';
 import { MapController } from './controllers/maps/map/map.controller';
+import { MapDbService } from './model/map-db/map-db.service';
 import { MapService } from './services/maps/map/map.service';
+import { MongooseModule } from '@nestjs/mongoose';
 import { MapVerificationService } from './services/mapVerification/mapVerification.service';
+import { mapSchema } from './model/map-db/map.schema';
 
 @Module({
     imports: [
@@ -13,12 +14,12 @@ import { MapVerificationService } from './services/mapVerification/mapVerificati
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: async (config: ConfigService) => ({
-                uri: config.get<string>('DATABASE_CONNECTION_STRING'), // Loaded from .env
+                uri: config.get<string>('DATABASE_CONNECTION_STRING'),
             }),
         }),
-        MongooseModule.forFeature(),
+        MongooseModule.forFeature([{ name: 'Map', schema: mapSchema }]),
     ],
     controllers: [MapController],
-    providers: [ChatGateway, Logger, MapService, MapVerificationService],
+    providers: [Logger, MapService, MapVerificationService, MapDbService],
 })
 export class AppModule {}

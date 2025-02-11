@@ -23,7 +23,8 @@ export class GameActionsComponent {
     ) {}
 
     toggleVisibility(map: Map) {
-        this.clientHttpRequest.updateMapVisibility(map.id, !map.isVisible).subscribe({
+        map.isVisible = !map.isVisible;
+        this.clientHttpRequest.updateMapVisibility(map.mapId, map.isVisible).subscribe({
             next: () => {
                 this.refresh.emit();
             },
@@ -34,13 +35,13 @@ export class GameActionsComponent {
     }
 
     async editMap(map: Map) {
-        await this.mapService.loadMapFromServer(map.id);
-        this.router.navigate(['edit', map.id]);
+        await this.mapService.loadMapFromServer(map.mapId);
+        this.router.navigate(['edit', map.mapId]);
     }
 
     deleteMap(map: Map) {
         if (confirm('Êtes-vous sûr de vouloir supprimer ce jeu ?')) {
-            this.clientHttpRequest.deleteMap(map.id).subscribe({
+            this.clientHttpRequest.deleteMap(map.mapId).subscribe({
                 next: () => {
                     this.refresh.emit();
                 },

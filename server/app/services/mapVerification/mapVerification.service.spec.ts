@@ -12,7 +12,7 @@ describe('MapVerificationService', () => {
 
     function createMockMap(id: number, size: number): Map {
         return {
-            id,
+            mapId: id,
             name: `Untitled${id}`,
             size,
             isVisible: true,
@@ -68,8 +68,40 @@ describe('MapVerificationService', () => {
         expect(service).toBeTruthy();
     });
 
+    it('should set all map names correctly', () => {
+        const smallMapNumber = 1;
+        const mediumMapNumber = 2;
+        const largeMapNumber = 3;
+        const maps: Map[] = [
+            createMockMap(smallMapNumber, MapProperties.MAP_SIZE_SMALL),
+            createMockMap(mediumMapNumber, MapProperties.MAP_SIZE_MEDIUM),
+            createMockMap(largeMapNumber, MapProperties.MAP_SIZE_LARGE),
+        ];
+
+        service.setAllMapsNames(maps);
+        expect(service.isUniqueName('Untitled1')).toBeFalsy();
+        expect(service.isUniqueName('Untitled2')).toBeFalsy();
+        expect(service.isUniqueName('Untitled3')).toBeFalsy();
+        expect(service.isUniqueName('Untitled4')).toBeTruthy();
+    });
+
+    it('should remove map name correctly', () => {
+        const smallMapNumber = 1;
+        const mediumMapNumber = 2;
+        const largeMapNumber = 3;
+        const maps: Map[] = [
+            createMockMap(smallMapNumber, MapProperties.MAP_SIZE_SMALL),
+            createMockMap(mediumMapNumber, MapProperties.MAP_SIZE_MEDIUM),
+            createMockMap(largeMapNumber, MapProperties.MAP_SIZE_LARGE),
+        ];
+
+        service.setAllMapsNames(maps);
+        expect(service.isUniqueName('Untitled1')).toBeFalsy();
+        service.removeMapName('Untitled1');
+        expect(service.isUniqueName('Untitled1')).toBeTruthy();
+    });
+
     it('should check if name is unique', () => {
-        service.setGameNames([{ name: 'test' }]);
         expect(service.isUniqueName('test')).toBeFalsy();
         expect(service.isUniqueName('test2')).toBeTruthy();
     });
@@ -218,6 +250,20 @@ describe('MapVerificationService', () => {
         expect(service.areDoorsNextToWalls(mockMap)).toBeFalsy();
     });
 
+    it('should check if doors are between walls vertical', () => {
+        mockMap.tileMatrix[5][5].type = TileTypes.DOOR;
+        expect(service.areDoorsNextToWalls(mockMap)).toBeFalsy();
+
+        mockMap.tileMatrix[5][4].type = TileTypes.WALL;
+        expect(service.areDoorsNextToWalls(mockMap)).toBeFalsy();
+
+        mockMap.tileMatrix[5][6].type = TileTypes.WALL;
+        expect(service.areDoorsNextToWalls(mockMap)).toBeTruthy();
+
+        mockMap.tileMatrix[4][5].type = TileTypes.WALL;
+        expect(service.areDoorsNextToWalls(mockMap)).toBeFalsy();
+    });
+
     it('should check if walls are not next to the border', () => {
         mockMap.tileMatrix[0][0].type = TileTypes.DOOR;
         expect(service.areDoorsNotNextToBorder(mockMap)).toBeFalsy();
@@ -283,5 +329,12 @@ describe('MapVerificationService', () => {
 
         const updatedList = service.validateGame(mockMap);
         expect(updatedList).toEqual(comparison);
+    });
+
+    it('should check if the flag is present', () => {
+        mockMap.gameMode = 'CTF';
+        expect(service.isFlagPresent(mockMap)).toBeFalsy();
+        mockMap.tileMatrix[5][5].itemObject = { name: 'flag' };
+        expect(service.isFlagPresent(mockMap)).toBeTruthy();
     });
 });

@@ -100,7 +100,7 @@ describe('MapService', () => {
     // AFTER - loadMapFromServer
     it('should load map from server successfully', async () => {
         const mockMap: Map = {
-            id: 1,
+            mapId: 1,
             name: 'Test',
             size: 15,
             isVisible: true,
@@ -127,7 +127,7 @@ describe('MapService', () => {
 
         const json = {
             name: 'Test Map',
-            id: 1,
+            mapId: 1,
             size: 10,
             isVisible: true,
             description: 'Test Description',
@@ -173,12 +173,12 @@ describe('MapService', () => {
         };
 
         spyOn(service['clientHttpRequest'], 'saveMapToServer').and.returnValue(of(mockResponse));
-        service.map = { id: 0 } as Map;
+        service.map = { mapId: 0 } as Map;
 
         const result = await service.saveMapToServer();
 
         expect(result).toEqual(mockResponse.mapVerification);
-        expect(service.map.id).toBe(mockResponse.id);
+        expect(service.map.mapId).toBe(mockResponse.id);
     });
 
     it('should initialize with default map when session storage is empty', () => {
@@ -224,7 +224,7 @@ describe('MapService', () => {
     it('should create a map from JSON', () => {
         const json = {
             name: 'Test Map',
-            id: 1,
+            mapId: 1,
             size: 10,
             isVisible: true,
             description: 'Test Description',
@@ -364,7 +364,7 @@ describe('MapService', () => {
 
         await service.saveCompressedImageToServer(mockDataUrl);
 
-        expect(service['clientHttpRequest'].saveMapImageOnServer).toHaveBeenCalledWith(service.map.id, 'compressedData');
+        expect(service['clientHttpRequest'].saveMapImageOnServer).toHaveBeenCalledWith(service.map.mapId, 'compressedData');
     });
 
     it('should convert data URL to blob', async () => {

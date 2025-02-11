@@ -113,15 +113,10 @@ export class MapController {
     @ApiResponse({
         status: HttpStatus.OK,
         description: 'Map visibility updated',
-        type: Map,
     })
-    async updateMapVisibility(@Param('id', ParseIntPipe) id: number, @Body('isVisible') isVisible: boolean): Promise<Map> {
+    async updateMapVisibility(@Param('id', ParseIntPipe) id: number, @Body('isVisible') isVisible: boolean): Promise<void> {
         try {
-            const map = await this.mapService.updateMapVisibility(id, isVisible);
-            if (!map) {
-                throw new NotFoundException(`Map with ID ${id} not found`);
-            }
-            return map;
+            await this.mapService.updateMapVisibility(id, isVisible);
         } catch (error) {
             this.logger.error(`Failed to update map ${id} visibility: ${error.message}`);
             throw error;
