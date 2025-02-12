@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 // import { ItemManager } from '@app/classes/item-manager';
 import { provideHttpClient } from '@angular/common/http';
 import { MapFormData } from '@app/interfaces/mapFormData';
@@ -196,7 +196,7 @@ describe('MapService', () => {
         expect(service.itemManager).toBeTruthy();
     });
 
-    it('should save map and handle successful verification', async () => {
+    it('should save map and handle successful verification', fakeAsync(() => {
         const mockVerification: MapVerification = {
             isUniqueName: true,
             isNamePresent: true,
@@ -213,13 +213,18 @@ describe('MapService', () => {
         };
 
         spyOn(service, 'saveMapToServer').and.returnValue(Promise.resolve(mockVerification));
-        spyOn(service, 'exportMapAsImage').and.returnValue(Promise.resolve(new Blob()));
+        spyOn(service, 'exportMapAsImage').and.returnValue(Promise.resolve());
+        spyOn(service, 'handleMapVerificationError').and.callThrough();
         spyOn(service['router'], 'navigate');
 
-        await service.saveMap();
+        service.saveMap();
+        tick();
         expect(service.errorList.length).toBe(0);
+        expect(service.exportMapAsImage).toHaveBeenCalled();
+
+        tick(101);
         expect(service['router'].navigate).toHaveBeenCalledWith(['/admin']);
-    });
+    }));
 
     it('should create a map from JSON', () => {
         const json = {
@@ -245,14 +250,6 @@ describe('MapService', () => {
         expect(service.getTileTexture(1, 1)).toBe('url(assets/tiles/groundTile1.png)');
     });
 
-    // it('should call saveMapToSessionStorage and saveMapToServer when saving map', () => {
-    //     spyOn(service, 'saveMapToSessionStorage');
-    //     spyOn(service, 'saveMapToServer');
-    //     service.saveMap();
-    //     expect(service.saveMapToSessionStorage).toHaveBeenCalled();
-    //     expect(service.saveMapToServer).toHaveBeenCalled();
-    // });
-
     it('should set default tile type', () => {
         service.setDefaultMap();
         service.changeTileType(0, 0, TileTypes.GROUND_2);
@@ -266,7 +263,7 @@ describe('MapService', () => {
         expect(service.loadMapFromSessionStorage).toHaveBeenCalled();
     });
 
-    it('should save map and handle successful verification', async () => {
+    it('should save map and handle successful verification', fakeAsync(() => {
         const mockVerification: MapVerification = {
             isUniqueName: true,
             isNamePresent: true,
@@ -283,13 +280,15 @@ describe('MapService', () => {
         };
 
         spyOn(service, 'saveMapToServer').and.returnValue(Promise.resolve(mockVerification));
-        spyOn(service, 'exportMapAsImage').and.returnValue(Promise.resolve(new Blob()));
+        spyOn(service, 'exportMapAsImage').and.returnValue(Promise.resolve());
         spyOn(service['router'], 'navigate');
 
-        await service.saveMap();
+        service.saveMap();
+        tick();
         expect(service.errorList.length).toBe(0);
+        tick(101);
         expect(service['router'].navigate).toHaveBeenCalledWith(['/admin']);
-    });
+    }));
 
     it('should return error list with mapVerificationErrors', () => {
         const mapVerification: MapVerification = {
@@ -317,17 +316,14 @@ describe('MapService', () => {
         spyOn(service, 'getMapElement').and.returnValue(mockElement);
         spyOn(service, 'renderMapToCanvas').and.returnValue(Promise.resolve(document.createElement('canvas')));
         spyOn(service, 'compressCanvasToDataUrl').and.returnValue('data:image/jpeg;base64,compressedData');
-        spyOn(service, 'saveCompressedImageToServer').and.returnValue(Promise.resolve());
-        spyOn(service, 'convertDataUrlToBlob').and.returnValue(Promise.resolve(new Blob()));
+        spyOn(service, 'saveCompressedImageToServer').and.stub();
 
-        const result = await service.exportMapAsImage();
+        await service.exportMapAsImage();
 
         expect(service.getMapElement).toHaveBeenCalled();
         expect(service.renderMapToCanvas).toHaveBeenCalledWith(mockElement);
         expect(service.compressCanvasToDataUrl).toHaveBeenCalled();
         expect(service.saveCompressedImageToServer).toHaveBeenCalledWith('data:image/jpeg;base64,compressedData');
-        expect(service.convertDataUrlToBlob).toHaveBeenCalledWith('data:image/jpeg;base64,compressedData');
-        expect(result).toBeInstanceOf(Blob);
 
         document.body.removeChild(mockElement);
     });
@@ -365,17 +361,6 @@ describe('MapService', () => {
         await service.saveCompressedImageToServer(mockDataUrl);
 
         expect(service['clientHttpRequest'].saveMapImageOnServer).toHaveBeenCalledWith(service.map.mapId, 'compressedData');
-    });
-
-    it('should convert data URL to blob', async () => {
-        const mockDataUrl = 'data:image/jpeg;base64,compressedData';
-        const mockBlob = new Blob();
-        spyOn(window, 'fetch').and.returnValue(Promise.resolve(new Response(mockBlob)));
-
-        const result = await service.convertDataUrlToBlob(mockDataUrl);
-
-        expect(result).toEqual(mockBlob);
-        expect(window.fetch).toHaveBeenCalledWith(mockDataUrl);
     });
 
     it('should throw error when rendering map to canvas with bad mapElement', async () => {

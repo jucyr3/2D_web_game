@@ -10,6 +10,9 @@ export class MapsForClientService {
     mapsSubject = new BehaviorSubject<Map[]>([]);
     maps$ = this.mapsSubject.asObservable();
 
+    mapsVisibleSubject = new BehaviorSubject<Map[]>([]);
+    mapsVisible$ = this.mapsVisibleSubject.asObservable();
+
     selectedMap: Map | null = null;
     clickedMap: Map | null = null;
     loading = false;
@@ -33,7 +36,7 @@ export class MapsForClientService {
         this.error = null;
         this.clientHttpRequest.getAllMapsByVisibility().subscribe({
             next: (maps) => {
-                this.mapsSubject.next(maps);
+                this.mapsVisibleSubject.next(maps);
                 this.loading = false;
             },
         });

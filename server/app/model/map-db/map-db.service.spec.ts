@@ -163,7 +163,7 @@ describe('MapDbService', () => {
         const findByIdStub = jest.spyOn(mapModel, 'findOne').mockResolvedValueOnce(image);
         const result = await service.getImage(1);
         expect(findByIdStub).toHaveBeenCalled();
-        expect(result).toEqual('image-data');
+        expect(result).toEqual({ previewImage: 'image-data' });
     });
 
     it('should change map visibility', async () => {

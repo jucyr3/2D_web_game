@@ -48,7 +48,7 @@ export class ClientHttpRequestsService {
     }
 
     saveMapImageOnServer(mapId: number, imagepng: string): Observable<Map> {
-        return this.http.patch<Map>(`${this.apiUrl}/maps/${mapId}/previewImage`, { previewImage: imagepng }).pipe(map((response) => response));
+        return this.http.patch<Map>(`${this.apiUrl}/maps/${mapId}/previewImage`, { previewImage: imagepng });
     }
 
     deleteMap(mapId: number): Observable<void> {

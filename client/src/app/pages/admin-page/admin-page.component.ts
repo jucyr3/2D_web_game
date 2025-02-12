@@ -6,8 +6,8 @@ import { Router } from '@angular/router';
 import { GameGridComponent } from '@app/components/admin-game/games-grid/games-grid.component';
 import { MapCreationModalComponent } from '@app/components/admin-game/mapCreationModal/mapCreationModal.component';
 import { MapService } from '@app/services/edit-services/map.service';
-import { MapsForClientService } from '@app/services/maps-for-client.service';
 import { MapFormData } from '@app/interfaces/mapFormData';
+import { MapsForClientService } from '@app/services/maps-for-client.service';
 
 @Component({
     selector: 'app-admin-page',
@@ -23,8 +23,8 @@ export class AdminPageComponent {
     constructor(
         protected router: Router,
         protected mapService: MapService,
-        protected mapsForClientService: MapsForClientService,
         readonly dialog: MatDialog,
+        protected readonly mapsForClientService: MapsForClientService,
     ) {}
 
     openCreateModal() {

@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { MapsForClientService } from './maps-for-client.service';
-import { ClientHttpRequestsService } from './client-http-requests.service';
-import { of } from 'rxjs';
 import { Map } from '@common/map';
+import { of } from 'rxjs';
+import { ClientHttpRequestsService } from './client-http-requests.service';
+import { MapsForClientService } from './maps-for-client.service';
 
 describe('MapsForClientService', () => {
     let service: MapsForClientService;
@@ -46,7 +46,7 @@ describe('MapsForClientService', () => {
 
         expect(service.loading).toBeFalse();
         expect(service.error).toBeNull();
-        service.maps$.subscribe((maps) => {
+        service.mapsVisible$.subscribe((maps) => {
             expect(maps).toEqual([mockMap]);
         });
     });

@@ -129,15 +129,13 @@ export class MapController {
     @ApiResponse({
         status: HttpStatus.OK,
         description: 'Map image updated',
-        type: Map,
     })
-    async updatePreviewImage(@Param('id', ParseIntPipe) id: number, @Body('previewImage') previewImage: string): Promise<Map> {
+    async updatePreviewImage(@Param('id', ParseIntPipe) id: number, @Body('previewImage') previewImage: string): Promise<void> {
         try {
-            const map = await this.mapService.updateMapImage(id, previewImage);
-            if (!map) {
+            if (!(await this.mapService.updateMapImage(id, previewImage))) {
                 throw new NotFoundException(`Map with ID ${id} not found`);
             }
-            return map;
+            return;
         } catch (error) {
             this.logger.error(`Failed to update map ${id} image: ${error.message}`);
             throw error;

@@ -38,7 +38,7 @@ describe('MapsGridComponent', () => {
 
     beforeEach(async () => {
         const serviceSpy = jasmine.createSpyObj('MapsForClientService', ['loadMapsByVisibility', 'changeClickedMap'], {
-            maps$: new BehaviorSubject(mockMaps),
+            mapsVisible$: new BehaviorSubject(mockMaps),
             selectedMap: null,
         });
 
