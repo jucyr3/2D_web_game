@@ -1,5 +1,5 @@
 <div class="games-grid">
-    @for (map of mapsForClientService.maps$ | async; track map.mapId){
+    @for (map of mapsForClientService.mapsVisible$ | async; track map.mapId){
     <div class="game-card" (click)="mapsForClientService.changeClickedMap(map)">
         <app-preview-container
             [map]="map"

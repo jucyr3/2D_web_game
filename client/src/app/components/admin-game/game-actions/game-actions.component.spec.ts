@@ -128,5 +128,16 @@ describe('GameActionsComponent', () => {
 
             expect(alertSpy).toHaveBeenCalledWith("Impossible d'enlever la carte");
         });
+
+        it('should show alert and emit refresh event when loading the map fails', async () => {
+            const alertSpy = spyOn(window, 'alert');
+            spyOn(component.refresh, 'emit');
+            mapServiceSpy.loadMapFromServer.and.returnValue(Promise.reject(new Error()));
+
+            await component.editMap(mockMap);
+
+            expect(alertSpy).toHaveBeenCalledWith('Impossible de charger la carte');
+            expect(component.refresh.emit).toHaveBeenCalled();
+        });
     });
 });

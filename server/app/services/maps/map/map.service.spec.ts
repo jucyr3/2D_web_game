@@ -272,7 +272,7 @@ describe('MapService', () => {
             mapDbService.getMap.mockResolvedValue({ ...mockMap, previewImage: 'new-image.png' });
 
             const result = await mapService.updateMapImage(1, 'new-image.png');
-            expect(result.previewImage).toBe('new-image.png');
+            expect(result).toBeTruthy();
         });
 
         it('should throw NotFoundException if map is not found', async () => {

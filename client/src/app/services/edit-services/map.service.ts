@@ -66,6 +66,7 @@ export class MapService {
         };
         this.map = defaultMap;
         this.itemManager = new ItemManager(mapData.size, mapData.gameMode);
+        this.saveMapToSessionStorage();
     }
 
     parseTileMatrix(json: Map): Tile[][] {
@@ -140,7 +141,10 @@ export class MapService {
         if (this.errorList.length === 0) {
             await this.exportMapAsImage();
             this.errorList = [];
-            this.router.navigate(['/admin']);
+            const saveImageTimeout = 100;
+            setTimeout(() => {
+                this.router.navigate(['/admin']);
+            }, saveImageTimeout);
         }
     }
 
@@ -208,12 +212,11 @@ export class MapService {
         this.map.tileMatrix[row][column].itemObject = draggedItem;
     }
 
-    async exportMapAsImage(): Promise<Blob | null> {
+    async exportMapAsImage(): Promise<void> {
         const mapElement = this.getMapElement();
         const canvas = await this.renderMapToCanvas(mapElement);
-        const compressedDataUrl = this.compressCanvasToDataUrl(canvas);
+        const compressedDataUrl = await this.compressCanvasToDataUrl(canvas);
         await this.saveCompressedImageToServer(compressedDataUrl);
-        return this.convertDataUrlToBlob(compressedDataUrl);
     }
 
     getMapElement(): HTMLElement {
@@ -227,8 +230,9 @@ export class MapService {
     async renderMapToCanvas(mapElement: HTMLElement): Promise<HTMLCanvasElement> {
         try {
             return await html2canvas.default(mapElement, {
-                scale: 1,
+                scale: 0.5,
                 useCORS: true,
+                logging: false,
                 backgroundColor: 'transparent',
             });
         } catch (error) {
@@ -241,14 +245,9 @@ export class MapService {
         return canvas.toDataURL('image/jpeg', compressedScale);
     }
 
-    async saveCompressedImageToServer(compressedDataUrl: string): Promise<void> {
+    saveCompressedImageToServer(compressedDataUrl: string): void {
         const base64String = compressedDataUrl.split(',')[1];
         this.clientHttpRequest.saveMapImageOnServer(this.map.mapId, base64String).subscribe();
-    }
-
-    async convertDataUrlToBlob(dataUrl: string): Promise<Blob> {
-        const response = await fetch(dataUrl);
-        return response.blob();
     }
 
     flattenedTileMatrix(): Tile[] {

@@ -93,11 +93,10 @@ export class MapService {
         }
     }
 
-    async updateMapImage(id: number, previewImage: string): Promise<Map> {
+    async updateMapImage(id: number, previewImage: string): Promise<boolean> {
         try {
             await this.mapDbService.saveImage(id, previewImage);
-            const mapUpdated = await this.mapDbService.getMap(id);
-            return this.transformToMap(mapUpdated);
+            return true;
         } catch (error) {
             if (error instanceof NotFoundException) {
                 throw error;

@@ -180,8 +180,9 @@ describe('MapController', () => {
     describe('updatePreviewImage', () => {
         it('should successfully update map preview image', async () => {
             mockService.updateMapImage.mockResolvedValue(mockMap);
-            const result = await controller.updatePreviewImage(1, 'new-image.png');
-            expect(result).toEqual(mockMap);
+            await controller.updatePreviewImage(1, 'new-image.png');
+            expect(mockService.updateMapImage).toHaveBeenCalledWith(1, 'new-image.png');
+            expect(mockLogger.error).not.toHaveBeenCalled();
             expect(mockService.updateMapImage).toHaveBeenCalledWith(1, 'new-image.png');
             expect(mockLogger.error).not.toHaveBeenCalled();
         });

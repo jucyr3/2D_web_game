@@ -4,8 +4,12 @@
         <div class="content-wrapper">
             <header class="admin-header">
                 <h1 style="color: rgb(233, 231, 231)">CRÉER UNE PARTIE</h1>
-                <p *ngIf="!mapsForClient.clickedMap" style="color: rgb(233, 231, 231)">Sélectionner un jeu</p>
-                <button *ngIf="mapsForClient.clickedMap" class="button" (click)="createGame()">Créer une partie</button>
+                @if (!mapsForClient.clickedMap) {
+                    <p>Sélectionner un jeu</p>
+                }
+                @if (mapsForClient.clickedMap) {
+                    <button class="button" (click)="createGame()">Créer une partie</button>
+                }
             </header>
             <app-maps-grid />
         </div>

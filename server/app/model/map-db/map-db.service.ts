@@ -41,20 +41,16 @@ export class MapDbService {
     }
 
     async changeMap(id: number, map: Map) {
-        const themap = await this.mapModel.updateOne({ mapId: id }, { $set: { ...map } });
-        return themap;
+        return await this.mapModel.updateOne({ mapId: id }, { $set: { ...map } });
     }
     async saveImage(id: number, image: string) {
-        const themap = await this.mapModel.updateOne({ mapId: id }, { $set: { previewImage: image } });
-        return themap;
+        return await this.mapModel.updateOne({ mapId: id }, { $set: { previewImage: image } });
     }
     async getImage(id: number) {
-        const theImage = await this.mapModel.findOne({ mapId: id }, { previewImage: 1, _id: 0 });
-        return theImage.previewImage;
+        return await this.mapModel.findOne({ mapId: id }, { previewImage: 1, _id: 0 });
     }
 
     async changeMapVisibility(id: number, visible: boolean) {
-        const themap = await this.mapModel.updateOne({ mapId: id }, { $set: { isVisible: visible } });
-        return themap;
+        return await this.mapModel.updateOne({ mapId: id }, { $set: { isVisible: visible } });
     }
 }

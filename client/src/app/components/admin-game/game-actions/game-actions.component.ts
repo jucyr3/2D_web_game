@@ -30,13 +30,19 @@ export class GameActionsComponent {
             },
             error: () => {
                 alert('Impossible de modifier la visibilité de la carte');
+                this.refresh.emit();
             },
         });
     }
 
     async editMap(map: Map) {
-        await this.mapService.loadMapFromServer(map.mapId);
-        this.router.navigate(['edit', map.mapId]);
+        try {
+            await this.mapService.loadMapFromServer(map.mapId);
+            this.router.navigate(['edit', map.mapId]);
+        } catch (error) {
+            alert('Impossible de charger la carte');
+            this.refresh.emit();
+        }
     }
 
     deleteMap(map: Map) {
