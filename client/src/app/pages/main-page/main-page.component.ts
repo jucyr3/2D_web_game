@@ -8,5 +8,5 @@ import { RouterLink } from '@angular/router';
     imports: [RouterLink],
 })
 export class MainPageComponent {
-    readonly title: string = 'MYSHTIC QUEST-RPG';
+    readonly title: string = "Winter's Wrath";
 }
