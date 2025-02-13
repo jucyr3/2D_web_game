@@ -13,7 +13,7 @@ describe('MapService', () => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const mockMap: any = {
-        mapId: 1,
+        mapId: '1',
         name: 'Test Map',
         size: 10,
         isVisible: true,
@@ -119,18 +119,18 @@ describe('MapService', () => {
     describe('getMapById', () => {
         it('should return a map by id', async () => {
             mapDbService.getMap.mockResolvedValue(mockMap);
-            const result = await mapService.getMapById(1);
+            const result = await mapService.getMapById('1');
             expect(result).toEqual(mockMap);
         });
 
         it('should throw NotFoundException if map is not found', async () => {
             mapDbService.getMap.mockResolvedValue(null);
-            await expect(mapService.getMapById(1)).rejects.toThrow(NotFoundException);
+            await expect(mapService.getMapById('1')).rejects.toThrow(NotFoundException);
         });
 
         it('should throw an error if getMap fails', async () => {
             mapDbService.getMap.mockRejectedValue(new Error('Database error'));
-            await expect(mapService.getMapById(1)).rejects.toThrow('Failed to retrieve map: Database error');
+            await expect(mapService.getMapById('1')).rejects.toThrow('Failed to retrieve map: Database error');
         });
     });
 
@@ -161,7 +161,7 @@ describe('MapService', () => {
             mapVerificationService.validateGame.mockReturnValue(mockMapVerificationFailed);
 
             const result = await mapService.saveMap(mockMap);
-            expect(result.id).toEqual(0);
+            expect(result.id).toEqual('');
             expect(result.mapVerification).toEqual(mockMapVerificationFailed);
         });
 
@@ -192,7 +192,7 @@ describe('MapService', () => {
 
         it('should throw BadRequestException if encountered', async () => {
             const newMap: Map = {
-                mapId: 2,
+                mapId: '2',
                 name: 'New Map',
                 size: 10,
                 isVisible: true,
@@ -210,7 +210,7 @@ describe('MapService', () => {
 
         it('should throw generic error if an unknown error occurs', async () => {
             const newMap: Map = {
-                mapId: 3,
+                mapId: '3',
                 name: 'Another New Map',
                 size: 10,
                 isVisible: true,
@@ -248,21 +248,21 @@ describe('MapService', () => {
             mapDbService.getMap.mockResolvedValue(mockMap);
             mapService['transformToMap'] = jest.fn().mockReturnValue(mockMap);
 
-            const result = await mapService.updateMapVisibility(1, true);
+            const result = await mapService.updateMapVisibility('1', true);
             expect(result).toEqual(mockMap);
-            expect(mapDbService.changeMapVisibility).toHaveBeenCalledWith(1, true);
+            expect(mapDbService.changeMapVisibility).toHaveBeenCalledWith('1', true);
         });
 
         it('should throw NotFoundException if map is not found', async () => {
             mapDbService.getMap.mockResolvedValue(null);
 
-            await expect(mapService.updateMapVisibility(1, true)).rejects.toThrow(NotFoundException);
+            await expect(mapService.updateMapVisibility('1', true)).rejects.toThrow(NotFoundException);
         });
 
         it('should throw a generic error if an unexpected error occurs', async () => {
             mapDbService.changeMapVisibility.mockRejectedValue(new Error('Database failure'));
 
-            await expect(mapService.updateMapVisibility(1, true)).rejects.toThrow('Failed to update map visibility: Database failure');
+            await expect(mapService.updateMapVisibility('1', true)).rejects.toThrow('Failed to update map visibility: Database failure');
         });
     });
 
@@ -271,40 +271,40 @@ describe('MapService', () => {
             mapDbService.saveImage.mockResolvedValue(undefined);
             mapDbService.getMap.mockResolvedValue({ ...mockMap, previewImage: 'new-image.png' });
 
-            const result = await mapService.updateMapImage(1, 'new-image.png');
+            const result = await mapService.updateMapImage('1', 'new-image.png');
             expect(result).toBeTruthy();
         });
 
         it('should throw NotFoundException if map is not found', async () => {
             mapDbService.saveImage.mockRejectedValue(new NotFoundException());
-            await expect(mapService.updateMapImage(1, 'new-image.png')).rejects.toThrow(NotFoundException);
+            await expect(mapService.updateMapImage('1', 'new-image.png')).rejects.toThrow(NotFoundException);
         });
 
         it('should throw an error with custom message if saveImage fails', async () => {
             const errorMessage = 'Failed to save image';
             mapDbService.saveImage.mockRejectedValue(new Error(errorMessage));
 
-            await expect(mapService.updateMapImage(1, 'new-image.png')).rejects.toThrow(`Failed to update map image: ${errorMessage}`);
+            await expect(mapService.updateMapImage('1', 'new-image.png')).rejects.toThrow(`Failed to update map image: ${errorMessage}`);
         });
     });
 
     describe('deleteMap', () => {
         it('should delete a map', async () => {
             mapDbService.remove.mockResolvedValue(undefined);
-            await expect(mapService.deleteMap(1)).resolves.not.toThrow();
+            await expect(mapService.deleteMap('1')).resolves.not.toThrow();
         });
 
         it('should throw NotFoundException if map is not found', async () => {
             mapDbService.remove.mockRejectedValue(new NotFoundException());
 
-            await expect(mapService.deleteMap(1)).rejects.toThrow(NotFoundException);
+            await expect(mapService.deleteMap('1')).rejects.toThrow(NotFoundException);
         });
 
         it('should throw an error with custom message if deletion fails', async () => {
             const errorMessage = 'Database connection failed';
             mapDbService.remove.mockRejectedValue(new Error(errorMessage));
 
-            await expect(mapService.deleteMap(1)).rejects.toThrow(`Failed to delete map: ${errorMessage}`);
+            await expect(mapService.deleteMap('1')).rejects.toThrow(`Failed to delete map: ${errorMessage}`);
         });
     });
 });

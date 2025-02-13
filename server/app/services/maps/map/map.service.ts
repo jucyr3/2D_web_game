@@ -4,6 +4,7 @@ import { Map } from '@common/map';
 import { MapResponse } from '@common/mapResponse';
 import { MapVerification } from '@common/mapVerification.interface';
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class MapService {
@@ -35,7 +36,7 @@ export class MapService {
         }
     }
 
-    async getMapById(id: number): Promise<Map> {
+    async getMapById(id: string): Promise<Map> {
         try {
             const foundMap = await this.mapDbService.getMap(id);
             if (!foundMap) {
@@ -80,7 +81,7 @@ export class MapService {
         }
     }
 
-    async updateMapVisibility(id: number, isVisible: boolean): Promise<Map> {
+    async updateMapVisibility(id: string, isVisible: boolean): Promise<Map> {
         try {
             await this.mapDbService.changeMapVisibility(id, isVisible);
             const mapChanged = await this.getMapById(id);
@@ -93,7 +94,7 @@ export class MapService {
         }
     }
 
-    async updateMapImage(id: number, previewImage: string): Promise<boolean> {
+    async updateMapImage(id: string, previewImage: string): Promise<boolean> {
         try {
             await this.mapDbService.saveImage(id, previewImage);
             return true;
@@ -105,7 +106,7 @@ export class MapService {
         }
     }
 
-    async deleteMap(id: number): Promise<void> {
+    async deleteMap(id: string): Promise<void> {
         try {
             await this.mapDbService.remove(id);
         } catch (error) {
@@ -116,11 +117,11 @@ export class MapService {
         }
     }
 
-    private checkVerification(verification: MapVerification, existingMapById: Map | undefined, mapId: number): MapResponse | null {
+    private checkVerification(verification: MapVerification, existingMapById: Map | undefined, mapId: string): MapResponse | null {
         for (const [, value] of Object.entries(verification)) {
             if (!value && !existingMapById) {
                 return {
-                    id: 0,
+                    id: '',
                     mapVerification: verification,
                 } as MapResponse;
             }
@@ -160,11 +161,8 @@ export class MapService {
         } as MapResponse;
     }
 
-    private generateRandomId(): number {
-        const MAX_RANDOM_VALUE = 10000;
-        const timestamp = Date.now();
-        const random = Math.floor(Math.random() * MAX_RANDOM_VALUE);
-        return parseInt(`${timestamp}${random}`, 10);
+    private generateRandomId(): string {
+        return uuidv4();
     }
 
     private transformToMap(doc: Map): Map {

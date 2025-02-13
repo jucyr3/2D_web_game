@@ -3,26 +3,12 @@ import { Map } from '@common/map';
 import { MapResponse } from '@common/mapResponse';
 import { MapVerification } from '@common/mapVerification.interface';
 
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    HttpCode,
-    HttpStatus,
-    Logger,
-    NotFoundException,
-    Param,
-    ParseIntPipe,
-    Patch,
-    Post,
-    HttpException,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Logger, NotFoundException, Param, Patch, Post, HttpException } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags, ApiProperty } from '@nestjs/swagger';
 
 class MapResponseDto {
     @ApiProperty()
-    id: number;
+    id: string;
 
     @ApiProperty()
     mapVerification: MapVerification;
@@ -54,13 +40,13 @@ export class MapController {
 
     @Get(':id')
     @ApiOperation({ summary: 'Get map by ID' })
-    @ApiParam({ name: 'id', type: Number })
+    @ApiParam({ name: 'id', type: String })
     @ApiResponse({
         status: HttpStatus.OK,
         description: 'Returns the map',
         type: Map,
     })
-    async getMapById(@Param('id', ParseIntPipe) id: number): Promise<Map> {
+    async getMapById(@Param('id') id: string): Promise<Map> {
         try {
             const map = await this.mapService.getMapById(id);
             if (!map) {
@@ -109,12 +95,12 @@ export class MapController {
 
     @Patch(':id/isVisible')
     @ApiOperation({ summary: 'Update map visibility' })
-    @ApiParam({ name: 'id', type: Number })
+    @ApiParam({ name: 'id', type: String })
     @ApiResponse({
         status: HttpStatus.OK,
         description: 'Map visibility updated',
     })
-    async updateMapVisibility(@Param('id', ParseIntPipe) id: number, @Body('isVisible') isVisible: boolean): Promise<void> {
+    async updateMapVisibility(@Param('id') id: string, @Body('isVisible') isVisible: boolean): Promise<void> {
         try {
             await this.mapService.updateMapVisibility(id, isVisible);
         } catch (error) {
@@ -125,12 +111,12 @@ export class MapController {
 
     @Patch(':id/previewImage')
     @ApiOperation({ summary: 'Update map image' })
-    @ApiParam({ name: 'id', type: Number })
+    @ApiParam({ name: 'id', type: String })
     @ApiResponse({
         status: HttpStatus.OK,
         description: 'Map image updated',
     })
-    async updatePreviewImage(@Param('id', ParseIntPipe) id: number, @Body('previewImage') previewImage: string): Promise<void> {
+    async updatePreviewImage(@Param('id') id: string, @Body('previewImage') previewImage: string): Promise<void> {
         try {
             if (!(await this.mapService.updateMapImage(id, previewImage))) {
                 throw new NotFoundException(`Map with ID ${id} not found`);
@@ -145,12 +131,12 @@ export class MapController {
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     @ApiOperation({ summary: 'Delete a map' })
-    @ApiParam({ name: 'id', type: Number })
+    @ApiParam({ name: 'id', type: String })
     @ApiResponse({
         status: HttpStatus.NO_CONTENT,
         description: 'map deleted successfully',
     })
-    async deleteMap(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    async deleteMap(@Param('id') id: string): Promise<void> {
         try {
             await this.mapService.deleteMap(id);
         } catch (error) {

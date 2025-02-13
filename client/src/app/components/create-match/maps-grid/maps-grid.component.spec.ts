@@ -13,7 +13,7 @@ describe('MapsGridComponent', () => {
 
     const mockMaps: Map[] = [
         {
-            mapId: 1,
+            mapId: '1',
             name: 'Test Map 1',
             size: 10,
             isVisible: true,
@@ -24,7 +24,7 @@ describe('MapsGridComponent', () => {
             previewImage: 'base64string1',
         },
         {
-            mapId: 2,
+            mapId: '2',
             name: 'Test Map 2',
             size: 15,
             isVisible: true,

@@ -9,7 +9,7 @@ describe('MapsForClientService', () => {
     let httpService: jasmine.SpyObj<ClientHttpRequestsService>;
 
     const mockMap: Map = {
-        mapId: 1,
+        mapId: '1',
         name: 'Test Map',
         size: 10,
         isVisible: true,

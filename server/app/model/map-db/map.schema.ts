@@ -13,7 +13,7 @@ const tileSchema = new mongoose.Schema({
 });
 
 export const mapSchema = new mongoose.Schema({
-    mapId: { type: Number, required: true },
+    mapId: { type: String, required: true },
     name: { type: String, required: true },
     size: { type: Number, required: true },
     isVisible: { type: Boolean, required: true },

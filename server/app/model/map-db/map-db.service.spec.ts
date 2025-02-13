@@ -52,7 +52,7 @@ describe('MapDbService', () => {
 
     it('should add a map', async () => {
         const map: Map = {
-            mapId: 1,
+            mapId: '1',
             name: 'Test Map',
             size: MAP_SIZE,
             isVisible: true,
@@ -80,7 +80,7 @@ describe('MapDbService', () => {
 
     it('should get a map by id', async () => {
         const map: Map = {
-            mapId: 1,
+            mapId: '1',
             name: 'Test Map',
             size: MAP_SIZE,
             isVisible: true,
@@ -91,7 +91,7 @@ describe('MapDbService', () => {
             previewImage: 'test-preview.png',
         };
         const findByIdSpy = jest.spyOn(mapModel, 'findOne').mockResolvedValueOnce(map);
-        const result = await service.getMap(1);
+        const result = await service.getMap('1');
         expect(findByIdSpy).toHaveBeenCalled();
         expect(result).toEqual(map);
     });
@@ -101,12 +101,12 @@ describe('MapDbService', () => {
         findByIdStub.mockImplementation(() => {
             throw new Error('error');
         });
-        await expect(service.getMap(1)).rejects.toThrow('Map not found');
+        await expect(service.getMap('1')).rejects.toThrow('Map not found');
     });
 
     it('should throw NotFoundException if map not found by id', async () => {
         jest.spyOn(mapModel, 'findById').mockResolvedValueOnce(null);
-        await expect(service.getMap(1)).rejects.toThrow(NotFoundException);
+        await expect(service.getMap('1')).rejects.toThrow(NotFoundException);
     });
 
     it('should get visible maps', async () => {
@@ -125,7 +125,7 @@ describe('MapDbService', () => {
 
     it('should change a map', async () => {
         const map: Map = {
-            mapId: 1,
+            mapId: '1',
             name: 'Test Map',
             size: MAP_SIZE,
             isVisible: true,
@@ -137,7 +137,7 @@ describe('MapDbService', () => {
         };
         const updateResult = { acknowledged: true, modifiedCount: 1, upsertedId: null, upsertedCount: 0, matchedCount: 1 };
         const updateOneStub = jest.spyOn(mapModel, 'updateOne').mockResolvedValueOnce(updateResult);
-        const result = await service.changeMap(1, map);
+        const result = await service.changeMap('1', map);
         expect(updateOneStub).toHaveBeenCalled();
         expect(result).toEqual(updateResult);
     });
@@ -145,7 +145,7 @@ describe('MapDbService', () => {
     it('should remove a map', async () => {
         const deleteResult = { acknowledged: true, deletedCount: 1 };
         const deleteOneStub = jest.spyOn(mapModel, 'deleteOne').mockResolvedValueOnce(deleteResult);
-        const result = await service.remove(1);
+        const result = await service.remove('1');
         expect(deleteOneStub).toHaveBeenCalled();
         expect(result).toEqual(deleteResult);
     });
@@ -153,7 +153,7 @@ describe('MapDbService', () => {
     it('should save an image', async () => {
         const updateResult = { acknowledged: true, modifiedCount: 1, upsertedId: null, upsertedCount: 0, matchedCount: 1 };
         const updateOneStub = jest.spyOn(mapModel, 'updateOne').mockResolvedValueOnce(updateResult);
-        const result = await service.saveImage(1, 'image-data');
+        const result = await service.saveImage('1', 'image-data');
         expect(updateOneStub).toHaveBeenCalled();
         expect(result).toEqual(updateResult);
     });
@@ -161,7 +161,7 @@ describe('MapDbService', () => {
     it('should get an image by id', async () => {
         const image = { previewImage: 'image-data' };
         const findByIdStub = jest.spyOn(mapModel, 'findOne').mockResolvedValueOnce(image);
-        const result = await service.getImage(1);
+        const result = await service.getImage('1');
         expect(findByIdStub).toHaveBeenCalled();
         expect(result).toEqual({ previewImage: 'image-data' });
     });
@@ -169,8 +169,8 @@ describe('MapDbService', () => {
     it('should change map visibility', async () => {
         const updateResult = { acknowledged: true, modifiedCount: 1, upsertedId: null, upsertedCount: 0, matchedCount: 1 };
         const updateOneStub = jest.spyOn(mapModel, 'updateOne').mockResolvedValueOnce(updateResult);
-        const result = await service.changeMapVisibility(1, true);
-        expect(updateOneStub).toHaveBeenCalledWith({ mapId: 1 }, { $set: { isVisible: true } });
+        const result = await service.changeMapVisibility('1', true);
+        expect(updateOneStub).toHaveBeenCalledWith({ mapId: '1' }, { $set: { isVisible: true } });
         expect(result).toEqual(updateResult);
     });
 
@@ -178,11 +178,11 @@ describe('MapDbService', () => {
         jest.spyOn(mapModel, 'updateOne').mockImplementationOnce(() => {
             throw new Error('error');
         });
-        await expect(service.changeMapVisibility(1, true)).rejects.toThrow('error');
+        await expect(service.changeMapVisibility('1', true)).rejects.toThrow('error');
     });
 
     it('should throw NotFoundException if map is not found (null response)', async () => {
-        const mockId = 1;
+        const mockId = '1';
 
         // Mock the findOne method to return null (map not found)
         jest.spyOn(mapModel, 'findOne').mockResolvedValue(null);
