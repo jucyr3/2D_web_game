@@ -17,7 +17,7 @@ describe('GameActionsComponent', () => {
     let confirmSpy: jasmine.Spy;
 
     const mockMap: Map = {
-        mapId: 123,
+        mapId: '123',
         name: 'Test Map',
         size: 10,
         isVisible: true,

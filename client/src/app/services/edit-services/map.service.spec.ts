@@ -100,7 +100,7 @@ describe('MapService', () => {
     // AFTER - loadMapFromServer
     it('should load map from server successfully', async () => {
         const mockMap: Map = {
-            mapId: 1,
+            mapId: '1',
             name: 'Test',
             size: 15,
             isVisible: true,
@@ -113,7 +113,7 @@ describe('MapService', () => {
         spyOn(service['clientHttpRequest'], 'loadMapById').and.returnValue(of(mockMap));
         spyOn(service, 'saveMapToSessionStorage');
 
-        const result = await service.loadMapFromServer(1);
+        const result = await service.loadMapFromServer('1');
 
         expect(result).toBeTrue();
         expect(service.map).toBeTruthy();
@@ -127,7 +127,7 @@ describe('MapService', () => {
 
         const json = {
             name: 'Test Map',
-            mapId: 1,
+            mapId: '1',
             size: 10,
             isVisible: true,
             description: 'Test Description',
@@ -155,7 +155,7 @@ describe('MapService', () => {
     // AFTER - saveMapToServer
     it('should save map to server successfully', async () => {
         const mockResponse = {
-            id: 1,
+            id: '1',
             mapVerification: {
                 isUniqueName: true,
                 isNamePresent: true,
@@ -173,7 +173,7 @@ describe('MapService', () => {
         };
 
         spyOn(service['clientHttpRequest'], 'saveMapToServer').and.returnValue(of(mockResponse));
-        service.map = { mapId: 0 } as Map;
+        service.map = { mapId: '' } as Map;
 
         const result = await service.saveMapToServer();
 
@@ -229,7 +229,7 @@ describe('MapService', () => {
     it('should create a map from JSON', () => {
         const json = {
             name: 'Test Map',
-            mapId: 1,
+            mapId: '1',
             size: 10,
             isVisible: true,
             description: 'Test Description',

@@ -32,7 +32,7 @@ export class MapService {
 
     setDefaultMap(): void {
         const mapSize = MapProperties.MAP_SIZE_MEDIUM;
-        const defaultId = 0;
+        const defaultId = '';
         this.map = {
             mapId: defaultId,
             name: 'Untitled',
@@ -49,7 +49,7 @@ export class MapService {
 
     createEmptyMap(mapData: MapFormData): void {
         const defaultMap: Map = {
-            mapId: 0,
+            mapId: '',
             name: 'Untitled',
             size: mapData.size,
             isVisible: false,
@@ -101,7 +101,7 @@ export class MapService {
         };
     }
 
-    async loadMapFromServer(id: number): Promise<boolean> {
+    async loadMapFromServer(id: string): Promise<boolean> {
         return new Promise((resolve) => {
             this.errorList = [];
             this.clientHttpRequest.loadMapById(id).subscribe({

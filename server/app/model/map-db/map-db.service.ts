@@ -18,7 +18,7 @@ export class MapDbService {
         return response;
     }
 
-    async getMap(id: number) {
+    async getMap(id: string) {
         let response;
         try {
             response = await this.mapModel.findOne({ mapId: id });
@@ -36,21 +36,21 @@ export class MapDbService {
         return response ?? [];
     }
 
-    async remove(id: number) {
+    async remove(id: string) {
         return await this.mapModel.deleteOne({ mapId: id });
     }
 
-    async changeMap(id: number, map: Map) {
+    async changeMap(id: string, map: Map) {
         return await this.mapModel.updateOne({ mapId: id }, { $set: { ...map } });
     }
-    async saveImage(id: number, image: string) {
+    async saveImage(id: string, image: string) {
         return await this.mapModel.updateOne({ mapId: id }, { $set: { previewImage: image } });
     }
-    async getImage(id: number) {
+    async getImage(id: string) {
         return await this.mapModel.findOne({ mapId: id }, { previewImage: 1, _id: 0 });
     }
 
-    async changeMapVisibility(id: number, visible: boolean) {
+    async changeMapVisibility(id: string, visible: boolean) {
         return await this.mapModel.updateOne({ mapId: id }, { $set: { isVisible: visible } });
     }
 }

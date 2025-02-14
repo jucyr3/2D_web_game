@@ -22,7 +22,7 @@ export class ClientHttpRequestsService {
         );
     }
 
-    loadMapById(mapId: number): Observable<Map> {
+    loadMapById(mapId: string): Observable<Map> {
         return this.http.get<Map>(`${this.apiUrl}/maps/${mapId}`).pipe(
             map((response) => {
                 return response;
@@ -43,15 +43,15 @@ export class ClientHttpRequestsService {
         );
     }
 
-    updateMapVisibility(mapId: number, isVisible: boolean): Observable<Map> {
+    updateMapVisibility(mapId: string, isVisible: boolean): Observable<Map> {
         return this.http.patch<Map>(`${this.apiUrl}/maps/${mapId}/isVisible`, { isVisible }).pipe(map((response) => response));
     }
 
-    saveMapImageOnServer(mapId: number, imagepng: string): Observable<Map> {
+    saveMapImageOnServer(mapId: string, imagepng: string): Observable<Map> {
         return this.http.patch<Map>(`${this.apiUrl}/maps/${mapId}/previewImage`, { previewImage: imagepng });
     }
 
-    deleteMap(mapId: number): Observable<void> {
+    deleteMap(mapId: string): Observable<void> {
         return this.http.delete<void>(`${this.apiUrl}/maps/${mapId}`);
     }
 }

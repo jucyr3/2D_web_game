@@ -20,7 +20,7 @@ describe('MapController', () => {
     });
 
     const mockMap: Map = {
-        mapId: 1,
+        mapId: '1',
         name: 'Test Map',
         size: 10,
         isVisible: true,
@@ -41,7 +41,7 @@ describe('MapController', () => {
     };
 
     const mockResponse: MapResponse = {
-        id: 1,
+        id: '1',
         mapVerification: {
             isUniqueName: true,
             isNamePresent: true,
@@ -102,16 +102,16 @@ describe('MapController', () => {
     describe('getMapById', () => {
         it('should successfully return a map by id', async () => {
             mockService.getMapById.mockResolvedValue(mockMap);
-            const result = await controller.getMapById(1);
+            const result = await controller.getMapById('1');
             expect(result).toEqual(mockMap);
-            expect(mockService.getMapById).toHaveBeenCalledWith(1);
+            expect(mockService.getMapById).toHaveBeenCalledWith('1');
             expect(mockLogger.error).not.toHaveBeenCalled();
         });
 
         it('should throw NotFoundException when map is not found', async () => {
             mockService.getMapById.mockResolvedValue(null);
 
-            await expect(controller.getMapById(1)).rejects.toThrow(NotFoundException);
+            await expect(controller.getMapById('1')).rejects.toThrow(NotFoundException);
             expect(mockLogger.error).toHaveBeenCalledWith('Failed to get map 1: Map with ID 1 not found');
         });
 
@@ -119,7 +119,7 @@ describe('MapController', () => {
             const error = new Error('Database error');
             mockService.getMapById.mockRejectedValue(error);
 
-            await expect(controller.getMapById(1)).rejects.toThrow(error);
+            await expect(controller.getMapById('1')).rejects.toThrow(error);
             expect(mockLogger.error).toHaveBeenCalledWith('Failed to get map 1: Database error');
         });
     });
@@ -163,8 +163,8 @@ describe('MapController', () => {
     describe('updateMapVisibility', () => {
         it('should successfully update map visibility', async () => {
             mockService.updateMapVisibility.mockResolvedValue(mockMap);
-            await controller.updateMapVisibility(1, true);
-            expect(mockService.updateMapVisibility).toHaveBeenCalledWith(1, true);
+            await controller.updateMapVisibility('1', true);
+            expect(mockService.updateMapVisibility).toHaveBeenCalledWith('1', true);
             expect(mockLogger.error).not.toHaveBeenCalled();
         });
 
@@ -172,7 +172,7 @@ describe('MapController', () => {
             const error = new Error('Database error');
             mockService.updateMapVisibility.mockRejectedValue(error);
 
-            await expect(controller.updateMapVisibility(1, true)).rejects.toThrow(error);
+            await expect(controller.updateMapVisibility('1', true)).rejects.toThrow(error);
             expect(mockLogger.error).toHaveBeenCalledWith('Failed to update map 1 visibility: Database error');
         });
     });
@@ -180,17 +180,17 @@ describe('MapController', () => {
     describe('updatePreviewImage', () => {
         it('should successfully update map preview image', async () => {
             mockService.updateMapImage.mockResolvedValue(mockMap);
-            await controller.updatePreviewImage(1, 'new-image.png');
-            expect(mockService.updateMapImage).toHaveBeenCalledWith(1, 'new-image.png');
+            await controller.updatePreviewImage('1', 'new-image.png');
+            expect(mockService.updateMapImage).toHaveBeenCalledWith('1', 'new-image.png');
             expect(mockLogger.error).not.toHaveBeenCalled();
-            expect(mockService.updateMapImage).toHaveBeenCalledWith(1, 'new-image.png');
+            expect(mockService.updateMapImage).toHaveBeenCalledWith('1', 'new-image.png');
             expect(mockLogger.error).not.toHaveBeenCalled();
         });
 
         it('should throw NotFoundException when map is not found', async () => {
             mockService.updateMapImage.mockResolvedValue(null);
 
-            await expect(controller.updatePreviewImage(1, 'new-image.png')).rejects.toThrow(NotFoundException);
+            await expect(controller.updatePreviewImage('1', 'new-image.png')).rejects.toThrow(NotFoundException);
             expect(mockLogger.error).toHaveBeenCalledWith('Failed to update map 1 image: Map with ID 1 not found');
         });
 
@@ -198,7 +198,7 @@ describe('MapController', () => {
             const error = new Error('Database error');
             mockService.updateMapImage.mockRejectedValue(error);
 
-            await expect(controller.updatePreviewImage(1, 'new-image.png')).rejects.toThrow(error);
+            await expect(controller.updatePreviewImage('1', 'new-image.png')).rejects.toThrow(error);
             expect(mockLogger.error).toHaveBeenCalledWith('Failed to update map 1 image: Database error');
         });
     });
@@ -206,8 +206,8 @@ describe('MapController', () => {
     describe('deleteMap', () => {
         it('should successfully delete a map', async () => {
             mockService.deleteMap.mockResolvedValue(undefined);
-            await controller.deleteMap(1);
-            expect(mockService.deleteMap).toHaveBeenCalledWith(1);
+            await controller.deleteMap('1');
+            expect(mockService.deleteMap).toHaveBeenCalledWith('1');
             expect(mockLogger.error).not.toHaveBeenCalled();
         });
 
@@ -215,7 +215,7 @@ describe('MapController', () => {
             const error = new Error('Database error');
             mockService.deleteMap.mockRejectedValue(error);
 
-            await expect(controller.deleteMap(1)).rejects.toThrow(error);
+            await expect(controller.deleteMap('1')).rejects.toThrow(error);
             expect(mockLogger.error).toHaveBeenCalledWith('Failed to delete map 1: Database error');
         });
     });

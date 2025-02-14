@@ -29,7 +29,7 @@ describe('ClientHttpRequestsService', () => {
     });
 
     // Helper function to create a mock map
-    const createMockMap = (mapId: number, name: string): Map => ({
+    const createMockMap = (mapId: string, name: string): Map => ({
         mapId,
         name,
         size: 10, // Example size
@@ -42,7 +42,7 @@ describe('ClientHttpRequestsService', () => {
     });
 
     // Helper function to create a mock map response
-    const createMockMapResponse = (id: number, verificationOverrides: Partial<MapVerification> = {}): MapResponse => ({
+    const createMockMapResponse = (id: string, verificationOverrides: Partial<MapVerification> = {}): MapResponse => ({
         id,
         mapVerification: createMockMapVerification(verificationOverrides),
     });
@@ -66,7 +66,7 @@ describe('ClientHttpRequestsService', () => {
 
     describe('getMaps', () => {
         it('should return an array of maps', () => {
-            const mockMaps: Map[] = [createMockMap(1, 'Test Map 1'), createMockMap(2, 'Test Map 2')];
+            const mockMaps: Map[] = [createMockMap('1', 'Test Map 1'), createMockMap('2', 'Test Map 2')];
 
             service.getMaps().subscribe((maps) => {
                 expect(maps.length).toBe(2);
@@ -80,7 +80,7 @@ describe('ClientHttpRequestsService', () => {
         });
 
         it('should handle single map response', () => {
-            const mockMap = createMockMap(1, 'Single Map');
+            const mockMap = createMockMap('1', 'Single Map');
 
             service.getMaps().subscribe((maps) => {
                 expect(maps.length).toBe(1);
@@ -94,7 +94,7 @@ describe('ClientHttpRequestsService', () => {
         });
 
         it('should handle single map response when getting visible maps', () => {
-            const mockMap = createMockMap(1, 'Single Visible Map');
+            const mockMap = createMockMap('1', 'Single Visible Map');
 
             service.getAllMapsByVisibility().subscribe((maps) => {
                 expect(maps.length).toBe(1);
@@ -111,11 +111,11 @@ describe('ClientHttpRequestsService', () => {
 
     describe('loadMapById', () => {
         it('should return a specific map by ID', () => {
-            const mockMap = createMockMap(1, 'Specific Map');
+            const mockMap = createMockMap('1', 'Specific Map');
             const mapSize = 10;
 
-            service.loadMapById(1).subscribe((map) => {
-                expect(map.mapId).toBe(1);
+            service.loadMapById('1').subscribe((map) => {
+                expect(map.mapId).toBe('1');
                 expect(map.name).toBe('Specific Map');
                 expect(map.size).toBe(mapSize);
                 expect(map.gameMode).toBe('Classic');
@@ -130,11 +130,11 @@ describe('ClientHttpRequestsService', () => {
 
     describe('saveMapToServer', () => {
         it('should save a map and return MapResponse with full validation', () => {
-            const mapToSave = createMockMap(0, 'New Map');
-            const mockResponse = createMockMapResponse(1);
+            const mapToSave = createMockMap('0', 'New Map');
+            const mockResponse = createMockMapResponse('1');
 
             service.saveMapToServer(mapToSave).subscribe((response) => {
-                expect(response.id).toBe(1);
+                expect(response.id).toBe('1');
                 expect(response.mapVerification).toBeDefined();
 
                 // Verify all validation properties
@@ -159,15 +159,15 @@ describe('ClientHttpRequestsService', () => {
         });
 
         it('should handle map verification failures', () => {
-            const mapToSave = createMockMap(0, 'Invalid Map');
-            const mockResponse = createMockMapResponse(1, {
+            const mapToSave = createMockMap('0', 'Invalid Map');
+            const mockResponse = createMockMapResponse('1', {
                 isUniqueName: false,
                 isNamePresent: false,
                 isMapAccessible: false,
             });
 
             service.saveMapToServer(mapToSave).subscribe((response) => {
-                expect(response.id).toBe(1);
+                expect(response.id).toBe('1');
                 expect(response.mapVerification.isUniqueName).toBeFalse();
                 expect(response.mapVerification.isNamePresent).toBeFalse();
                 expect(response.mapVerification.isMapAccessible).toBeFalse();
@@ -181,7 +181,7 @@ describe('ClientHttpRequestsService', () => {
 
     describe('getAllMapsByVisibility', () => {
         it('should return visible maps', () => {
-            const mockVisibleMaps: Map[] = [createMockMap(1, 'Visible Map 1'), createMockMap(2, 'Visible Map 2')];
+            const mockVisibleMaps: Map[] = [createMockMap('1', 'Visible Map 1'), createMockMap('2', 'Visible Map 2')];
 
             service.getAllMapsByVisibility().subscribe((maps) => {
                 expect(maps.length).toBe(2);
@@ -197,11 +197,11 @@ describe('ClientHttpRequestsService', () => {
 
     describe('updateMapVisibility', () => {
         it('should update map visibility', () => {
-            const mockMap = createMockMap(1, 'Test Map');
+            const mockMap = createMockMap('1', 'Test Map');
             mockMap.isVisible = false;
 
-            service.updateMapVisibility(1, false).subscribe((map) => {
-                expect(map.mapId).toBe(1);
+            service.updateMapVisibility('1', false).subscribe((map) => {
+                expect(map.mapId).toBe('1');
                 expect(map.isVisible).toBeFalse();
             });
 
@@ -214,12 +214,12 @@ describe('ClientHttpRequestsService', () => {
 
     describe('saveMapImageOnServer', () => {
         it('should save map preview image', () => {
-            const mockMap = createMockMap(1, 'Map with Image');
+            const mockMap = createMockMap('1', 'Map with Image');
             const base64Image = 'data:image/png;base64,testimage';
             mockMap.previewImage = base64Image;
 
-            service.saveMapImageOnServer(1, base64Image).subscribe((map) => {
-                expect(map.mapId).toBe(1);
+            service.saveMapImageOnServer('1', base64Image).subscribe((map) => {
+                expect(map.mapId).toBe('1');
                 expect(map.previewImage).toBe(base64Image);
             });
 
@@ -232,7 +232,7 @@ describe('ClientHttpRequestsService', () => {
 
     describe('deleteMap', () => {
         it('should delete a map by ID', () => {
-            service.deleteMap(1).subscribe(() => {
+            service.deleteMap('1').subscribe(() => {
                 // Successful deletion
             });
 

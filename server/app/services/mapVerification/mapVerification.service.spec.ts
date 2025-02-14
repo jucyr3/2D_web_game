@@ -10,7 +10,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 describe('MapVerificationService', () => {
     let service: MapVerificationService;
 
-    function createMockMap(id: number, size: number): Map {
+    function createMockMap(id: string, size: number): Map {
         return {
             mapId: id,
             name: `Untitled${id}`,
@@ -30,7 +30,7 @@ describe('MapVerificationService', () => {
         itemObject: null,
     };
 
-    const mockMap: Map = createMockMap(1, MapProperties.MAP_SIZE_SMALL);
+    const mockMap: Map = createMockMap('1', MapProperties.MAP_SIZE_SMALL);
 
     const spawnpoint: ItemObject = {
         name: 'spawnpoint',
@@ -69,9 +69,9 @@ describe('MapVerificationService', () => {
     });
 
     it('should set all map names correctly', () => {
-        const smallMapNumber = 1;
-        const mediumMapNumber = 2;
-        const largeMapNumber = 3;
+        const smallMapNumber = '1';
+        const mediumMapNumber = '2';
+        const largeMapNumber = '3';
         const maps: Map[] = [
             createMockMap(smallMapNumber, MapProperties.MAP_SIZE_SMALL),
             createMockMap(mediumMapNumber, MapProperties.MAP_SIZE_MEDIUM),
@@ -86,9 +86,9 @@ describe('MapVerificationService', () => {
     });
 
     it('should remove map name correctly', () => {
-        const smallMapNumber = 1;
-        const mediumMapNumber = 2;
-        const largeMapNumber = 3;
+        const smallMapNumber = '1';
+        const mediumMapNumber = '2';
+        const largeMapNumber = '3';
         const maps: Map[] = [
             createMockMap(smallMapNumber, MapProperties.MAP_SIZE_SMALL),
             createMockMap(mediumMapNumber, MapProperties.MAP_SIZE_MEDIUM),
@@ -183,7 +183,7 @@ describe('MapVerificationService', () => {
         expect(service.areStartingPointsValid(mockMap)).toBeTruthy();
 
         // MAP_SIZE_MEDIUM map
-        const mockMap15: Map = createMockMap(2, MapProperties.MAP_SIZE_MEDIUM);
+        const mockMap15: Map = createMockMap('2', MapProperties.MAP_SIZE_MEDIUM);
 
         expect(service.areStartingPointsValid(mockMap15)).toBeFalsy();
         mockMap15.tileMatrix[0][0].itemObject = { ...spawnpoint };
@@ -194,7 +194,7 @@ describe('MapVerificationService', () => {
         expect(service.areStartingPointsValid(mockMap15)).toBeTruthy();
 
         // MAP_SIZE_LARGE map
-        const mockMap20: Map = createMockMap(2, MapProperties.MAP_SIZE_LARGE);
+        const mockMap20: Map = createMockMap('2', MapProperties.MAP_SIZE_LARGE);
 
         mockMap20.tileMatrix[0][0].itemObject = { ...spawnpoint };
         mockMap20.tileMatrix[0][1].itemObject = { ...spawnpoint };
@@ -213,7 +213,7 @@ describe('MapVerificationService', () => {
         expect(service.areItemObjectsValid(mockMap)).toBeTruthy();
 
         // MAP_SIZE_MEDIUM map
-        const mockMap15: Map = createMockMap(2, MapProperties.MAP_SIZE_MEDIUM);
+        const mockMap15: Map = createMockMap('2', MapProperties.MAP_SIZE_MEDIUM);
 
         expect(service.areItemObjectsValid(mockMap15)).toBeFalsy();
         mockMap15.tileMatrix[0][0].itemObject = { ...gameplayItem1 };
@@ -224,7 +224,7 @@ describe('MapVerificationService', () => {
         expect(service.areItemObjectsValid(mockMap15)).toBeTruthy();
 
         // MAP_SIZE_LARGE map
-        const mockMap20: Map = createMockMap(2, MapProperties.MAP_SIZE_LARGE);
+        const mockMap20: Map = createMockMap('2', MapProperties.MAP_SIZE_LARGE);
 
         mockMap20.tileMatrix[0][0].itemObject = { ...gameplayItem1 };
         mockMap20.tileMatrix[0][1].itemObject = { ...gameplayItem1 };
