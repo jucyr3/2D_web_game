@@ -7,7 +7,7 @@
     tpMaxWidth="200px"
     (click)="changeBrushTile(tileType)"
     [class.active]="isActive"
-    style="background-image: url('../assets/tiles/{{ tileType }}.png')"
+    style="background-image: url('./assets/tiles/{{ this.tileType }}.png')"
 ></button>
 
 <ng-template #BrushTooltipComponent let-tooltip="tooltip">
